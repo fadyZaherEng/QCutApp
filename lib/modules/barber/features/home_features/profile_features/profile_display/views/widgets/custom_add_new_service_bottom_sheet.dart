@@ -1,0 +1,460 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:q_cut/core/utils/constants/assets_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
+
+class CustomAddNewServiceBottomSheet extends StatefulWidget {
+  const CustomAddNewServiceBottomSheet({super.key});
+
+  @override
+  State<CustomAddNewServiceBottomSheet> createState() =>
+      _CustomAddNewServiceBottomSheetState();
+}
+
+class _CustomAddNewServiceBottomSheetState
+    extends State<CustomAddNewServiceBottomSheet> {
+  final TextEditingController serviceNameController = TextEditingController();
+  final TextEditingController servicePriceController = TextEditingController();
+  final TextEditingController serviceMinTimeController =
+      TextEditingController();
+  final TextEditingController serviceMaxTimeController =
+      TextEditingController();
+  File? _selectedImage;
+  late final BProfileController _profileController;
+
+  String? _uploadedImageUrl;
+  bool _isUploadingImage = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Register the controller if it doesn't exist yet
+    if (!Get.isRegistered<BProfileController>()) {
+      _profileController = Get.put(BProfileController());
+    } else {
+      _profileController = Get.find<BProfileController>();
+    }
+  }
+
+  /// Function to pick an image from gallery or camera
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await showModalBottomSheet<XFile?>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take a photo'),
+                onTap: () async {
+                  final XFile? file =
+                      await picker.pickImage(source: ImageSource.camera);
+                  Navigator.pop(context, file);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Choose from gallery'),
+                onTap: () async {
+                  final XFile? file =
+                      await picker.pickImage(source: ImageSource.gallery);
+                  Navigator.pop(context, file);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  /// Handle the creation of a new service
+  Future<void> _handleCreateService() async {
+    // Validate inputs
+    if (serviceNameController.text.isEmpty ||
+        servicePriceController.text.isEmpty ||
+        serviceMinTimeController.text.isEmpty ||
+        serviceMaxTimeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill all required fields"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Upload image if selected but not yet uploaded
+    if (_selectedImage != null && _uploadedImageUrl == null) {
+      setState(() {
+        _isUploadingImage = true;
+      });
+
+      _uploadedImageUrl =
+          await _profileController.uploadServiceImage(_selectedImage!);
+
+      setState(() {
+        _isUploadingImage = false;
+      });
+
+      if (_uploadedImageUrl == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Failed to upload image. Please try again."),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+    }
+
+    // Call the controller method to create the service
+    final result = await _profileController.createBarberService(
+      serviceName: serviceNameController.text,
+      servicePrice: servicePriceController.text,
+      min: serviceMinTimeController.text,
+      max: serviceMaxTimeController.text,
+      imageUrl: _uploadedImageUrl, // Pass the uploaded image URL
+    );
+
+    if (result['success']) {
+      // Explicitly fetch services to ensure data is up to date
+      await _profileController.fetchBarberServices();
+
+      // Force a rebuild of any widgets that depend on barberServices
+      _profileController.update(['barber_services']);
+
+      // Force the entire app to rebuild - this ensures even non-GetX widgets update
+      Get.forceAppUpdate();
+
+      // Delay slightly to allow state to propagate
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Close the bottom sheet on success
+      Navigator.pop(context);
+
+      // Show a success message after navigation
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        const SnackBar(
+          content: Text("Service created successfully"),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Call Get.reset to refresh injected dependencies (if needed)
+      // Get.reset(clearRouteBindings: false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            SvgPicture.asset(
+              height: 36.h,
+              width: 36.w,
+              AssetsData.addnewservicebottonicon,
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Add New Service",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: ColorsData.primary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Add Service photo",
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: ColorsData.secondary,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            /// Image Picker
+            GestureDetector(
+              onTap: _isUploadingImage ? null : _pickImage,
+              child: _isUploadingImage
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: ColorsData.primary,
+                      ),
+                    )
+                  : _selectedImage != null
+                      ? Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                _selectedImage!,
+                                width: 100.w,
+                                height: 100.h,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            if (_uploadedImageUrl != null)
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        )
+                      : SvgPicture.asset(
+                          AssetsData.addImageIcon,
+                          height: 89.h,
+                          width: 89.w,
+                          colorFilter: const ColorFilter.mode(
+                            ColorsData.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+            ),
+            SizedBox(height: 16.h),
+
+            /// Service Name Input
+            CustomTextFormField(
+              style: Styles.textStyleS14W400(
+                color: ColorsData.secondary,
+              ),
+              fillColor: ColorsData.font,
+              controller: serviceNameController,
+              hintText: "Enter Service Name",
+            ),
+            SizedBox(height: 12.h),
+
+            /// Service Price Input
+            CustomTextFormField(
+              style: Styles.textStyleS14W400(
+                color: ColorsData.secondary,
+              ),
+              fillColor: ColorsData.font,
+              controller: servicePriceController,
+              hintText: "Enter Service Price",
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 12.h),
+
+            /// Service Time Input
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Min Time',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          SizedBox(
+                            width: 164.w,
+                            height: 36.h,
+                            child: TextFormField(
+                              controller: serviceMinTimeController,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              style: Styles.textStyleS14W400(
+                                color: ColorsData.secondary,
+                              ),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.zero,
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.r)),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              expands: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Max Time',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          SizedBox(
+                            width: 164.w,
+                            height: 36.h,
+                            child: TextFormField(
+                              controller: serviceMaxTimeController,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              style: Styles.textStyleS14W400(
+                                color: ColorsData.secondary,
+                              ),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.zero,
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.r)),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              expands: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+
+            /// Confirm Button
+            Obx(() => SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC49A58),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: (_profileController.isCreatingService.value ||
+                            _isUploadingImage)
+                        ? null
+                        : _handleCreateService,
+                    child: (_profileController.isCreatingService.value ||
+                            _isUploadingImage)
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          )
+                        : const Text(
+                            "Confirm",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                )),
+            SizedBox(height: 16.h),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Show Bottom Sheet Function
+void showCustomAddNewServiceBottomSheet(BuildContext context) {
+  // Ensure BProfileController is registered before showing the bottom sheet
+  if (!Get.isRegistered<BProfileController>()) {
+    Get.put(BProfileController());
+  }
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+    ),
+    builder: (context) => const CustomAddNewServiceBottomSheet(),
+  );
+}

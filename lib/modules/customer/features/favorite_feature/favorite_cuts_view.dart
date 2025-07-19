@@ -1,0 +1,401 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:q_cut/core/utils/constants/assets_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:q_cut/modules/customer/features/settings/chat_feature/logic/upload_media.dart';
+import 'package:q_cut/core/utils/app_router.dart';
+
+class FavoriteCutsView extends StatefulWidget {
+  const FavoriteCutsView({super.key});
+
+  @override
+  State<FavoriteCutsView> createState() => _FavoriteCutsViewState();
+}
+
+class _FavoriteCutsViewState extends State<FavoriteCutsView> {
+  final NetworkAPICall _apiCall = NetworkAPICall();
+  final UploadMedia _uploadMedia = UploadMedia();
+  List<String> favoriteCuts = [];
+  bool isLoading = true;
+  bool isUploadingPhotos = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchFavoriteCuts();
+  }
+
+  Future<void> fetchFavoriteCuts() async {
+    try {
+      final response =
+          await _apiCall.getData("${Variables.baseUrl}favoriteForUser/cuts");
+      print("${Variables.baseUrl}/favoriteForUser/cuts");
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (mounted) {
+          setState(() {
+            favoriteCuts = List<String>.from(data['favoriteCuts']);
+            isLoading = false;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() => isLoading = false);
+          ShowToast.showError(message: 'failedToFetchFavorites'.tr);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => isLoading = false);
+        ShowToast.showError(
+            message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
+      }
+    }
+  }
+
+  Future<void> addPhotosToFavorites() async {
+    try {
+      if (!mounted) return;
+
+      setState(() {
+        isUploadingPhotos = true;
+      });
+
+      final ImagePicker picker = ImagePicker();
+      final List<XFile> images = await picker.pickMultiImage();
+
+      if (images.isEmpty) {
+        if (!mounted) return;
+        setState(() {
+          isUploadingPhotos = false;
+        });
+        return;
+      }
+
+      // Upload each image one by one and toggle favorite
+      for (final image in images) {
+        if (!mounted) return;
+
+        final uploadedUrl =
+            await _uploadMedia.uploadFile(File(image.path), 'image');
+
+        if (uploadedUrl != null && mounted) {
+          // Call the toggle-favorite-photo endpoint
+          final requestData = {
+            'photoUrl': uploadedUrl,
+          };
+
+          print('Adding photo to favorites: $requestData');
+
+          final response = await _apiCall.addData(
+            requestData,
+            '${Variables.baseUrl}favoriteForUser/toggle-favorite-photo',
+          );
+
+          print(
+              'Favorite photo toggle response: ${response.statusCode}, ${response.body}');
+
+          if (mounted &&
+              (response.statusCode == 200 || response.statusCode == 201)) {
+            // Success - the photo was added to favorites
+            ShowToast.showSuccessSnackBar(message: 'photoAddedToFavorites'.tr);
+          } else if (mounted) {
+            // Error
+            ShowToast.showError(
+              message: '${'failedToAddPhoto'.tr}: ${response.statusCode}',
+            );
+          }
+        }
+      }
+
+      // Refresh the favorites list
+      if (mounted) {
+        await fetchFavoriteCuts();
+      }
+    } catch (e) {
+      print('Error adding photos to favorites: $e');
+      if (mounted) {
+        ShowToast.showError(
+          message: '${'failedToUploadPhotos'.tr}: ${e.toString()}',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isUploadingPhotos = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    // Cancel any pending operations if needed
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 12.h),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  favoriteCuts.isEmpty
+                      ? "noFavoriteCutsYet".tr
+                      : "youHaveFavoriteCuts"
+                          .trParams({'0': favoriteCuts.length.toString()}),
+                  style: Styles.textStyleS14W400(),
+                ),
+                InkWell(
+                  onTap: isUploadingPhotos ? null : addPhotosToFavorites,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                    decoration: BoxDecoration(
+                      color: ColorsData.secondary,
+                      border: Border.all(color: ColorsData.primary, width: 1.w),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Row(
+                      children: [
+                        isUploadingPhotos
+                            ? SizedBox(
+                                width: 24.w,
+                                height: 24.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      ColorsData.primary),
+                                ),
+                              )
+                            : SvgPicture.asset(
+                                AssetsData.addImageIcon,
+                                width: 24.w,
+                                height: 24.h,
+                              ),
+                        SizedBox(width: 2.w),
+                        Text(
+                          isUploadingPhotos ? "uploading".tr : "addPhotos".tr,
+                          style: Styles.textStyleS16W400(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverFillRemaining(
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : favoriteCuts.isEmpty
+                  ? _buildEmptyState()
+                  : RefreshIndicator(
+                      onRefresh: fetchFavoriteCuts,
+                      child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding:
+                            EdgeInsets.only(top: 16.h, left: 16.w, right: 17.w),
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 110.w,
+                          crossAxisSpacing: 6.h,
+                          mainAxisSpacing: 9.w,
+                        ),
+                        itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            // Open the image in full screen
+                            _showFullScreenImage(context, favoriteCuts[index]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.r),
+                              border: Border.all(
+                                color: ColorsData.cardStrock,
+                                width: 1.w,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.r),
+                              child: Image.network(
+                                favoriteCuts[index],
+                                width: 108.w,
+                                height: 94.h,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                  AssetsData.hairCutInGallery,
+                                  width: 108.w,
+                                  height: 94.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        itemCount: favoriteCuts.length,
+                      ),
+                    ),
+        ),
+      ],
+    );
+  }
+
+  void _showFullScreenImage(BuildContext context, String imageUrl) {
+    // Use the existing imageView route if available, otherwise use a local viewer
+    try {
+      Get.toNamed(
+        AppRouter.imageViewPath,
+        arguments: imageUrl,
+      );
+    } catch (e) {
+      // Fallback to local image viewer if route not found
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => _ImageViewScreen(imageUrl: imageUrl),
+        ),
+      );
+    }
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            AssetsData.addImageIcon,
+            width: 70.w,
+            height: 70.h,
+            color: Colors.grey,
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            "noFavoriteCutsAdded".tr,
+            style: Styles.textStyleS16W600(color: Colors.grey),
+          ),
+          SizedBox(height: 8.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            child: Text(
+              "addPhotosOfFavoriteHaircuts".tr,
+              textAlign: TextAlign.center,
+              style: Styles.textStyleS14W400(color: Colors.grey),
+            ),
+          ),
+          SizedBox(height: 20.h),
+          InkWell(
+            onTap: isUploadingPhotos ? null : addPhotosToFavorites,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+              decoration: BoxDecoration(
+                color: ColorsData.secondary,
+                border: Border.all(color: ColorsData.primary, width: 1.w),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isUploadingPhotos
+                      ? SizedBox(
+                          width: 24.w,
+                          height: 24.h,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                ColorsData.primary),
+                          ),
+                        )
+                      : SvgPicture.asset(
+                          AssetsData.addImageIcon,
+                          width: 24.w,
+                          height: 24.h,
+                        ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    isUploadingPhotos ? "uploading".tr : "addYourFirstCut".tr,
+                    style: Styles.textStyleS16W400(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Local image viewer widget for fallback
+class _ImageViewScreen extends StatelessWidget {
+  final String imageUrl;
+
+  const _ImageViewScreen({Key? key, required this.imageUrl}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black.withOpacity(0.5),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: Center(
+          child: InteractiveViewer(
+            minScale: 0.5,
+            maxScale: 4.0,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            (loadingProgress.expectedTotalBytes ?? 1)
+                        : null,
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(ColorsData.primary),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error, color: Colors.red, size: 48),
+                    SizedBox(height: 16.h),
+                    Text(
+                      "failedToLoadImage".tr,
+                      style: Styles.textStyleS16W600(color: Colors.white),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
