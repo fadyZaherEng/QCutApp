@@ -79,10 +79,13 @@ class HomeView extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8)),
-                            child: Text(
-                              "whatIsCity".tr,
-                              style: Styles.textStyleS14W400(
-                                  color: ColorsData.cardStrock),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "whatIsCity".tr,
+                                style: Styles.textStyleS14W400(
+                                    color: ColorsData.cardStrock),
+                              ),
                             ),
                           ),
                         ),
@@ -101,10 +104,13 @@ class HomeView extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8)),
-                            child: Text(
-                              "when".tr,
-                              style: Styles.textStyleS14W400(
-                                  color: ColorsData.cardStrock),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "when".tr,
+                                style: Styles.textStyleS14W400(
+                                    color: ColorsData.cardStrock),
+                              ),
                             ),
                           ),
                         ),

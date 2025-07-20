@@ -82,7 +82,7 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                               ),
                               Text(
                                 appointment.paymentMethod,
-                                style: Styles.textStyleS10W400(
+                                style: Styles.textStyleS14W400(
                                     color: ColorsData.primary),
                               ),
                             ],
@@ -155,12 +155,12 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Styles.textStyleS10W400(),
+          style: Styles.textStyleS14W400(),
         ),
         Expanded(
           child: Text(
             value,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS14W400(),
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
           ),

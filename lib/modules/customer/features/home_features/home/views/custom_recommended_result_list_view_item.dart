@@ -22,7 +22,7 @@ class CustomBarberShopWideCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 343.w,
-      height: 274.h,
+      height: 300.h,
       decoration: BoxDecoration(
           color: ColorsData.cardColor,
           borderRadius: BorderRadius.circular(16.r)),
@@ -61,7 +61,7 @@ class CustomBarberShopWideCard extends StatelessWidget {
                     style: Styles.textStyleS14W400()),
                 SizedBox(height: 4.h),
                 Text(barber.fullName.splitMapJoin(', '),
-                    style: Styles.textStyleS10W400(),
+                    style: Styles.textStyleS14W400(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
                 SizedBox(height: 4.h),
@@ -70,23 +70,23 @@ class CustomBarberShopWideCard extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       AssetsData.mapPinIcon,
-                      width: 12.w,
-                      height: 12.h,
+                      width: 18.w,
+                      height: 18.h,
                       colorFilter: const ColorFilter.mode(
                           ColorsData.font, BlendMode.srcIn),
                     ),
                     SizedBox(width: 4.w),
                     Expanded(
                       child: Text(barber.city,
-                          style: Styles.textStyleS10W400(),
+                          style: Styles.textStyleS14W400(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 16.h),
                 ViewCustomButton(
-                  height: 28.h,
+                  height: 35.h,
                   width: double.infinity,
                   onPressed: () {
                     Get.toNamed(AppRouter.selectedPath, arguments: barber);

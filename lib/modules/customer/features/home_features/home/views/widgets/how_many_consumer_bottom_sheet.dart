@@ -10,6 +10,7 @@ import 'package:q_cut/modules/customer/features/home_features/home/models/barber
 
 class HowManyConsumerBottomSheet extends StatelessWidget {
   final Barber? barber;
+
   const HowManyConsumerBottomSheet({super.key, this.barber});
 
   @override
@@ -82,6 +83,7 @@ class HowManyConsumerBottomSheet extends StatelessWidget {
                 "isMultiple": 4,
               }),
             ),
+            const SizedBox(height: 32),
           ],
         ),
       ),

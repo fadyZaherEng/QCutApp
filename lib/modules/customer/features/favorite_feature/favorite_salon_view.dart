@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -124,7 +125,8 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
           ),
           SliverFillRemaining(
             child: isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: SpinKitDoubleBounce(color: ColorsData.primary))
                 : filteredFavorites.isEmpty
                     ? _buildEmptyState()
                     : ListView.builder(

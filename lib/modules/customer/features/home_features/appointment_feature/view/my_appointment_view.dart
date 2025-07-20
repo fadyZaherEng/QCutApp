@@ -20,7 +20,7 @@ class MyAppointmentView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Appointments"),
+        title:   Text("myAppointments".tr),
         actions: [
           _buildFilterButton(controller),
         ],
@@ -45,7 +45,7 @@ class MyAppointmentView extends StatelessWidget {
                   SizedBox(height: 16.h),
                   ElevatedButton(
                     onPressed: () => controller.fetchAppointments(),
-                    child: const Text('Retry'),
+                    child:   Text('Retry'.tr),
                   ),
                 ],
               ),
@@ -53,7 +53,7 @@ class MyAppointmentView extends StatelessWidget {
           } else if (controller.filteredAppointments.isEmpty) {
             return Center(
               child: Text(
-                'No appointments found',
+                'noAppointmentsFound'.tr,
                 style: Styles.textStyleS14W400(),
               ),
             );
@@ -94,25 +94,25 @@ class MyAppointmentView extends StatelessWidget {
         controller.setStatusFilter(value);
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
+          PopupMenuItem(
           value: 'all',
-          child: Text('All appointments'),
+          child: Text('allAppointments'.tr),
         ),
-        const PopupMenuItem(
+          PopupMenuItem(
           value: 'pending',
-          child: Text('Pending'),
+          child: Text('Pending'.tr),
         ),
-        const PopupMenuItem(
+          PopupMenuItem(
           value: 'cancelled',
-          child: Text('Cancelled'),
+          child: Text('Cancelled'.tr),
         ),
-        const PopupMenuItem(
+          PopupMenuItem(
           value: 'NotCome',
-          child: Text('Not Attended'),
+          child: Text('Not Attended'.tr),
         ),
-        const PopupMenuItem(
+          PopupMenuItem(
           value: 'completed',
-          child: Text('Completed'),
+          child: Text('Completed'.tr),
         ),
       ],
       icon: const Icon(Icons.filter_list),

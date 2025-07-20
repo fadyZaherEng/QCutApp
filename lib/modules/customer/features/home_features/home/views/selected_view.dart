@@ -121,7 +121,7 @@ class _SelectedViewState extends State<SelectedView> {
                                 ),
                                 Text(
                                   "instagram".tr,
-                                  style: Styles.textStyleS10W400(),
+                                  style: Styles.textStyleS14W500(),
                                 ),
                               ],
                             ),
@@ -152,7 +152,7 @@ class _SelectedViewState extends State<SelectedView> {
                                 ),
                                 Text(
                                   "direction".tr,
-                                  style: Styles.textStyleS10W400(),
+                                  style: Styles.textStyleS14W500(),
                                 ),
                               ],
                             ),
@@ -183,7 +183,7 @@ class _SelectedViewState extends State<SelectedView> {
                                 ),
                                 Text(
                                   "share".tr,
-                                  style: Styles.textStyleS10W400(),
+                                  style: Styles.textStyleS14W500(),
                                 ),
                               ],
                             ),
@@ -200,8 +200,8 @@ class _SelectedViewState extends State<SelectedView> {
                           children: [
                             SvgPicture.asset(
                               AssetsData.mapPinIcon,
-                              width: 12.w,
-                              height: 12.h,
+                              width: 18.w,
+                              height: 18.h,
                               colorFilter: const ColorFilter.mode(
                                 ColorsData.primary,
                                 BlendMode.srcIn,
@@ -214,7 +214,7 @@ class _SelectedViewState extends State<SelectedView> {
                             Expanded(
                               child: Text(
                                 barber.city,
-                                style: Styles.textStyleS12W400(),
+                                style: Styles.textStyleS14W500(),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -241,7 +241,7 @@ class _SelectedViewState extends State<SelectedView> {
                             ),
                             Text(
                               '15 min   1.5 km',
-                              style: Styles.textStyleS12W400(),
+                              style: Styles.textStyleS14W500(),
                             ),
                           ],
                         ),
@@ -314,7 +314,7 @@ class _SelectedViewState extends State<SelectedView> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ColorsData.primary,
                               ),
-                              child: Text("Retry",
+                              child: Text("Retry".tr,
                                   style: Styles.textStyleS14W400(
                                       color: Colors.white)),
                             ),
@@ -339,7 +339,7 @@ class _SelectedViewState extends State<SelectedView> {
                             ),
                             SizedBox(height: 10.h),
                             Text(
-                              "No photos available",
+                              "No photos available".tr,
                               style: Styles.textStyleS14W400(
                                   color: Colors.grey[600]),
                             ),
@@ -417,7 +417,7 @@ class _SelectedViewState extends State<SelectedView> {
           ),
           // Book button at bottom of screen
           Positioned(
-            bottom: 0,
+            bottom: 48,
             left: 0,
             right: 0,
             child: Container(

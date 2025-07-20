@@ -41,7 +41,7 @@ class NearbySalonsSection extends StatelessWidget {
               },
               child: Text(
                 'seeAll'.tr,
-                style: Styles.textStyleS14W400(),
+                style: Styles.textStyleS14W500(),
               ),
             ),
           ],

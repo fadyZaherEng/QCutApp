@@ -23,7 +23,7 @@ class CustomBarberListView extends StatelessWidget {
             ? controller.recommendedBarbers
             : controller.nearbyBarbers);
 
-    return Container(
+    return SizedBox(
       height: 281 * 3.h,
       child: Obx(() {
         if (controller.isLoading.value) {
@@ -43,7 +43,7 @@ class CustomBarberListView extends StatelessWidget {
                   : startIdx + itemsPerRow;
 
               return SizedBox(
-                height: 281.h,
+                height: 300.h,
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,

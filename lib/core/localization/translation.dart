@@ -380,6 +380,14 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "هل أنت متأكد أنك تريد حذف حسابك؟",
           "Account created successfully": "تم إنشاء الحساب بنجاح",
+          "Search for the time": "ابحث عن الوقت",
+          "favorites": "المفضلة",
+          "Pending": "قيد الانتظار",
+          "Cancelled": "ملغي",
+          "Not Attended": "لم يحضر",
+          "Completed": "مكتمل",
+          "status": "حالة الحجز",
+          "areYouSureDeleteAppointment": "هل أنت متأكد أنك تريد حذف الحجز؟",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -777,6 +785,15 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "Are you sure you want to delete your Account?",
           "Account created successfully": "Account created successfully",
+
+          "Search for the time": "Search for the time",
+          "favorites": "favorites",
+          "Pending": "Pending",
+          "Cancelled": "Cancelled",
+          "Not Attended": "Not Attended",
+          "Completed": "Completed",
+          "status": "status",
+          "areYouSureDeleteAppointment": "areYouSureDeleteAppointment",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1162,6 +1179,14 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "האם אתה בטוח שברצונך למחוק את החשבון שלך?",
           "Account created successfully": "החשבון נוצר בהצלחה",
+          "Search for the time": "חפש לפי זמן",
+          "favorites": "מועדפים",
+          "Pending": "ממתין",
+          "Cancelled": "בוטל",
+          "Not Attended": "לא הגיע",
+          "Completed": "הושלם",
+          "status": "סטטוס ההזמנה",
+          "areYouSureDeleteAppointment": "האם אתה בטוח שברצונך למחוק את ההזמנה?"
         },
       };
 }

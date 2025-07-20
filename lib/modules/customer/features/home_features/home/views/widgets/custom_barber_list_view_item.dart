@@ -27,7 +27,7 @@ class CustomBarberListViewItem extends StatelessWidget {
 
     return Container(
       width: 211.w,
-      height: 250.h,
+      height: 300.h,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 1),
           color: ColorsData.cardColor,
@@ -70,16 +70,18 @@ class CustomBarberListViewItem extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       AssetsData.personIcon,
-                      width: 14.w,
-                      height: 14.h,
+                      width: 18.w,
+                      height: 18.h,
                       colorFilter: const ColorFilter.mode(
-                          ColorsData.primary, BlendMode.srcIn),
+                        ColorsData.primary,
+                        BlendMode.srcIn,
+                      ),
                     ),
                     SizedBox(width: 4.w),
                     Expanded(
                       child: Text(
                         barberName,
-                        style: Styles.textStyleS10W400(),
+                        style: Styles.textStyleS13W400(),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -90,8 +92,8 @@ class CustomBarberListViewItem extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       AssetsData.mapPinIcon,
-                      width: 12.w,
-                      height: 12.h,
+                      width: 18.w,
+                      height: 18.h,
                       colorFilter: const ColorFilter.mode(
                           ColorsData.primary, BlendMode.srcIn),
                     ),
@@ -99,7 +101,7 @@ class CustomBarberListViewItem extends StatelessWidget {
                     Expanded(
                       child: Text(
                         city,
-                        style: Styles.textStyleS10W400(),
+                        style: Styles.textStyleS13W400(),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

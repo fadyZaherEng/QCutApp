@@ -30,7 +30,7 @@ class ViewCustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 25.h,
+      height: height ?? 35.h,
       width: width ?? 185.w,
       decoration: BoxDecoration(
         color: backgroundColor ?? ColorsData.primary,

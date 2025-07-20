@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
-import 'package:q_cut/modules/main/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:q_cut/modules/customer/features/favorite_feature/favorite_view_body.dart';
 
 class FavoriteView extends StatelessWidget {
