@@ -60,14 +60,14 @@ class BAppointmentView extends StatelessWidget {
                               height: 10.h,
                             ),
                             Text(
-                              controller.barberName.value,
+                              controller.barberName,
                               style: Styles.textStyleS14W700(),
                             ),
                             SizedBox(
                               height: 4.h,
                             ),
                             Text(
-                              controller.barberServices.value,
+                              controller.barberServices,
                               style: Styles.textStyleS12W400(),
                             ),
                           ],

@@ -210,7 +210,7 @@ class BStaticsViewBody extends StatelessWidget {
           )
         : SizedBox(
             width: 348.w,
-            height: 106.h,
+            height: 120.h,
             child: Row(
               children: [
                 Expanded(
@@ -249,8 +249,8 @@ class BStaticsViewBody extends StatelessWidget {
   Widget _buildPaymentCard(String title, String value, String subtitle,
       {double? progressValue, bool showProgress = true}) {
     return Container(
-      width: 109.w,
-      height: 106.h,
+      width: 116.w,
+      height: 130.h,
       padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 8.h),
       decoration: BoxDecoration(
         color: ColorsData.cardColor,

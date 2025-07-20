@@ -775,6 +775,7 @@ class MyTranslation extends Translations {
           "enterYourMessage": "Enter Your Message",
           "Are you sure you want to delete your Account?":
               "Are you sure you want to delete your Account?",
+
         },
         "he": {
           "emailreq": "דרוש אימייל",
