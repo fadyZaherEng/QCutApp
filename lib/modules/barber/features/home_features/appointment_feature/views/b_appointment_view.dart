@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_drawer.dart';
-import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_floating_action_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -19,16 +18,13 @@ class BAppointmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Building BAppointmentView");
     final controller = Get.put(BAppointmentController());
-    print("Controller initialized");
 
     return SafeArea(
       child: Scaffold(
         drawer: const CustomBDrawer(),
         body: RefreshIndicator(
           onRefresh: () {
-            print("Refresh indicator triggered");
             return controller.refreshAppointments();
           },
           child: Obx(() {
@@ -72,7 +68,7 @@ class BAppointmentView extends StatelessWidget {
                             ),
                             Text(
                               controller.barberServices.value,
-                              style: Styles.textStyleS10W400(),
+                              style: Styles.textStyleS12W400(),
                             ),
                           ],
                         ),
@@ -83,18 +79,17 @@ class BAppointmentView extends StatelessWidget {
                           color: ColorsData.cardStrock,
                         ),
                         SizedBox(
-                          height: 5.h,
+                          height: 12.h,
                         ),
                         CustomDaysPicker(
-                          titleSimpleDaysPicker: "My Appointments",
+                          titleSimpleDaysPicker: "myAppointments".tr,
                           selectedDay: controller.selectedDay.value,
                           onDaySelected: (day) {
-                            print("Day selected in days picker: $day");
                             controller.changeSelectedDay(day);
                           },
                         ),
                         SizedBox(
-                          height: 12.h,
+                          height: 16.h,
                         ),
                       ],
                     ),
@@ -103,7 +98,9 @@ class BAppointmentView extends StatelessWidget {
                 if (controller.isLoading.value)
                   const SliverToBoxAdapter(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: SpinKitDoubleBounce(
+                        color: ColorsData.primary,
+                      ),
                     ),
                   ),
                 if (!controller.isLoading.value &&
@@ -115,7 +112,7 @@ class BAppointmentView extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              "No appointments found",
+                              "noAppointmentsFound".tr,
                               style: Styles.textStyleS14W500(),
                             ),
                             if (controller.isError.value)
@@ -141,7 +138,7 @@ class BAppointmentView extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(top: 50.h),
                         child: Text(
-                          "No appointments for this day",
+                          "noAppointmentsForThisDay".tr,
                           style: Styles.textStyleS14W500(),
                         ),
                       ),
@@ -175,10 +172,10 @@ class BAppointmentView extends StatelessWidget {
                                 controller.deleteAppointment(appointment.id),
                             imageUrl: profileDrawerImage,
                             name: appointment.user.fullName,
-                            location: "Location",
+                            location: "location".tr,
                             service: appointment.services.isNotEmpty
                                 ? appointment.services[0].service.name
-                                : "Service",
+                                : "service".tr,
                             hairStyle: appointment.runtimeType.toString(),
                             qty: "${appointment.services.length}",
                             bookingDay: appointment.formattedDate,
@@ -196,7 +193,9 @@ class BAppointmentView extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(16.h),
                       child: const Center(
-                        child: CircularProgressIndicator(),
+                        child: SpinKitDoubleBounce(
+                          color: ColorsData.primary,
+                        ),
                       ),
                     ),
                   ),

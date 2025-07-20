@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -57,7 +58,7 @@ class _BProfileViewBodyState extends State<BProfileView>
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(
-          child: CircularProgressIndicator(color: ColorsData.primary),
+          child: SpinKitDoubleBounce(color: ColorsData.primary),
         );
       }
 
@@ -67,7 +68,7 @@ class _BProfileViewBodyState extends State<BProfileView>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Failed to load profile',
+                'Failed to load profile'.tr,
                 style: TextStyle(
                   fontSize: 16.sp,
                   color: Colors.white,
@@ -76,7 +77,7 @@ class _BProfileViewBodyState extends State<BProfileView>
               SizedBox(height: 16.h),
               ElevatedButton(
                 onPressed: controller.fetchProfileData,
-                child: const Text('Retry'),
+                child: Text('Retry'.tr),
               ),
             ],
           ),
@@ -85,8 +86,8 @@ class _BProfileViewBodyState extends State<BProfileView>
 
       final profileData = controller.profileData.value;
       if (profileData == null) {
-        return const Center(
-          child: Text('No profile data available',
+        return Center(
+          child: Text('No profile data available'.tr,
               style: TextStyle(color: Colors.white)),
         );
       }
@@ -94,13 +95,14 @@ class _BProfileViewBodyState extends State<BProfileView>
       // Handle empty data fields with defaults or placeholders
       final barberShop = profileData.barberShop.isNotEmpty
           ? profileData.barberShop
-          : 'My Barber Shop';
+          : 'My Barber Shop'.tr;
 
-      final city = profileData.city.isNotEmpty ? profileData.city : 'Not set';
+      final city =
+          profileData.city.isNotEmpty ? profileData.city : 'Not set'.tr;
 
       final instagramPage = profileData.instagramPage.isNotEmpty
           ? profileData.instagramPage
-          : 'Not set';
+          : 'Not set'.tr;
 
       final fullName =
           profileData.fullName.isNotEmpty ? profileData.fullName : 'Your Name';
@@ -136,7 +138,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                               color: ColorsData.secondary,
                               child: Center(
                                 child: Text(
-                                  "Add Cover Photo",
+                                  "Add Cover Photo".tr,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18.sp,
@@ -150,7 +152,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                           color: ColorsData.secondary,
                           child: Center(
                             child: Text(
-                              "Add Cover Photo",
+                              "Add Cover Photo".tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.sp,
@@ -183,9 +185,10 @@ class _BProfileViewBodyState extends State<BProfileView>
                             height: 18.h,
                             width: 18.w,
                           ),
+                          SizedBox(width: 5.w),
                           Text(
-                            "Take break",
-                            style: Styles.textStyleS10W700(color: Colors.black),
+                            "Take break".tr,
+                            style: Styles.textStyleS14W500(color: Colors.black),
                           ),
                         ],
                       ),
@@ -260,7 +263,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                         child: Text(
                           barberShop,
                           style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -280,8 +283,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "NO. 1",
-                              style: Styles.textStyleS10W700(
+                              "NO. 1".tr,
+                              style: Styles.textStyleS13W400(
                                   color: ColorsData.primary),
                             ),
                           ],
@@ -299,13 +302,14 @@ class _BProfileViewBodyState extends State<BProfileView>
                   SizedBox(height: 8.h),
                   _buildInfoRow(AssetsData.mapPinIcon, city),
                   SizedBox(height: 8.h),
-                  _buildInfoRow(AssetsData.callIcon, profileData.phoneNumber),
+                  _buildInfoRow(
+                      AssetsData.callIcon, "\u200E${profileData.phoneNumber}"),
                   SizedBox(height: 8.h),
                   _buildInfoRow(AssetsData.instagramIcon, instagramPage),
                   SizedBox(height: 16.h),
                   CustomBigButton(
                     color: const Color(0xA6C59D4E),
-                    textData: "Working days",
+                    textData: "workingDays".tr,
                     onPressed: () {
                       showBWorkingDaysBottomSheet(
                           context, profileData.workingDays);
@@ -313,7 +317,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   ),
                   SizedBox(height: 12.h),
                   CustomBigButton(
-                    textData: "Edit Profile",
+                    textData: "Edit Profile".tr,
                     onPressed: () async {
                       final result = await Get.toNamed(
                         AppRouter.beditProfilePath,
@@ -340,12 +344,14 @@ class _BProfileViewBodyState extends State<BProfileView>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildTabButton("My service", _tabController.index == 0),
-                      _buildTabButton("My gallery", _tabController.index == 1),
+                      _buildTabButton(
+                          "My service".tr, _tabController.index == 0),
+                      _buildTabButton(
+                          "My gallery".tr, _tabController.index == 1),
                     ],
                   ),
                   SizedBox(height: 16.h),
-                  Container(
+                  SizedBox(
                     // Use a fixed height that's tall enough to show content
                     height: 400.h,
                     child: TabBarView(
@@ -374,7 +380,7 @@ class _BProfileViewBodyState extends State<BProfileView>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Services (${controller.totalServices})",
+          "${"services".tr} (${controller.totalServices})",
           style: TextStyle(
             fontSize: 16.sp,
             color: Colors.white,
@@ -395,7 +401,7 @@ class _BProfileViewBodyState extends State<BProfileView>
               children: [
                 SizedBox(height: 50.h),
                 Text(
-                  'No services available',
+                  'No services available'.tr,
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: Colors.white,
@@ -407,11 +413,11 @@ class _BProfileViewBodyState extends State<BProfileView>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorsData.primary,
                   ),
-                  child: const Text('Refresh'),
+                  child: Text('Refresh'.tr),
                 ),
                 SizedBox(height: 16.h),
                 CustomBigButton(
-                  textData: "Add new service",
+                  textData: "Add new service".tr,
                   onPressed: () {
                     showCustomAddNewServiceBottomSheet(context);
                   },
@@ -439,7 +445,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                 Padding(
                   padding: EdgeInsets.only(top: 16.h),
                   child: CustomBigButton(
-                    textData: "Add new service",
+                    textData: "Add new service".tr,
                     onPressed: () {
                       showCustomAddNewServiceBottomSheet(context);
                     },
@@ -545,7 +551,7 @@ class _BProfileViewBodyState extends State<BProfileView>
               minimumSize: Size.zero,
             ),
             child: Text(
-              "Edit",
+              "Edit".tr,
               style: TextStyle(fontSize: 12.sp),
             ),
           ),
@@ -585,7 +591,7 @@ class _BProfileViewBodyState extends State<BProfileView>
   Widget _buildTabButton(String text, bool isActive) {
     return GestureDetector(
       onTap: () {
-        _tabController.animateTo(text == "My service" ? 0 : 1);
+        _tabController.animateTo(text == "My service".tr ? 0 : 1);
       },
       child: Column(
         children: [
@@ -616,7 +622,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(() => Text(
-                  "Gallery (${controller.galleryPhotos.length})",
+                  "'Gallery'.tr (${controller.galleryPhotos.length})",
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: Colors.white,
@@ -657,8 +663,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                           ),
                     label: Text(
                       controller.isUploadingPhotos.value
-                          ? "Uploading..."
-                          : "add photos",
+                          ? "Uploading...".tr
+                          : "add photos".tr,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 13.sp,
@@ -683,7 +689,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'No photos available',
+                      'No photos available'.tr,
                       style: TextStyle(
                         fontSize: 16.sp,
                         color: Colors.white,
@@ -692,7 +698,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                     SizedBox(height: 16.h),
                     ElevatedButton.icon(
                       icon: Icon(Icons.add_photo_alternate),
-                      label: Text('Add Photos'),
+                      label: Text('Add Photos'.tr),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorsData.primary,
                       ),

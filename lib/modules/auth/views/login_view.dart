@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
@@ -74,9 +75,9 @@ class _LoginViewState extends State<LoginView> {
                   Expanded(
                     child: CustomButton(
                       text: 'logIn'.tr,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        bottomLeft: Radius.circular(16),
+                      borderRadiusDirectional: BorderRadiusDirectional.only(
+                        topEnd: Radius.circular(16.r),
+                        bottomEnd: Radius.circular(16.r),
                       ),
                       onPressed: () {},
                       textColor: ColorsData.primary,
@@ -87,11 +88,11 @@ class _LoginViewState extends State<LoginView> {
                     child: CustomButton(
                       backgroundColor: ColorsData.font,
                       text: 'signUp'.tr,
-                      textStyle:
-                          Styles.textStyleS14W400(color: ColorsData.cardStrock),
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
+                      textStyle: Styles.textStyleS14W400(
+                          color: ColorsData.cardStrock, fontSize: 15.sp),
+                      borderRadiusDirectional: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(16.r),
+                        bottomStart: Radius.circular(16.r),
                       ),
                       onPressed: () {
                         Get.toNamed(AppRouter.signUpPath);
@@ -168,7 +169,9 @@ class _LoginViewState extends State<LoginView> {
                     SizedBox(height: 16.h),
                     Obx(
                       () => _authController.isLoading.value
-                          ? const CircularProgressIndicator()
+                          ? const SpinKitDoubleBounce(
+                              color: ColorsData.primary,
+                            )
                           : CustomBigButton(
                               textData: 'login'.tr,
                               onPressed: () {
@@ -184,6 +187,7 @@ class _LoginViewState extends State<LoginView> {
                           'continue'.tr,
                           style: Styles.textStyleS14W400(),
                         ),
+                        SizedBox(width: 5.w),
                         InkWell(
                             onTap: () {
                               Get.offAllNamed(AppRouter.homPath);

@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title,style: Styles.textStyleS16W600(),),
+      title: Text(title,style: Styles.textStyleS16W700(),),
       leading: CustomArrowLeft(onPressed: onPressed ,
       
       ),

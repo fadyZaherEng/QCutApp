@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 
@@ -15,25 +17,25 @@ class CustomDaysPicker extends StatelessWidget {
     this.titleSimpleDaysPicker,
   });
 
-  List<Map<String, dynamic>> _generateDynamicDays() {
+  List<Map<String, dynamic>> _generateDynamicDays(BuildContext context) {
     final now = DateTime.now();
     final List<Map<String, dynamic>> days = [];
 
-    // Generate 5 days starting from today
     for (int i = 0; i < 5; i++) {
       final day = now.add(Duration(days: i));
       days.add({
-        "day": DateFormat('E').format(day), // Short day name (Mon, Tue, etc.)
+        "day": DateFormat('E', Get.locale?.languageCode).format(day), // Localized day name
         "date": day.day,
-        "fullDate": day, // Store the full date for reference
+        "fullDate": day,
       });
     }
+
     return days;
   }
 
   @override
   Widget build(BuildContext context) {
-    final days = _generateDynamicDays();
+    final days = _generateDynamicDays(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +47,7 @@ class CustomDaysPicker extends StatelessWidget {
                 titleSimpleDaysPicker!,
                 style: TextStyle(
                   color: ColorsData.font,
-                  fontSize: 14.sp,
+                  fontSize:Get.locale?.languageCode == 'ar' ? 13.sp : 14.sp,
                   fontFamily: 'Alexandria',
                   fontWeight: FontWeight.w700,
                   height: 1.0,
@@ -79,7 +81,7 @@ class CustomDaysPicker extends StatelessWidget {
                       day["day"],
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black,
-                        fontSize: 12.sp,
+                        fontSize:Get.locale?.languageCode == 'ar' ? 9.sp : 12.sp,
                         fontFamily: 'Alexandria',
                         fontWeight: FontWeight.w500,
                       ),

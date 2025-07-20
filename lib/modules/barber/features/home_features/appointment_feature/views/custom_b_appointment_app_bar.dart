@@ -6,6 +6,7 @@ import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/logic/appointment_controller.dart';
 
 class CustomBAppointmentAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -15,7 +16,8 @@ class CustomBAppointmentAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    print("Building CustomBAppointmentAppBar");
+    final controller = Get.put(BAppointmentController());
+
     return Row(
       children: [
         Row(
@@ -29,16 +31,13 @@ class CustomBAppointmentAppBar extends StatelessWidget
                 BlendMode.srcIn,
               ),
             ),
-            SizedBox(
-              width: 2.w,
-            ),
+            SizedBox(width: 2.w),
+            //TODO : add address
             Text(
               '208 , New Gaza, New Gaza',
               style: Styles.textStyleS12W400(),
             ),
-            SizedBox(
-              width: 2.w,
-            ),
+            SizedBox(width: 2.w),
             SvgPicture.asset(
               AssetsData.downArrowIcon,
               width: 24.w,
@@ -53,7 +52,6 @@ class CustomBAppointmentAppBar extends StatelessWidget
         const Spacer(),
         InkWell(
             onTap: () {
-              print("Notification icon tapped, navigating to notifications");
               Get.toNamed(AppRouter.notificationPath);
             },
             child: SvgPicture.asset(
@@ -61,12 +59,9 @@ class CustomBAppointmentAppBar extends StatelessWidget
               width: 24,
               height: 24,
             )),
-        SizedBox(
-          width: 11.w,
-        ),
+        SizedBox(width: 11.w),
         InkWell(
             onTap: () {
-              print("Menu icon tapped, opening drawer");
               Scaffold.of(context).openDrawer();
             },
             child: SvgPicture.asset(

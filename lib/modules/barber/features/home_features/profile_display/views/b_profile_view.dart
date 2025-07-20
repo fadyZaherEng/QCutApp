@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,7 +57,7 @@ class _BProfileViewBodyState extends State<BProfileView>
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(
-          child: CircularProgressIndicator(color: ColorsData.primary),
+          child: SpinKitDoubleBounce(color: ColorsData.primary),
         );
       }
 
@@ -66,7 +67,7 @@ class _BProfileViewBodyState extends State<BProfileView>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Failed to load profile',
+                'Failed to load profile'.tr,
                 style: TextStyle(
                   fontSize: 16.sp,
                   color: Colors.white,
@@ -75,7 +76,7 @@ class _BProfileViewBodyState extends State<BProfileView>
               SizedBox(height: 16.h),
               ElevatedButton(
                 onPressed: controller.fetchProfileData,
-                child: const Text('Retry'),
+                child: Text('Retry'.tr),
               ),
             ],
           ),
@@ -84,8 +85,8 @@ class _BProfileViewBodyState extends State<BProfileView>
 
       final profileData = controller.profileData.value;
       if (profileData == null) {
-        return const Center(
-          child: Text('No profile data available',
+        return Center(
+          child: Text('No profile data available'.tr,
               style: TextStyle(color: Colors.white)),
         );
       }
@@ -136,7 +137,6 @@ class _BProfileViewBodyState extends State<BProfileView>
                         borderRadius: BorderRadius.circular(10.r),
                         color: ColorsData.font,
                       ),
-                      width: 104.w,
                       height: 36.h,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,9 +147,10 @@ class _BProfileViewBodyState extends State<BProfileView>
                             height: 18.h,
                             width: 18.w,
                           ),
+                          SizedBox(width: 5.w),
                           Text(
-                            "Take break",
-                            style: Styles.textStyleS10W700(color: Colors.black),
+                            "Take break".tr,
+                            style: Styles.textStyleS14W500(color: Colors.black),
                           ),
                         ],
                       ),
@@ -580,7 +581,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   final ImagePicker picker = ImagePicker();
                   final List<XFile> images = await picker.pickMultiImage();
                   if (images.isNotEmpty) {
-                    controller.addPhotosToGallery( );
+                    controller.addPhotosToGallery();
                   }
                 },
                 style: TextButton.styleFrom(

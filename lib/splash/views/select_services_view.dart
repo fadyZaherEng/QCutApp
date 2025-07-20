@@ -6,6 +6,7 @@ import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 
@@ -23,19 +24,24 @@ class SelectServicesView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // const Spacer(),
                   SvgPicture.asset(
                     width: 85.w,
                     height: 86.h,
                     AssetsData.logo,
                   ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
+                  SizedBox(width: 5.w),
                   SvgPicture.asset(
                     width: 103.w,
                     height: 31.h,
                     AssetsData.qCutTextImage,
                   ),
+                  const SizedBox(width: 15),
+                  buildDrawerItem(
+                      "changeLanguages".tr, AssetsData.changeLanguagesIcon, () {
+                    Get.toNamed(AppRouter.changeLangugesPath);
+                  }),
+                  // const Spacer(),
                 ],
               ),
               SizedBox(
@@ -55,14 +61,14 @@ class SelectServicesView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 41.h,
+                height: 16.h,
               ),
               Text(
                 'youAre'.tr,
                 style: Styles.textStyleS16W700(),
               ),
               SizedBox(
-                height: 24.h,
+                height: 39.h,
               ),
               CustomBigButton(
                 textData: 'barber'.tr,
@@ -93,6 +99,22 @@ class SelectServicesView extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
+    return Padding(
+      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+      child: GestureDetector(
+        onTap: onTap,
+        child: SvgPicture.asset(
+          imagePath,
+          height: 24.h,
+          width: 24.w,
+          colorFilter:
+              const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
         ),
       ),
     );

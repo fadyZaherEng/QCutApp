@@ -56,11 +56,11 @@ class CustomBigButton extends StatelessWidget {
               ? Styles.textStyleS10W500(
                   color: ColorsData.primary,
                 ).copyWith(
-                  fontSize: font ?? 15.sp,
+                  fontSize: font ?? 16.sp,
                 )
               : Styles.textStyleS16W700().copyWith(
                   color: ColorsData.bodyFont,
-                  fontSize: font ?? 15.sp,
+                  fontSize: font ?? 16.sp,
                 ),
         ),
       ),

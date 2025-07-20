@@ -29,11 +29,11 @@ class NotificationViewBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Failed to load notifications",
+              Text("Failed to load notifications".tr,
                   style: Styles.textStyleS14W700()),
               ElevatedButton(
                 onPressed: viewModel.refreshNotifications,
-                child: const Text("Retry"),
+                child: Text("Retry".tr),
               ),
             ],
           ),
@@ -46,11 +46,11 @@ class NotificationViewBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("No notifications available",
+              Text("No notifications available".tr,
                   style: Styles.textStyleS14W700()),
               ElevatedButton(
                 onPressed: viewModel.refreshNotifications,
-                child: const Text("Refresh"),
+                child: Text("Refresh".tr),
               ),
             ],
           ),
@@ -82,15 +82,15 @@ class NotificationCard extends StatelessWidget {
   final NotificationViewModel viewModel;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.notification,
     required this.viewModel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.r),
         color: ColorsData.cardColor,
@@ -117,7 +117,7 @@ class NotificationCard extends StatelessWidget {
                     ),
                     Text(
                       viewModel.getNotificationMessage(notification),
-                      style: Styles.textStyleS10W400(),
+                      style: Styles.textStyleS13W400(),
                     ),
                   ],
                 ),
@@ -133,14 +133,14 @@ class NotificationCard extends StatelessWidget {
                 children: [
                   CustomButton(
                     width: 138.w,
-                    text: "Yes",
+                    text: "Yes".tr,
                     onPressed: () => viewModel.handleAppointmentConfirmation(
                         notification, true),
                   ),
                   CustomButton(
                     backgroundColor: ColorsData.cardStrock,
                     width: 138.w,
-                    text: "No",
+                    text: "No".tr,
                     onPressed: () => viewModel.handleAppointmentConfirmation(
                         notification, false),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
@@ -74,9 +75,11 @@ class _SignUpViewState extends State<SignUpView> {
                     Expanded(
                       child: CustomButton(
                         text: 'logIn'.tr,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          bottomLeft: Radius.circular(16),
+                        textStyle: Styles.textStyleS14W400(
+                            color: ColorsData.cardStrock, fontSize: 15.sp),
+                        borderRadiusDirectional: BorderRadiusDirectional.only(
+                          topStart: Radius.circular(16.r),
+                          bottomStart: Radius.circular(16.r),
                         ),
                         onPressed: () {
                           Get.back();
@@ -88,9 +91,9 @@ class _SignUpViewState extends State<SignUpView> {
                     Expanded(
                       child: CustomButton(
                         text: 'signUp'.tr,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(16),
-                          bottomRight: Radius.circular(16),
+                        borderRadiusDirectional: BorderRadiusDirectional.only(
+                          topStart: Radius.circular(16.r),
+                          bottomStart: Radius.circular(16.r),
                         ),
                         onPressed: () {},
                         backgroundColor: ColorsData.secondary,
@@ -216,7 +219,9 @@ class _SignUpViewState extends State<SignUpView> {
                       SizedBox(height: 16.h),
                       Obx(
                         () => _authController.isLoading.value
-                            ? const CircularProgressIndicator()
+                            ? const SpinKitDoubleBounce(
+                                color: ColorsData.primary,
+                              )
                             : CustomBigButton(
                                 textData: 'register'.tr,
                                 onPressed: () {

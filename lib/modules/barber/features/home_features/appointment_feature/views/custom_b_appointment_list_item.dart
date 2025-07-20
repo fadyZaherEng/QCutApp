@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -78,7 +79,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
                     ),
                     SizedBox(width: 4.w),
                     Text(
-                      "Cash method",
+                      "cashMethod".tr,
                       style:
                           Styles.textStyleS10W400(color: ColorsData.secondary),
                     ),
@@ -127,19 +128,19 @@ class CustomBAppointmentListItem extends StatelessWidget {
           SizedBox(height: 12.h),
 
           // **Details in Rows**
-          _infoRow("Service", service),
-          _infoRow("Qty", qty),
-          _infoRow("Booking day", bookingDay),
-          _infoRow("Booking time", bookingTime),
-          _infoRow("Type", type),
+          _infoRow("service".tr, service),
+          _infoRow("Qty".tr, qty),
+          _infoRow("bookingDay".tr, bookingDay),
+          _infoRow("bookingTime".tr, bookingTime),
+          _infoRow("type".tr, type),
 
           SizedBox(height: 12.h),
 
           // **Price Details**
           Divider(color: Colors.white.withOpacity(0.3)),
           SizedBox(height: 8.h),
-          _infoRow("Price", "\$ ${price.toStringAsFixed(2)}"),
-          _infoRow("Final price", "\$ ${finalPrice.toStringAsFixed(2)}",
+          _infoRow("price".tr, "\$ ${price.toStringAsFixed(2)}"),
+          _infoRow("finalPrice".tr, "\$ ${finalPrice.toStringAsFixed(2)}",
               color: ColorsData.primary),
           SizedBox(height: 12.h),
 
@@ -148,7 +149,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
             children: [
               Expanded(
                 child: _customButton(
-                  "Change",
+                  "change".tr,
                   ColorsData.primary,
                   () {
                     showChangeTimeBottomSheet(context, bookingDay, id);
@@ -158,7 +159,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
               SizedBox(width: 12.w),
               Expanded(
                 child: _customButton(
-                  "Didn’t come",
+                  "Didn’t come".tr,
                   ColorsData.cardStrock,
                   () {
                     showDeleteAppointmentDialog(

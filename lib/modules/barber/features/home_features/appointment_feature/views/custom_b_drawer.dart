@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
-import 'package:q_cut/core/utils/constants/drawer_constants.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/main.dart';
 
@@ -27,7 +25,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
       backgroundColor: ColorsData.secondary,
       width: 311.w,
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +89,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 277.w,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,21 +98,13 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                             fullName,
                             style: Styles.textStyleS16W700(),
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
+                          SizedBox(height: 8.h),
                           Text(
-                            phoneNumber,
+                            "\u200E$phoneNumber",
                             style: Styles.textStyleS20W400(
                                 color: ColorsData.primary),
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          Text(
-                            "Select language",
-                            style: Styles.textStyleS20W400(),
-                          ),
+                          SizedBox(height: 8.h),
                         ],
                       ),
                     ),
@@ -125,7 +115,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Pay to Qcut", AssetsData.paymentIcon, () {
+                    buildDrawerItem("Pay to Qcut".tr, AssetsData.paymentIcon, () {
                       Get.toNamed(AppRouter.bpayToQCutPath);
                       //   context.push(AppRouter.bpayToQCutPath);
                     }),
@@ -136,14 +126,14 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("History", AssetsData.bhistoryIcon, () {
+                    buildDrawerItem("History".tr, AssetsData.bhistoryIcon, () {
                       Get.toNamed(AppRouter.bhistoryPath);
                     }),
                     SizedBox(
                       height: 10.h,
                     ),
                     buildDivider(),
-                    buildDrawerItem("Reports", AssetsData.historyIcon, () {
+                    buildDrawerItem("Reports".tr, AssetsData.historyIcon, () {
                       Get.toNamed(AppRouter.reportsPath);
                     }),
                     SizedBox(
@@ -153,7 +143,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Setting", AssetsData.settingIcon, () {
+                    buildDrawerItem("Setting".tr, AssetsData.settingIcon, () {
                       Get.toNamed(AppRouter.bsettingsPath);
                     }),
                     SizedBox(
@@ -177,7 +167,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                             ),
                             SizedBox(width: 12.w),
                             Text(
-                              "Notifications",
+                              "Notifications".tr,
                               style: Styles.textStyleS14W400(),
                             ),
                           ],
@@ -208,7 +198,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Contact us", AssetsData.contactUsIcon, () {
+                    buildDrawerItem("Contact us".tr, AssetsData.contactUsIcon, () {
                       Get.toNamed(AppRouter.bconectUsPath);
                     }),
                     SizedBox(
@@ -218,7 +208,7 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Share", AssetsData.shareIcon, () {}),
+                    buildDrawerItem("Share".tr, AssetsData.shareIcon, () {}),
                     SizedBox(
                       height: 10.h,
                     ),

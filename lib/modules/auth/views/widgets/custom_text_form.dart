@@ -63,8 +63,9 @@ class CustomTextFormField extends StatelessWidget {
         filled: true, // Ensure filled is true for proper background color
         contentPadding: EdgeInsets.only(
           left: 16.w,
-          top: 13.h,
-          bottom: 13.h,
+          right: 16.w,
+          top: 14.h,
+          bottom: 14.h,
         ),
         suffixIconColor: ColorsData.primary,
         prefixIconColor: ColorsData.secondary,

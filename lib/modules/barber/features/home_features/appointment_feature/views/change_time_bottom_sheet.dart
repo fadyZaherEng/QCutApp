@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
@@ -190,7 +191,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  "Change Time",
+                  "changeTime".tr,
                   style: Styles.textStyleS16W600(color: Colors.black),
                 ),
               ],
@@ -210,7 +211,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  "Days",
+                  "days".tr,
                   style: Styles.textStyleS14W500(color: Colors.black),
                 ),
               ],
@@ -271,7 +272,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  "Time",
+                  "time".tr,
                   style: Styles.textStyleS14W500(color: Colors.black),
                 ),
               ],
@@ -295,7 +296,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                   style: Styles.textStyleS14W400(color: ColorsData.secondary),
                   fillColor: ColorsData.font,
                   controller: timeController,
-                  hintText: "When?",
+                  hintText: "When?".tr,
                 ),
               ),
             ),
@@ -313,9 +314,9 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 onPressed: isLoading ? null : _sendTimeChangeRequest,
                 child: isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
+                    ? const SpinKitDoubleBounce(color:ColorsData.primary)
                     : Text(
-                        "Send to Customer",
+                        "sendToCustomer".tr,
                         style: Styles.textStyleS16W600(color: Colors.white),
                       ),
               ),

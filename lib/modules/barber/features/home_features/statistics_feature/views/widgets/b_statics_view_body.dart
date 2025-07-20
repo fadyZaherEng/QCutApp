@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -31,7 +32,7 @@ class BStaticsViewBody extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('All About your Salon',
+                Text('allAboutYourSalon'.tr,
                     style: Styles.textStyleS14W600(color: Colors.white)
                         .copyWith(
                             fontWeight: FontWeight.w700, fontSize: 13.sp)),
@@ -53,13 +54,13 @@ class BStaticsViewBody extends StatelessWidget {
             SizedBox(height: 10.h),
             Obx(() => controller.isStatsLoading.value
                 ? Center(
-                    child: CircularProgressIndicator(
+                    child: SpinKitDoubleBounce(
                       color: ColorsData.primary,
                     ),
                   )
                 : _buildStatisticsCards(controller)),
             SizedBox(height: 20.h),
-            Text('All Payment Methods',
+            Text('allPaymentMethods'.tr,
                 style: Styles.textStyleS14W600(color: Colors.white)),
             SizedBox(height: 10.h),
             _buildPaymentMethods(),
@@ -75,39 +76,39 @@ class BStaticsViewBody extends StatelessWidget {
   Widget _buildStatisticsCards(StatisticsController controller) {
     List<Map<String, dynamic>> stats = [
       {
-        'title': 'all appointments',
+        'title': 'allAppointments'.tr,
         'value': controller.barberStats.value.totalAppointments.toString(),
-        'unit': 'appointment',
+        'unit': 'appointment'.tr,
         'svgImagePath': AssetsData.calendarIcon,
       },
       {
-        'title': 'Working Hours',
+        'title': 'workingHours'.tr,
         'value': controller.barberStats.value.workingHours.toString(),
-        'unit': 'Hours',
+        'unit': 'hours'.tr,
         'svgImagePath': AssetsData.clockIcon,
       },
       {
-        'title': 'all income',
+        'title': 'allIncome'.tr,
         'value': controller.barberStats.value.totalIncome.toStringAsFixed(0),
         'unit': '\$',
         'svgImagePath': AssetsData.calendarIcon,
       },
       {
-        'title': 'income / hr.',
+        'title': 'incomeHr'.tr,
         'value': controller.formattedIncomePerHour,
         'unit': '\$',
         'svgImagePath': AssetsData.notificationsIcon,
       },
       {
-        'title': 'all consumers',
+        'title': 'allConsumers'.tr,
         'value': controller.totalConsumers.toString(),
-        'unit': 'consumers',
+        'unit': 'consumers'.tr,
         'svgImagePath': AssetsData.calendarIcon,
       },
       {
-        'title': 'New consumer',
+        'title': 'NewConsumers'.tr,
         'value': controller.barberStats.value.newConsumers.toString(),
-        'unit': 'consumers',
+        'unit': 'consumers'.tr,
         'svgImagePath': AssetsData.profileIcon,
       },
     ];
@@ -203,7 +204,7 @@ class BStaticsViewBody extends StatelessWidget {
 
     return Obx(() => controller.isPaymentStatsLoading.value
         ? Center(
-            child: CircularProgressIndicator(
+            child: SpinKitDoubleBounce(
               color: ColorsData.primary,
             ),
           )
@@ -214,18 +215,18 @@ class BStaticsViewBody extends StatelessWidget {
               children: [
                 Expanded(
                   child: _buildPaymentCard(
-                    'All Pay methods',
+                    'allPaymentMethods'.tr,
                     controller.paymentStats.value.totalPayments.toString(),
-                    'Process',
+                    'process'.tr,
                     showProgress: false,
                   ),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: _buildPaymentCard(
-                    'Cash methods',
+                    'cashMethod'.tr,
                     '${controller.paymentStats.value.cashPercentage.toStringAsFixed(0)}%',
-                    'Process',
+                    'process'.tr,
                     progressValue:
                         controller.paymentStats.value.cashPercentage / 100,
                   ),
@@ -233,9 +234,9 @@ class BStaticsViewBody extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: _buildPaymentCard(
-                    'Visa methods',
+                    'visaMethod'.tr,
                     '${controller.paymentStats.value.visaPercentage.toStringAsFixed(0)}%',
-                    'Process',
+                    'process'.tr,
                     progressValue:
                         controller.paymentStats.value.visaPercentage / 100,
                   ),
@@ -257,7 +258,7 @@ class BStaticsViewBody extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (title == 'All Pay methods')
+          if (title == 'allPaymentMethods'.tr)
             Column(
               children: [
                 SvgPicture.asset(
@@ -324,7 +325,7 @@ class BStaticsViewBody extends StatelessWidget {
 
     return Obx(() => controller.isMonthlyStatsLoading.value
         ? Center(
-            child: CircularProgressIndicator(
+            child: SpinKitDoubleBounce(
               color: ColorsData.primary,
             ),
           )
@@ -341,7 +342,7 @@ class BStaticsViewBody extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 8.w, bottom: 14.h),
                   child: Text(
-                    'Salon Booking Rate',
+                    'salonBookingRate'.tr,
                     style: Styles.textStyleS14W600(color: Colors.white),
                   ),
                 ),
@@ -357,15 +358,15 @@ class BStaticsViewBody extends StatelessWidget {
                             return ColorsData.primary.withOpacity(0.8);
                           },
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            const months = [
-                              'Jan',
-                              'Feb',
-                              'Mar',
-                              'Aug',
-                              'Sep',
-                              'Oct',
-                              'Nov',
-                              'Dec'
+                            final months = [
+                              'Jan'.tr,
+                              'Feb'.tr,
+                              'Mar'.tr,
+                              'Aug'.tr,
+                              'Sep'.tr,
+                              'Oct'.tr,
+                              'Nov'.tr,
+                              'Dec'.tr
                             ];
                             return BarTooltipItem(
                               '${months[group.x.toInt()]}: ${rod.toY.toInt()}',
@@ -384,19 +385,19 @@ class BStaticsViewBody extends StatelessWidget {
                           sideTitles: SideTitles(
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
-                              const months = [
-                                'Jan',
-                                'Feb',
-                                'Mar',
-                                'Apr',
-                                'May',
-                                'Jun',
-                                'Jul',
-                                'Aug',
-                                'Sep',
-                                'Oct',
-                                'Nov',
-                                'Dec'
+                              final months = [
+                                'Jan'.tr,
+                                'Feb'.tr,
+                                'Mar'.tr,
+                                'Apr'.tr,
+                                'May'.tr,
+                                'Jun'.tr,
+                                'Jul'.tr,
+                                'Aug'.tr,
+                                'Sep'.tr,
+                                'Oct'.tr,
+                                'Nov'.tr,
+                                'Dec'.tr,
                               ];
                               return Padding(
                                 padding: EdgeInsets.only(top: 8.h),

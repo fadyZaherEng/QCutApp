@@ -54,7 +54,7 @@ class _CustomAddNewServiceBottomSheetState
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text('Take a photo'),
+                title:   Text('Take a photo'.tr),
                 onTap: () async {
                   final XFile? file =
                       await picker.pickImage(source: ImageSource.camera);
@@ -63,7 +63,7 @@ class _CustomAddNewServiceBottomSheetState
               ),
               ListTile(
                 leading: const Icon(Icons.image),
-                title: const Text('Choose from gallery'),
+                title:   Text('Choose from gallery'.tr),
                 onTap: () async {
                   final XFile? file =
                       await picker.pickImage(source: ImageSource.gallery);
@@ -190,8 +190,8 @@ class _CustomAddNewServiceBottomSheetState
               AssetsData.addnewservicebottonicon,
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Add New Service",
+              Text(
+              "Add New Service".tr,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -200,7 +200,7 @@ class _CustomAddNewServiceBottomSheetState
             ),
             const SizedBox(height: 4),
             Text(
-              "Add Service photo",
+              "Add Service photo".tr,
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -268,7 +268,7 @@ class _CustomAddNewServiceBottomSheetState
               ),
               fillColor: ColorsData.font,
               controller: serviceNameController,
-              hintText: "Enter Service Name",
+              hintText: "Enter Service Name".tr,
             ),
             SizedBox(height: 12.h),
 
@@ -279,7 +279,7 @@ class _CustomAddNewServiceBottomSheetState
               ),
               fillColor: ColorsData.font,
               controller: servicePriceController,
-              hintText: "Enter Service Price",
+              hintText: "Enter Service Price".tr,
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 12.h),
@@ -295,7 +295,7 @@ class _CustomAddNewServiceBottomSheetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Enter Min Time',
+                            'Enter Min Time'.tr,
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.grey,
@@ -349,7 +349,7 @@ class _CustomAddNewServiceBottomSheetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Enter Max Time',
+                            'Enter Max Time'.tr,
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.grey,
@@ -424,8 +424,8 @@ class _CustomAddNewServiceBottomSheetState
                             color: Colors.white,
                             strokeWidth: 3,
                           )
-                        : const Text(
-                            "Confirm",
+                        :   Text(
+                            "Confirm".tr,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

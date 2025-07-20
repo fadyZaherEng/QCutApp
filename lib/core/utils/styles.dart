@@ -10,7 +10,7 @@ abstract class Styles {
   static TextStyle textStyleS8W400(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 6.sp,
+        fontSize: 8.sp,
         fontWeight: FontWeight.w400,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -172,10 +172,10 @@ abstract class Styles {
 
   // Font size 14
   static TextStyle textStyleS14W400(
-          {Color? color, double? letterSpacing, String? fontFamily}) =>
+          {Color? color, double? letterSpacing, String? fontFamily,fontSize,fontWeight}) =>
       TextStyle(
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w400,
+        fontSize:fontSize?? 13.sp,
+        fontWeight:fontWeight?? FontWeight.w500,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
         fontFamily: fontFamily ?? defaultFontFamily,
@@ -184,7 +184,7 @@ abstract class Styles {
   static TextStyle textStyleS14W500(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 12.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w500,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -194,7 +194,7 @@ abstract class Styles {
   static TextStyle textStyleS14W600(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 12.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w600,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -204,7 +204,7 @@ abstract class Styles {
   static TextStyle textStyleS14W700(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 12.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w700,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -215,7 +215,7 @@ abstract class Styles {
   static TextStyle textStyleS15W400(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 13.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w400,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -225,7 +225,7 @@ abstract class Styles {
   static TextStyle textStyleS15W500(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 13.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w500,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -235,7 +235,7 @@ abstract class Styles {
   static TextStyle textStyleS15W600(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 13.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w600,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -245,7 +245,7 @@ abstract class Styles {
   static TextStyle textStyleS15W700(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 13.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w700,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -256,7 +256,7 @@ abstract class Styles {
   static TextStyle textStyleS16W400(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 14.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w400,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -266,7 +266,7 @@ abstract class Styles {
   static TextStyle textStyleS16W500(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 14.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w500,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -276,7 +276,7 @@ abstract class Styles {
   static TextStyle textStyleS16W600(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 14.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w600,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
@@ -286,7 +286,7 @@ abstract class Styles {
   static TextStyle textStyleS16W700(
           {Color? color, double? letterSpacing, String? fontFamily}) =>
       TextStyle(
-        fontSize: 14.sp,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w700,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,

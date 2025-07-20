@@ -7,6 +7,7 @@ import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
 import 'package:q_cut/qcut_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/services/shared_pref/pref_keys.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 String profileImage = SharedPref().getString(PrefKeys.profilePic) ??
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzph4xv23B3sfc8O09BVewi1IeI-FWnHVvyxsnzqa6muN8-XWy08Vu0teNV7zXZrV1h8M&usqp=CAU";
@@ -20,6 +21,9 @@ void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPref().instantiatePreferences();
+
+  // Initialize all supported locales (e.g., 'ar', 'en')
+  await initializeDateFormatting();
 
   await Firebase.initializeApp(
     name: "QCut",

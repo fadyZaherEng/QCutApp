@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
     this.textStyle,
     this.isLoading =
         false, // Add the isLoading parameter with default value false
+    this.borderRadiusDirectional,
   });
 
   final String text;
@@ -26,6 +27,7 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final Color? backgroundColor;
   final Color? textColor;
+  final BorderRadiusDirectional? borderRadiusDirectional;
   final BorderRadius? borderRadius;
   final double? fontSize;
   final ButtonStyle? style;
@@ -42,10 +44,12 @@ class CustomButton extends StatelessWidget {
             TextButton.styleFrom(
               backgroundColor: backgroundColor ?? ColorsData.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: borderRadius ?? BorderRadius.circular(8.r),
+                borderRadius:borderRadiusDirectional ?? borderRadius ?? BorderRadius.circular(8.r),
               ),
-              padding: EdgeInsets.zero, // Remove default padding
-              minimumSize: Size.zero, // Remove minimum size constraints
+              padding: EdgeInsets.zero,
+              // Remove default padding
+              minimumSize: Size.zero,
+              // Remove minimum size constraints
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
         onPressed: onPressed,
@@ -68,7 +72,8 @@ class CustomButton extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: textStyle ??
                         Styles.textStyleS14W400(
-                            color: textColor ?? ColorsData.font),
+                          color: textColor ?? ColorsData.font,
+                        ),
                   ),
           ),
         ),

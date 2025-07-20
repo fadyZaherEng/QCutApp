@@ -19,7 +19,7 @@ class AuthController extends GetxController {
   final TextEditingController phoneNumberController =
       //  TextEditingController(text: "+970591999999");
       //   barber
-      TextEditingController(text: "+201018089213");
+      TextEditingController(text: '\u200E+201018089213');
 
   final TextEditingController passwordController =
       TextEditingController(text: "Aa123456789.");
@@ -27,6 +27,7 @@ class AuthController extends GetxController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController otpController = TextEditingController();
+
   // Form Keys
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
@@ -64,7 +65,7 @@ class AuthController extends GetxController {
     try {
       final userData = UserModel(
         fullName: fullNameController.text.trim(),
-        phoneNumber: phoneNumberController.text.trim(),
+        phoneNumber: phoneNumberController.text.trim().replaceAll('\u200E', ''),
         password: passwordController.text,
         city: city.text,
       );
@@ -128,7 +129,7 @@ class AuthController extends GetxController {
       final fcmToken = await getFCMToken();
 
       final requestData = {
-        'phoneNumber': phoneNumberController.text.trim(),
+        'phoneNumber': phoneNumberController.text.trim().replaceAll('\u200E', ''),
         'password': passwordController.text,
         "fcmToken": fcmToken
       };
@@ -158,7 +159,7 @@ class AuthController extends GetxController {
 
         // You might want to show a success message
 
-        ShowToast.showSuccessSnackBar(message: 'Logged in successfully');
+        ShowToast.showSuccessSnackBar(message: "loggedInSuccessfully".tr);
 
         Get.offAllNamed(AppRouter.bottomNavigationBar);
       } else {

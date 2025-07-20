@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -100,7 +101,7 @@ class _CustomTimeSelectDialogState extends State<CustomTimeSelectDialog> {
             Row(
               children: [
                 Text(
-                  "Time",
+                  "time".tr,
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.grey[600],
@@ -136,7 +137,7 @@ class _CustomTimeSelectDialogState extends State<CustomTimeSelectDialog> {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  "Confirm time",
+                  "confirmTime".tr,
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
@@ -188,7 +189,8 @@ class _CustomTimeSelectDialogState extends State<CustomTimeSelectDialog> {
         crossAxisCount: 7,
         childAspectRatio: 1,
       ),
-      itemCount: 42, // Show a maximum of 6 weeks
+      itemCount: 42,
+      // Show a maximum of 6 weeks
       itemBuilder: (context, index) {
         // Skip days before the first day of the month
         if (index < firstDayOfWeek) {
@@ -336,11 +338,11 @@ class _CustomTimeSelectDialogState extends State<CustomTimeSelectDialog> {
 void showCustomTimeSelectDialog(BuildContext context,
     {Function(String)? onTimeSelected}) {
   final List<String> timeOptions = [
-    'Today',
-    'This Week',
-    'This Month',
-    'This Year',
-    'All Time'
+    'today'.tr,
+    'thisWeek'.tr,
+    'thisMonth'.tr,
+    'thisYear'.tr,
+    'allTime'.tr,
   ];
 
   showDialog(
@@ -357,7 +359,7 @@ void showCustomTimeSelectDialog(BuildContext context,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Select Time Frame',
+                'selectTimeFrame'.tr,
                 style: Styles.textStyleS16W700(color: Colors.white),
               ),
               SizedBox(height: 16.h),

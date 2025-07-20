@@ -30,8 +30,8 @@ class BAppointmentController extends GetxController {
   final RxInt selectedDay = 0.obs;
 
   // Barber profile info
-  final RxString barberName = "Barber shop".obs;
-  final RxString barberServices = "Hair Style, Cuts, Face shaving".obs;
+  final RxString barberName = "barberShop".tr.obs;
+  final RxString barberServices = "hairStyleCutsFaceShaving".tr.obs;
   final RxString barberImage = "".obs;
 
   @override
@@ -62,17 +62,9 @@ class BAppointmentController extends GetxController {
       String formattedDate =
           DateFormat('yyyy-MM-dd').format(selectedDate.value);
 
-      print("Fetching appointments for date: $formattedDate");
-      print("API URL: ${Variables.GET_BARBER_APPOINTMENTS}$formattedDate");
 
       final response = await _apiCall
           .getData("${Variables.GET_BARBER_APPOINTMENTS}$formattedDate");
-
-      print("API Response status code: ${response.statusCode}");
-      print("API Response headers: ${response.headers}");
-      print("API Response body length: ${response.body.length}");
-      print(
-          "API Response body (first 500 chars): ${response.body.substring(0, response.body.length > 500 ? 500 : response.body.length)}");
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
