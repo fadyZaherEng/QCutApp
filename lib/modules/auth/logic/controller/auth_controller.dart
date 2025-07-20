@@ -94,7 +94,8 @@ class AuthController extends GetxController {
           return;
         }
 
-        ShowToast.showSuccessSnackBar(message: 'Account created successfully');
+        ShowToast.showSuccessSnackBar(
+            message: 'Account created successfully'.tr);
 
         Get.to(() => OtpVerificationView(userId: userId.value));
       } else {
@@ -129,7 +130,8 @@ class AuthController extends GetxController {
       final fcmToken = await getFCMToken();
 
       final requestData = {
-        'phoneNumber': phoneNumberController.text.trim().replaceAll('\u200E', ''),
+        'phoneNumber':
+            phoneNumberController.text.trim().replaceAll('\u200E', ''),
         'password': passwordController.text,
         "fcmToken": fcmToken
       };

@@ -379,6 +379,7 @@ class MyTranslation extends Translations {
           "enterYourMessage": "أدخل رسالتك",
           "Are you sure you want to delete your Account?":
               "هل أنت متأكد أنك تريد حذف حسابك؟",
+          "Account created successfully": "تم إنشاء الحساب بنجاح",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -775,7 +776,7 @@ class MyTranslation extends Translations {
           "enterYourMessage": "Enter Your Message",
           "Are you sure you want to delete your Account?":
               "Are you sure you want to delete your Account?",
-
+          "Account created successfully": "Account created successfully",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1159,7 +1160,8 @@ class MyTranslation extends Translations {
           "Chat with us": "צ'אט איתנו",
           "enterYourMessage": "הזן את ההודעה שלך",
           "Are you sure you want to delete your Account?":
-              "האם אתה בטוח שברצונך למחוק את החשבון שלך?"
+              "האם אתה בטוח שברצונך למחוק את החשבון שלך?",
+          "Account created successfully": "החשבון נוצר בהצלחה",
         },
       };
 }
