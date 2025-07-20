@@ -391,7 +391,7 @@ class _BProfileViewBodyState extends State<BProfileView>
         Obx(() {
           if (controller.isServicesLoading.value) {
             return const Center(
-              child: CircularProgressIndicator(color: ColorsData.primary),
+              child: SpinKitDoubleBounce(color: ColorsData.primary),
             );
           }
 
@@ -622,7 +622,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(() => Text(
-                  "'Gallery'.tr (${controller.galleryPhotos.length})",
+                  "${"Gallery".tr} (${controller.galleryPhotos.length})",
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: Colors.white,

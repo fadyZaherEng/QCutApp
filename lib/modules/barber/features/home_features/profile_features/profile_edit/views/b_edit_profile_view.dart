@@ -22,7 +22,7 @@ class BEditProfileView extends StatelessWidget {
       backgroundColor: ColorsData.secondary,
       appBar: AppBar(
         backgroundColor: ColorsData.secondary,
-        title: Text("Edit Profile", style: Styles.textStyleS16W700()),
+        title: Text("Edit Profile".tr, style: Styles.textStyleS16W700()),
         centerTitle: true,
         elevation: 0,
       ),
@@ -35,47 +35,47 @@ class BEditProfileView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Profile Photo Section
-                    _buildTitle("Change Profile Photo"),
+                    _buildTitle("Change Profile Photo".tr),
                     SizedBox(height: 16.h),
                     _buildProfilePhoto(controller),
                     SizedBox(height: 24.h),
 
                     // Cover Photo Section
-                    _buildTitle("Change Cover Photo"),
+                    _buildTitle("Change Cover Photo".tr),
                     SizedBox(height: 16.h),
                     _buildCoverPhoto(controller),
                     SizedBox(height: 32.h),
 
                     // Personal Details Section
-                    _buildTitle("Change Your Details"),
+                    _buildTitle("Change Your Details".tr),
                     SizedBox(height: 20.h),
-                    _buildInputField("Change your name", "Full Name",
+                    _buildInputField("Change your name".tr, "Full Name".tr,
                         controller.nameController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Phone Number", "Phone Number",
+                    _buildInputField("Change Your Phone Number".tr, "Phone Number".tr,
                         controller.phoneController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Saloon Name", "Saloon Name",
+                    _buildInputField("Change Your Saloon Name".tr, "Saloon Name".tr,
                         controller.saloonController),
                     SizedBox(height: 16.h),
                     _buildInputField(
-                        "Change Your City", "City", controller.cityController),
+                        "Change Your City".tr, "City".tr, controller.cityController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Bank Account", "Bank Account",
+                    _buildInputField("Change Your Bank Account".tr, "Bank Account".tr,
                         controller.bankAccountController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Instagram Page", "Instagram",
+                    _buildInputField("Change Your Instagram Page".tr, "Instagram".tr,
                         controller.instagramController),
-                    _buildNoteText("It's not necessary if you haven't"),
+                    _buildNoteText("It's not necessary if you haven't".tr),
 
                     SizedBox(height: 24.h),
                     Divider(thickness: 1.w, color: ColorsData.cardStrock),
                     SizedBox(height: 24.h),
 
                     // Off Days Section
-                    _buildTitle("Set Your Off Days"),
+                    _buildTitle("Set Your Off Days".tr),
                     SizedBox(height: 16.h),
-                    _buildDropdownField("Select days when you don't work", () {
+                    _buildDropdownField("Select days when you don't work".tr, () {
                       Get.bottomSheet(
                         ChooseOffDaysBottomSheet(
                           onDaysSelected: (selectedDays) {
@@ -94,12 +94,12 @@ class BEditProfileView extends StatelessWidget {
                       );
                     }),
                     _buildNoteText(
-                        "It's not necessary if you don't have off days"),
+                        "It's not necessary if you don't have off days".tr),
 
                     SizedBox(height: 32.h),
 
                     // Working Days Section
-                    _buildTitle("Set Your Working Hours"),
+                    _buildTitle("Set Your Working Hours".tr),
                     SizedBox(height: 16.h),
                     _buildWorkingDaysSelector(controller),
 
@@ -230,7 +230,7 @@ class BEditProfileView extends StatelessWidget {
                   child: Obx(() {
                     final offDays = Get.find<BEditProfileController>().offDays;
                     return Text(
-                      offDays.isEmpty ? "Select off days" : offDays.join(", "),
+                      offDays.isEmpty ? "Select off days".tr : offDays.join(", "),
                       style: Styles.textStyleS14W400(
                           color: offDays.isEmpty ? Colors.grey : Colors.white),
                       overflow: TextOverflow.ellipsis,
@@ -270,7 +270,7 @@ class BEditProfileView extends StatelessWidget {
         onPressed: () {
           controller.updateProfile();
         },
-        child: Text("Confirm",
+        child: Text("Confirm".tr,
             style: Styles.textStyleS16W600(color: Colors.white)),
       ),
     );
@@ -284,12 +284,12 @@ class BEditProfileView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Working Days Schedule",
+                Text("Working Days Schedule".tr,
                     style: Styles.textStyleS14W500(color: Colors.white)),
                 TextButton.icon(
                   onPressed: () => controller.addWorkingDay(),
                   icon: const Icon(Icons.add, color: ColorsData.primary),
-                  label: Text("Add Day",
+                  label: Text("Add Day".tr,
                       style:
                           Styles.textStyleS12W500(color: ColorsData.primary)),
                 ),
@@ -307,7 +307,7 @@ class BEditProfileView extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "No working days set. Add your working days.",
+                    "No working days set. Add your working days.".tr,
                     style: Styles.textStyleS14W400(color: Colors.grey),
                   ),
                 ),
@@ -410,7 +410,7 @@ class BEditProfileView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("From",
+                    Text("From".tr,
                         style: Styles.textStyleS12W400(color: Colors.grey)),
                     SizedBox(height: 8.h),
                     GestureDetector(
@@ -474,7 +474,7 @@ class BEditProfileView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("To",
+                    Text("To".tr,
                         style: Styles.textStyleS12W400(color: Colors.grey)),
                     SizedBox(height: 8.h),
                     GestureDetector(

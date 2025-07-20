@@ -54,7 +54,7 @@ class _CustomAddNewServiceBottomSheetState
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title:   Text('Take a photo'.tr),
+                title: Text('Take a photo'.tr),
                 onTap: () async {
                   final XFile? file =
                       await picker.pickImage(source: ImageSource.camera);
@@ -63,7 +63,7 @@ class _CustomAddNewServiceBottomSheetState
               ),
               ListTile(
                 leading: const Icon(Icons.image),
-                title:   Text('Choose from gallery'.tr),
+                title: Text('Choose from gallery'.tr),
                 onTap: () async {
                   final XFile? file =
                       await picker.pickImage(source: ImageSource.gallery);
@@ -176,29 +176,38 @@ class _CustomAddNewServiceBottomSheetState
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              ),
+            Row(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+                const Spacer(),
+                SvgPicture.asset(
+                  height: 24.h,
+                  width: 24.w,
+                  AssetsData.addnewservicebottonicon,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "Add new service".tr,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ColorsData.primary,
+                  ),
+                ),
+                const SizedBox(width: 4),
+              ],
             ),
-            SvgPicture.asset(
-              height: 36.h,
-              width: 36.w,
-              AssetsData.addnewservicebottonicon,
-            ),
-            const SizedBox(height: 8),
-              Text(
-              "Add New Service".tr,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: ColorsData.primary,
-              ),
-            ),
-            const SizedBox(height: 4),
+            const Divider(),
+            const SizedBox(height: 12),
             Text(
               "Add Service photo".tr,
               style: TextStyle(
@@ -270,7 +279,7 @@ class _CustomAddNewServiceBottomSheetState
               controller: serviceNameController,
               hintText: "Enter Service Name".tr,
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 24.h),
 
             /// Service Price Input
             CustomTextFormField(
@@ -282,7 +291,7 @@ class _CustomAddNewServiceBottomSheetState
               hintText: "Enter Service Price".tr,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 24.h),
 
             /// Service Time Input
             Column(
@@ -343,7 +352,7 @@ class _CustomAddNewServiceBottomSheetState
                         ],
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 24.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,7 +410,7 @@ class _CustomAddNewServiceBottomSheetState
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 24.h),
 
             /// Confirm Button
             Obx(() => SizedBox(
@@ -424,7 +433,7 @@ class _CustomAddNewServiceBottomSheetState
                             color: Colors.white,
                             strokeWidth: 3,
                           )
-                        :   Text(
+                        : Text(
                             "Confirm".tr,
                             style: TextStyle(
                               fontSize: 16,
@@ -434,7 +443,7 @@ class _CustomAddNewServiceBottomSheetState
                           ),
                   ),
                 )),
-            SizedBox(height: 16.h),
+            SizedBox(height: 64.h),
           ],
         ),
       ),

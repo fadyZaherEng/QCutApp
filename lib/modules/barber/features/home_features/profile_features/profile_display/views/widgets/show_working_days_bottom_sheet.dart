@@ -19,6 +19,15 @@ void showWorkingDaysBottomSheet(BuildContext context) {
 
 void showBWorkingDaysBottomSheet(
     BuildContext context, List<WorkingDay> workingDays) {
+  if (workingDays.isEmpty) {
+    Get.snackbar(
+      'No Working Days',
+      'You have not set any working days yet',
+      backgroundColor: Colors.orange,
+      colorText: Colors.white,
+    );
+    return;
+  }
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -53,7 +62,7 @@ void showBWorkingDaysBottomSheet(
           ),
           SizedBox(height: 16.h),
           Text(
-            "working days".tr,
+            "workingDays".tr,
             style: Styles.textStyleS14W700(color: ColorsData.primary),
           ),
           SizedBox(height: 16.h),
