@@ -349,6 +349,8 @@ class MyTranslation extends Translations {
           "Add Day": "اضافة يوم",
           "No working days set. Add your working days.":
               "لم يتم تعيين اي ايام عمل بعد. اضف ايام العمل الخاصة بك.",
+          "It's not necessary if you haven't":
+              "لا يكون مطلوبا اذا لم يتم تعيين اي ايام عمل بعد",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -712,6 +714,8 @@ class MyTranslation extends Translations {
           "Add Day": "Add Day",
           "No working days set. Add your working days.":
               "No working days set. Add your working days.",
+          "It's not necessary if you haven't":
+              "It's not necessary if you haven't",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1067,6 +1071,7 @@ class MyTranslation extends Translations {
           "No working days set. Add your working days.":
               "לא נמצאו ימי עבודה. הוסף ימי העבודה שלך.",
           "Change Your Facebook Page": "שנה את דף הפייסבוק שלך",
+          "It's not necessary if you haven't": "זה לא הכרחי אם עדיין לא הגדרת",
         },
       };
 }
