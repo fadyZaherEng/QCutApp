@@ -73,7 +73,7 @@ void showBWorkingDaysBottomSheet(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    day.day,
+                    day.day.tr,
                     style: Styles.textStyleS14W700(color: ColorsData.secondary),
                   ),
                   Text(
