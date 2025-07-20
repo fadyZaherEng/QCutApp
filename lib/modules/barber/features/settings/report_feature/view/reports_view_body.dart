@@ -200,9 +200,9 @@ class ReportsViewBody extends StatelessWidget {
           _tableHeaderCell('name'.tr, flex: 2),
           _tableHeaderCell('date'.tr, flex: 2),
           _tableHeaderCell('services'.tr, flex: 2),
-          _tableHeaderCell('price'.tr),
+          _tableHeaderCell('price'.tr,flex: 2),
           _tableHeaderCell('qcutTax'.tr, flex: 2),
-          _tableHeaderCell('total'.tr),
+          _tableHeaderCell('total'.tr, flex: 2),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -23,7 +24,7 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
     return Obx(() {
       if (_controller.isLoading.value) {
         return const Center(
-            child: CircularProgressIndicator(color: ColorsData.primary));
+            child: SpinKitDoubleBounce(color: ColorsData.primary));
       }
 
       if (_controller.isError.value) {

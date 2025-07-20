@@ -14,6 +14,7 @@ class MessageInput extends StatelessWidget {
     this.onRecTap,
     this.onSendMessage,
   });
+
   final void Function()? onSend;
   final void Function()? onCameraTap;
   final void Function()? onRecTap;

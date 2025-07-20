@@ -43,7 +43,7 @@ class BSettingViewBody extends StatelessWidget {
                     SizedBox(height: 5.h),
                     Text(fullName, style: Styles.textStyleS16W700()),
                     SizedBox(height: 3.h),
-                    Text(phoneNumber,
+                    Text("\u200E$phoneNumber",
                         style:
                             Styles.textStyleS20W400(color: ColorsData.primary)),
                   ],
@@ -105,7 +105,7 @@ class BSettingViewBody extends StatelessWidget {
                       ColorsData.primary, BlendMode.srcIn),
                 ),
                 SizedBox(width: 12.w),
-                Text(title, style: Styles.textStyleS14W400()),
+                Text(title, style: Styles.textStyleS15W400()),
               ],
             ),
             SvgPicture.asset(

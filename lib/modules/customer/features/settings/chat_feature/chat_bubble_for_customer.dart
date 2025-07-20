@@ -23,33 +23,34 @@ class ChatBubbleForCustomer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 25.r,
-            foregroundImage: CachedNetworkImageProvider(profileImage),
-            backgroundColor: ColorsData.secondary,
-          ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: Container(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 25.r,
+              foregroundImage: CachedNetworkImageProvider(profileImage),
+              backgroundColor: ColorsData.secondary,
+            ),
+            SizedBox(width: 8.w),
+            Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-              // constraints: BoxConstraints(maxWidth: 0.7.sw),
+              constraints: BoxConstraints(maxWidth: 0.7.sw, minWidth: 70.w),
               decoration: BoxDecoration(
                 color: ColorsData.cardColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.r),
                   topRight: Radius.circular(20.r),
-                  bottomRight: Radius.circular(20.r),
+                  bottomLeft: Radius.circular(20.r),
                 ),
               ),
               child: _buildMessageContent(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

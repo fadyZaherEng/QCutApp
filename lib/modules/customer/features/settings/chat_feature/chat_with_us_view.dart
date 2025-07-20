@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:q_cut/core/utils/widgets/custom_app_bar.dart';
 import 'package:q_cut/modules/customer/features/settings/chat_feature/chat_with_us_view_body.dart';
@@ -34,7 +35,7 @@ class _ChatWithUsViewState extends State<ChatWithUsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Chat with us"),
+      appBar:   CustomAppBar(title: "Chat with us".tr),
       body: ChatWithUsViewBody(key: _chatBodyKey),
       bottomNavigationBar: SingleChildScrollView(
         padding:
@@ -42,6 +43,7 @@ class _ChatWithUsViewState extends State<ChatWithUsView> {
         child: MessageInput(
           onSendMessage: _handleSendMessage,
           onCameraTap: _handleImageSelection,
+
         ),
       ),
     );

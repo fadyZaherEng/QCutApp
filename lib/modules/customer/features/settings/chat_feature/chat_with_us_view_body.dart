@@ -64,8 +64,8 @@ class ChatWithUsViewBodyState extends State<ChatWithUsViewBody> {
               controller: _scrollController,
               reverse: true,
               padding: EdgeInsets.symmetric(horizontal: 15.w),
-              itemCount: _chatController.messages.length +
-                  1, // +1 for loading indicator
+              itemCount: _chatController.messages.length + 1,
+              // +1 for loading indicator
               itemBuilder: (context, index) {
                 if (index == _chatController.messages.length) {
                   return Obx(() => _chatController.isLoadingMore.value

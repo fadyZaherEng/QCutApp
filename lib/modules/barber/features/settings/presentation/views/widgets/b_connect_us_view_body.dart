@@ -29,7 +29,7 @@ class BConnectUsViewBody extends StatelessWidget {
             height: 32.h,
           ),
           Text(
-            "You can contact by",
+            "You can contact by".tr,
             style: Styles.textStyleS16W700(color: ColorsData.primary),
           ),
           SizedBox(
@@ -48,7 +48,7 @@ class BConnectUsViewBody extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  "Instgram",
+                  "Instagram".tr,
                   style: Styles.textStyleS16W400(),
                 ),
               ],
@@ -76,7 +76,7 @@ class BConnectUsViewBody extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  "Chat with us",
+                  "Chat with us".tr,
                   style: Styles.textStyleS16W400(),
                 ),
               ],

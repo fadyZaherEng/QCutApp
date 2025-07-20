@@ -52,20 +52,20 @@ class BEditProfileView extends StatelessWidget {
                     _buildInputField("Change your name".tr, "Full Name".tr,
                         controller.nameController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Phone Number".tr, "Phone Number".tr,
-                        controller.phoneController),
+                    _buildInputField("Change Your Phone Number".tr,
+                        "Phone Number".tr, controller.phoneController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Saloon Name".tr, "Saloon Name".tr,
-                        controller.saloonController),
+                    _buildInputField("Change Your Saloon Name".tr,
+                        "Saloon Name".tr, controller.saloonController),
                     SizedBox(height: 16.h),
-                    _buildInputField(
-                        "Change Your City".tr, "City".tr, controller.cityController),
+                    _buildInputField("Change Your City".tr, "City".tr,
+                        controller.cityController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Bank Account".tr, "Bank Account".tr,
-                        controller.bankAccountController),
+                    _buildInputField("Change Your Bank Account".tr,
+                        "Bank Account".tr, controller.bankAccountController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Instagram Page".tr, "Instagram".tr,
-                        controller.instagramController),
+                    _buildInputField("Change Your Instagram Page".tr,
+                        "Instagram".tr, controller.instagramController),
                     _buildNoteText("It's not necessary if you haven't".tr),
 
                     SizedBox(height: 24.h),
@@ -75,7 +75,8 @@ class BEditProfileView extends StatelessWidget {
                     // Off Days Section
                     _buildTitle("Set Your Off Days".tr),
                     SizedBox(height: 16.h),
-                    _buildDropdownField("Select days when you don't work".tr, () {
+                    _buildDropdownField("Select days when you don't work".tr,
+                        () {
                       Get.bottomSheet(
                         ChooseOffDaysBottomSheet(
                           onDaysSelected: (selectedDays) {
@@ -103,11 +104,11 @@ class BEditProfileView extends StatelessWidget {
                     SizedBox(height: 16.h),
                     _buildWorkingDaysSelector(controller),
 
-                    SizedBox(height: 40.h),
+                    SizedBox(height: 16.h),
 
                     // Confirm Button
                     _buildConfirmButton(controller),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 64.h),
                   ],
                 ),
               ),
@@ -230,7 +231,9 @@ class BEditProfileView extends StatelessWidget {
                   child: Obx(() {
                     final offDays = Get.find<BEditProfileController>().offDays;
                     return Text(
-                      offDays.isEmpty ? "Select off days".tr : offDays.join(", "),
+                      offDays.isEmpty
+                          ? "Select off days".tr
+                          : offDays.join(", "),
                       style: Styles.textStyleS14W400(
                           color: offDays.isEmpty ? Colors.grey : Colors.white),
                       overflow: TextOverflow.ellipsis,
@@ -378,7 +381,7 @@ class BEditProfileView extends StatelessWidget {
                     items: availableDays
                         .map((day) => DropdownMenuItem<String>(
                               value: day,
-                              child: Text(day),
+                              child: Text(day.tr),
                             ))
                         .toList(),
                     onChanged: (value) {

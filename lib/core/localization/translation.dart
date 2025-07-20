@@ -351,6 +351,34 @@ class MyTranslation extends Translations {
               "لم يتم تعيين اي ايام عمل بعد. اضف ايام العمل الخاصة بك.",
           "It's not necessary if you haven't":
               "لا يكون مطلوبا اذا لم يتم تعيين اي ايام عمل بعد",
+          'Monday': "الاثنين",
+          'Tuesday': "الثلاثاء",
+          'Wednesday': "الاربعاء",
+          'Thursday': "الخميس",
+          'Friday': "الجمعة",
+          'Saturday': "السبت",
+          'Sunday': "الاحد",
+          "Choose Off Days": "اختر ايام العطل",
+          "Select days when you are not working": "اختر ايام العطل",
+          "All days are already set as working days.":
+              "جميع الايام موجودة بالفعل كايام عمل.",
+          "Payment Time line": "وقت الدفع",
+          "Pay to QCUT": "دفع الى QCUT",
+          "months": "شهور",
+          "qcutTax": "الضريبة الخاصة بQCUT",
+          "price": "السعر",
+          "Settings": "الاعدادات",
+          "Are you sure you want to log out from your account?":
+              "هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟",
+          "Are you sure you want to delete your Account?":
+              "هل أنت متأكد أنك تريد حذف حسابك؟",
+          "contact us": "اتصل بنا",
+          "You can contact by": "يمكنك التواصل معنا من خلال",
+          "Chat with us": "دردشة معنا",
+          "Chat with us": "دردشة معنا",
+          "enterYourMessage": "أدخل رسالتك",
+          "Are you sure you want to delete your Account?":
+              "هل أنت متأكد أنك تريد حذف حسابك؟",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -716,6 +744,37 @@ class MyTranslation extends Translations {
               "No working days set. Add your working days.",
           "It's not necessary if you haven't":
               "It's not necessary if you haven't",
+
+          'Monday': "Monday",
+          'Tuesday': "Tuesday",
+          'Wednesday': "Wednesday",
+          'Thursday': "Thursday",
+          'Friday': "Friday",
+          'Saturday': "Saturday",
+          'Sunday': "Sunday",
+          "Choose Off Days": "Choose Off Days",
+          "Select days when you are not working":
+              "Select days when you are not working",
+          "All days are already set as working days.":
+              "All days are already set as working days.",
+
+          "Payment Time line": "Payment Time line",
+          "Pay to QCUT": "Pay to QCUT",
+          "months": "months",
+          "qcutTax": "qcutTax",
+          "price": "price",
+          "Settings": "Settings",
+          "Are you sure you want to log out from your account?":
+              "Are you sure you want to log out from your account?",
+          "Are you sure you want to delete your Account?":
+              "Are you sure you want to delete your Account?",
+          "contact us": "contact us",
+          "You can contact by": "You can contact by",
+          "Chat with us": "Chat with us",
+          "Chat with us": "Chat with us",
+          "enterYourMessage": "Enter Your Message",
+          "Are you sure you want to delete your Account?":
+              "Are you sure you want to delete your Account?",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1072,6 +1131,34 @@ class MyTranslation extends Translations {
               "לא נמצאו ימי עבודה. הוסף ימי העבודה שלך.",
           "Change Your Facebook Page": "שנה את דף הפייסבוק שלך",
           "It's not necessary if you haven't": "זה לא הכרחי אם עדיין לא הגדרת",
+          "Monday": "יום שני",
+          "Tuesday": "יום שלישי",
+          "Wednesday": "יום רביעי",
+          "Thursday": "יום חמישי",
+          "Friday": "יום שישי",
+          "Saturday": "יום שבת",
+          "Sunday": "יום ראשון",
+          "Choose Off Days": "בחר ימי חופשה",
+          "Select days when you are not working": "בחר ימים שבהם אינך עובד",
+          "All days are already set as working days.":
+              "כל הימים כבר מוגדרים כימי עבודה.",
+          "Payment Time line": "ציר זמן התשלום",
+          "Pay to QCUT": "שלם ל-QCUT",
+          "months": "חודשים",
+          "qcutTax": "מס QCUT",
+          "price": "מחיר",
+          "Settings": "הגדרות",
+          "Are you sure you want to log out from your account?":
+              "האם אתה בטוח שברצונך להתנתק מהחשבון שלך?",
+          "Are you sure you want to delete your Account?":
+              "האם אתה בטוח שברצונך למחוק את החשבון שלך?",
+          "contact us": "צור קשר",
+          "You can contact by": "ניתן ליצור קשר באמצעות",
+          "Chat with us": "צ'אט איתנו",
+          "Chat with us": "צ'אט איתנו",
+          "enterYourMessage": "הזן את ההודעה שלך",
+          "Are you sure you want to delete your Account?":
+              "האם אתה בטוח שברצונך למחוק את החשבון שלך?"
         },
       };
 }

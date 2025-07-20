@@ -21,7 +21,7 @@ class ReportsView extends StatelessWidget {
         leading: const CustomArrowLeft(),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 15.w),
+            padding: EdgeInsets.only(right: 15.w,left: 15.w),
             child: SvgPicture.asset(AssetsData.reportsIcon),
           )
         ],

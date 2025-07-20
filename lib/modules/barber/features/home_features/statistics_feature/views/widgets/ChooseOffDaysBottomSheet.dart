@@ -10,10 +10,10 @@ class ChooseOffDaysBottomSheet extends StatefulWidget {
   final List<String> selectedDays;
 
   const ChooseOffDaysBottomSheet({
-    Key? key,
+    super.key,
     required this.onDaysSelected,
     this.selectedDays = const [],
-  }) : super(key: key);
+  });
 
   @override
   State<ChooseOffDaysBottomSheet> createState() =>
@@ -22,13 +22,13 @@ class ChooseOffDaysBottomSheet extends StatefulWidget {
 
 class _ChooseOffDaysBottomSheetState extends State<ChooseOffDaysBottomSheet> {
   final List<String> allDays = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
+    'Monday'.tr,
+    'Tuesday'.tr,
+    'Wednesday'.tr,
+    'Thursday'.tr,
+    'Friday'.tr,
+    'Saturday'.tr,
+    'Sunday'.tr,
   ];
 
   late List<String> selectedDays;
@@ -65,7 +65,7 @@ class _ChooseOffDaysBottomSheetState extends State<ChooseOffDaysBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Choose Off Days",
+                "Choose Off Days".tr,
                 style: Styles.textStyleS16W700(color: Colors.white),
               ),
               IconButton(
@@ -75,7 +75,7 @@ class _ChooseOffDaysBottomSheetState extends State<ChooseOffDaysBottomSheet> {
             ],
           ),
           Text(
-            "Select days when you are not working",
+            "Select days when you are not working".tr,
             style: Styles.textStyleS14W400(color: Colors.grey),
           ),
           SizedBox(height: 16.h),
@@ -115,7 +115,7 @@ class _ChooseOffDaysBottomSheetState extends State<ChooseOffDaysBottomSheet> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 24.h),
                 child: Text(
-                  "All days are already set as working days.",
+                  "All days are already set as working days.".tr,
                   style: Styles.textStyleS14W400(color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
@@ -138,12 +138,12 @@ class _ChooseOffDaysBottomSheetState extends State<ChooseOffDaysBottomSheet> {
                 Get.back();
               },
               child: Text(
-                "Confirm",
+                "Confirm".tr,
                 style: Styles.textStyleS16W600(color: Colors.white),
               ),
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 64.h),
         ],
       ),
     );

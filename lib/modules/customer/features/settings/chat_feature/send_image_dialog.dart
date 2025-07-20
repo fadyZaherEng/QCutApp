@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -27,14 +28,15 @@ class DeleteAccountDialog extends StatelessWidget {
               ),
             ),
             SvgPicture.asset(
-              AssetsData.trashIcon, 
+              AssetsData.trashIcon,
               width: 32.w,
               height: 32.h,
-              colorFilter: const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
             ),
             SizedBox(height: 16.h),
             Text(
-              "Are you sure you want to delete your Account?",
+              "Are you sure you want to delete your Account?".tr,
               style: Styles.textStyleS14W700(color: ColorsData.secondary),
               textAlign: TextAlign.center,
             ),
@@ -50,7 +52,8 @@ class DeleteAccountDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("Yes", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("Yes".tr,
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -63,7 +66,8 @@ class DeleteAccountDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("NO", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("No".tr,
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
               ],
