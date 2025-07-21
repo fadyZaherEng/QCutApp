@@ -14,7 +14,7 @@ class PreviousBookingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => appointments.isEmpty
-        ? const Center(child: Text('No previous appointments'))
+        ?   Center(child: Text('No previous appointments'.tr))
         : ListView.builder(
             itemCount: appointments.length,
             itemBuilder: (context, index) => CustomBookingAgainItem(

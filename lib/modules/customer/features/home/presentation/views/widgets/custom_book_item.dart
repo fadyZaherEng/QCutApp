@@ -20,7 +20,7 @@ class CustomBookItem extends StatelessWidget {
       children: [
         Container(
           width: 126.w,
-          height: 194.h,
+          height: 200.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16.r),
@@ -43,7 +43,7 @@ class CustomBookItem extends StatelessWidget {
             padding: EdgeInsets.only(right: 4.w, bottom: 4.h, top: 4.h),
             child: Container(
               width: double.infinity,
-              height: 194.h,
+              height: 200.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(16.r),
@@ -65,30 +65,12 @@ class CustomBookItem extends StatelessWidget {
                         const Spacer(),
                         Text(
                           appointment?.paymentMethod.toUpperCase() ?? "cash".tr,
-                          style: Styles.textStyleS10W400(
+                          style: Styles.textStyleS14W400(
                               color: ColorsData.primary),
                         ),
                       ],
                     ),
-                    SizedBox(height: 6.h),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          AssetsData.mapPinIcon,
-                          width: 12.w,
-                          height: 12.h,
-                          colorFilter: const ColorFilter.mode(
-                            ColorsData.primary,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        Text(
-                          'yourLocation'.tr,
-                          style: Styles.textStyleS12W400(),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6.h),
+                      SizedBox(height: 6.h),
                     _buildInfoRow(
                         "service".tr,
                         appointment?.services
@@ -109,9 +91,9 @@ class CustomBookItem extends StatelessWidget {
                         "bookingTime".tr,
                         appointment != null
                             ? "${DateFormat('hh:mm a').format(appointment!.startDate)} - ${DateFormat('hh:mm a').format(appointment!.endDate)}"
-                            : "Not set"),
+                            : "Not set".tr),
                     _buildInfoRow(
-                        "status".tr, appointment?.status ?? "pending"),
+                        "status".tr, appointment?.status ?? "Pending".tr),
                   ],
                 ),
               ),
@@ -129,12 +111,12 @@ class CustomBookItem extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS14W400(),
           ),
           const Spacer(),
           Text(
             value,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS14W400(),
           ),
         ],
       ),

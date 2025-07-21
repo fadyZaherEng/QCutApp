@@ -388,6 +388,16 @@ class MyTranslation extends Translations {
           "Completed": "مكتمل",
           "status": "حالة الحجز",
           "areYouSureDeleteAppointment": "هل أنت متأكد أنك تريد حذف الحجز؟",
+          "Previous": "السابق",
+          "Currently": "الحالي",
+          'No previous appointments': "لا يوجد حجوزات سابقة",
+          "bookingAgain": "احجز مرة اخرى",
+          "Delete": "حذف",
+          "INSTGRAM": "  الانستقرام",
+          "You can Contact us by": "يمكنك التواصل معنا من خلال",
+          "resetPhoneNumber": "إعادة تعيين رقم الهاتف",
+          "Please enter your phone number": "يرجى إدخال رقم الهاتف الخاص بك",
+          "Phone number is invalid": "رقم الهاتف غير صالح",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -794,6 +804,17 @@ class MyTranslation extends Translations {
           "Completed": "Completed",
           "status": "status",
           "areYouSureDeleteAppointment": "areYouSureDeleteAppointment",
+
+          "Previous": "Previous",
+          "Currently": "Currently",
+          'No previous appointments': "No previous appointments",
+          "bookingAgain": "bookingAgain",
+          "Delete": "Delete",
+          "INSTGRAM": " INSTGRAM",
+          "You can Contact us by": "You can Contact us by",
+          "resetPhoneNumber": "resetPhoneNumber",
+          "Please enter your phone number": "Please enter your phone number",
+          "Phone number is invalid": "Phone number is invalid",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1186,7 +1207,18 @@ class MyTranslation extends Translations {
           "Not Attended": "לא הגיע",
           "Completed": "הושלם",
           "status": "סטטוס ההזמנה",
-          "areYouSureDeleteAppointment": "האם אתה בטוח שברצונך למחוק את ההזמנה?"
+          "areYouSureDeleteAppointment":
+              "האם אתה בטוח שברצונך למחוק את ההזמנה?",
+          "Previous": "קודם",
+          "Currently": "נוכחי",
+          "No previous appointments": "אין פגישות קודמות",
+          "bookingAgain": "הזמן שוב",
+          "Delete": "מחק",
+          "INSTGRAM": "אינסטגרם",
+          "You can Contact us by": "ניתן ליצור איתנו קשר באמצעות",
+          "resetPhoneNumber": "איפוס מספר טלפון",
+          "Please enter your phone number": "אנא הזן את מספר הטלפון שלך",
+          "Phone number is invalid": "מספר טלפון לא חוקי"
         },
       };
 }

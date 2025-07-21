@@ -28,7 +28,7 @@ class ConnectUsViewBody extends StatelessWidget {
             height: 32.h,
           ),
           Text(
-            "You can Contact us by",
+            "You can Contact us by".tr,
             style: Styles.textStyleS16W700(color: ColorsData.primary),
           ),
           SizedBox(
@@ -47,7 +47,7 @@ class ConnectUsViewBody extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  "INSTGRAM",
+                  "INSTGRAM".tr,
                   style: Styles.textStyleS16W400(),
                 ),
               ],
@@ -75,7 +75,7 @@ class ConnectUsViewBody extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  "Chat with us",
+                  "Chat with us".tr,
                   style: Styles.textStyleS16W400(),
                 ),
               ],

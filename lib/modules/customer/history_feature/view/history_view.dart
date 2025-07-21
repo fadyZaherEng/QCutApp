@@ -13,7 +13,7 @@ class HistoryView extends GetView<HistoryController> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('History'),
+          title:   Text('History'.tr),
           centerTitle: true,
           backgroundColor: Colors.transparent,
           leading: IconButton(
@@ -22,13 +22,13 @@ class HistoryView extends GetView<HistoryController> {
               Navigator.pop(context);
             },
           ),
-          bottom: const TabBar(
+          bottom:   TabBar(
             indicatorColor: ColorsData.primary,
             labelColor: ColorsData.font,
             unselectedLabelColor: ColorsData.font,
             tabs: [
-              Tab(text: 'Previous'),
-              Tab(text: 'Currently'),
+              Tab(text: 'Previous'.tr),
+              Tab(text: 'Currently'.tr),
             ],
           ),
         ),

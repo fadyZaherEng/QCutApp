@@ -48,7 +48,7 @@ class _SettingViewBodyState extends State<SettingViewBody> {
                     SizedBox(height: 1.h),
                     Text(fullName, style: Styles.textStyleS16W700()),
                     SizedBox(height: 3.h),
-                    Text(phoneNumber,
+                    Text("\u200E$phoneNumber",
                         style:
                             Styles.textStyleS20W400(color: ColorsData.primary)),
                   ],
@@ -78,7 +78,9 @@ class _SettingViewBodyState extends State<SettingViewBody> {
               }),
               buildDivider(),
               buildDrawerItem("changePhoneNumber".tr, AssetsData.callIcon, () {
-                context.push(AppRouter.resetPhoneNumberPath);
+                Get.toNamed(AppRouter.resetPhoneNumberPath);
+
+                // context.push(AppRouter.resetPhoneNumberPath);
               }),
               buildDivider(),
               buildDrawerItem(
@@ -116,7 +118,7 @@ class _SettingViewBodyState extends State<SettingViewBody> {
                       ColorsData.primary, BlendMode.srcIn),
                 ),
                 SizedBox(width: 12.w),
-                Text(title, style: Styles.textStyleS14W400()),
+                Text(title, style: Styles.textStyleS14W500()),
               ],
             ),
             SvgPicture.asset(

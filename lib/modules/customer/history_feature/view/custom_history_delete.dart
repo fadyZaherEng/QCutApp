@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -27,7 +28,7 @@ class CustomHistoryDelete extends StatelessWidget {
             children: [
               Container(
                 width: 126.w,
-                height: 194.h,
+                height: 200.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16.r),
@@ -50,7 +51,7 @@ class CustomHistoryDelete extends StatelessWidget {
                   padding: EdgeInsets.only(right: 4.w, bottom: 4.h, top: 4.h),
                   child: Container(
                     width: double.infinity,
-                    height: 194.h,
+                    height: 200.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(16.r),
@@ -66,42 +67,24 @@ class CustomHistoryDelete extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "Barber shop",
-                                style: Styles.textStyleS12W700(),
+                                "barberShop".tr,
+                                style: Styles.textStyleS14W400(),
                               ),
                               const Spacer(),
                               Text(
-                                "Cash",
-                                style: Styles.textStyleS10W400(
+                                "cashMethod".tr,
+                                style: Styles.textStyleS14W400(
                                     color: ColorsData.primary),
                               ),
                             ],
                           ),
                           SizedBox(height: 6.h),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                AssetsData.mapPinIcon,
-                                width: 12.w,
-                                height: 12.h,
-                                colorFilter: const ColorFilter.mode(
-                                  ColorsData.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              Text(
-                                '208 , New Gaza, New Gaza',
-                                style: Styles.textStyleS12W400(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 6.h),
-                          _buildInfoRow("Service", "Hair style"),
-                          _buildInfoRow("Price", "\$ 20"),
-                          _buildInfoRow("Qty", "1 consumer"),
-                          _buildInfoRow("Booking day", "Sat 12/1/2024"),
-                          _buildInfoRow("Booking time", "11-12 pm"),
-                          _buildInfoRow("Type", "booking"),
+                          _buildInfoRow("service".tr, "Hair style"),
+                          _buildInfoRow("price".tr, "\$ 20"),
+                          _buildInfoRow("Qty".tr, "1 consumer"),
+                          _buildInfoRow("bookingDay".tr, "Sat 12/1/2024"),
+                          _buildInfoRow("bookingTime".tr, "11-12 pm"),
+                          _buildInfoRow("type".tr, "booking"),
                         ],
                       ),
                     ),
@@ -112,7 +95,7 @@ class CustomHistoryDelete extends StatelessWidget {
           ),
           SizedBox(height: 24.h),
           appointment.CustomBigButton(
-            textData: "Delete",
+            textData: "Delete".tr,
             onPressed: onDelete,
           ),
         ],
@@ -127,12 +110,12 @@ class CustomHistoryDelete extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS14W400(),
           ),
           const Spacer(),
           Text(
             value,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS14W400(),
           ),
         ],
       ),

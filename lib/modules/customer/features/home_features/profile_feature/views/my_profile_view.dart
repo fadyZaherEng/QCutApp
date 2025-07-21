@@ -173,11 +173,8 @@ class MyProfileView extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 5.h),
-                        Text(
-                          Get.locale?.languageCode == 'ar' ||
-                                  Get.locale?.languageCode == "he"
-                              ? '\u202A$phoneNumber\u202C' // LTR override for RTL languages
-                              : phoneNumber,
+                        Text(  '\u200E$phoneNumber' // LTR override for RTL languages
+                              ,
                           style: Styles.textStyleS20W400(
                               color: ColorsData.primary),
                         ),
@@ -235,7 +232,7 @@ Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
                     const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
               ),
               SizedBox(width: 12.w),
-              Text(title, style: Styles.textStyleS14W400()),
+              Text(title, style: Styles.textStyleS14W500()),
             ],
           ),
           SvgPicture.asset(

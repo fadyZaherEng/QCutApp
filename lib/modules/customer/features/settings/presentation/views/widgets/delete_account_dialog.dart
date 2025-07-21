@@ -40,7 +40,7 @@ class DeleteAccountDialog extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             Text(
-              "Are you sure you want to delete your Account?",
+              "Are you sure you want to delete your Account?".tr,
               style: Styles.textStyleS14W700(color: ColorsData.secondary),
               textAlign: TextAlign.center,
             ),
