@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/show_delete_appointment_dialog.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/logic/appointment_controller.dart';
@@ -20,7 +22,7 @@ class MyAppointmentView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:   Text("myAppointments".tr),
+        title: Text("myAppointments".tr),
         actions: [
           _buildFilterButton(controller),
         ],
@@ -29,8 +31,10 @@ class MyAppointmentView extends StatelessWidget {
         onRefresh: () => controller.refreshAppointments(),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: SpinKitDoubleBounce(
+                color: ColorsData.primary,
+              ),
             );
           } else if (controller.isError.value) {
             return Center(
@@ -45,7 +49,7 @@ class MyAppointmentView extends StatelessWidget {
                   SizedBox(height: 16.h),
                   ElevatedButton(
                     onPressed: () => controller.fetchAppointments(),
-                    child:   Text('Retry'.tr),
+                    child: Text('Retry'.tr),
                   ),
                 ],
               ),
@@ -94,23 +98,23 @@ class MyAppointmentView extends StatelessWidget {
         controller.setStatusFilter(value);
       },
       itemBuilder: (context) => [
-          PopupMenuItem(
+        PopupMenuItem(
           value: 'all',
           child: Text('allAppointments'.tr),
         ),
-          PopupMenuItem(
+        PopupMenuItem(
           value: 'pending',
           child: Text('Pending'.tr),
         ),
-          PopupMenuItem(
+        PopupMenuItem(
           value: 'cancelled',
           child: Text('Cancelled'.tr),
         ),
-          PopupMenuItem(
+        PopupMenuItem(
           value: 'NotCome',
           child: Text('Not Attended'.tr),
         ),
-          PopupMenuItem(
+        PopupMenuItem(
           value: 'completed',
           child: Text('Completed'.tr),
         ),

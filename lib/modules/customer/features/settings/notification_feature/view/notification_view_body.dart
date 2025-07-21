@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -20,7 +21,10 @@ class NotificationViewBody extends StatelessWidget {
       // Show loading indicator while fetching data
       if (viewModel.isLoading.value &&
           viewModel.displayedNotifications.isEmpty) {
-        return const Center(child: CircularProgressIndicator());
+        return Center(
+            child: SpinKitDoubleBounce(
+          color: ColorsData.primary,
+        ));
       }
 
       // Show error message if loading failed
@@ -46,6 +50,11 @@ class NotificationViewBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Center(
+                child: SpinKitDoubleBounce(
+                  color: ColorsData.primary,
+                ),
+              ),
               Text("No notifications available".tr,
                   style: Styles.textStyleS14W700()),
               ElevatedButton(

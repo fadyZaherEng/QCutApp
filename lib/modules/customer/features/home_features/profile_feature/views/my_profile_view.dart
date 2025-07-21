@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -24,7 +25,11 @@ class MyProfileView extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (profileController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: SpinKitDoubleBounce(
+              color: ColorsData.primary,
+            ),
+          );
         }
 
         if (profileController.isError.value) {
@@ -173,8 +178,9 @@ class MyProfileView extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 5.h),
-                        Text(  '\u200E$phoneNumber' // LTR override for RTL languages
-                              ,
+                        Text(
+                          '\u200E$phoneNumber' // LTR override for RTL languages
+                          ,
                           style: Styles.textStyleS20W400(
                               color: ColorsData.primary),
                         ),

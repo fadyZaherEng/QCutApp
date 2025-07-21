@@ -398,6 +398,7 @@ class MyTranslation extends Translations {
           "resetPhoneNumber": "إعادة تعيين رقم الهاتف",
           "Please enter your phone number": "يرجى إدخال رقم الهاتف الخاص بك",
           "Phone number is invalid": "رقم الهاتف غير صالح",
+          "editYourProfile": "تعديل الملف الشخصي",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -720,7 +721,7 @@ class MyTranslation extends Translations {
           "Enter Min Time": "Enter min time",
           "Enter Max Time": "Enter max time",
           "Confirm": "Confirm",
-
+          "editYourProfile": "Edit Your Profile",
           "No Working Days Set": "No Working Days Set",
           "You have not set any working days yet":
               "You have not set any working days yet",
@@ -808,11 +809,11 @@ class MyTranslation extends Translations {
           "Previous": "Previous",
           "Currently": "Currently",
           'No previous appointments': "No previous appointments",
-          "bookingAgain": "bookingAgain",
+          "bookingAgain": "Booking Again",
           "Delete": "Delete",
           "INSTGRAM": " INSTGRAM",
           "You can Contact us by": "You can Contact us by",
-          "resetPhoneNumber": "resetPhoneNumber",
+          "resetPhoneNumber": "Reset Phone Number",
           "Please enter your phone number": "Please enter your phone number",
           "Phone number is invalid": "Phone number is invalid",
         },
