@@ -67,7 +67,7 @@ class _QCutServiceCardState extends State<QCutServiceCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.service?.name ?? "Hair cut",
+                          widget.service?.name.tr ?? "Hair cut",
                           style: Styles.textStyleS14W700(
                             color: ColorsData.bodyFont,
                           ),

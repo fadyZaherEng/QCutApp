@@ -121,7 +121,7 @@ class CustomBSimpleDaysPicker extends GetView<SelectAppointmentTimeController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          day["dayName"],
+                          day["dayName"].toString().toLowerCase().tr,
                           style: TextStyle(
                             color: isCurrentlySelected
                                 ? Colors.white

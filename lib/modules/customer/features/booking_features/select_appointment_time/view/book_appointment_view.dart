@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -78,7 +79,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: ColorsData.primary),
+                  SpinKitDoubleBounce(color: ColorsData.primary),
                   SizedBox(height: 20.h),
                   Text("loadingAvailableAppointments".tr,
                       style: TextStyle(fontSize: 16.sp, color: Colors.grey))
