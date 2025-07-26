@@ -176,37 +176,40 @@ class _CustomAddNewServiceBottomSheetState
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-                const Spacer(),
-                SvgPicture.asset(
-                  height: 24.h,
-                  width: 24.w,
-                  AssetsData.addnewservicebottonicon,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "Add new service".tr,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: ColorsData.primary,
-                  ),
-                ),
-                const SizedBox(width: 4),
-              ],
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              ),
             ),
-            const Divider(),
+             Container(
+               height: 6.h,
+               width: 100.w,
+               decoration: BoxDecoration(
+                 shape: BoxShape.rectangle,
+                 color:Colors.grey,
+                 borderRadius: BorderRadius.circular(10.r),
+               ),
+             ),
+             const SizedBox(height: 12),
+             SvgPicture.asset(
+              height: 32.h,
+              width: 32.w,
+              AssetsData.addnewservicebottonicon,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Add new service".tr,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: ColorsData.primary,
+              ),
+            ),
             const SizedBox(height: 12),
             Text(
               "Add Service photo".tr,
