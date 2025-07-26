@@ -85,23 +85,22 @@ class CustomHistoryDelete extends StatelessWidget {
                           _buildInfoRow(
                               "service".tr,
                               appointment.services
-                                      .map((s) => s.service.name)
-                                      .join(", ") ??
-                                  "Hair style"),
-                          _buildInfoRow("price".tr,
-                              "₪ ${appointment.price.toString() ?? "0"}"),
+                                  .map((s) => s.service.name)
+                                  .join(", ")),
+                          _buildInfoRow(
+                              "price".tr, "₪ ${appointment.price.toString()}"),
                           _buildInfoRow("qty".tr,
                               "${appointment.services.fold(0, (sum, service) => sum + service.numberOfUsers)} ${'consumer'.tr}(s)"),
                           _buildInfoRow(
                               "bookingDay".tr,
                               appointment != null
                                   ? DateFormat('EEE dd/MM/yyyy')
-                                      .format(appointment!.startDate)
+                                      .format(appointment.startDate)
                                   : "Not set"),
                           _buildInfoRow(
                               "bookingTime".tr,
                               appointment != null
-                                  ? "${DateFormat('hh:mm a').format(appointment!.startDate)} - ${DateFormat('hh:mm a').format(appointment!.endDate)}"
+                                  ? "${DateFormat('hh:mm a').format(appointment.startDate)} - ${DateFormat('hh:mm a').format(appointment.endDate)}"
                                   : "Not set".tr),
                           _buildInfoRow(
                               "status".tr, appointment.status ?? "Pending".tr),

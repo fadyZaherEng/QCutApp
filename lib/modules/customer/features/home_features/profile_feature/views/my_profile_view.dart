@@ -45,104 +45,112 @@ class MyProfileView extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 250.h,
-                  decoration: BoxDecoration(
-                    color: ColorsData.secondary,
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      alignment: Alignment.topCenter,
-                      image: CachedNetworkImageProvider(
-                          profileData!.coverPic ?? ""),
+
+            SizedBox(
+              height: 300.h,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 250.h,
+                    decoration: BoxDecoration(
+                      color: ColorsData.secondary,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        alignment: Alignment.topCenter,
+                        image: CachedNetworkImageProvider(
+                            profileData!.coverPic ?? ""),
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 10.h,
-                  right: Get.locale?.languageCode == 'ar' ||
-                          Get.locale?.languageCode == "he"
-                      ? null
-                      : 20.w,
-                  left: Get.locale?.languageCode == 'ar' ||
-                          Get.locale?.languageCode == "he"
-                      ? 20.w
-                      : null,
-                  child: CustomBigButton(
-                    width: 180.w,
-                    textData: "editYourProfile".tr,
-                    onPressed: () {
-                      showChangeUserInfoBottomSheet(context, profileController);
-                    },
+                  Positioned(
+                    bottom: 70.h,
+                    right: Get.locale?.languageCode == 'ar' ||
+                            Get.locale?.languageCode == "he"
+                        ? null
+                        : 20.w,
+                    left: Get.locale?.languageCode == 'ar' ||
+                            Get.locale?.languageCode == "he"
+                        ? 20.w
+                        : null,
+                    child: CustomBigButton(
+                      width: 180.w,
+                      textData: "editYourProfile".tr,
+                      onPressed: () {
+                        showChangeUserInfoBottomSheet(context, profileController);
+                      },
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: -50.h,
-                  left: Get.locale?.languageCode == 'ar' ||
-                          Get.locale?.languageCode == "he"
-                      ? null
-                      : 30.w,
-                  right: Get.locale?.languageCode == 'ar' ||
-                          Get.locale?.languageCode == "he"
-                      ? 30.w
-                      : null,
-                  child: InkWell(
-                    onTap: () => showChangeYourPictureDialog(context),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundColor: ColorsData.secondary,
-                          child: CircleAvatar(
-                            radius: 55,
-                            foregroundImage:
-                                CachedNetworkImageProvider(profileImage),
-                            backgroundColor: ColorsData.secondary,
-                          ),
-                        ),
-                        Positioned(
-                          right: 9,
-                          bottom: -3,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                debugPrint("Change your picture clicked");
-                                showChangeYourPictureDialog(context);
-                              },
-                              borderRadius: BorderRadius.circular(45),
-                              child: Container(
-                                width: 36.17.w,
-                                height: 36.17.h,
-                                decoration: const BoxDecoration(
-                                  color: ColorsData.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    AssetsData.addImageIcon,
-                                    fit: BoxFit.fill,
-                                    width: 25.w,
-                                    height: 25.h,
-                                    colorFilter: const ColorFilter.mode(
-                                      ColorsData.font,
-                                      BlendMode.srcIn,
+                  Positioned(
+                    bottom: 0.h,
+                    left: Get.locale?.languageCode == 'ar' ||
+                            Get.locale?.languageCode == "he"
+                        ? null
+                        : 30.w,
+                    right: Get.locale?.languageCode == 'ar' ||
+                            Get.locale?.languageCode == "he"
+                        ? 30.w
+                        : null,
+                    child: GestureDetector(
+                      onTap: () => showChangeYourPictureDialog(context),
+                      child: SizedBox(
+                        width: 120.w,
+                        height: 120.h,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            CircleAvatar(
+                              radius: 60,
+                              backgroundColor: ColorsData.secondary,
+                              child: CircleAvatar(
+                                radius: 55,
+                                foregroundImage:
+                                    CachedNetworkImageProvider(profileImage),
+                                backgroundColor: ColorsData.secondary,
+                              ),
+                            ),
+                            Positioned(
+                              right: 9,
+                              bottom: 0,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    debugPrint("Change your picture clicked");
+                                    showChangeYourPictureDialog(context);
+                                  },
+                                  borderRadius: BorderRadius.circular(45),
+                                  child: Container(
+                                    width: 50.17.w,
+                                    height: 50.17.h,
+                                    decoration: const BoxDecoration(
+                                      color: ColorsData.primary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        AssetsData.addImageIcon,
+                                        fit: BoxFit.fill,
+                                        width: 25.w,
+                                        height: 25.h,
+                                        colorFilter: const ColorFilter.mode(
+                                          ColorsData.font,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 65.h),
             Container(

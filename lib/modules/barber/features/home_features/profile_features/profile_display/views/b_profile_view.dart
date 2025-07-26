@@ -112,7 +112,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 250.h,
+              height: 300.h,
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -164,7 +164,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                           ),
                   ),
                   Positioned(
-                    bottom: -42.h,
+                    bottom: 20.h,
                     right: 20.w,
                     child: GestureDetector(
                       onTap: () {
@@ -199,7 +199,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                     ),
                   ),
                   Positioned(
-                    top: 186.98.h,
+                    top: 200.98.h,
                     left: 47.39.w,
                     child: InkWell(
                       onTap: () {
@@ -236,7 +236,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   ),
                   Positioned(
                     left: 110.w,
-                    bottom: -66.h,
+                    bottom: -20.h,
                     child: InkWell(
                       onTap: () {
                         showChangeYourPictureDialog(context);
