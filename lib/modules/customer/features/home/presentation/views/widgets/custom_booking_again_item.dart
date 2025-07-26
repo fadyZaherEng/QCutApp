@@ -7,11 +7,13 @@ import 'package:q_cut/modules/customer/history_feature/model/customer_history_ap
 
 class CustomBookingAgainItem extends StatelessWidget {
   final VoidCallback onBookingAgain;
+  final CustomerHistoryAppointment appointment;
 
-  const CustomBookingAgainItem(
-      {super.key,
-      required this.onBookingAgain,
-      required CustomerHistoryAppointment appointment});
+  const CustomBookingAgainItem({
+    super.key,
+    required this.onBookingAgain,
+    required this. appointment,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,9 @@ class CustomBookingAgainItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomBookItem(),
+            CustomBookItem(
+              appointment: appointment,
+            ),
           SizedBox(height: 24.h),
           CustomBigButton(
             textData: "bookingAgain".tr,

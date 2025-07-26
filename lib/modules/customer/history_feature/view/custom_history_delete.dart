@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get_utils/get_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/core/utils/widgets/custom_big_button.dart' as appointment;
 import 'package:q_cut/modules/customer/history_feature/model/customer_history_appointment.dart';
+import 'package:get/get.dart';
+import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 
 class CustomHistoryDelete extends StatelessWidget {
   final VoidCallback onDelete;
+  final CustomerHistoryAppointment appointment;
 
-  const CustomHistoryDelete(
-      {super.key,
-      required this.onDelete,
-      CustomerHistoryAppointment? appointment});
+  const CustomHistoryDelete({
+    super.key,
+    required this.onDelete,
+    required this.appointment,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +82,29 @@ class CustomHistoryDelete extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 6.h),
-                          _buildInfoRow("service".tr, "Hair style"),
-                          _buildInfoRow("price".tr, "\$ 20"),
-                          _buildInfoRow("Qty".tr, "1 consumer"),
-                          _buildInfoRow("bookingDay".tr, "Sat 12/1/2024"),
-                          _buildInfoRow("bookingTime".tr, "11-12 pm"),
-                          _buildInfoRow("type".tr, "booking"),
+                          _buildInfoRow(
+                              "service".tr,
+                              appointment.services
+                                      .map((s) => s.service.name)
+                                      .join(", ") ??
+                                  "Hair style"),
+                          _buildInfoRow("price".tr,
+                              "₪ ${appointment.price.toString() ?? "0"}"),
+                          _buildInfoRow("qty".tr,
+                              "${appointment.services.fold(0, (sum, service) => sum + service.numberOfUsers)} ${'consumer'.tr}(s)"),
+                          _buildInfoRow(
+                              "bookingDay".tr,
+                              appointment != null
+                                  ? DateFormat('EEE dd/MM/yyyy')
+                                      .format(appointment!.startDate)
+                                  : "Not set"),
+                          _buildInfoRow(
+                              "bookingTime".tr,
+                              appointment != null
+                                  ? "${DateFormat('hh:mm a').format(appointment!.startDate)} - ${DateFormat('hh:mm a').format(appointment!.endDate)}"
+                                  : "Not set".tr),
+                          _buildInfoRow(
+                              "status".tr, appointment.status ?? "Pending".tr),
                         ],
                       ),
                     ),
@@ -94,7 +114,7 @@ class CustomHistoryDelete extends StatelessWidget {
             ],
           ),
           SizedBox(height: 24.h),
-          appointment.CustomBigButton(
+          CustomBigButton(
             textData: "Delete".tr,
             onPressed: onDelete,
           ),

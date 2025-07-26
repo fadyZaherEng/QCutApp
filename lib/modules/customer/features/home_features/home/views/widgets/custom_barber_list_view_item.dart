@@ -109,7 +109,7 @@ class CustomBarberListViewItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 ViewCustomButton(
-                  text: "View",
+                  text: "View".toLowerCase().tr,
                   onPressed: () {
                     Get.toNamed(AppRouter.selectedPath, arguments: barber);
                   },

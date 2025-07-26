@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 class CustomBookItem extends StatelessWidget {
   final CustomerHistoryAppointment? appointment;
 
-  const CustomBookItem({super.key, this.appointment});
+  const CustomBookItem({super.key,required this.appointment});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class CustomBookItem extends StatelessWidget {
                                 .join(", ") ??
                             "Hair style"),
                     _buildInfoRow("price".tr,
-                        "\$ ${appointment?.price.toString() ?? "0"}"),
+                        "₪ ${appointment?.price.toString() ?? "0"}"),
                     _buildInfoRow("qty".tr,
                         "${appointment?.services.fold(0, (sum, service) => sum + service.numberOfUsers)} ${'consumer'.tr}(s)"),
                     _buildInfoRow(
