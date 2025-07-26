@@ -80,7 +80,8 @@ class HomeView extends StatelessWidget {
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
                                 "whatIsCity".tr,
                                 style: Styles.textStyleS14W400(
@@ -105,7 +106,8 @@ class HomeView extends StatelessWidget {
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
                                 "when".tr,
                                 style: Styles.textStyleS14W400(
@@ -117,12 +119,8 @@ class HomeView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 12.h,
-                  ),
-                  const Divider(
-                    color: ColorsData.cardStrock,
-                  ),
+                  SizedBox(height: 12.h),
+                  const Divider(color: ColorsData.cardStrock),
                   SizedBox(
                     height: 12.h,
                   ),

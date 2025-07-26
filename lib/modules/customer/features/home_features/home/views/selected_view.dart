@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
@@ -291,7 +292,7 @@ class _SelectedViewState extends State<SelectedView> {
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 20.h),
-                        child: CircularProgressIndicator(
+                        child: SpinKitDoubleBounce(
                           color: ColorsData.primary,
                         ),
                       ),
@@ -389,14 +390,14 @@ class _SelectedViewState extends State<SelectedView> {
                                 height: 94.h,
                                 color: Colors.grey[200],
                                 child: Center(
-                                  child: CircularProgressIndicator(
+                                  child: SpinKitDoubleBounce(
                                     color: ColorsData.primary,
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
+                                    // value: loadingProgress.expectedTotalBytes !=
+                                    //         null
+                                    //     ? loadingProgress
+                                    //             .cumulativeBytesLoaded /
+                                    //         loadingProgress.expectedTotalBytes!
+                                    //     : null,
                                   ),
                                 ),
                               );
