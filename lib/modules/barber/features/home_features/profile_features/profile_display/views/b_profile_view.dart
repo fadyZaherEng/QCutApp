@@ -111,145 +111,162 @@ class _BProfileViewBodyState extends State<BProfileView>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 250.h,
-                  decoration: BoxDecoration(
-                    color: ColorsData.secondary,
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      alignment: Alignment.topCenter,
-                      image: CachedNetworkImageProvider(
-                        profileData.coverPic,
-                        errorListener: (exception) =>
-                            print('Error loading image: $exception'),
+            SizedBox(
+              height: 250.h,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 250.h,
+                    decoration: BoxDecoration(
+                      color: ColorsData.secondary,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        alignment: Alignment.topCenter,
+                        image: CachedNetworkImageProvider(
+                          profileData.coverPic,
+                          errorListener: (exception) =>
+                              print('Error loading image: $exception'),
+                        ),
                       ),
                     ),
-                  ),
-                  child: profileData.coverPic.isNotEmpty
-                      ? Image.network(
-                          profileData.coverPic,
-                          fit: BoxFit.fill,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: ColorsData.secondary,
-                              child: Center(
-                                child: Text(
-                                  "Add Cover Photo".tr,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.sp,
+                    child: profileData.coverPic.isNotEmpty
+                        ? Image.network(
+                            profileData.coverPic,
+                            fit: BoxFit.fill,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: ColorsData.secondary,
+                                child: Center(
+                                  child: Text(
+                                    "Add Cover Photo".tr,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.sp,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      : Container(
-                          color: ColorsData.secondary,
-                          child: Center(
-                            child: Text(
-                              "Add Cover Photo".tr,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.sp,
+                              );
+                            },
+                          )
+                        : Container(
+                            color: ColorsData.secondary,
+                            child: Center(
+                              child: Text(
+                                "Add Cover Photo".tr,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
+                                ),
                               ),
                             ),
                           ),
+                  ),
+                  Positioned(
+                    bottom: -42.h,
+                    right: 20.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        showChooseBreakDaysBottomSheet(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ColorsData.primary),
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: ColorsData.font,
                         ),
-                ),
-                Positioned(
-                  bottom: -42.h,
-                  right: 20.w,
-                  child: GestureDetector(
-                    onTap: () {
-                      showChooseBreakDaysBottomSheet(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: ColorsData.primary),
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: ColorsData.font,
-                      ),
-                      width: 104.w,
-                      height: 36.h,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            AssetsData.takeBreakIcon,
-                            height: 18.h,
-                            width: 18.w,
-                          ),
-                          SizedBox(width: 5.w),
-                          Text(
-                            "Take break".tr,
-                            style: Styles.textStyleS14W500(color: Colors.black),
-                          ),
-                        ],
+                        width: 104.w,
+                        height: 36.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AssetsData.takeBreakIcon,
+                              height: 18.h,
+                              width: 18.w,
+                            ),
+                            SizedBox(width: 5.w),
+                            Text(
+                              "Take break".tr,
+                              style:
+                                  Styles.textStyleS14W500(color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 186.98.h,
-                  left: 47.39.w,
-                  child: SizedBox(
-                    width: 120.w,
-                    height: 127.08.h,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: ColorsData.secondary,
-                      child: CircleAvatar(
-                        radius: 55,
-                        backgroundImage: NetworkImage(profileData.profilePic),
-                        backgroundColor: ColorsData.secondary,
-                        onBackgroundImageError: (exception, stackTrace) {
-                          print('Error loading profile image: $exception');
-                          return; // This will display the child widget
+                  Positioned(
+                    top: 186.98.h,
+                    left: 47.39.w,
+                    child: InkWell(
+                      onTap: () {
+                        showChangeYourPictureDialog(context).then((value) {
+                          controller.fetchProfileData();
+                        });
+                      },
+                      child: SizedBox(
+                        width: 120.w,
+                        height: 127.08.h,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ColorsData.secondary,
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundImage:
+                                NetworkImage(profileData.profilePic),
+                            backgroundColor: ColorsData.secondary,
+                            onBackgroundImageError: (exception, stackTrace) {
+                              print('Error loading profile image: $exception');
+                              return; // This will display the child widget
+                            },
+                            child: profileData.profilePic.isEmpty
+                                ? Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 110.w,
+                    bottom: -66.h,
+                    child: InkWell(
+                      onTap: () {
+                        showChangeYourPictureDialog(context);
+                      },
+                      child: MaterialButton(
+                        height: 36.16748046875.h,
+                        minWidth: 36.16748046875.w,
+                        padding: EdgeInsets.zero,
+                        shape: const CircleBorder(),
+                        onPressed: () {
+                          showChangeYourPictureDialog(context);
                         },
-                        child: profileData.profilePic.isEmpty
-                            ? Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Colors.white,
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 110.w,
-                  bottom: -66.h,
-                  child: MaterialButton(
-                    height: 36.16748046875.h,
-                    minWidth: 36.16748046875.w,
-                    padding: EdgeInsets.zero,
-                    shape: const CircleBorder(),
-                    onPressed: () {
-                      showChangeYourPictureDialog(context);
-                    },
-                    child: CircleAvatar(
-                      radius: 18.08.r,
-                      backgroundColor: ColorsData.primary,
-                      child: SvgPicture.asset(
-                        height: 20.h,
-                        width: 20.w,
-                        AssetsData.addImageIcon,
-                        colorFilter: const ColorFilter.mode(
-                          ColorsData.font,
-                          BlendMode.srcIn,
+                        child: CircleAvatar(
+                          radius: 18.08.r,
+                          backgroundColor: ColorsData.primary,
+                          child: SvgPicture.asset(
+                            height: 20.h,
+                            width: 20.w,
+                            AssetsData.addImageIcon,
+                            colorFilter: const ColorFilter.mode(
+                              ColorsData.font,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 68.h),

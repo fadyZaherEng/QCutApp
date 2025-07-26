@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ChooseBreakDaysBottomSheet extends StatefulWidget {
   const ChooseBreakDaysBottomSheet({super.key});
@@ -41,7 +42,7 @@ class _ChooseBreakDaysBottomSheetState
           Icon(Icons.access_time_rounded, size: 36.h, color: Colors.black87),
           SizedBox(height: 8.h),
           Text(
-            "Choose break days",
+            "Choose break days".tr,
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
@@ -101,7 +102,7 @@ class _ChooseBreakDaysBottomSheetState
               ),
               onPressed: () {},
               child: Text(
-                "Confirm",
+                "Confirm".tr,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -124,7 +125,7 @@ class _ChooseBreakDaysBottomSheetState
           .map((day) => SizedBox(
                 width: 40,
                 child: Text(
-                  day,
+                  day.toLowerCase().tr,
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: Colors.grey,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -40,7 +41,7 @@ class ChangeYourPictureDialog extends StatelessWidget {
                 ),
               ),
               controller.isLoading.value
-                  ? CircularProgressIndicator()
+                  ? SpinKitDoubleBounce(color: ColorsData.primary)
                   : CircleAvatar(
                       radius: 25.r,
                       foregroundImage: CachedNetworkImageProvider(profileImage),
@@ -48,7 +49,7 @@ class ChangeYourPictureDialog extends StatelessWidget {
                     ),
               SizedBox(height: 16.h),
               Text(
-                "Change Your Picture",
+                "Change Your Picture".tr,
                 style: Styles.textStyleS14W700(color: ColorsData.secondary),
                 textAlign: TextAlign.center,
               ),
@@ -58,7 +59,7 @@ class ChangeYourPictureDialog extends StatelessWidget {
                   Expanded(
                     child: CustomButton(
                       textStyle: Styles.textStyleS12W600(),
-                      text: "Go to Gallery",
+                      text: "Go to Gallery".tr,
                       onPressed: controller.isLoading.value
                           ? null
                           : () async {
@@ -80,7 +81,7 @@ class ChangeYourPictureDialog extends StatelessWidget {
                   Expanded(
                     child: CustomButton(
                       textStyle: Styles.textStyleS12W600(),
-                      text: "Take a picture",
+                      text: "Take a picture".tr,
                       onPressed: controller.isLoading.value
                           ? null
                           : () async {

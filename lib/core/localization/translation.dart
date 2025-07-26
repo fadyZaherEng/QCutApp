@@ -399,6 +399,12 @@ class MyTranslation extends Translations {
           "Please enter your phone number": "يرجى إدخال رقم الهاتف الخاص بك",
           "Phone number is invalid": "رقم الهاتف غير صالح",
           "editYourProfile": "تعديل الملف الشخصي",
+
+          "Take a picture": "أخذ صورة",
+          "Go to Gallery": "أذهب إلى المعرض",
+          "Change Your Picture": "تغيير الصورة الشخصية",
+          "Instagram link is not set": "لم يتم تعيين رابط الانستقرام",
+          "Error": "خطأ",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -816,6 +822,12 @@ class MyTranslation extends Translations {
           "resetPhoneNumber": "Reset Phone Number",
           "Please enter your phone number": "Please enter your phone number",
           "Phone number is invalid": "Phone number is invalid",
+          "Take a picture": "Take a picture",
+          "Go to Gallery": "Go to Gallery",
+          "Change Your Picture": "Change Your Picture",
+          "Instagram link is not set": "Instagram link is not set",
+          "Error": "Error",
+
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1219,7 +1231,12 @@ class MyTranslation extends Translations {
           "You can Contact us by": "ניתן ליצור איתנו קשר באמצעות",
           "resetPhoneNumber": "איפוס מספר טלפון",
           "Please enter your phone number": "אנא הזן את מספר הטלפון שלך",
-          "Phone number is invalid": "מספר טלפון לא חוקי"
+          "Phone number is invalid": "מספר טלפון לא חוקי",
+          "Take a picture": "טען תמונה",
+          "Go to Gallery": "עבור לגלרייה",
+          "Change Your Picture": "שנה את תמונתך",
+          "Instagram link is not set": "לא מוגדר קישור לאינסטגרם",
+          "Error": "שגיאה",
         },
       };
 }
