@@ -10,7 +10,7 @@ class ConnectUsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "contact us".tr),
-      body: const ConnectUsViewBody(),
+      body: ConnectUsViewBody(),
     );
   }
 }

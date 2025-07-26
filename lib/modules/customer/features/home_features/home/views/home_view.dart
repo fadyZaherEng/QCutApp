@@ -10,6 +10,7 @@ import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_home_app_bar.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
+import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,6 +19,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Initialize HomeController when the view is built
     final homeController = Get.put(HomeController());
+    final ProfileController profileController = Get.put(ProfileController());
 
     return SafeArea(
         child: Scaffold(
@@ -45,7 +47,8 @@ class HomeView extends StatelessWidget {
                         width: 2.w,
                       ),
                       Text(
-                        'yourLocation'.tr,
+                        profileController.profileData.value?.city ??
+                            'yourLocation'.tr,
                         style: Styles.textStyleS12W400(),
                       ),
                       SizedBox(
@@ -75,25 +78,26 @@ class HomeView extends StatelessWidget {
                           onTap: () {},
                           child: Container(
                             padding: EdgeInsets.only(top: 9.h, left: 16.w),
-                            height: 40.h,
-                            decoration: BoxDecoration(
-                                color: ColorsData.font,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                "whatIsCity".tr,
-                                style: Styles.textStyleS14W400(
+                            height: 52.h,
+                            child: TextFormField(
+                              style:
+                                  Styles.textStyleS14W400(color: Colors.black),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                fillColor: ColorsData.font,
+                                filled: true,
+                                hintStyle: Styles.textStyleS14W400(
                                     color: ColorsData.cardStrock),
+                                hintText: "whatIsCity".tr,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 16.w,
-                      ),
+                      SizedBox(width: 16.w),
                       Expanded(
                         child: InkWell(
                           onTap: () {
@@ -121,17 +125,9 @@ class HomeView extends StatelessWidget {
                   ),
                   SizedBox(height: 12.h),
                   const Divider(color: ColorsData.cardStrock),
-                  SizedBox(
-                    height: 12.h,
-                  ),
+                  SizedBox(height: 12.h),
                   const NearbySalonsSection(),
-                  SizedBox(
-                    height: 12.h,
-                  ),
-                  // const RecommendedSalonsSection(),
-                  // SizedBox(
-                  //   height: 23.h,
-                  // ),
+                  SizedBox(height: 12.h),
                 ],
               ),
             ),
