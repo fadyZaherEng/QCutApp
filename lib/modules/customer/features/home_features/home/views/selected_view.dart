@@ -27,6 +27,7 @@ class _SelectedViewState extends State<SelectedView> {
   final RxBool isFavorite = false.obs;
   late Barber barber;
   final GalleryController galleryController = Get.put(GalleryController());
+  bool isClicked = true;
 
   @override
   void initState() {
@@ -310,8 +311,18 @@ class _SelectedViewState extends State<SelectedView> {
                             Text(galleryController.errorMessage.value),
                             SizedBox(height: 10.h),
                             ElevatedButton(
-                              onPressed: () =>
-                                  galleryController.fetchGallery(barber.id),
+                              onPressed: () {
+                                if (isClicked) {
+                                  isClicked = false;
+                                  setState(() {});
+                                  galleryController.fetchGallery(barber.id);
+                                  Future.delayed(const Duration(seconds: 2),
+                                      () {
+                                    isClicked = true;
+                                    setState(() {});
+                                  });
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ColorsData.primary,
                               ),
@@ -463,15 +474,23 @@ class _SelectedViewState extends State<SelectedView> {
                       size: 24.sp,
                     )),
                 onPressed: () async {
-                  var response = await NetworkAPICall().addData({
-                    "barberId": barber.id,
-                  }, "${Variables.baseUrl}favoriteForUser/toggle");
+                  if (isClicked) {
+                    isClicked = false;
+                    setState(() {});
+                    var response = await NetworkAPICall().addData({
+                      "barberId": barber.id,
+                    }, "${Variables.baseUrl}favoriteForUser/toggle");
 
-                  if (response.statusCode == 200) {
-                    isFavorite.value = !isFavorite.value;
-                    barber.isFavorite = isFavorite.value;
-                  } else {
-                    ShowToast.showError(message: "Error occurred");
+                    if (response.statusCode == 200) {
+                      isFavorite.value = !isFavorite.value;
+                      barber.isFavorite = isFavorite.value;
+                    } else {
+                      ShowToast.showError(message: "Error occurred");
+                    }
+                    await Future.delayed(const Duration(seconds: 2), () {
+                      isClicked = true;
+                      setState(() {});
+                    });
                   }
                 },
                 splashColor: Colors.transparent,

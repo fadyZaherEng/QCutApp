@@ -13,14 +13,20 @@ import 'package:q_cut/modules/customer/features/home_features/profile_feature/vi
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_log_out_dialog.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_my_cards_bottom_sheet.dart';
 
-class MyProfileViewBody extends StatelessWidget {
+class MyProfileViewBody extends StatefulWidget {
   const MyProfileViewBody({super.key});
 
+  @override
+  State<MyProfileViewBody> createState() => _MyProfileViewBodyState();
+}
+
+class _MyProfileViewBodyState extends State<MyProfileViewBody> {
   final String profileDrawerImage =
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzph4xv23B3sfc8O09BVewi1IeI-FWnHVvyxsnzqa6muN8-XWy08Vu0teNV7zXZrV1h8M&usqp=CAU";
 
   final String coverImageUrl =
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzph4xv23B3sfc8O09BVewi1IeI-FWnHVvyxsnzqa6muN8-XWy08Vu0teNV7zXZrV1h8M&usqp=CAU";
+  bool isClicked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +77,16 @@ class MyProfileViewBody extends StatelessWidget {
               left: 75.w,
               bottom: -56.h,
               child: MaterialButton(
-                onPressed: () {
-                  showChangeYourPictureDialog(context);
+                onPressed: () async {
+                  if (isClicked == true) {
+                    isClicked = false;
+                    setState(() {});
+                    showChangeYourPictureDialog(context);
+                    await Future.delayed(const Duration(seconds: 2), () {
+                      isClicked = true;
+                      setState(() {});
+                    });
+                  }
                 },
                 child: CircleAvatar(
                   backgroundColor: ColorsData.primary,
@@ -139,7 +153,17 @@ class MyProfileViewBody extends StatelessWidget {
 
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (isClicked) {
+          isClicked = false;
+          setState(() {});
+          onTap!();
+          Future.delayed(const Duration(seconds: 2), () {
+            isClicked = true;
+            setState(() {});
+          });
+        }
+      },
       child: Padding(
         padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
         child: Row(

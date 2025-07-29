@@ -9,8 +9,15 @@ import '../../../statistics_feature/views/widgets/ChooseOffDaysBottomSheet.dart'
 import '../../profile_display/models/barber_profile_model.dart';
 import '../logic/b_edit_profile_controller.dart';
 
-class BEditProfileView extends StatelessWidget {
+class BEditProfileView extends StatefulWidget {
   const BEditProfileView({super.key});
+
+  @override
+  State<BEditProfileView> createState() => _BEditProfileViewState();
+}
+
+class _BEditProfileViewState extends State<BEditProfileView> {
+  bool isClicked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +279,15 @@ class BEditProfileView extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          controller.updateProfile();
+          if (isClicked) {
+            isClicked = false;
+            setState(() {});
+            controller.updateProfile();
+            Future.delayed(const Duration(seconds: 2), () {
+              isClicked = true;
+              setState(() {});
+            });
+          }
         },
         child: Text("Confirm".tr,
             style: Styles.textStyleS16W600(color: Colors.white)),

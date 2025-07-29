@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_checkbox.dart';
@@ -13,13 +14,13 @@ class ChooseWorkingDaysBottomSheet extends StatefulWidget {
 
 class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSheet> {
   final List<String> workingDays = [
-    "Saturday",
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
+    "Saturday".tr,
+    "Sunday".tr,
+    "Monday".tr,
+    "Tuesday".tr,
+    "Wednesday".tr,
+    "Thursday".tr,
+    "Friday".tr,
   ];
 
   final Set<String> selectedDays = {};

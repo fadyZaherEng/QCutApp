@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -286,7 +287,7 @@ class _CustomEditNewServiceBottomSheetState
             /// Image Picker with upload status
             _isUploadingImage
                 ? const Center(
-                    child: CircularProgressIndicator(
+                    child: SpinKitDoubleBounce(
                       color: ColorsData.primary,
                     ),
                   )

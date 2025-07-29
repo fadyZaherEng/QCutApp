@@ -140,8 +140,10 @@ class ReportsViewBody extends StatelessWidget {
             )
           : const SizedBox.shrink()),
       fillColor: Colors.white,
-      controller: controller.searchController, // Use directly without .value
-      readOnly: true, // Make it read-only as we're using a date picker
+      controller: controller.searchController,
+      // Use directly without .value
+      readOnly: true,
+      // Make it read-only as we're using a date picker
       onTap: () => controller.showDatePickerAndSearch(Get.context!),
     );
   }
@@ -200,7 +202,7 @@ class ReportsViewBody extends StatelessWidget {
           _tableHeaderCell('name'.tr, flex: 2),
           _tableHeaderCell('date'.tr, flex: 2),
           _tableHeaderCell('services'.tr, flex: 2),
-          _tableHeaderCell('price'.tr,flex: 2),
+          _tableHeaderCell('price'.tr, flex: 2),
           _tableHeaderCell('qcutTax'.tr, flex: 2),
           _tableHeaderCell('total'.tr, flex: 2),
         ],
@@ -319,9 +321,11 @@ class ReportsViewBody extends StatelessWidget {
   Widget _paginationButton(IconData icon, {Function()? onPressed}) {
     return IconButton(
       onPressed: onPressed,
-      icon: Icon(icon,
-          color: onPressed != null ? ColorsData.primary : Colors.grey,
-          size: 16),
+      icon: Icon(
+        icon,
+        color: onPressed != null ? ColorsData.primary : Colors.grey,
+        size: 16,
+      ),
     );
   }
 

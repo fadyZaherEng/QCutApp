@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -29,7 +30,7 @@ class QCutServicesView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: SpinKitDoubleBounce(color: ColorsData.primary));
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

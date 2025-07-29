@@ -393,6 +393,7 @@ class _BProfileViewBodyState extends State<BProfileView>
 
   // New method to build services tab with API data
   Widget _buildServicesTab() {
+    bool isClicked = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -426,7 +427,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                 ),
                 SizedBox(height: 16.h),
                 ElevatedButton(
-                  onPressed: controller.fetchBarberServices,
+                  onPressed: () {
+                    if (isClicked) {
+                      isClicked = false;
+                      setState(() {});
+                      controller.fetchBarberServices();
+                      Future.delayed(const Duration(seconds: 2), () {
+                        isClicked = true;
+                        setState(() {});
+                      });
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorsData.primary,
                   ),
@@ -477,6 +488,7 @@ class _BProfileViewBodyState extends State<BProfileView>
   }
 
   Widget _buildServiceItemFromData(BarberService service) {
+    bool isClicked = true;
     String durationText;
     if (service.duration != null) {
       if (service.duration! > 60000) {
@@ -550,17 +562,25 @@ class _BProfileViewBodyState extends State<BProfileView>
           ),
           SizedBox(width: 12.w),
           ElevatedButton(
-            onPressed: () {
-              showCustomEditNewServiceBottomSheet(
-                context,
-                serviceId: service.id,
-                serviceName: service.name,
-                servicePrice: service.price.toString(),
-                serviceTime: service.duration?.toString() ??
-                    ((service.minTime + service.maxTime) / 2)
-                        .round()
-                        .toString(),
-              );
+            onPressed: () async {
+              if (isClicked) {
+                isClicked = false;
+                setState(() {});
+                showCustomEditNewServiceBottomSheet(
+                  context,
+                  serviceId: service.id,
+                  serviceName: service.name,
+                  servicePrice: service.price.toString(),
+                  serviceTime: service.duration?.toString() ??
+                      ((service.minTime + service.maxTime) / 2)
+                          .round()
+                          .toString(),
+                );
+                await Future.delayed(const Duration(seconds: 2), () {
+                  isClicked = true;
+                  setState(() {});
+                });
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFB08B4F),
@@ -632,6 +652,7 @@ class _BProfileViewBodyState extends State<BProfileView>
   }
 
   Widget _buildGalleryTab() {
+    bool isClicked = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -655,7 +676,18 @@ class _BProfileViewBodyState extends State<BProfileView>
               child: Obx(() => TextButton.icon(
                     onPressed: controller.isUploadingPhotos.value
                         ? null
-                        : controller.addPhotosToGallery,
+                        : () async {
+                            if (isClicked) {
+                              isClicked = false;
+                              setState(() {});
+                              controller.addPhotosToGallery;
+                              await Future.delayed(const Duration(seconds: 2),
+                                  () {
+                                isClicked = true;
+                                setState(() {});
+                              });
+                            }
+                          },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.all(2.w),
                     ),
@@ -714,13 +746,23 @@ class _BProfileViewBodyState extends State<BProfileView>
                     ),
                     SizedBox(height: 16.h),
                     ElevatedButton.icon(
-                      icon: Icon(Icons.add_photo_alternate),
-                      label: Text('Add Photos'.tr),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorsData.primary,
-                      ),
-                      onPressed: controller.addPhotosToGallery,
-                    ),
+                        icon: Icon(Icons.add_photo_alternate),
+                        label: Text('Add Photos'.tr),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorsData.primary,
+                        ),
+                        onPressed: () async {
+                          if (isClicked) {
+                            isClicked = false;
+                            setState(() {});
+                            controller.addPhotosToGallery;
+                            await Future.delayed(const Duration(seconds: 2),
+                                () {
+                              isClicked = true;
+                              setState(() {});
+                            });
+                          }
+                        }),
                   ],
                 ),
               );

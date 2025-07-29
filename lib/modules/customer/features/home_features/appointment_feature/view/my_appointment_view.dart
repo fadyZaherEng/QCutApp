@@ -8,8 +8,15 @@ import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/logic/appointment_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/view/widgets/custom_delete_appointment_item.dart';
 
-class MyAppointmentView extends StatelessWidget {
+class MyAppointmentView extends StatefulWidget {
   const MyAppointmentView({super.key});
+
+  @override
+  State<MyAppointmentView> createState() => _MyAppointmentViewState();
+}
+
+class _MyAppointmentViewState extends State<MyAppointmentView> {
+  bool isClicked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,17 @@ class MyAppointmentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   ElevatedButton(
-                    onPressed: () => controller.fetchAppointments(),
+                    onPressed: () {
+                      if (isClicked) {
+                        isClicked = false;
+                        setState(() {});
+                        controller.fetchAppointments();
+                        Future.delayed(const Duration(seconds: 2), () {
+                          isClicked = true;
+                          setState(() {});
+                        });
+                      }
+                    },
                     child: Text('Retry'.tr),
                   ),
                 ],

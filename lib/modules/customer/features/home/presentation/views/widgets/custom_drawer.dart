@@ -71,10 +71,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget _buildMenuItem(String title, String iconPath, VoidCallback onTap) {
+    bool isClicked = true;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: DrawerConstants.itemSpacing.h),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: () async {
+          if (isClicked) {
+            isClicked = false;
+            setState(() {});
+            onTap();
+            await Future.delayed(const Duration(milliseconds: 500), () {
+              isClicked = true;
+              setState(() {});
+            });
+          }
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

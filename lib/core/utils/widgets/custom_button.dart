@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   const CustomButton({
     super.key,
     required this.text,
@@ -32,19 +32,29 @@ class CustomButton extends StatelessWidget {
   final double? fontSize;
   final ButtonStyle? style;
   final TextStyle? textStyle;
-  final bool isLoading; // Add this property
+  final bool isLoading;
 
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  bool isClicked = true;
+
+  // Add this property
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 40.h,
-      width: width ?? 185.w,
+      height: widget.height ?? 40.h,
+      width: widget.width ?? 185.w,
       child: TextButton(
-        style: style ??
+        style: widget.style ??
             TextButton.styleFrom(
-              backgroundColor: backgroundColor ?? ColorsData.primary,
+              backgroundColor: widget.backgroundColor ?? ColorsData.primary,
               shape: RoundedRectangleBorder(
-                borderRadius:borderRadiusDirectional ?? borderRadius ?? BorderRadius.circular(8.r),
+                borderRadius: widget.borderRadiusDirectional ??
+                    widget.borderRadius ??
+                    BorderRadius.circular(8.r),
               ),
               padding: EdgeInsets.zero,
               // Remove default padding
@@ -52,12 +62,24 @@ class CustomButton extends StatelessWidget {
               // Remove minimum size constraints
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-        onPressed: onPressed,
+        onPressed: () async {
+          FocusManager.instance.primaryFocus?.unfocus();
+          if (isClicked) {
+            isClicked = false;
+            setState(() {});
+            widget.onPressed?.call();
+            await Future.delayed(const Duration(seconds: 2), () {
+              isClicked = true;
+              setState(() {});
+            });
+          }
+        },
         child: Center(
           child: Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: 8.w), // Add horizontal padding
-            child: isLoading // Display loading indicator when isLoading is true
+            child: widget
+                    .isLoading // Display loading indicator when isLoading is true
                 ? SizedBox(
                     width: 20,
                     height: 20,
@@ -67,12 +89,12 @@ class CustomButton extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    text,
+                    widget.text,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: textStyle ??
+                    style: widget.textStyle ??
                         Styles.textStyleS14W400(
-                          color: textColor ?? ColorsData.font,
+                          color: widget.textColor ?? ColorsData.font,
                         ),
                   ),
           ),

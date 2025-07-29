@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_app_bar.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
@@ -84,7 +86,7 @@ class _OnHoldAppointmentViewState extends State<OnHoldAppointmentView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
+                  SpinKitDoubleBounce(color: ColorsData.primary),
                   SizedBox(height: 20.h),
                   Text("Loading on-hold appointments...",
                       style: TextStyle(fontSize: 16.sp, color: Colors.grey))

@@ -32,6 +32,7 @@ class _BProfileViewBodyState extends State<BProfileView>
   late TabController _tabController;
   final BProfileController controller =
       Get.put(BProfileController(), tag: 'profile');
+  bool isClicked = true;
 
   @override
   void initState() {
@@ -128,8 +129,15 @@ class _BProfileViewBodyState extends State<BProfileView>
                   bottom: -42.h,
                   right: 20.w,
                   child: GestureDetector(
-                    onTap: () {
-                      showChooseBreakDaysBottomSheet(context);
+                    onTap: () async {
+                      if (isClicked) {
+                        isClicked = false;
+                        setState(() {});
+                        showChooseBreakDaysBottomSheet(context);
+                        await Future.delayed(const Duration(seconds: 2));
+                        isClicked = true;
+                        setState(() {});
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -184,8 +192,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                     minWidth: 36.16748046875.w,
                     padding: EdgeInsets.zero,
                     shape: const CircleBorder(),
-                    onPressed: () {
-                      showChangeYourPictureDialog(context);
+                    onPressed: () async {
+                      if (isClicked) {
+                        isClicked = false;
+                        setState(() {});
+                        showChangeYourPictureDialog(context);
+                        await Future.delayed(const Duration(seconds: 2))
+                            .then((_) {
+                          isClicked = true;
+                          setState(() {});
+                        });
+                      }
                     },
                     child: CircleAvatar(
                       radius: 18.08.r,

@@ -90,8 +90,9 @@ class ChangePictureDialog extends StatelessWidget {
                     textStyle: Styles.textStyleS12W600(),
                     text: "goToGallery".tr,
                     onPressed: () {
-                      onGalleryTap();
                       Navigator.pop(context);
+
+                      onGalleryTap();
                     },
                   ),
                 ),
@@ -101,8 +102,9 @@ class ChangePictureDialog extends StatelessWidget {
                     textStyle: Styles.textStyleS12W600(),
                     text: "takeAPicture".tr,
                     onPressed: () {
-                      onCameraTap();
                       Navigator.pop(context);
+
+                      onCameraTap();
                     },
                   ),
                 ),

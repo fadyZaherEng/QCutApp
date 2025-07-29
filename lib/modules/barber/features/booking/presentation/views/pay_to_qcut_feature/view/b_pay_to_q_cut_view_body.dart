@@ -18,6 +18,7 @@ class BPayToQCutViewBody extends StatefulWidget {
 
 class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
   final PayToQcutController _controller = Get.put(PayToQcutController());
+  bool isClicked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,17 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
               backgroundColor: ColorsData.primary,
               foregroundColor: Colors.white,
             ),
-            onPressed: () => _controller.fetchInvoiceData(),
+            onPressed: () async {
+              if (isClicked) {
+                isClicked = false;
+                setState(() {});
+                _controller.fetchInvoiceData();
+                await Future.delayed(const Duration(seconds: 2), () {
+                  isClicked = true;
+                  setState(() {});
+                });
+              }
+            },
             child: Text('retry'.tr),
           ),
         ],
@@ -217,7 +228,15 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              Get.toNamed(AppRouter.bpaymentTimeLinePath);
+              if (isClicked) {
+                isClicked = false;
+                setState(() {});
+                Get.toNamed(AppRouter.bpaymentTimeLinePath);
+                Future.delayed(const Duration(seconds: 2), () {
+                  isClicked = true;
+                  setState(() {});
+                });
+              }
             },
             child: Text(
               'seeAll'.tr,

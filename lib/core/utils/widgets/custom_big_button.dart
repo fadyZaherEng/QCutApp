@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 
-class CustomBigButton extends StatelessWidget {
+class CustomBigButton extends StatefulWidget {
   const CustomBigButton({
     super.key,
     required this.textData,
@@ -24,21 +24,39 @@ class CustomBigButton extends StatelessWidget {
   final Color? color;
 
   @override
+  State<CustomBigButton> createState() => _CustomBigButtonState();
+}
+
+class _CustomBigButtonState extends State<CustomBigButton> {
+  bool isClicked = true;
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 48.h,
-      width: width ?? 343.w,
+      height: widget.height ?? 48.h,
+      width: widget.width ?? 343.w,
       child: ElevatedButton(
-        onPressed: onPressed,
-        style: color != null
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          if (isClicked) {
+            isClicked = false;
+            setState(() {});
+            widget.onPressed?.call();
+            Future.delayed(const Duration(seconds: 2), () {
+              isClicked = true;
+              setState(() {});
+            });
+          }
+        },
+        style: widget.color != null
             ? ElevatedButton.styleFrom(
-                backgroundColor: color,
+                backgroundColor: widget.color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 elevation: 0,
               )
-            : isCustomStyle
+            : widget.isCustomStyle
                 ? ElevatedButton.styleFrom(
                     backgroundColor: ColorsData.secondary,
                     shape: RoundedRectangleBorder(
@@ -50,17 +68,17 @@ class CustomBigButton extends StatelessWidget {
                   )
                 : ElevatedButton.styleFrom(),
         child: Text(
-          textData,
+          widget.textData,
           maxLines: 1,
-          style: isCustomStyle
+          style: widget.isCustomStyle
               ? Styles.textStyleS10W500(
                   color: ColorsData.primary,
                 ).copyWith(
-                  fontSize: font ?? 16.sp,
+                  fontSize: widget.font ?? 16.sp,
                 )
               : Styles.textStyleS16W700().copyWith(
                   color: ColorsData.bodyFont,
-                  fontSize: font ?? 16.sp,
+                  fontSize: widget.font ?? 16.sp,
                 ),
         ),
       ),
