@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 
-class ViewCustomButton extends StatelessWidget {
+class ViewCustomButton extends StatefulWidget {
   const ViewCustomButton({
     super.key,
     this.onPressed,
@@ -28,25 +28,43 @@ class ViewCustomButton extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
 
   @override
+  State<ViewCustomButton> createState() => _ViewCustomButtonState();
+}
+
+class _ViewCustomButtonState extends State<ViewCustomButton> {
+  bool isPressed = true;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 35.h,
-      width: width ?? 185.w,
+      height: widget.height ?? 35.h,
+      width: widget.width ?? 185.w,
       decoration: BoxDecoration(
-        color: backgroundColor ?? ColorsData.primary,
-        borderRadius: borderRadius ?? BorderRadius.circular(10.r),
-        boxShadow: boxShadow,
+        color: widget.backgroundColor ?? ColorsData.primary,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10.r),
+        boxShadow: widget.boxShadow,
       ),
       child: InkWell(
-        onTap: onPressed,
-        borderRadius: borderRadius ?? BorderRadius.circular(8.r),
+        onTap: () async {
+          if (isPressed) {
+            isPressed = false;
+            setState(() {});
+            widget.onPressed!();
+            await Future.delayed(const Duration(seconds: 2), () {
+              isPressed = true;
+              setState(() {});
+            });
+          }
+        },
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
         child: Center(
           child: Text(
-            text,
+            widget.text,
             maxLines: 1,
             textAlign: TextAlign.center,
-            style: textStyle ??
-                Styles.textStyleS14W400(color: textColor ?? ColorsData.font),
+            style: widget.textStyle ??
+                Styles.textStyleS14W400(
+                    color: widget.textColor ?? ColorsData.font),
           ),
         ),
       ),
