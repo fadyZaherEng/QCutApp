@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -19,7 +20,6 @@ class CustomTextFormField extends StatelessWidget {
   final Color? suffixIconColor;
   void Function(String?)? onSaved;
   final Color? fillColor;
-  // Add new parameters
   final bool readOnly;
   final VoidCallback? onTap;
 
@@ -39,12 +39,66 @@ class CustomTextFormField extends StatelessWidget {
     this.fillColor,
     this.prefixIcon,
     this.onChanged,
-    this.readOnly = false, // Default to false
+    this.readOnly = false,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Special handling for phone field
+    if (keyboardType == TextInputType.phone|| keyboardType == TextInputType.number) {
+      return TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(9), // allow only 9 digits
+        ],
+        validator: validator,
+        onChanged: onChanged,
+        onSaved: onSaved,
+        style: style ?? Styles.textStyleS14W500(),
+        decoration: InputDecoration(
+          hintText: hintText ?? "5xxxxxxxx",
+          hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
+          fillColor: fillColor ?? ColorsData.secondary,
+          filled: true,
+          contentPadding: EdgeInsets.only(
+            left: 16.w,
+            right: 16.w,
+            top: 14.h,
+            bottom: 14.h,
+          ),
+          prefixIcon: Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+            // margin: EdgeInsets.only(left: 8.w, right: 4.w),
+            decoration: BoxDecoration(
+              color: ColorsData.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6.r),
+            ),
+            child: Text(
+              "+972",
+              style: Styles.textStyleS14W500(color: ColorsData.primary),
+            ),
+          ),
+          suffixIcon: suffixIcon,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
+        ),
+      );
+    }
+
+    // Normal field for other cases
     return TextFormField(
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
@@ -54,13 +108,13 @@ class CustomTextFormField extends StatelessWidget {
       keyboardType: keyboardType ?? TextInputType.emailAddress,
       validator: validator,
       style: style ?? Styles.textStyleS14W500(),
-      readOnly: readOnly, // Add readOnly property
-      onTap: onTap, // Add onTap callback
+      readOnly: readOnly,
+      onTap: onTap,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
         fillColor: fillColor ?? ColorsData.secondary,
-        filled: true, // Ensure filled is true for proper background color
+        filled: true,
         contentPadding: EdgeInsets.only(
           left: 16.w,
           right: 16.w,
@@ -86,5 +140,4 @@ class CustomTextFormField extends StatelessWidget {
       ),
     );
   }
-
 }

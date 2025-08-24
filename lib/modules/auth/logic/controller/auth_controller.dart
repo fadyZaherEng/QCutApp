@@ -19,10 +19,10 @@ class AuthController extends GetxController {
   final TextEditingController phoneNumberController =
       //  TextEditingController(text: "+970591999999");
       //   barber
-      TextEditingController(text: '\u200E+201018089213');
+      TextEditingController();
 
   final TextEditingController passwordController =
-      TextEditingController(text: "Aa123456789.");
+      TextEditingController(text: "");
   final TextEditingController city = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -48,8 +48,8 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     fullNameController.dispose();
-    phoneNumberController.dispose();
-    passwordController.dispose();
+    // phoneNumberController.dispose();
+    // passwordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();
   }
@@ -64,11 +64,11 @@ class AuthController extends GetxController {
 
     try {
       final userData = UserModel(
-        fullName: fullNameController.text.trim(),
-        phoneNumber: phoneNumberController.text.trim().replaceAll('\u200E', ''),
-        password: passwordController.text,
-        city: city.text,
-      );
+          fullName: fullNameController.text.trim(),
+          phoneNumber:
+              "+972${phoneNumberController.text.trim().replaceAll('\u200E', '')}",
+          password: passwordController.text,
+          city: "New City");
 
       final requestData = {
         'userType':
@@ -131,10 +131,11 @@ class AuthController extends GetxController {
 
       final requestData = {
         'phoneNumber':
-            phoneNumberController.text.trim().replaceAll('\u200E', ''),
+            "+972${phoneNumberController.text.trim().replaceAll('\u200E', '')}",
         'password': passwordController.text,
         "fcmToken": fcmToken
       };
+      print(requestData);
 
       final response =
           await _apiCall.postDataAsGuest(requestData, Variables.LOGIN);

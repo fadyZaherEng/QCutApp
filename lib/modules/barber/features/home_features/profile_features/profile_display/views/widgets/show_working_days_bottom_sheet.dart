@@ -20,14 +20,16 @@ void showWorkingDaysBottomSheet(BuildContext context) {
 void showBWorkingDaysBottomSheet(
     BuildContext context, List<WorkingDay> workingDays) {
   if (workingDays.isEmpty) {
+    Get.closeAllSnackbars(); // ✅ اقفل أي Snackbar قديم
     Get.snackbar(
-      'No Working Days',
-      'You have not set any working days yet',
-      backgroundColor: Colors.orange,
+      'No Working Days'.tr,
+      'You have not set any working days yet'.tr,
+      backgroundColor: Colors.blueGrey,
       colorText: Colors.white,
     );
     return;
   }
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,

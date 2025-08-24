@@ -44,7 +44,10 @@ class _CustomBigButtonState extends State<CustomBigButton> {
             widget.onPressed?.call();
             Future.delayed(const Duration(seconds: 2), () {
               isClicked = true;
-              setState(() {});
+              if (mounted) {
+                FocusManager.instance.primaryFocus?.unfocus();
+                setState(() {});
+              }
             });
           }
         },

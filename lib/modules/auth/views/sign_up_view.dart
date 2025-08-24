@@ -137,10 +137,10 @@ class _SignUpViewState extends State<SignUpView> {
                                 SizedBox(height: 16.h),
                                 CustomTextFormField(
                                   //     controller: _barberShop,
-                                  hintText: 'enterYourBarberShop'.tr,
+                                  hintText: 'enterYourBarberShopName'.tr,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your Barber Shop'.tr;
+                                      return 'pleaseEnterYourBarberShopName'.tr;
                                     }
                                     return null;
                                   },
@@ -149,17 +149,17 @@ class _SignUpViewState extends State<SignUpView> {
                               ],
                             )
                           : SizedBox(height: 16.h),
-                      CustomTextFormField(
-                        controller: _authController.city,
-                        hintText: 'enterYourCity'.tr,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your City'.tr;
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.h),
+                      // CustomTextFormField(
+                      //   controller: _authController.city,
+                      //   hintText: 'enterYourCity'.tr,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter your City'.tr;
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      // SizedBox(height: 16.h),
                       CustomTextFormField(
                         controller: _authController.passwordController,
                         keyboardType: TextInputType.visiblePassword,
@@ -223,7 +223,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 color: ColorsData.primary,
                               )
                             : CustomBigButton(
-                                textData: 'register'.tr,
+                                textData: 'request'.tr,
                                 onPressed: () {
                                   if (isChecked) {
                                     _authController.signUp(context);

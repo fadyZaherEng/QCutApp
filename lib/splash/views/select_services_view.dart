@@ -17,87 +17,94 @@ class SelectServicesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+            child: SizedBox(
+              width: 12.w,
+              height: 12.h,
+              child: buildDrawerItem(
+                  "changeLanguages".tr, AssetsData.changeLanguagesIcon, () {
+                Get.toNamed(AppRouter.changeLangugesPath);
+              }),
+            ),
+          ),
+        ),
         body: Padding(
-          padding: EdgeInsets.only(top: 27.h),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // const Spacer(),
-                  SvgPicture.asset(
-                    width: 85.w,
-                    height: 86.h,
-                    AssetsData.logo,
-                  ),
-                  SizedBox(width: 5.w),
-                  SvgPicture.asset(
-                    width: 103.w,
-                    height: 31.h,
-                    AssetsData.qCutTextImage,
-                  ),
-                  const SizedBox(width: 15),
-                  buildDrawerItem(
-                      "changeLanguages".tr, AssetsData.changeLanguagesIcon, () {
-                    Get.toNamed(AppRouter.changeLangugesPath);
-                  }),
-                  // const Spacer(),
-                ],
-              ),
-              SizedBox(
-                height: 35.h,
-              ),
-              SvgPicture.asset(
-                width: 232.w,
-                height: 232.h,
-                AssetsData.selectServicesImage,
-              ),
-              SizedBox(
-                height: 69.h,
-              ),
-              Text(
-                'easyWayToBook'.tr,
-                style: Styles.textStyleS16W400(),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
-              Text(
-                'youAre'.tr,
-                style: Styles.textStyleS16W700(),
-              ),
-              SizedBox(
-                height: 39.h,
-              ),
-              CustomBigButton(
-                textData: 'barber'.tr,
-                onPressed: () async {
-                  try {
-                    await SharedPref().setBool(PrefKeys.userRole, false);
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // const Spacer(),
+                    SvgPicture.asset(
+                      width: 85.w,
+                      height: 86.h,
+                      AssetsData.logo,
+                    ),
+                    SizedBox(width: 5.w),
+                    SvgPicture.asset(
+                      width: 103.w,
+                      height: 31.h,
+                      AssetsData.qCutTextImage,
+                    ),
+                    const SizedBox(width: 15),
 
-                    Get.offAllNamed(AppRouter.loginPath);
-                  } catch (e) {
-                    print('Error setting barber role: $e');
-                  }
-                },
-              ),
-              SizedBox(
-                height: 24.h,
-              ),
-              CustomBigButton(
-                textData: 'customer'.tr,
-                onPressed: () async {
-                  try {
-                    await SharedPref().setBool(PrefKeys.userRole, true);
+                    // const Spacer(),
+                  ],
+                ),
+                SizedBox(height: 35.h),
+                SvgPicture.asset(
+                  width: 232.w,
+                  height: 232.h,
+                  AssetsData.selectServicesImage,
+                ),
+                SizedBox(height: 69.h),
+                Text(
+                  'theNewAraOfBooking'.tr,
+                  style: Styles.textStyleS16W600(),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'youAre'.tr,
+                  style: Styles.textStyleS16W700(),
+                ),
+                SizedBox(
+                  height: 39.h,
+                ),
+                CustomBigButton(
+                  textData: 'barber'.tr,
+                  onPressed: () async {
+                    try {
+                      await SharedPref().setBool(PrefKeys.userRole, false);
 
-                    Get.offAllNamed(AppRouter.loginPath);
-                  } catch (e) {
-                    print('Error setting customer role: $e');
-                  }
-                },
-              ),
-            ],
+                      Get.offAllNamed(AppRouter.loginPath);
+                    } catch (e) {
+                      print('Error setting barber role: $e');
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 24.h,
+                ),
+                CustomBigButton(
+                  textData: 'customer'.tr,
+                  onPressed: () async {
+                    try {
+                      await SharedPref().setBool(PrefKeys.userRole, true);
+
+                      Get.offAllNamed(AppRouter.loginPath);
+                    } catch (e) {
+                      print('Error setting customer role: $e');
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -111,8 +118,8 @@ class SelectServicesView extends StatelessWidget {
         onTap: onTap,
         child: SvgPicture.asset(
           imagePath,
-          height: 24.h,
-          width: 24.w,
+          height: 18.h,
+          width: 18.w,
           colorFilter:
               const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
         ),

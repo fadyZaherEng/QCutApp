@@ -111,7 +111,7 @@ class _ChooseBreakDaysBottomSheetState
               ),
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 64.h),
         ],
       ),
     );

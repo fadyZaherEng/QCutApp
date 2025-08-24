@@ -176,7 +176,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                           borderRadius: BorderRadius.circular(10.r),
                           color: ColorsData.font,
                         ),
-                        width: 104.w,
+                        width: 120.w,
                         height: 36.h,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

@@ -6,8 +6,8 @@ String? validateEgyptianPhoneNumber(String phoneNumber) {
   // if (regExp.hasMatch(phoneNumber)) {
   //   return null;
   // } else
-  if (phoneNumber.isEmpty) {
-    return "Please enter your phone number".tr;
+  if (phoneNumber.isEmpty||phoneNumber.length>9) {
+    return "inValidPhoneNumber".tr;
   } else {
     return null;
   }

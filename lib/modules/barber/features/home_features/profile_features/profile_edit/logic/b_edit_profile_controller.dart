@@ -61,7 +61,7 @@ class BEditProfileController extends GetxController {
   final phoneController = TextEditingController();
   final saloonController = TextEditingController();
   final cityController = TextEditingController();
-  final bankAccountController = TextEditingController();
+  // final bankAccountController = TextEditingController();
   final instagramController = TextEditingController();
 
   @override
@@ -95,7 +95,7 @@ class BEditProfileController extends GetxController {
     // phoneController.text = initialData.p ?? '';
     saloonController.text = initialData.barberShop;
     cityController.text = initialData.city;
-    bankAccountController.text = initialData.bankAccountNumber;
+    // bankAccountController.text = initialData.bankAccountNumber;
     instagramController.text = initialData.instagramPage;
   }
 
@@ -215,9 +215,9 @@ class BEditProfileController extends GetxController {
         'fullName': nameController.text,
         'phoneNumber': phoneController.text,
         'barberShop': saloonController.text,
-        'city': cityController.text,
+        'city':"city",// cityController.text,
         'instagramPage': instagramController.text,
-        'bankAccountNumber': bankAccountController.text,
+        'bankAccountNumber':"123456",// bankAccountController.text,
         'offDay': offDays,
         'workingDays': workingDays
             .map((day) => {
@@ -286,8 +286,8 @@ class BEditProfileController extends GetxController {
     nameController.dispose();
     phoneController.dispose();
     saloonController.dispose();
-    cityController.dispose();
-    bankAccountController.dispose();
+    // cityController.dispose();
+    // bankAccountController.dispose();
     instagramController.dispose();
     super.onClose();
   }

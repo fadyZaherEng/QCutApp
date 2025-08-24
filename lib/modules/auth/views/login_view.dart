@@ -180,25 +180,25 @@ class _LoginViewState extends State<LoginView> {
                             ),
                     ),
                     SizedBox(height: 16.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'continue'.tr,
-                          style: Styles.textStyleS14W400(),
-                        ),
-                        SizedBox(width: 5.w),
-                        InkWell(
-                            onTap: () {
-                              Get.offAllNamed(AppRouter.homPath);
-                            },
-                            child: Text(
-                              'asAGuest'.tr,
-                              style: Styles.textStyleS14W400(
-                                  color: ColorsData.primary),
-                            )),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'continue'.tr,
+                    //       style: Styles.textStyleS14W400(),
+                    //     ),
+                    //     SizedBox(width: 5.w),
+                    //     InkWell(
+                    //         onTap: () {
+                    //           Get.offAllNamed(AppRouter.homPath);
+                    //         },
+                    //         child: Text(
+                    //           'asAGuest'.tr,
+                    //           style: Styles.textStyleS14W400(
+                    //               color: ColorsData.primary),
+                    //         )),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

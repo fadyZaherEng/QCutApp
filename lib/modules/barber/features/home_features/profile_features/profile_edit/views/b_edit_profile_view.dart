@@ -20,6 +20,30 @@ class _BEditProfileViewState extends State<BEditProfileView> {
   bool isClicked = true;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Make sure the controller is registered
+    final controller = Get.isRegistered<BEditProfileController>()
+        ? Get.find<BEditProfileController>()
+        : Get.put(BEditProfileController());
+
+    if (controller.cityController.text == "New City") {
+      Future.delayed(Duration(milliseconds: 500), () {
+        // Ensure the controller is initialized
+        Get.snackbar(
+          "Complete Profile".tr,
+          "Please fill out your profile to start working.".tr,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 5),
+        );
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Make sure the controller is registered
     final controller = Get.isRegistered<BEditProfileController>()
@@ -60,17 +84,21 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     _buildInputField("Change your name".tr, "Full Name".tr,
                         controller.nameController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Phone Number".tr,
-                        "Phone Number".tr, controller.phoneController),
+                    _buildInputField(
+                      "Change Your Phone Number".tr,
+                      "Phone Number".tr,
+                      controller.phoneController,
+                      isPhone: true,
+                    ),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Saloon Name".tr,
+                    _buildInputField("change your barber shop name".tr,
                         "Saloon Name".tr, controller.saloonController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your City".tr, "City".tr,
-                        controller.cityController),
-                    SizedBox(height: 16.h),
-                    _buildInputField("Change Your Bank Account".tr,
-                        "Bank Account".tr, controller.bankAccountController),
+                    // _buildInputField("Change Your City".tr, "City".tr,
+                    //     controller.cityController),
+                    // SizedBox(height: 16.h),
+                    // _buildInputField("Change Your Bank Account".tr,
+                    //     "Bank Account".tr, controller.bankAccountController),
                     SizedBox(height: 16.h),
                     _buildInputField("Change Your Instagram Page".tr,
                         "Instagram".tr, controller.instagramController),
@@ -198,7 +226,8 @@ class _BEditProfileViewState extends State<BEditProfileView> {
   }
 
   Widget _buildInputField(
-      String label, String hint, TextEditingController controller) {
+      String label, String hint, TextEditingController controller,
+      {bool isPhone = false}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: Column(
@@ -210,6 +239,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
             fillColor: ColorsData.secondary,
             hintText: hint,
             controller: controller,
+            keyboardType: isPhone ? TextInputType.phone : null,
           ),
         ],
       ),

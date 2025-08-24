@@ -3,8 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/b_appointment_view.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/models/barber_profile_model.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/b_profile_view.dart';
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/b_statics_view.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/home_view.dart';
@@ -117,6 +120,19 @@ class MainController extends GetxController {
 
       print('${Variables.baseUrl}deal/$id');
       print(response.body);
+      // showDealDialog(Deal(
+      //   id: '1',
+      //   dealDateStart: DateTime.now().millisecondsSinceEpoch,
+      //   dealDateEnd:
+      //       DateTime.now().add(Duration(days: 30)).millisecondsSinceEpoch,
+      //   qCuteSubscription: 100,
+      //   qCuteTax: 10,
+      //   freeDaysNumber: 5,
+      //   status: 'pending',
+      //   barber: 'barberId',
+      //   createdAt: DateTime.now().toIso8601String(),
+      //   updatedAt: DateTime.now().toIso8601String(),
+      // ));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -222,7 +238,7 @@ class MainController extends GetxController {
               ),
               SizedBox(height: 16.h),
               Text(
-                "Thank you for choosing us",
+                "Thank you for choosing us".tr,
                 style: titleStyle.copyWith(
                   fontSize: 18.sp,
                   color: Color(0xFF333333),
@@ -230,7 +246,7 @@ class MainController extends GetxController {
               ),
               SizedBox(height: 6.h),
               Text(
-                "QCut Special Offer",
+                "QCut Special Offer".tr,
                 style: subtitleStyle.copyWith(
                   fontSize: 17.sp,
                   color: Color(0xFFD1A439),
@@ -253,28 +269,28 @@ class MainController extends GetxController {
                         Icon(Icons.celebration,
                             color: Color(0xFFD1A439), size: 20.sp),
                         SizedBox(width: 8.w),
-                        Text("Exclusive Offer", style: boldGoldStyle),
+                        Text("Exclusive Offer".tr, style: boldGoldStyle),
                       ],
                     ),
                     Divider(height: 24.h, color: Color(0xFFEEEEEE)),
                     offerDetailRow(
                       Icons.date_range,
-                      "Valid Period: $startDate - $endDate",
+                      "${"Valid Period".tr}: $startDate - $endDate",
                     ),
                     SizedBox(height: 10.h),
                     offerDetailRow(
                       Icons.money_off,
-                      "QCut Tax: ${deal.qCuteTax}% per booking",
+                      "${"QCut Tax:".tr} ${deal.qCuteTax}% per booking",
                     ),
                     SizedBox(height: 10.h),
                     offerDetailRow(
                       Icons.payment,
-                      "Subscription: \$${deal.qCuteSubscription}",
+                      "${"Subscription".tr}: \$${deal.qCuteSubscription}",
                     ),
                     SizedBox(height: 10.h),
                     offerDetailRow(
                       Icons.card_giftcard,
-                      "Free Trial: ${deal.freeDaysNumber} days",
+                      "${"Free Trial".tr}: ${deal.freeDaysNumber} days",
                     ),
                   ],
                 ),
@@ -289,17 +305,67 @@ class MainController extends GetxController {
                           '${Variables.baseUrl}deal',
                           {"status": "accepted"},
                         );
-                        response.statusCode == 200
-                            ? Get.back()
-                            : Get.snackbar(
-                                "Error",
-                                "Failed to accept the offer",
-                                backgroundColor: Colors.red,
+
+                        if (response.statusCode == 200) {
+                          Get.back();
+
+                          // ✅ اعرض رسالة نجاح
+                          Get.snackbar(
+                            "Success",
+                            "Offer accepted successfully".tr,
+                            backgroundColor: Colors.green,
+                            colorText: Colors.white,
+                          );
+                          final BProfileController controller =
+                              Get.put(BProfileController());
+                          await controller.fetchProfileData();
+
+                          final profileData = controller.profileData.value;
+
+                          // ✅ بعد القبول أول مرة، روح على صفحة البروفايل
+                          final result = await Get.toNamed(
+                            AppRouter.beditProfilePath,
+                            arguments: BarberProfileModel(
+                              fullName: profileData?.fullName.trim() ?? '',
+                              offDay: profileData?.offDay ?? [],
+                              barberShop: profileData?.barberShop ?? '',
+                              bankAccountNumber:
+                                  profileData?.bankAccountNumber ?? '',
+                              instagramPage: profileData?.instagramPage ?? '',
+                              profilePic: profileData?.profilePic.trim() ?? '',
+                              coverPic: profileData?.coverPic.trim() ?? '',
+                              city: profileData?.city ?? 'New City',
+                              workingDays: profileData?.workingDays ?? [],
+                            ),
+                          );
+
+                          if (result == true) {
+                            // Profile was updated, refresh the data
+
+                            // ✅ اعرض تنبيه إنه لازم يملأ بيانات البروفايل
+                            Future.delayed(const Duration(seconds: 1), () {
+                              Get.snackbar(
+                                "Complete Profile".tr,
+                                "Please fill out your profile to start working."
+                                    .tr,
+                                backgroundColor: Colors.orange,
                                 colorText: Colors.white,
+                                snackPosition: SnackPosition.TOP,
+                                duration: const Duration(seconds: 5),
                               );
+                            });
+                          }
+                        } else {
+                          Get.snackbar(
+                            "Error",
+                            "Failed to accept the offer",
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFD1A439),
+                        backgroundColor: const Color(0xFFD1A439),
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         shape: RoundedRectangleBorder(
@@ -308,7 +374,7 @@ class MainController extends GetxController {
                         elevation: 2,
                       ),
                       child: Text(
-                        "Accept Offer",
+                        "Accept Offer".tr,
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
@@ -328,7 +394,7 @@ class MainController extends GetxController {
                         ),
                       ),
                       child: Text(
-                        "Contact Us",
+                        "Contact Us".tr,
                         style: TextStyle(
                           color: Color(0xFF757575),
                           fontSize: 16.sp,
