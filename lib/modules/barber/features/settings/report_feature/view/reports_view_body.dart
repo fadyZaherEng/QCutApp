@@ -63,19 +63,22 @@ class ReportsViewBody extends StatelessWidget {
     return Row(
       children: [
         _summaryCard(
-            "previousBooking".tr,
-            "${controller.reportCounts.value.previousAppointments}",
-            "appointment".tr),
+          "previousBooking".tr,
+          "${controller.reportCounts.value.previousAppointments}",
+          "appointment".tr,
+        ),
         const SizedBox(width: 8),
         _summaryCard(
-            "todayBooking".tr,
-            "${controller.reportCounts.value.todayAppointments}",
-            "appointment".tr),
+          "todayBooking".tr,
+          "${controller.reportCounts.value.todayAppointments}",
+          "appointment".tr,
+        ),
         const SizedBox(width: 8),
         _summaryCard(
-            "nextFourDays".tr,
-            "${controller.reportCounts.value.upcomingAppointments}",
-            "appointment".tr),
+          "nextFourDays".tr,
+          "${controller.reportCounts.value.upcomingAppointments}",
+          "appointment".tr,
+        ),
       ],
     );
   }
@@ -203,8 +206,8 @@ class ReportsViewBody extends StatelessWidget {
           _tableHeaderCell('date'.tr, flex: 2),
           _tableHeaderCell('services'.tr, flex: 2),
           _tableHeaderCell('price'.tr, flex: 2),
-          _tableHeaderCell('qcutTax'.tr, flex: 2),
-          _tableHeaderCell('total'.tr, flex: 2),
+          // _tableHeaderCell('qcutTax'.tr, flex: 2),
+          // _tableHeaderCell('total'.tr, flex: 2),
         ],
       ),
     );
@@ -256,8 +259,8 @@ class ReportsViewBody extends StatelessWidget {
           _tableCell('${bill.serviceCount} ${'services'.tr.toLowerCase()}',
               flex: 2),
           _tableCell('\$${bill.price.toStringAsFixed(0)}'),
-          _tableCell('\$${bill.taxAmount.toStringAsFixed(0)}', flex: 2),
-          _tableCell('\$${bill.priceAfterTax.toStringAsFixed(0)}'),
+          // _tableCell('\$${bill.taxAmount.toStringAsFixed(0)}', flex: 2),
+          // _tableCell('\$${bill.priceAfterTax.toStringAsFixed(0)}'),
         ],
       ),
     );

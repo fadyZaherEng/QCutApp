@@ -115,6 +115,7 @@ class _LoginViewState extends State<LoginView> {
                     CustomTextFormField(
                       controller: _authController.phoneNumberController,
                       hintText: 'enterYourPhoneNumber'.tr,
+                      keyboardType: TextInputType.phone,
                       // validator: (value) => validateEgyptianPhoneNumber(value!),
                     ),
                     SizedBox(height: 16.h),

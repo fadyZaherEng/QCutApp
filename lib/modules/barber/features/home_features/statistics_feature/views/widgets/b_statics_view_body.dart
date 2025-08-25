@@ -47,6 +47,7 @@ class BStaticsViewBody extends StatelessWidget {
                     height: 33.h,
                     width: 33.w,
                     AssetsData.sortIcon,
+                    color: ColorsData.primary,
                   ),
                 ),
               ],

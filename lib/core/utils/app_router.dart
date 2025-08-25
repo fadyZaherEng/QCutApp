@@ -20,7 +20,7 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/image_view.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/b_connect_us_view.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/b_history_view.dart';
- import 'package:q_cut/modules/barber/features/settings/presentation/views/b_settings_view.dart';
+import 'package:q_cut/modules/barber/features/settings/presentation/views/b_settings_view.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/view/reports_view.dart';
 import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/views/barber_services_view.dart';
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/view/book_appointment_view.dart';
@@ -28,6 +28,8 @@ import 'package:q_cut/modules/customer/features/bookingAndPayment/view/views/boo
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/view/on_hold_appointment_view.dart';
 import 'package:q_cut/modules/customer/features/bookingAndPayment/view/views/q_cut_services_view.dart';
 import 'package:q_cut/modules/customer/features/favorite_feature/favorite_view.dart';
+import 'package:q_cut/modules/customer/features/home_features/city_selection/bindings/city_binding.dart';
+import 'package:q_cut/modules/customer/features/home_features/city_selection/views/city_selection_view_new.dart';
 import 'package:q_cut/modules/customer/history_feature/binding/history_binding.dart';
 import 'package:q_cut/modules/customer/history_feature/view/history_view.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/home_view.dart';
@@ -107,6 +109,7 @@ abstract class AppRouter {
   static const String bpaymentMethodsPath = "/bpaymentMethodsPath";
   static const String successScreenPath = "/successScreenPath";
   static const String bottomNavigationBar = "/bottomNavigationBar";
+  static const String citySelectionPath = "/citySelectionPath";
 
   // Define the GetPage routes
   static final List<GetPage> routes = [
@@ -299,6 +302,11 @@ abstract class AppRouter {
     GetPage(
       name: successScreenPath,
       page: () => SuccessScreen(),
+    ),
+    GetPage(
+      name: citySelectionPath,
+      page: () => const CitySelectionView(),
+      binding: CityBinding(),
     ),
   ];
 }

@@ -72,9 +72,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   Widget _buildMenuItem(String title, String iconPath, VoidCallback onTap) {
     bool isClicked = true;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: DrawerConstants.itemSpacing.h),
-      child: GestureDetector(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8.r), // انيميشن حلوة عند الضغط
         onTap: () async {
           if (isClicked) {
             isClicked = false;
@@ -86,30 +88,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
             });
           }
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  iconPath,
-                  height: DrawerConstants.iconSize.h,
-                  width: DrawerConstants.iconSize.w,
-                  colorFilter: const ColorFilter.mode(
-                    ColorsData.primary,
-                    BlendMode.srcIn,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 12.h,
+            horizontal: 4.w,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    iconPath,
+                    height: DrawerConstants.iconSize.h,
+                    width: DrawerConstants.iconSize.w,
+                    colorFilter: const ColorFilter.mode(
+                      ColorsData.primary,
+                      BlendMode.srcIn,
+                    ),
                   ),
-                ),
-                SizedBox(width: DrawerConstants.iconSpacing.w),
-                Text(title, style: Styles.textStyleS14W400()),
-              ],
-            ),
-            SvgPicture.asset(
-              AssetsData.rightArrowIcon,
-              height: DrawerConstants.iconSize.h,
-              width: DrawerConstants.iconSize.w,
-            ),
-          ],
+                  SizedBox(width: DrawerConstants.iconSpacing.w),
+                  Text(title, style: Styles.textStyleS14W400()),
+                ],
+              ),
+              SvgPicture.asset(
+                AssetsData.rightArrowIcon,
+                height: DrawerConstants.iconSize.h,
+                width: DrawerConstants.iconSize.w,
+              ),
+            ],
+          ),
         ),
       ),
     );

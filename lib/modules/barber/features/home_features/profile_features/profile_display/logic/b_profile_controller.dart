@@ -316,6 +316,7 @@ class BProfileController extends GetxController {
 
   Future<void> addPhotosToGallery() async {
     try {
+      print('Starting photo selection...');
       final ImagePicker picker = ImagePicker();
       final List<XFile> images = await picker.pickMultiImage();
 
@@ -353,8 +354,8 @@ class BProfileController extends GetxController {
         if (response.statusCode == 200 || response.statusCode == 201) {
           await fetchGallery(); // Refresh gallery
           Get.snackbar(
-            'Success',
-            'Photos added successfully',
+            'Success'.tr,
+            'Photos added successfully'.tr,
             backgroundColor: ColorsData.primary,
             colorText: Colors.white,
           );
@@ -399,7 +400,7 @@ class BProfileController extends GetxController {
         'minTime': min,
         'maxTime': max,
         'imageUrl': imageUrl ??
-            "https://qcute-test-bucket.s3.us-east-1.amazonaws.com/images/1738787141939" // Use provided image URL or default
+            "https://qcute-test-bucket.s3.us-east-1.amazonaws.com/images/1738787141939"
       };
 
       print('Creating service with data: ${jsonEncode(requestData)}');

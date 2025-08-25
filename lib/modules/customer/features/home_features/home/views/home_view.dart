@@ -76,11 +76,14 @@ class HomeView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(AppRouter.citySelectionPath);
+                              },
                               child: Container(
                                 padding: EdgeInsets.only(top: 9.h, left: 16.w),
                                 height: 52.h,
                                 child: TextFormField(
+                                  enabled: false,
                                   style:
                                   Styles.textStyleS14W400(color: Colors.black),
                                   decoration: InputDecoration(

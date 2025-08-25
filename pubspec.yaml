@@ -56,6 +56,7 @@ dependencies:
   web_socket_channel: ^3.0.2
   flutter_spinkit:
   url_launcher:
+  photo_view:
 
 dev_dependencies:
   flutter_lints: ^5.0.0

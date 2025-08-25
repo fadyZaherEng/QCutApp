@@ -53,6 +53,7 @@ class ReportController extends GetxController {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = json.decode(response.body);
+        print(responseBody);
         reportCounts.value = ReportCounts.fromJson(responseBody);
       } else {
         _handleApiError(response);
@@ -111,7 +112,7 @@ class ReportController extends GetxController {
 
     try {
       // Format date as MM/DD/YYYY
-      final formattedDate = DateFormat('MM/dd/yyyy').format(date);
+      final formattedDate = DateFormat('dd/MM/yyyy').format(date);
       final url = '${Variables.REPORT}/search?date=$formattedDate';
 
       // Update search field text safely without triggering listeners

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
@@ -18,6 +19,7 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/widgets/custom_edit_new_service_bottom_sheet.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_change_your_picture_dialog.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_working_days_bottom_sheet.dart';
+import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/my_profile_view.dart';
 
 import '../../models/barber_profile_model.dart';
 
@@ -112,319 +114,334 @@ class _BProfileViewBodyState extends State<BProfileView>
       return Scaffold(
         key: _scaffoldKey, // 👈 عشان نتحكم في الـ Scaffold
         drawer: const CustomBDrawer(), // 👈 هنا بنضيف الـ Drawer بتاعك
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 300.h,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 250.h,
-                      decoration: BoxDecoration(
-                        color: ColorsData.secondary,
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          alignment: Alignment.topCenter,
-                          image: CachedNetworkImageProvider(
-                            profileData.coverPic,
-                            errorListener: (exception) =>
-                                print('Error loading image: $exception'),
-                          ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 300.h,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 250.h,
+                    decoration: BoxDecoration(
+                      color: ColorsData.secondary,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        alignment: Alignment.topCenter,
+                        image: CachedNetworkImageProvider(
+                          profileData.coverPic,
+                          errorListener: (exception) =>
+                              print('Error loading image: $exception'),
                         ),
                       ),
-                      child: profileData.coverPic.isNotEmpty
-                          ? Image.network(
-                              profileData.coverPic,
-                              fit: BoxFit.fill,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: ColorsData.secondary,
-                                  child: Center(
-                                    child: Text(
-                                      "Add Cover Photo".tr,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.sp,
-                                      ),
+                    ),
+                    child: profileData.coverPic.isNotEmpty
+                        ? Image.network(
+                            profileData.coverPic,
+                            fit: BoxFit.fill,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: ColorsData.secondary,
+                                child: Center(
+                                  child: Text(
+                                    "Add Cover Photo".tr,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.sp,
                                     ),
                                   ),
-                                );
-                              },
-                            )
-                          : Container(
-                              color: ColorsData.secondary,
-                              child: Center(
-                                child: Text(
-                                  "Add Cover Photo".tr,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.sp,
-                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(
+                            color: ColorsData.secondary,
+                            child: Center(
+                              child: Text(
+                                "Add Cover Photo".tr,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
                                 ),
                               ),
                             ),
-                    ),
-                    Positioned(
-                      bottom: 20.h,
-                      right: 20.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          showChooseBreakDaysBottomSheet(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: ColorsData.primary),
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: ColorsData.font,
                           ),
-                          width: 120.w,
-                          height: 36.h,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                AssetsData.takeBreakIcon,
-                                height: 18.h,
-                                width: 18.w,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                "Take break".tr,
-                                style: Styles.textStyleS14W500(
-                                    color: Colors.black),
-                              ),
-                            ],
-                          ),
+                  ),
+                  Positioned(
+                    bottom: 20.h,
+                    right: 20.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        showChooseBreakDaysBottomSheet(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ColorsData.primary),
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: ColorsData.font,
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 200.98.h,
-                      left: 47.39.w,
-                      child: InkWell(
-                        onTap: () {
-                          showChangeYourPictureDialog(context).then((value) {
-                            controller.fetchProfileData();
-                          });
-                        },
-                        child: SizedBox(
-                          width: 120.w,
-                          height: 127.08.h,
-                          child: CircleAvatar(
-                            radius: 60,
-                            backgroundColor: ColorsData.secondary,
-                            child: CircleAvatar(
-                              radius: 55,
-                              backgroundImage:
-                                  NetworkImage(profileData.profilePic),
-                              backgroundColor: ColorsData.secondary,
-                              onBackgroundImageError: (exception, stackTrace) {
-                                print(
-                                    'Error loading profile image: $exception');
-                                return; // This will display the child widget
-                              },
-                              child: profileData.profilePic.isEmpty
-                                  ? Icon(
-                                      Icons.person,
-                                      size: 50,
-                                      color: Colors.white,
-                                    )
-                                  : null,
+                        width: 120.w,
+                        height: 36.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AssetsData.takeBreakIcon,
+                              height: 18.h,
+                              width: 18.w,
                             ),
+                            SizedBox(width: 5.w),
+                            Text(
+                              "Take break".tr,
+                              style:
+                                  Styles.textStyleS14W500(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 200.98.h,
+                    left: 47.39.w,
+                    child: InkWell(
+                      onTap: () {
+                        if (profileData.profilePic.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => FullScreenImageView(
+                                imageUrl: profileData.profilePic,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: SizedBox(
+                        width: 120.w,
+                        height: 127.08.h,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ColorsData.secondary,
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundImage:
+                                NetworkImage(profileData.profilePic),
+                            backgroundColor: ColorsData.secondary,
+                            onBackgroundImageError: (exception, stackTrace) {
+                              print('Error loading profile image: $exception');
+                            },
+                            child: profileData.profilePic.isEmpty
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.white,
+                                  )
+                                : null,
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
-                      left: 110.w,
-                      bottom: -20.h,
-                      child: InkWell(
-                        onTap: () {
+                  ),
+
+                  Positioned(
+                    left: 110.w,
+                    bottom: -20.h,
+                    child: InkWell(
+                      onTap: () {
+                        showChangeYourPictureDialog(context);
+                      },
+                      child: MaterialButton(
+                        height: 36.16748046875.h,
+                        minWidth: 36.16748046875.w,
+                        padding: EdgeInsets.zero,
+                        shape: const CircleBorder(),
+                        onPressed: () {
                           showChangeYourPictureDialog(context);
                         },
-                        child: MaterialButton(
-                          height: 36.16748046875.h,
-                          minWidth: 36.16748046875.w,
-                          padding: EdgeInsets.zero,
-                          shape: const CircleBorder(),
-                          onPressed: () {
-                            showChangeYourPictureDialog(context);
-                          },
-                          child: CircleAvatar(
-                            radius: 18.08.r,
-                            backgroundColor: ColorsData.primary,
-                            child: SvgPicture.asset(
-                              height: 20.h,
-                              width: 20.w,
-                              AssetsData.addImageIcon,
-                              colorFilter: const ColorFilter.mode(
-                                ColorsData.font,
-                                BlendMode.srcIn,
-                              ),
+                        child: CircleAvatar(
+                          radius: 18.08.r,
+                          backgroundColor: ColorsData.primary,
+                          child: SvgPicture.asset(
+                            height: 20.h,
+                            width: 20.w,
+                            AssetsData.addImageIcon,
+                            colorFilter: const ColorFilter.mode(
+                              ColorsData.font,
+                              BlendMode.srcIn,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    // Burger Menu + Take Break
-                    Positioned(
-                      top: 10.h,
-                      left: Get.locale?.languageCode == "ar" ? 20.w : null,
-                      // 👈 RTL support
-                      right: Get.locale?.languageCode == "ar" ? null : 20.w,
-                      child: Row(
-                        children: [
-                          // Burger Menu
-                          GestureDetector(
-                            onTap: () {
-                              // open drawer / show menu sheet
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: ColorsData.primary),
-                                borderRadius: BorderRadius.circular(10.r),
-                                color: ColorsData.font,
-                              ),
-                              width: 40.w,
-                              height: 36.h,
-                              child: Icon(
-                                Icons.menu,
-                                color: Colors.black,
-                                size: 22.sp,
-                              ),
+                  ),
+                  // Burger Menu + Take Break
+                  Positioned(
+                    top: 10.h,
+                    left: Get.locale?.languageCode == "ar" ? 20.w : null,
+                    // 👈 RTL support
+                    right: Get.locale?.languageCode == "ar" ? null : 20.w,
+                    child: Row(
+                      children: [
+                        // Burger Menu
+                        GestureDetector(
+                          onTap: () {
+                            // open drawer / show menu sheet
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: ColorsData.primary),
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: ColorsData.font,
+                            ),
+                            width: 40.w,
+                            height: 36.h,
+                            child: Icon(
+                              Icons.menu,
+                              color: Colors.black,
+                              size: 22.sp,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 68.h),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            barberShop,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: ColorsData.primary),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          width: 80.w,
-                          height: 30.h,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.w, vertical: 68.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "NO. 1".tr,
-                                style: Styles.textStyleS13W400(
-                                    color: ColorsData.primary),
+                              Flexible(
+                                child: Text(
+                                  barberShop,
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: ColorsData.primary),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                width: 80.w,
+                                height: 30.h,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "NO. 1".tr,
+                                      style: Styles.textStyleS13W400(
+                                          color: ColorsData.primary),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Divider(
-                      color: ColorsData.cardStrock,
-                      thickness: 1.w,
-                    ),
-                    SizedBox(height: 8.h),
-                    _buildInfoRow(AssetsData.personIcon, fullName),
-                    SizedBox(height: 8.h),
-                    _buildInfoRow(AssetsData.mapPinIcon, city),
-                    SizedBox(height: 8.h),
-                    _buildInfoRow(AssetsData.callIcon,
-                        "\u200E${profileData.phoneNumber}"),
-                    SizedBox(height: 8.h),
-                    _buildInfoRow(AssetsData.instagramIcon, instagramPage),
-                    SizedBox(height: 16.h),
-                    CustomBigButton(
-                      color: const Color(0xA6C59D4E),
-                      textData: "workingDays".tr,
-                      onPressed: () {
-                        showBWorkingDaysBottomSheet(
-                            context, profileData.workingDays);
-                      },
-                    ),
-                    SizedBox(height: 12.h),
-                    CustomBigButton(
-                      textData: "Edit Profile".tr,
-                      onPressed: () async {
-                        final result = await Get.toNamed(
-                          AppRouter.beditProfilePath,
-                          arguments: BarberProfileModel(
-                            fullName: profileData.fullName,
-                            offDay: profileData.offDay,
-                            barberShop: profileData.barberShop,
-                            bankAccountNumber: profileData.bankAccountNumber,
-                            instagramPage: profileData.instagramPage,
-                            profilePic: profileData.profilePic,
-                            coverPic: profileData.coverPic,
-                            city: profileData.city,
-                            workingDays: profileData.workingDays,
+                          SizedBox(height: 10.h),
+                          Divider(
+                            color: ColorsData.cardStrock,
+                            thickness: 1.w,
                           ),
-                        );
+                          SizedBox(height: 8.h),
+                          _buildInfoRow(AssetsData.personIcon, fullName),
+                          SizedBox(height: 8.h),
+                          _buildInfoRow(AssetsData.mapPinIcon, city),
+                          SizedBox(height: 8.h),
+                          _buildInfoRow(AssetsData.callIcon,
+                              "\u200E${profileData.phoneNumber}"),
+                          SizedBox(height: 8.h),
+                          _buildInfoRow(
+                              AssetsData.instagramIcon, instagramPage),
+                          SizedBox(height: 16.h),
+                          CustomBigButton(
+                            color: const Color(0xA6C59D4E),
+                            textData: "workingDays".tr,
+                            onPressed: () {
+                              showBWorkingDaysBottomSheet(
+                                  context, profileData.workingDays);
+                            },
+                          ),
+                          SizedBox(height: 12.h),
+                          CustomBigButton(
+                            textData: "Edit Profile".tr,
+                            onPressed: () async {
+                              final result = await Get.toNamed(
+                                AppRouter.beditProfilePath,
+                                arguments: BarberProfileModel(
+                                  fullName: profileData.fullName,
+                                  offDay: profileData.offDay,
+                                  barberShop: profileData.barberShop,
+                                  bankAccountNumber:
+                                      profileData.bankAccountNumber,
+                                  instagramPage: profileData.instagramPage,
+                                  profilePic: profileData.profilePic,
+                                  coverPic: profileData.coverPic,
+                                  city: profileData.city,
+                                  workingDays: profileData.workingDays,
+                                ),
+                              );
 
-                        if (result == true) {
-                          // Profile was updated, refresh the data
-                          controller.fetchProfileData();
-                        }
-                      },
-                    ),
-                    SizedBox(height: 24.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildTabButton(
-                            "My service".tr, _tabController.index == 0),
-                        _buildTabButton(
-                            "My gallery".tr, _tabController.index == 1),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    SizedBox(
-                      // Use a fixed height that's tall enough to show content
-                      height: 400.h,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          // Services Tab
-                          _buildServicesTab(),
+                              if (result == true) {
+                                // Profile was updated, refresh the data
+                                controller.fetchProfileData();
+                              }
+                            },
+                          ),
+                          SizedBox(height: 24.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _buildTabButton(
+                                  "My service".tr, _tabController.index == 0),
+                              _buildTabButton(
+                                  "My gallery".tr, _tabController.index == 1),
+                            ],
+                          ),
+                          SizedBox(height: 16.h),
+                          SizedBox(
+                            // Use a fixed height that's tall enough to show content
+                            height: 400.h,
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                // Services Tab
+                                _buildServicesTab(),
 
-                          // Gallery Tab
-                          _buildGalleryTab(),
+                                // Gallery Tab
+                                _buildGalleryTab(),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     });
@@ -501,14 +518,25 @@ class _BProfileViewBodyState extends State<BProfileView>
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: controller.barberServices.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 8.h),
-                    itemBuilder: (context, index) {
-                      final service = controller.barberServices[index];
-                      return _buildServiceItemFromData(service);
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is OverscrollNotification) {
+                        // ده بيخلي السحب يروح للـParent لما توصل لأول أو آخر الليست
+                        return true;
+                      }
+                      return false;
                     },
+                    child: ListView.separated(
+                      physics: const ClampingScrollPhysics(),
+                      // مش AlwaysScrollable
+                      itemCount: controller.barberServices.length,
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 8.h),
+                      itemBuilder: (context, index) {
+                        final service = controller.barberServices[index];
+                        return _buildServiceItemFromData(service);
+                      },
+                    ),
                   ),
                 ),
                 // Add the button at the bottom, outside the ListView
@@ -719,16 +747,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                     onPressed: controller.isUploadingPhotos.value
                         ? null
                         : () async {
-                            if (isClicked) {
-                              isClicked = false;
-                              setState(() {});
-                              controller.addPhotosToGallery;
-                              await Future.delayed(const Duration(seconds: 2),
-                                  () {
-                                isClicked = true;
-                                setState(() {});
-                              });
-                            }
+                            controller.addPhotosToGallery();
                           },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.all(2.w),
@@ -737,10 +756,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                         ? SizedBox(
                             width: 20.w,
                             height: 20.h,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  ColorsData.primary),
+                            child: const SpinKitDoubleBounce(
+                              color: ColorsData.primary,
                             ),
                           )
                         : SvgPicture.asset(
@@ -770,7 +787,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           child: Obx(() {
             if (controller.isGalleryLoading.value) {
               return const Center(
-                child: CircularProgressIndicator(color: ColorsData.primary),
+                child: SpinKitDoubleBounce(color: ColorsData.primary),
               );
             }
 
@@ -788,23 +805,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                     ),
                     SizedBox(height: 16.h),
                     ElevatedButton.icon(
-                        icon: Icon(Icons.add_photo_alternate),
-                        label: Text('Add Photos'.tr),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorsData.primary,
-                        ),
-                        onPressed: () async {
-                          if (isClicked) {
-                            isClicked = false;
-                            setState(() {});
-                            controller.addPhotosToGallery;
-                            await Future.delayed(const Duration(seconds: 2),
-                                () {
-                              isClicked = true;
-                              setState(() {});
-                            });
-                          }
-                        }),
+                      icon: Icon(Icons.add_photo_alternate),
+                      label: Text('Add Photos'.tr),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsData.primary,
+                      ),
+                      onPressed: () async {
+                        controller.addPhotosToGallery();
+
+                        // controller.addPhotosToGallery;
+                      },
+                    ),
                   ],
                 ),
               );
