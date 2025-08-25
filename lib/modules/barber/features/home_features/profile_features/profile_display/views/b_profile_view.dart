@@ -483,11 +483,14 @@ class _BProfileViewBodyState extends State<BProfileView>
                   child: Text('Refresh'.tr),
                 ),
                 SizedBox(height: 16.h),
-                CustomBigButton(
-                  textData: "Add new service".tr,
-                  onPressed: () {
-                    showCustomAddNewServiceBottomSheet(context);
-                  },
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24.h), // يرفع الزرار لفوق
+                  child: CustomBigButton(
+                    textData: "Add new service".tr,
+                    onPressed: () {
+                      showCustomAddNewServiceBottomSheet(context);
+                    },
+                  ),
                 ),
               ],
             );

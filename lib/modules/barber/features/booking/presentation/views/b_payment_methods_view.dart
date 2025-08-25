@@ -18,13 +18,19 @@ class BPaymentMethodsView extends StatelessWidget {
           'paymentMethods'.tr,
           style: Styles.textStyleS16W700(),
         ),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: SvgPicture.asset(AssetsData.menuIcon),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: SvgPicture.asset(AssetsData.menuIcon),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
           ),
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: const BPaymentMethodsViewBody(),
