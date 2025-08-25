@@ -90,8 +90,22 @@ class QCutServicesView extends StatelessWidget {
                       .map((index) => controller.serviceQuantities[index])
                       .toList();
 
-                  final freeTimeRequestModel =
-                      FreeTimeRequestModel.fromServices(
+                  // ✅ اجمالي الكمية المختارة
+                  final int totalSelectedQuantity = quantities.fold(0, (a, b) => a + b);
+
+                  // ✅ تحقق ديناميكي حسب عدد الأشخاص
+                  if (numberofUsers > 1 && totalSelectedQuantity < numberofUsers) {
+                    Get.snackbar(
+                      "warning".tr,
+                      "${'youMustSelectAtLeast'.tr} $numberofUsers ${'services'.tr}",
+                      backgroundColor: Colors.red.withOpacity(0.8),
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+
+                  final freeTimeRequestModel = FreeTimeRequestModel.fromServices(
                     barber.id,
                     selectedServicesList,
                     serviceQuantities: quantities,
@@ -102,6 +116,38 @@ class QCutServicesView extends StatelessWidget {
                       arguments: freeTimeRequestModel);
                 },
               ),
+              SizedBox(height: 64.h),
+
+              // CustomBigButton(
+              //   textData: "confirm".tr,
+              //   onPressed: () async {
+              //     final selectedIndices = controller.selectedServices
+              //         .asMap()
+              //         .entries
+              //         .where((entry) => entry.value)
+              //         .map((entry) => entry.key)
+              //         .toList();
+              //
+              //     final selectedServicesList = selectedIndices
+              //         .map((index) => controller.barberServices[index])
+              //         .toList();
+              //
+              //     final List<int> quantities = selectedIndices
+              //         .map((index) => controller.serviceQuantities[index])
+              //         .toList();
+              //
+              //     final freeTimeRequestModel =
+              //         FreeTimeRequestModel.fromServices(
+              //       barber.id,
+              //       selectedServicesList,
+              //       serviceQuantities: quantities,
+              //       onHolding: false,
+              //     );
+              //
+              //     Get.toNamed(AppRouter.bookAppointmentPath,
+              //         arguments: freeTimeRequestModel);
+              //   },
+              // ),
             ],
           );
         }),
