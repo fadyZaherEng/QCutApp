@@ -17,16 +17,21 @@ class MyAppointmentView extends StatefulWidget {
 
 class _MyAppointmentViewState extends State<MyAppointmentView> {
   bool isClicked = true;
+  final controller = Get.put(CustomerAppointmentController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    // set default filter to pending
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setStatusFilter("pending");
+      controller.refreshAppointments();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CustomerAppointmentController());
-
-    // Add this to refresh when screen opens
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.refreshAppointments();
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text("myAppointments".tr),
@@ -90,7 +95,7 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
                       context: context,
                       onYes: () async {
                         final success =
-                            await controller.deleteAppointment(appointment.id);
+                        await controller.deleteAppointment(appointment.id);
                         if (success && context.mounted) {
                           Get.back();
                         }
@@ -114,7 +119,8 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
       onSelected: (value) {
         controller.setStatusFilter(value);
       },
-      itemBuilder: (context) => [
+      itemBuilder: (context) =>
+      [
         PopupMenuItem(
           value: 'all',
           child: Text('allAppointments'.tr),
