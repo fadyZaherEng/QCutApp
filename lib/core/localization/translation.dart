@@ -304,6 +304,9 @@ class MyTranslation extends Translations {
           "No notifications available": "لا يوجد اشعارات متاحة",
           "Refresh": "تحديث",
           "No": "لا",
+          "Break added successfully": "تمت اضافة الاستراحة بنجاح",
+          "Select the days you want to take a break":
+              "اختر الايام التي تريد اخذ استراحة فيها",
           "Yes": "نعم",
           "Please fill out your profile to start working.":
               "يرجى ملء ملفك الشخصي لبدء العمل.",
@@ -354,8 +357,10 @@ class MyTranslation extends Translations {
               "لا يكون مطلوبا اذا لم يتم تعيين اي ايام العطل",
           "Set Your Working Hours": "تعيين ساعات العمل",
           "Full Name": "الاسم الكامل",
+          "set working days": "تعيين ايام العمل",
           "Phone Number": "رقم الهاتف",
           "Saloon Name": "اسم المحل الحلاقة",
+          "Success": "نجاح",
           "City": "المدينة",
           "Bank Account": "حساب البنك",
           "Instagram": "صفحة Instagram",
@@ -445,6 +450,8 @@ class MyTranslation extends Translations {
           "english": "English",
           "arabic": "العربية",
           "hebrew": "עברית",
+          "Select the days you want to take a break":
+              "Select the days you want to take a break",
           "Exclusive Offer": "Exclusive Offer",
           "forgetPassword": "Forget password",
           "Free Trial": "Free Trial",
@@ -610,6 +617,7 @@ class MyTranslation extends Translations {
           "salon": "Salon",
           "cuts": "Cuts",
           "searchBarbersNameSalon": "Search barber's name, salon",
+          "Success": "Success",
           "selectFromRecommendedResults":
               "You can select from recommended results",
           "noMatchesFound": "No matches found",
@@ -725,6 +733,7 @@ class MyTranslation extends Translations {
           "Qty": "Qty",
           "bookingDay": "Booking Day",
           "bookingTime": "Booking Time",
+          "Break added successfully": "Break added successfully",
           "finalPrice": "Final Price",
           "type": "Type",
           "change": "Change",
@@ -769,6 +778,7 @@ class MyTranslation extends Translations {
           "Add Service photo": "Add Service Photos",
           "Enter Service Name": "Enter service name",
           "Enter Service Price": "Enter service price",
+          "set working days": "Set working days",
           "Enter Min Time": "Enter min time",
           "Enter Max Time": "Enter max time",
           "Confirm": "Confirm",
@@ -946,6 +956,8 @@ class MyTranslation extends Translations {
           "Valid Period": "תקופת תוקף",
           "barberName": "שם הספר",
           "barberSalon": "מספרה",
+          "Select the days you want to take a break":
+              "בחר את הימים שבהם תרצה לקחת הפסקה",
           "city": "עיר",
           "Offer accepted successfully":
               "ההצעה התקבלה בהצלחה",
@@ -965,7 +977,9 @@ class MyTranslation extends Translations {
           "Complete Profile": "השלם את הפרופיל",
           "Please fill out your profile to start working.":
               "אנא מלא את הפרופיל שלך כדי להתחיל לעבוד.",
+          "Success": "הצלחה",
           "tue": "שלישי",
+          "Break added successfully": "הפסקה נוספה בהצלחה",
           "wed": "רביעי",
           "thu": "חמישי",
           "fri": "שישי",
@@ -985,6 +999,7 @@ class MyTranslation extends Translations {
           "errorLoadingData": "שגיאה בטעינת נתונים",
           "retry": "נסה שוב",
           "paid": "שולם",
+          "set working days": "הגדר ימי עבודה",
           "unpaid": "לא שולם",
           "paymentMethods": "אמצעי תשלום",
           "cash": "מזומן",

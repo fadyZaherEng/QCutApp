@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
 
 class ChooseBreakDaysBottomSheet extends StatefulWidget {
   const ChooseBreakDaysBottomSheet({super.key});
@@ -13,8 +17,41 @@ class ChooseBreakDaysBottomSheet extends StatefulWidget {
 class _ChooseBreakDaysBottomSheetState
     extends State<ChooseBreakDaysBottomSheet> {
   int? _selectedDay;
-  bool _isAmFrom = true;
-  bool _isAmTo = true;
+  List<DateTime> _breakDays = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBreaks();
+  }
+
+  Future<void> _fetchBreaks() async {
+    try {
+      final response =
+          await NetworkAPICall().getData("${Variables.BARBER}get-break-time");
+
+      print("Fetch breaks response: $response");
+
+      if (response.statusCode == 200 && response.body != null) {
+        // Decode JSON string
+        final data =
+            response.body is String ? jsonDecode(response.body) : response.body;
+
+        print("Breaks response: $data");
+
+        final List breaks = data["breakTime"] ?? [];
+
+        setState(() {
+          _breakDays = breaks.map<DateTime>((b) {
+            int start = b["startDate"]; // already int in your API
+            return DateTime.fromMillisecondsSinceEpoch(start * 1000);
+          }).toList();
+        });
+      }
+    } catch (e, st) {
+      debugPrint("Error fetching breaks: $e\n$st");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +92,7 @@ class _ChooseBreakDaysBottomSheetState
           Column(
             children: [
               Text(
-                "June 2024",
+                "Select the days you want to take a break".tr,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
@@ -66,22 +103,6 @@ class _ChooseBreakDaysBottomSheetState
               _buildCalendarHeader(),
               _buildCalendarGrid(),
             ],
-          ),
-          SizedBox(height: 24.h),
-
-          // Time Selectors
-          _buildTimeSelector(
-            "Time from",
-            "8:00",
-            _isAmFrom,
-            (isAm) => setState(() => _isAmFrom = isAm),
-          ),
-          SizedBox(height: 16.h),
-          _buildTimeSelector(
-            "Time to",
-            "8:00",
-            _isAmTo,
-            (isAm) => setState(() => _isAmTo = isAm),
           ),
           SizedBox(height: 24.h),
 
@@ -100,7 +121,7 @@ class _ChooseBreakDaysBottomSheetState
                 ),
                 elevation: 0,
               ),
-              onPressed: () {},
+              onPressed: _addBreak,
               child: Text(
                 "Confirm".tr,
                 style: TextStyle(
@@ -149,8 +170,14 @@ class _ChooseBreakDaysBottomSheetState
       itemCount: 30,
       itemBuilder: (context, index) {
         final day = index + 1;
+        final now = DateTime.now();
+        final currentDate = DateTime(now.year, now.month, day);
+
         final isSelected = _selectedDay == day;
-        final isHighlighted = day == 10 || day == 26;
+        final isHighlighted = _breakDays.any((d) =>
+            d.year == currentDate.year &&
+            d.month == currentDate.month &&
+            d.day == currentDate.day);
 
         return GestureDetector(
           onTap: () => setState(() => _selectedDay = day),
@@ -185,81 +212,61 @@ class _ChooseBreakDaysBottomSheetState
     );
   }
 
-  Widget _buildTimeSelector(
-      String label, String time, bool isAm, Function(bool) onAmPmChanged) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: Colors.grey[600],
-          ),
-        ),
-        const Spacer(),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-          child: Text(
-            time,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[600],
-            ),
-          ),
-        ),
-        SizedBox(width: 8.w),
-        _buildAmPmSelector(isAm, onAmPmChanged),
-      ],
-    );
-  }
+  Future<void> _addBreak() async {
+    if (_selectedDay == null) {
+      Get.snackbar(
+        "Error",
+        "Please select a day first",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
-  Widget _buildAmPmSelector(bool isAm, Function(bool) onChanged) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          _buildAmPmButton("AM", isAm, () => onChanged(true)),
-          _buildAmPmButton("PM", !isAm, () => onChanged(false)),
-        ],
-      ),
-    );
-  }
+    try {
+      DateTime start = DateTime(
+          DateTime.now().year, DateTime.now().month, _selectedDay!, 8, 0);
+      DateTime end = DateTime(
+          DateTime.now().year, DateTime.now().month, _selectedDay!, 9, 0);
 
-  Widget _buildAmPmButton(String text, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: Colors.grey[600],
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
+      int startTimestamp = (start.millisecondsSinceEpoch / 1000).round();
+      int endTimestamp = (end.millisecondsSinceEpoch / 1000).round();
+
+      final body = {
+        "breaks": [
+          {"startDate": startTimestamp, "endDate": endTimestamp}
+        ]
+      };
+
+      final response = await NetworkAPICall().putData(
+        "${Variables.BARBER}take-break",
+        body,
+      );
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Get.snackbar(
+          "Success".tr,
+          "Break added successfully".tr,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to add break: ${response.body}",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Something went wrong: $e",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }
 

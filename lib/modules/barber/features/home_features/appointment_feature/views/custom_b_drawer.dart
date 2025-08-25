@@ -115,7 +115,8 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Pay to Qcut".tr, AssetsData.paymentIcon, () {
+                    buildDrawerItem("Pay to Qcut".tr, AssetsData.paymentIcon,
+                        () {
                       Get.toNamed(AppRouter.bpayToQCutPath);
                       //   context.push(AppRouter.bpayToQCutPath);
                     }),
@@ -198,7 +199,8 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    buildDrawerItem("Contact us".tr, AssetsData.contactUsIcon, () {
+                    buildDrawerItem("Contact us".tr, AssetsData.contactUsIcon,
+                        () {
                       Get.toNamed(AppRouter.bconectUsPath);
                     }),
                     SizedBox(
@@ -225,32 +227,39 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
 
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
     return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                imagePath,
-                height: 24.h,
-                width: 24.w,
-                colorFilter:
-                    const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
-              ),
-              SizedBox(width: 12.w),
-              Text(
-                title,
-                style: Styles.textStyleS14W400(),
-              ),
-            ],
-          ),
-          SvgPicture.asset(
-            AssetsData.rightArrowIcon,
-            height: 24.h,
-            width: 24.w,
-          ),
-        ],
+      behavior: HitTestBehavior.opaque, // 👈 makes entire row clickable
+      onTap: () {
+        Navigator.pop(context);
+        if (onTap != null) onTap();
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 2.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SvgPicture.asset(
+                  imagePath,
+                  height: 24.h,
+                  width: 24.w,
+                  colorFilter: const ColorFilter.mode(
+                      ColorsData.primary, BlendMode.srcIn),
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  title,
+                  style: Styles.textStyleS14W400(),
+                ),
+              ],
+            ),
+            SvgPicture.asset(
+              AssetsData.rightArrowIcon,
+              height: 24.h,
+              width: 24.w,
+            ),
+          ],
+        ),
       ),
     );
   }

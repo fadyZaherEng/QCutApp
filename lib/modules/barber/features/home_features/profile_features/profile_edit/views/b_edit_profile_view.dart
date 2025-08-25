@@ -109,7 +109,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     SizedBox(height: 24.h),
 
                     // Off Days Section
-                    _buildTitle("Set Your Off Days".tr),
+                    _buildTitle("set working days".tr),
                     SizedBox(height: 16.h),
                     _buildDropdownField("Select days when you don't work".tr,
                         () {

@@ -1,19 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:q_cut/modules/barber/features/home/presentation/views/widgets/custom_b_simple_days_picker.dart';
-
-// class BAvailableAppointmentsViewBody extends StatelessWidget {
-//    BAvailableAppointmentsViewBody({super.key});
-// int selectedDay=12;
-//   @override
-//   Widget build(BuildContext context) {
-//     return  Column(children: [
-//       CustomBSimpleDaysPicker(selectedDay: selectedDay, onDaySelected: (value) {
-
-//       },),
-
-//     ],);
-//   }
-// }
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
