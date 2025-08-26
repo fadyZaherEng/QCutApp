@@ -443,6 +443,7 @@ class MyTranslation extends Translations {
           "Change Your Picture": "تغيير الصورة الشخصية",
           "Instagram link is not set": "لم يتم تعيين رابط الانستقرام",
           "Error": "خطأ",
+          "Service created successfully": "تم إنشاء الخدمة بنجاح",
           "pleaseEnterYourBarberShopName":
               "يرجى إدخال اسم صالون الحلاقة الخاص بك",
           "inValidPhoneNumber": "رقم الهاتف غير صالح",
@@ -709,6 +710,7 @@ class MyTranslation extends Translations {
           "appointment": "appointment",
           "Thank you for choosing us": "Thank you for choosing us",
           "hours": "hours",
+          "Service created successfully": "Service created successfully",
           "allIncome": "All income",
           "incomeHr": "Income / hr",
           "NewConsumers": "New consumers",
@@ -1040,6 +1042,7 @@ class MyTranslation extends Translations {
           "set working days": "הגדר ימי עבודה",
           "unpaid": "לא שולם",
           "paymentMethods": "אמצעי תשלום",
+          "Service created successfully": "השירות נוצר בהצלחה",
           "cash": "מזומן",
           "selectDate": "בחר תאריך",
           "noDateSelected": "לא נבחר תאריך",

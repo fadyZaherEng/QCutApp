@@ -150,8 +150,8 @@ class _CustomAddNewServiceBottomSheetState
 
       // Show a success message after navigation
       ScaffoldMessenger.of(Get.context!).showSnackBar(
-        const SnackBar(
-          content: Text("Service created successfully"),
+          SnackBar(
+          content: Text("Service created successfully".tr),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 2),
         ),
@@ -292,8 +292,7 @@ class _CustomAddNewServiceBottomSheetState
               fillColor: ColorsData.font,
               controller: servicePriceController,
               hintText: "Enter Service Price".tr,
-              keyboardType: TextInputType.number,
-            ),
+             ),
             SizedBox(height: 24.h),
 
             /// Service Time Input

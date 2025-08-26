@@ -73,10 +73,10 @@ class CustomDaysPicker extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => onDaySelected(day["date"]),
                   child: Container(
-                    width: 60.w,
+                    width: 70.w,
                     height: 100.h,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 14.w, vertical: 11.h),
+                        EdgeInsets.symmetric(horizontal: 0.w, vertical: 11.h),
                     decoration: BoxDecoration(
                       color:
                           isSelected ? const Color(0xFFC49A5B) : Colors.white,
