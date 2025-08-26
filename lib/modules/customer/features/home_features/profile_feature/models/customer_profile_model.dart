@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class CustomerProfileResponse {
   final CustomerProfileData data;

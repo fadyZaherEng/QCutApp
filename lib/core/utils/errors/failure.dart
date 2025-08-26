@@ -1,5 +1,3 @@
-
-
 import 'package:dio/dio.dart';
 
 abstract class Failure {
@@ -43,7 +41,7 @@ class ServerFailure extends Failure {
   factory ServerFailure.fromResponse(int? statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
       if (response['message'] != null && response['message'] is List) {
-        return ServerFailure(response['message'].join(', ')); 
+        return ServerFailure(response['message'].join(', '));
       }
       return ServerFailure('Unknown error occurred');
     } else if (statusCode == 404) {

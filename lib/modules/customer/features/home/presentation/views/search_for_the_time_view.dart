@@ -8,7 +8,7 @@ class SearchForTheTimeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(
         title: "Search for the time".tr,
       ),

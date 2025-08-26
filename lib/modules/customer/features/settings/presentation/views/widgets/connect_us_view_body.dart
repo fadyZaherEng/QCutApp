@@ -41,7 +41,7 @@ class ConnectUsViewBody extends StatelessWidget {
           InkWell(
             onTap: () async {
               final instagramUrl =
-                  profileController.profileData.value?.fullName?.trim();
+                  profileController.profileData.value?.fullName.trim();
 
               // تأكد من أن الرابط موجود ويبدأ بـ http أو https
               if (instagramUrl != null &&

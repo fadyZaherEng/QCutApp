@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
@@ -67,8 +66,7 @@ class NotificationViewModel extends GetxController {
 
   // Check if a notification should have action buttons
   bool hasActions(NotificationModel notification) {
-    return notification.process != null &&
-        notification.process.isNotEmpty &&
+    return notification.process.isNotEmpty &&
         notification.process.startsWith("Request");
   }
 

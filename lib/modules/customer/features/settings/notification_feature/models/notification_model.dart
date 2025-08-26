@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class NotificationResponse {
   final bool success;

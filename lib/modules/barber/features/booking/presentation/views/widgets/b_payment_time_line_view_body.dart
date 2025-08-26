@@ -43,7 +43,8 @@ class _BPaymentTimeLineViewBodyState extends State<BPaymentTimeLineViewBody> {
               children: [
                 _buildSectionTitle("timeToJoinedQcut".tr),
                 _buildInfoRow("dateToJoined".tr, "1/1/2024"),
-                _buildInfoRow("joinedSince".tr, "3 ${"months".tr}", highlight: true),
+                _buildInfoRow("joinedSince".tr, "3 ${"months".tr}",
+                    highlight: true),
                 Divider(color: Colors.white24, height: 16.h),
                 _buildSectionTitle("paymentTimeLine".tr),
                 SizedBox(height: 8.h),

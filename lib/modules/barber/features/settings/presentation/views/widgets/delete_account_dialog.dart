@@ -27,10 +27,11 @@ class DeleteAccountDialog extends StatelessWidget {
               ),
             ),
             SvgPicture.asset(
-              AssetsData.trashIcon, 
+              AssetsData.trashIcon,
               width: 32.w,
               height: 32.h,
-              colorFilter: const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -50,7 +51,8 @@ class DeleteAccountDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("Yes", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("Yes",
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -63,7 +65,8 @@ class DeleteAccountDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("NO", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("NO",
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
               ],

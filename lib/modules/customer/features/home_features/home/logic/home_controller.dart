@@ -70,7 +70,7 @@ class HomeController extends GetxController {
 
       if (response.statusCode == 200) {
         final barbersResponse = BarbersResponse.fromJson(responseBody);
-
+        print("Barbers response: ${response.body}");
         // Update total count
         totalBarbers.value = barbersResponse.totalBarbers;
         currentPage.value = barbersResponse.page;
@@ -80,6 +80,122 @@ class HomeController extends GetxController {
 
         // For simplicity, we'll consider all barbers as nearby
         // and active barbers as recommended
+        nearbyBarbers.value = allBarbers;
+        recommendedBarbers.value =
+            allBarbers.where((barber) => barber.status == 'active').toList();
+      } else {
+        isError.value = true;
+        errorMessage.value =
+            responseBody['message'] ?? 'Failed to fetch barbers data';
+        ShowToast.showError(message: errorMessage.value);
+      }
+    } catch (e) {
+      isError.value = true;
+      errorMessage.value = 'Network error: $e';
+      Get.snackbar('Error', 'Failed to connect to server',
+          backgroundColor: Colors.red, colorText: Colors.white);
+
+      // Keep using static data if API fails
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getBarbersCity({
+    required String city, // ممكن يكون "Cairo,Alexandria,Giza"
+  }) async {
+    isLoading.value = true;
+    isError.value = false;
+    errorMessage.value = '';
+
+    try {
+      final response = await _apiCall.getData(Variables.GET_BARBERS);
+      final responseBody = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        final barbersResponse = BarbersResponse.fromJson(responseBody);
+        print("Barbers response: ${response.body}");
+
+        // Update total count
+        totalBarbers.value = barbersResponse.totalBarbers;
+        currentPage.value = barbersResponse.page;
+
+        // Get all barbers
+        final allBarbers = barbersResponse.barbers;
+
+        // ✨ دعم المدن المتعددة
+        final cityList = city
+            .split(',')
+            .map((c) => c.trim().toLowerCase())
+            .where((c) => c.isNotEmpty)
+            .toList();
+
+        final filteredBarbers = allBarbers.where((barber) {
+          final barberCity = barber.city.toLowerCase();
+          return cityList.any((c) => barberCity.contains(c));
+        }).toList();
+
+        // nearby = all filtered barbers
+        nearbyBarbers.value = filteredBarbers;
+
+        // recommended = only active barbers in those cities
+        recommendedBarbers.value = filteredBarbers
+            .where((barber) => barber.status == 'active')
+            .toList();
+      } else {
+        isError.value = true;
+        errorMessage.value =
+            responseBody['message'] ?? 'Failed to fetch barbers data';
+        ShowToast.showError(message: errorMessage.value);
+      }
+    } catch (e) {
+      isError.value = true;
+      errorMessage.value = 'Network error: $e';
+      Get.snackbar(
+        'Error',
+        'Failed to connect to server',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getBarbersByFilter({
+    required String city,
+    int page = 1,
+    int limit = 5,
+  }) async {
+    isLoading.value = true;
+    isError.value = false;
+    errorMessage.value = '';
+
+    try {
+      final response = await _apiCall.getData(
+        Variables.GET_BARBERS_FILTER,
+        body: {"city": city, "page": page, "limit": limit},
+      );
+      print(Variables.GET_BARBERS_FILTER);
+      print("city: $city, page: $page, limit: $limit");
+      final responseBody = json.decode(response.body);
+      print("Barbers filter response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        // final barbersResponse = BarbersResponse.fromJson(responseBody);
+        print("Barbers response: ${response.body}");
+        // Update total count
+        totalBarbers.value =
+            responseBody['total']; //barbersResponse.totalBarbers;
+        currentPage.value = responseBody['page']; // barbersResponse.page;
+
+        // Filter and assign barbers
+        final allBarbers = List<Barber>.from(
+            (responseBody['results'] ?? []).map((x) => Barber.fromJson(x)));
+
+        // For simplicity, we'll consider all barbers as nearby
+        // and active barbers as recommended
+
         nearbyBarbers.value = allBarbers;
         recommendedBarbers.value =
             allBarbers.where((barber) => barber.status == 'active').toList();
@@ -177,5 +293,97 @@ class HomeController extends GetxController {
     }
 
     return barber.offDay.join(', ');
+  }
+
+  // ---- Working Days as String ----
+//   String getWorkingDaysAsString(Barber barber) {
+//     if (barber.workingDays.isEmpty) {
+//       return 'No working days set';
+//     }
+//
+//     final List<String> formattedDays = barber.workingDays.map((day) {
+//       return '${day.day} (${day.startHour}:00 - ${day.endHour}:00)';
+//     }).toList();
+//
+//     return formattedDays.join(', ');
+//   }
+//
+// // ---- Off Days as String ----
+//   String getOffDaysAsString(Barber barber) {
+//     if (barber.offDay.isEmpty) {
+//       return 'No off days set';
+//     }
+//
+//     return barber.offDay.join(', ');
+//   }
+
+// ---- Check if barber working today ----
+  bool isBarberWorkingToday(Barber barber) {
+    final today = DateTime.now().weekday; // 1=Mon .. 7=Sun
+
+    try {
+      return barber.workingDays.any((day) => day.day == today);
+    } catch (_) {
+      return false;
+    }
+  }
+
+// ---- Count previous appointments ----
+// ---- Count previous appointments ----
+  int countPreviousAppointments(List<Appointment> allAppointments) {
+    final today = DateTime.now();
+    final dayStart = DateTime(today.year, today.month, today.day);
+
+    return allAppointments.where((a) {
+      final d = a.date;
+      return d.isBefore(dayStart); // كل المواعيد اللي قبل بداية النهار
+    }).length;
+  }
+
+// ---- Count today's appointments ----
+  int countTodayAppointments(List<Appointment> allAppointments) {
+    final now = DateTime.now();
+    final dayStart = DateTime(now.year, now.month, now.day);
+    final dayEnd = dayStart
+        .add(const Duration(days: 1))
+        .subtract(const Duration(milliseconds: 1));
+
+    return allAppointments.where((a) {
+      final d = a.date;
+      return !d.isBefore(dayStart) && !d.isAfter(dayEnd);
+    }).length;
+  }
+
+// ---- Count upcoming appointments ----
+  int countUpcomingAppointments(
+    List<Appointment> allAppointments, {
+    required int days,
+    required bool includeToday,
+  }) {
+    final now = DateTime.now();
+    final start = includeToday
+        ? DateTime(now.year, now.month, now.day)
+        : DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+
+    final end = start
+        .add(Duration(days: days))
+        .subtract(const Duration(milliseconds: 1));
+
+    return allAppointments.where((a) {
+      final d = a.date;
+      return !d.isBefore(start) && !d.isAfter(end);
+    }).length;
+  }
+}
+
+class Appointment {
+  final DateTime date;
+
+  Appointment({required this.date});
+
+  factory Appointment.fromJson(Map<String, dynamic> json) {
+    // adjust if your API uses seconds instead of ms
+    return Appointment(date: DateTime.parse(json['date'] as String));
+    // or: DateTime.fromMillisecondsSinceEpoch(json['date'] as int);
   }
 }

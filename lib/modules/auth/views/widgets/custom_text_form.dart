@@ -46,7 +46,8 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Special handling for phone field
-    if (keyboardType == TextInputType.phone|| keyboardType == TextInputType.number) {
+    if (keyboardType == TextInputType.phone ||
+        keyboardType == TextInputType.number) {
       return TextFormField(
         controller: controller,
         keyboardType: TextInputType.number,

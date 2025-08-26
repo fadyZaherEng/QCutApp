@@ -34,7 +34,8 @@ class CityResponse {
       totalBarbers: json['totalBarbers'] ?? 0,
       cities: (json['barberCounts'] as List<dynamic>?)
               ?.map((city) => City.fromJson(city))
-              .toList() ?? [],
+              .toList() ??
+          [],
       pagination: Pagination.fromJson(json['pagination'] ?? {}),
     );
   }

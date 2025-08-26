@@ -5,10 +5,10 @@ import 'package:q_cut/modules/customer/features/home_features/profile_feature/vi
 void showChangeUserInfoBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
-    isScrollControlled: true, 
+    isScrollControlled: true,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
     ),
-    builder: (context) =>   ChangeUserInfoBottomSheet(),
+    builder: (context) => ChangeUserInfoBottomSheet(),
   );
 }

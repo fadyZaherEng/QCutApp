@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/multipart/form_data.dart';
-import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/settings/chat_feature/models/message_model.dart';
@@ -21,7 +19,7 @@ class ChatController extends GetxController {
 
   // Add pagination variables
   final int _limit = 20;
-  RxInt _currentPage = 1.obs;
+  final RxInt _currentPage = 1.obs;
   RxBool hasMoreMessages = true.obs;
   RxBool isLoadingMore = false.obs;
 

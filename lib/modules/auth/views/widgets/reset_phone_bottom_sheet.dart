@@ -14,9 +14,9 @@ class ResetPhoneBottomSheet extends StatelessWidget {
   final ResetPhoneController controller;
 
   const ResetPhoneBottomSheet({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +91,9 @@ class BResetPhoneBottomSheet extends StatelessWidget {
   final ResetPhoneController controller;
 
   const BResetPhoneBottomSheet({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

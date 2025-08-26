@@ -166,7 +166,10 @@ class NetworkAPICall {
   }
 
   Future<http.Response> uploadFileToPresignedUrl(
-      String presignedUrl, List<int> fileBytes, String contentType) async {
+    String presignedUrl,
+    List<int> fileBytes,
+    String contentType,
+  ) async {
     return await http.put(
       Uri.parse(presignedUrl),
       headers: {'Content-Type': contentType},
@@ -177,9 +180,6 @@ class NetworkAPICall {
   _setHeaders() => {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        // 'Authorization':
-        //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2NhZTFjNTllOGIzMmYxOTE0NTM2ZmUiLCJ1c2VyVHlwZSI6InVzZXIiLCJpYXQiOjE3NDM4NjI2MjR9.bzK8bF4IPU935kqHWW0sbHPOZMWH46-b6gh5cwlsuvY'
-
         'Authorization': 'Bearer $token'
       };
 }

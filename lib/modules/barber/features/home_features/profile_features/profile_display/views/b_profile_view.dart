@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';

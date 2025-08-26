@@ -104,10 +104,11 @@ class _MyProfileViewState extends State<MyProfileView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => FullScreenImageView(imageUrl: profileImage),
+                              builder: (_) =>
+                                  FullScreenImageView(imageUrl: profileImage),
                             ),
                           );
-                         },
+                        },
                         child: SizedBox(
                           width: 120.w,
                           height: 120.h,

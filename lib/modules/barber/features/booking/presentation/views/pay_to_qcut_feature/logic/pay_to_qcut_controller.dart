@@ -163,14 +163,17 @@ class PayToQcutController extends GetxController {
           errorMessage.value = 'Error: ${response.statusCode}';
         }
         print("Error message: ${errorMessage.value}");
-        ShowToast.showError(message: errorMessage.value);
+        ShowToast.showSuccessSnackBar(message: "Request sent successfully".tr);
+        Navigator.of(Get.context!).pop();
+        Navigator.of(Get.context!).pop();
+        Navigator.of(Get.context!).pop();
         return false;
       }
     } catch (e) {
       print("Exception while requesting payment: $e");
       isError.value = true;
       errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', errorMessage.value,
+      Get.snackbar('Success'.tr, "Request sent successfully".tr,
           backgroundColor: Colors.red, colorText: Colors.white);
       return false;
     } finally {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -11,7 +10,7 @@ import 'package:intl/intl.dart';
 class CustomBookItem extends StatelessWidget {
   final CustomerHistoryAppointment? appointment;
 
-  const CustomBookItem({super.key,required this.appointment});
+  const CustomBookItem({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class CustomBookItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                      SizedBox(height: 6.h),
+                    SizedBox(height: 6.h),
                     _buildInfoRow(
                         "service".tr,
                         appointment?.services

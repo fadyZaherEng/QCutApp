@@ -8,6 +8,8 @@ import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/controller/report_controller.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/models/reports_models.dart';
 import 'package:intl/intl.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class ReportsViewBody extends StatelessWidget {
   const ReportsViewBody({super.key});
@@ -58,6 +60,36 @@ class ReportsViewBody extends StatelessWidget {
       }),
     );
   }
+  // Widget _buildSummaryCards(ReportController controller) {
+  //   HomeController homeController = Get.find<HomeController>();
+  //   final isWorkingToday =
+  //   homeController.isBarberWorkingToday(controller.);
+  //
+  //   final nextDaysTitle =
+  //   isWorkingToday ? "Next 6 days" : "Next 7 days"; // ✅ dynamic text
+  //
+  //   return Row(
+  //     children: [
+  //       _summaryCard(
+  //         "Previous bookings", // ✅ ثابت
+  //         "${controller.reportCounts.value.previousAppointments}",
+  //         "appointment".tr,
+  //       ),
+  //       const SizedBox(width: 8),
+  //       _summaryCard(
+  //         "Today bookings", // ✅ plural
+  //         "${controller.reportCounts.value.todayAppointments}",
+  //         "appointment".tr,
+  //       ),
+  //       const SizedBox(width: 8),
+  //       _summaryCard(
+  //         nextDaysTitle, // ✅ dynamic حسب if working today
+  //         "${controller.reportCounts.value.upcomingAppointments}",
+  //         "appointment".tr,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildSummaryCards(ReportController controller) {
     return Row(
@@ -148,6 +180,29 @@ class ReportsViewBody extends StatelessWidget {
       readOnly: true,
       // Make it read-only as we're using a date picker
       onTap: () => controller.showDatePickerAndSearch(Get.context!),
+    );
+  }
+
+  void updateReportCounts(Barber barber, List<Appointment> allAppointments) {
+    HomeController homeController = Get.find<HomeController>();
+
+    final today = DateTime.now();
+    final isWorking = homeController.isBarberWorkingToday(barber);
+
+    final previous = homeController.countPreviousAppointments(allAppointments);
+    final todayCount = homeController.countTodayAppointments(allAppointments);
+
+    // ✅ هنا الشرط
+    final upcoming = homeController.countUpcomingAppointments(
+      allAppointments,
+      days: isWorking ? 6 : 7,
+      includeToday: false,
+    );
+
+    ReportCounts(
+      previousAppointments: previous,
+      todayAppointments: todayCount,
+      upcomingAppointments: upcoming,
     );
   }
 

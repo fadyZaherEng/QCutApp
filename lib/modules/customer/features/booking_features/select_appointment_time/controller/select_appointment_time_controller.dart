@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
-import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/model/available_time_model.dart';
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/model/time_slot_model.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../../core/utils/network/api.dart';
 import '../../display_barber_services_feature/models/free_time_request_model.dart';

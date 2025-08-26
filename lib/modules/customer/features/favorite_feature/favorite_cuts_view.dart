@@ -205,7 +205,7 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
         ),
         SliverFillRemaining(
           child: isLoading
-              ?   Center(child: SpinKitDoubleBounce(color: ColorsData.primary))
+              ? Center(child: SpinKitDoubleBounce(color: ColorsData.primary))
               : favoriteCuts.isEmpty
                   ? _buildEmptyState()
                   : RefreshIndicator(
@@ -405,7 +405,7 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
 class _ImageViewScreen extends StatefulWidget {
   final String imageUrl;
 
-  const _ImageViewScreen({Key? key, required this.imageUrl}) : super(key: key);
+  const _ImageViewScreen({required this.imageUrl});
 
   @override
   State<_ImageViewScreen> createState() => _ImageViewScreenState();

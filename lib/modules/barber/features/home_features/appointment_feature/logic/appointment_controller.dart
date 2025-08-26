@@ -62,7 +62,6 @@ class BAppointmentController extends GetxController {
       String formattedDate =
           DateFormat('yyyy-MM-dd').format(selectedDate.value);
 
-
       final response = await _apiCall
           .getData("${Variables.GET_BARBER_APPOINTMENTS}$formattedDate");
 
@@ -242,10 +241,6 @@ class BAppointmentController extends GetxController {
               "Error parsing date for appointment: ${appointment.id} - ${e2.toString()}");
           return false;
         }
-      }
-
-      if (appointmentDate == null) {
-        return false;
       }
 
       final formattedApptDate =

@@ -8,7 +8,7 @@ class BPayToQCutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(title: "Pay to QCUT".tr),
       body: BPayToQCutViewBody(),
     );

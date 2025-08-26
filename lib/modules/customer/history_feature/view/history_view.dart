@@ -13,7 +13,7 @@ class HistoryView extends GetView<HistoryController> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title:   Text('History'.tr),
+          title: Text('History'.tr),
           centerTitle: true,
           backgroundColor: Colors.transparent,
           leading: IconButton(
@@ -22,7 +22,7 @@ class HistoryView extends GetView<HistoryController> {
               Navigator.pop(context);
             },
           ),
-          bottom:   TabBar(
+          bottom: TabBar(
             indicatorColor: ColorsData.primary,
             labelColor: ColorsData.font,
             unselectedLabelColor: ColorsData.font,

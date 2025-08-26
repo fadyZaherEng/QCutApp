@@ -1,4 +1,3 @@
-import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/model/time_slot_model.dart';
 
 class BookingPaymentDetailsModel {
   final String serviceTitle;
@@ -11,7 +10,7 @@ class BookingPaymentDetailsModel {
   final String barberImage;
   final String salonName;
   final String appointmentDate;
-  final String  appointmentTime;
+  final String appointmentTime;
   final String serviceDuration;
 
   BookingPaymentDetailsModel({

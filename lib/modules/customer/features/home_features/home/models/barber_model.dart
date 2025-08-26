@@ -63,17 +63,21 @@ class Barber {
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
-      userType: json['userType'] ?? '',
+      userType: json['userType'] ?? '', // may not exist
       city: json['city'] ?? '',
       status: json['status'] ?? '',
-      barberShop: json['barberShop'],
+      barberShop: json['barberShop'], // keep nullable
       profilePic: json['profilePic'],
       coverPic: json['coverPic'],
       instagramPage: json['instagramPage'],
-      isFavorite: json['isFavorite'],
-      offDay: List<String>.from(json['offDay'] ?? []),
-      workingDays: List<WorkingDay>.from(
-          (json['workingDays'] ?? []).map((x) => WorkingDay.fromJson(x))),
+      isFavorite: json['isFavorite'] ?? false,
+      offDay: (json['offDay'] is List)
+          ? List<String>.from(json['offDay'])
+          : <String>[],
+      workingDays: (json['workingDays'] is List)
+          ? List<WorkingDay>.from(
+              json['workingDays'].map((x) => WorkingDay.fromJson(x)))
+          : <WorkingDay>[],
     );
   }
 }

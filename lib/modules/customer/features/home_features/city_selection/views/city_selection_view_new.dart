@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
 import 'package:q_cut/modules/customer/features/home_features/city_selection/logic/city_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/city_selection/models/city_model.dart';
@@ -49,10 +48,12 @@ class CitySelectionView extends StatelessWidget {
           children: [
             // Available Cities Button
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 24.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFFD4AF37), // Golden color
                   borderRadius: BorderRadius.circular(12.0),
@@ -98,7 +99,8 @@ class CitySelectionView extends StatelessWidget {
 
             // City List Header
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -127,7 +129,8 @@ class CitySelectionView extends StatelessWidget {
             // City List
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value && controller.filteredCities.isEmpty) {
+                if (controller.isLoading.value &&
+                    controller.filteredCities.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -154,11 +157,12 @@ class CitySelectionView extends StatelessWidget {
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   itemCount: controller.filteredCities.length,
                   itemBuilder: (context, index) {
                     final city = controller.filteredCities[index];
-                    return _buildCityItem(context, city);
+                    return _buildCityItem(context, city, controller);
                   },
                 );
               }),
@@ -170,23 +174,41 @@ class CitySelectionView extends StatelessWidget {
           ? SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () => Get.back(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorsData.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Get.back(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text('Cancel'.tr),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'cancel'.tr,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final selected = controller.selectedCities
+                              .map((c) => c.name)
+                              .join(', ');
+                          Get.back(result: selected);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorsData.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text('Confirm'.tr),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             )
@@ -194,7 +216,11 @@ class CitySelectionView extends StatelessWidget {
     );
   }
 
-  Widget _buildCityItem(BuildContext context, City city) {
+  Widget _buildCityItem(
+      BuildContext context, City city, CityController controller) {
+    // final isSelected = controller.selectedCities.contains(city);
+    final isSelected = controller.isCitySelected(city);
+
     return Card(
       color: ColorsData.cardColor,
       margin: const EdgeInsets.only(bottom: 12.0),
@@ -202,45 +228,39 @@ class CitySelectionView extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            color: Color(0xFFD4AF37),
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.location_city, color: Colors.white, size: 20),
-        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        leading:
+            const Icon(Icons.location_city, color: Color(0xFFD4AF37), size: 28),
         title: Text(
           city.name,
           style: Styles.textStyleS16W600(),
         ),
-        trailing: Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(
-            color: Color(0xFFD4AF37),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              city.name.isNotEmpty ? city.name[0].toUpperCase() : '?',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+        trailing: isSelectionMode
+            ? Obx(() => Checkbox(
+                  value: controller.isCitySelected(city),
+                  onChanged: (_) => controller.toggleCitySelection(city),
+                  activeColor: ColorsData.primary,
+                ))
+            : Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: ColorsData.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    city.name.isNotEmpty ? city.name[0].toUpperCase() : '?',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-        onTap: () {
-          if (isSelectionMode) {
-            Get.back(result: city);
-          } else {
-            // TODO: Navigate to city details or barbers in city
-          }
-        },
+        onTap: () => controller.toggleCitySelection(city),
       ),
     );
   }

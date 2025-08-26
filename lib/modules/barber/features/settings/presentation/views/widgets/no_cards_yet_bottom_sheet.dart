@@ -34,7 +34,7 @@ class NoCardsYetBottomSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: 5.h),
-           Image.asset(AssetsData.myCardsImage),
+            Image.asset(AssetsData.myCardsImage),
             SizedBox(height: 12.h),
             Text(
               "My Cards",

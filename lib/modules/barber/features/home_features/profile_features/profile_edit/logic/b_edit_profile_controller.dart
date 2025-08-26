@@ -215,9 +215,9 @@ class BEditProfileController extends GetxController {
         'fullName': nameController.text,
         'phoneNumber': phoneController.text,
         'barberShop': saloonController.text,
-        'city':"city",// cityController.text,
+        'city': "city", // cityController.text,
         'instagramPage': instagramController.text,
-        'bankAccountNumber':"123456",// bankAccountController.text,
+        'bankAccountNumber': "123456", // bankAccountController.text,
         'offDay': offDays,
         'workingDays': workingDays
             .map((day) => {

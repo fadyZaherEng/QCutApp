@@ -31,7 +31,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
         controller.barberId.value = selectedServices.barber;
         print("${"setBarberID".tr}: ${controller.barberId.value}");
       } else {
-        print("${"warningBarberIDEmpty".tr}");
+        print("warningBarberIDEmpty".tr);
       }
 
       // Prepare and store the services data
@@ -46,7 +46,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
         controller.setSelectedServices(servicesList);
         print("${"setServices".tr}: ${controller.selectedServices}");
       } else {
-        print("${"warningNoServices".tr}");
+        print("warningNoServices".tr);
       }
 
       // Fetch available days immediately without any delay
@@ -54,7 +54,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
 
       // Manually add test timestamps if needed for debugging
       if (controller.availableDaysTimestamps.isEmpty) {
-        print("${"addingTestTimestamps".tr}");
+        print("addingTestTimestamps".tr);
         final now = DateTime.now().millisecondsSinceEpoch;
         final oneDayMs = 86400000; // 24 hours in milliseconds
 

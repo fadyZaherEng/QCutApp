@@ -19,7 +19,8 @@ class SelectServicesView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: SizedBox(
               width: 12.w,
               height: 12.h,

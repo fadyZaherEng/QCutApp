@@ -31,7 +31,9 @@ class CustomBAvailableTimesPicker extends StatelessWidget {
             Text(
               "Available time",
               style: TextStyle(
-                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -53,7 +55,8 @@ class CustomBAvailableTimesPicker extends StatelessWidget {
               onTap: () => onTimeSelected(time),
               child: Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: isSelected ? const Color(0xFFD4A656) : Colors.white,
                   borderRadius: BorderRadius.circular(8),

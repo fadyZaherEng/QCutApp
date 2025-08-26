@@ -95,7 +95,7 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
                       context: context,
                       onYes: () async {
                         final success =
-                        await controller.deleteAppointment(appointment.id);
+                            await controller.deleteAppointment(appointment.id);
                         if (success && context.mounted) {
                           Get.back();
                         }
@@ -119,8 +119,7 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
       onSelected: (value) {
         controller.setStatusFilter(value);
       },
-      itemBuilder: (context) =>
-      [
+      itemBuilder: (context) => [
         PopupMenuItem(
           value: 'all',
           child: Text('allAppointments'.tr),

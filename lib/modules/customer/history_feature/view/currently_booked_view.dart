@@ -15,7 +15,7 @@ class CurrentlyBookedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => appointments.isEmpty
-        ?   Center(
+        ? Center(
             child: Text(
               'No current appointments'.tr,
               style: TextStyle(fontSize: 16),

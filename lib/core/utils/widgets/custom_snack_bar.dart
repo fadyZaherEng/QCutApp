@@ -6,7 +6,8 @@ class CustomSnackbar {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF7FB04F), // لون النجاح
         behavior: SnackBarBehavior.floating,
@@ -23,7 +24,8 @@ class CustomSnackbar {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.redAccent, // لون الخطأ
         behavior: SnackBarBehavior.floating,

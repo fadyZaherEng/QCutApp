@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -89,7 +90,9 @@ class _RecommendedViewState extends State<RecommendedView> {
             if (controller.isLoading.value) {
               return SliverFillRemaining(
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: SpinKitDoubleBounce(
+                    color: ColorsData.primary,
+                  ),
                 ),
               );
             }

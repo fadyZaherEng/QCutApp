@@ -29,10 +29,11 @@ class LogoutDialog extends StatelessWidget {
               ),
             ),
             SvgPicture.asset(
-              AssetsData.logOutIcon, 
+              AssetsData.logOutIcon,
               width: 32.w,
               height: 32.h,
-              colorFilter: const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(ColorsData.primary, BlendMode.srcIn),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -45,29 +46,31 @@ class LogoutDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-   
                     onPressed: () => context.push(AppRouter.selectServicesPath),
-
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorsData.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("Yes", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("Yes",
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: ElevatedButton(
-                 onPressed: () {
-context.pop();                    },                    style: ElevatedButton.styleFrom(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: ColorsData.cardStrock,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text("NO", style: Styles.textStyleS14W600(color: ColorsData.font)),
+                    child: Text("NO",
+                        style: Styles.textStyleS14W600(color: ColorsData.font)),
                   ),
                 ),
               ],

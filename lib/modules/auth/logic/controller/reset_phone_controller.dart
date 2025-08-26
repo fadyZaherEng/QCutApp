@@ -11,11 +11,6 @@ class ResetPhoneController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Initialize any additional setup here
-  }
 
   @override
   void onClose() {

@@ -6,9 +6,6 @@ import 'package:q_cut/core/utils/network/network_helper.dart';
 class UploadMedia extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
 
-  void onInit() {
-    super.onInit();
-  }
 
   Future<String?> uploadFile(File file, String type) async {
     try {

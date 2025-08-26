@@ -35,7 +35,7 @@ class _ChatWithUsViewState extends State<ChatWithUsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:   CustomAppBar(title: "Chat with us".tr),
+      appBar: CustomAppBar(title: "Chat with us".tr),
       body: ChatWithUsViewBody(key: _chatBodyKey),
       bottomNavigationBar: SingleChildScrollView(
         padding:
@@ -43,7 +43,6 @@ class _ChatWithUsViewState extends State<ChatWithUsView> {
         child: MessageInput(
           onSendMessage: _handleSendMessage,
           onCameraTap: _handleImageSelection,
-
         ),
       ),
     );

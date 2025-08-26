@@ -172,10 +172,14 @@ abstract class Styles {
 
   // Font size 14
   static TextStyle textStyleS14W400(
-          {Color? color, double? letterSpacing, String? fontFamily,fontSize,fontWeight}) =>
+          {Color? color,
+          double? letterSpacing,
+          String? fontFamily,
+          fontSize,
+          fontWeight}) =>
       TextStyle(
-        fontSize:fontSize?? 13.sp,
-        fontWeight:fontWeight?? FontWeight.w500,
+        fontSize: fontSize ?? 13.sp,
+        fontWeight: fontWeight ?? FontWeight.w500,
         color: color ?? defaultColor,
         letterSpacing: letterSpacing,
         fontFamily: fontFamily ?? defaultFontFamily,

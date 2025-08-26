@@ -45,13 +45,13 @@ class MyCardsBottomSheet extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 2, 
-              
+              itemCount: 2,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 6.h),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(color: ColorsData.font),
@@ -61,33 +61,39 @@ class MyCardsBottomSheet extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-InkWell(onTap: (){
-
-},
-  child: SvgPicture.asset(height: 24.h,width: 24.w,
-    AssetsData.trashIcon,
-    colorFilter: const ColorFilter.mode(
-      ColorsData.red, 
-      BlendMode.srcIn, 
-    ),
-  ),
-),                            SizedBox(width: 8.w),
-InkWell(onTap: (){
-                showPaymentDetailsBottomSheet(context);
-
-},
-  child: SvgPicture.asset(height: 24.h,width: 24.w,
-    AssetsData.editIcon,
-    colorFilter: const ColorFilter.mode(
-      ColorsData.primary, 
-      BlendMode.srcIn, 
-    ),
-  ),
-),                           ],
+                            InkWell(
+                              onTap: () {},
+                              child: SvgPicture.asset(
+                                height: 24.h,
+                                width: 24.w,
+                                AssetsData.trashIcon,
+                                colorFilter: const ColorFilter.mode(
+                                  ColorsData.red,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            InkWell(
+                              onTap: () {
+                                showPaymentDetailsBottomSheet(context);
+                              },
+                              child: SvgPicture.asset(
+                                height: 24.h,
+                                width: 24.w,
+                                AssetsData.editIcon,
+                                colorFilter: const ColorFilter.mode(
+                                  ColorsData.primary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           "**** **** **** 2453",
-                          style: Styles.textStyleS14W700(color: ColorsData.secondary),
+                          style: Styles.textStyleS14W700(
+                              color: ColorsData.secondary),
                         ),
                       ],
                     ),
@@ -99,7 +105,7 @@ InkWell(onTap: (){
             CustomBigButton(
               textData: "+ Add New Card",
               onPressed: () {
-                                context.pop();
+                context.pop();
 
                 showPaymentDetailsBottomSheet(context);
               },

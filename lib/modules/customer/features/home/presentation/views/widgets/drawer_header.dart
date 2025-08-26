@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/constants/drawer_constants.dart';
@@ -46,7 +46,7 @@ class CustomDrawerHeader extends StatelessWidget {
             children: [
               Text(fullName, style: Styles.textStyleS16W700()),
               SizedBox(height: DrawerConstants.itemSpacing.h),
-               SizedBox(height: DrawerConstants.itemSpacing.h),
+              SizedBox(height: DrawerConstants.itemSpacing.h),
               Text(
                 "\u200E$phoneNumber",
                 style: Styles.textStyleS20W400(color: ColorsData.primary),

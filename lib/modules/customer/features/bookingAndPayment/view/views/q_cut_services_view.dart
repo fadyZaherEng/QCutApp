@@ -30,7 +30,8 @@ class QCutServicesView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: SpinKitDoubleBounce(color: ColorsData.primary));
+            return const Center(
+                child: SpinKitDoubleBounce(color: ColorsData.primary));
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,10 +92,12 @@ class QCutServicesView extends StatelessWidget {
                       .toList();
 
                   // ✅ اجمالي الكمية المختارة
-                  final int totalSelectedQuantity = quantities.fold(0, (a, b) => a + b);
+                  final int totalSelectedQuantity =
+                      quantities.fold(0, (a, b) => a + b);
 
                   // ✅ تحقق ديناميكي حسب عدد الأشخاص
-                  if (numberofUsers > 1 && totalSelectedQuantity < numberofUsers) {
+                  if (numberofUsers > 1 &&
+                      totalSelectedQuantity < numberofUsers) {
                     Get.snackbar(
                       "warning".tr,
                       "${'youMustSelectAtLeast'.tr} $numberofUsers ${'services'.tr}",
@@ -105,7 +108,8 @@ class QCutServicesView extends StatelessWidget {
                     return;
                   }
 
-                  final freeTimeRequestModel = FreeTimeRequestModel.fromServices(
+                  final freeTimeRequestModel =
+                      FreeTimeRequestModel.fromServices(
                     barber.id,
                     selectedServicesList,
                     serviceQuantities: quantities,

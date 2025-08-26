@@ -314,7 +314,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 onPressed: isLoading ? null : _sendTimeChangeRequest,
                 child: isLoading
-                    ? const SpinKitDoubleBounce(color:ColorsData.primary)
+                    ? const SpinKitDoubleBounce(color: ColorsData.primary)
                     : Text(
                         "sendToCustomer".tr,
                         style: Styles.textStyleS16W600(color: Colors.white),

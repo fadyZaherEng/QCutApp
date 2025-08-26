@@ -21,10 +21,12 @@ class CustomDaysPicker extends StatelessWidget {
     final now = DateTime.now();
     final List<Map<String, dynamic>> days = [];
 
-    for (int i = 0; i < 7; i++) { // ✅ Show 7 days instead of 5
+    for (int i = 0; i < 7; i++) {
+      // ✅ Show 7 days instead of 5
       final day = now.add(Duration(days: i));
       days.add({
-        "day": DateFormat('E', Get.locale?.languageCode).format(day), // Localized day name
+        "day": DateFormat('E', Get.locale?.languageCode)
+            .format(day), // Localized day name
         "date": day.day,
         "fullDate": day,
       });
@@ -33,7 +35,7 @@ class CustomDaysPicker extends StatelessWidget {
     return days;
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     final days = _generateDynamicDays(context);
 
@@ -73,9 +75,11 @@ class CustomDaysPicker extends StatelessWidget {
                   child: Container(
                     width: 60.w,
                     height: 100.h,
-                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 11.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 14.w, vertical: 11.h),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFFC49A5B) : Colors.white,
+                      color:
+                          isSelected ? const Color(0xFFC49A5B) : Colors.white,
                       borderRadius: BorderRadius.circular(24.r),
                     ),
                     child: Column(
@@ -85,7 +89,8 @@ class CustomDaysPicker extends StatelessWidget {
                           day["day"],
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.black,
-                            fontSize: Get.locale?.languageCode == 'ar' ? 9.sp : 12.sp,
+                            fontSize:
+                                Get.locale?.languageCode == 'ar' ? 9.sp : 12.sp,
                             fontFamily: 'Alexandria',
                             fontWeight: FontWeight.w500,
                           ),

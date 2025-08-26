@@ -116,11 +116,11 @@ class BookAppointmentWithPaymentMethodsViewBody
                   "paymentMethod": "cash" // Ensure it's a string without quotes
                 };
 
-                final NetworkAPICall _apiCall = NetworkAPICall();
-                final response = await _apiCall.addData(
+                final NetworkAPICall apiCall = NetworkAPICall();
+                final response = await apiCall.addData(
                     formattedPayload, Variables.APPOINTMENT);
 
-                print("API Request Payload: ${formattedPayload}");
+                print("API Request Payload: $formattedPayload");
                 print("API Response: ${response.body}");
 
                 if (response.statusCode == 200) {

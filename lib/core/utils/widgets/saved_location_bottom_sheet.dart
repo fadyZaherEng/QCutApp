@@ -32,28 +32,27 @@ class SavedLocationBottomSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12.h),
-
-SvgPicture.asset(height: 24.h,width: 24.w,
-  AssetsData.mapPinIcon,
-  colorFilter: const ColorFilter.mode(
-    ColorsData.primary, 
-    BlendMode.srcIn, 
-  ),
-),            SizedBox(height: 12.h),
-
+            SvgPicture.asset(
+              height: 24.h,
+              width: 24.w,
+              AssetsData.mapPinIcon,
+              colorFilter: const ColorFilter.mode(
+                ColorsData.primary,
+                BlendMode.srcIn,
+              ),
+            ),
+            SizedBox(height: 12.h),
             Text(
               "Saved location",
               style: Styles.textStyleS14W700(color: ColorsData.secondary),
             ),
             SizedBox(height: 16.h),
-
             _buildLocationItem(
               title: "New Gaza",
               subtitle: "New Gaza, New Gaza",
               isSelected: true,
             ),
             SizedBox(height: 12.h),
-
             _buildLocationItem(
               title: "Add Another location",
               isSelected: false,
@@ -71,18 +70,21 @@ SvgPicture.asset(height: 24.h,width: 24.w,
   }) {
     return Row(
       children: [
-
-SvgPicture.asset(height: 24.h,width: 24.w,
-  AssetsData.mapPinIcon,
-  colorFilter: const ColorFilter.mode(
-    ColorsData.primary, 
-    BlendMode.srcIn, 
-  ),
-),           SizedBox(width: 8.w),
+        SvgPicture.asset(
+          height: 24.h,
+          width: 24.w,
+          AssetsData.mapPinIcon,
+          colorFilter: const ColorFilter.mode(
+            ColorsData.primary,
+            BlendMode.srcIn,
+          ),
+        ),
+        SizedBox(width: 8.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Styles.textStyleS14W700(color: ColorsData.secondary)),
+            Text(title,
+                style: Styles.textStyleS14W700(color: ColorsData.secondary)),
             if (subtitle != null)
               Text(
                 subtitle,

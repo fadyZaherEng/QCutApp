@@ -139,7 +139,7 @@ class BProfileController extends GetxController {
     errorMessage.value = '';
 
     try {
-      final response = await _apiCall.getData(Variables.baseUrl + "gallery");
+      final response = await _apiCall.getData("${Variables.baseUrl}gallery");
       final responseBody = json.decode(response.body);
       print("=====> $responseBody");
       if (response.statusCode == 200) {

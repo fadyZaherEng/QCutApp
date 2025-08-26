@@ -33,7 +33,7 @@ class DefaultFirebaseOptions {
         );
       default:
         throw UnsupportedError(
-          'Unknown platform ${defaultTargetPlatform}',
+          'Unknown platform $defaultTargetPlatform',
         );
     }
   }

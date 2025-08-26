@@ -157,8 +157,7 @@ class ReportController extends GetxController {
               onPrimary: Colors.white,
               surface: Colors.grey[900]!,
               onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: Colors.grey[800],
+            ), dialogTheme: DialogThemeData(backgroundColor: Colors.grey[800]),
           ),
           child: child!,
         );

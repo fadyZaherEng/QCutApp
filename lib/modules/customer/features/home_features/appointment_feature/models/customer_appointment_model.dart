@@ -1,4 +1,3 @@
- 
 class CustomerAppointmentResponse {
   final List<CustomerAppointment> appointments;
 

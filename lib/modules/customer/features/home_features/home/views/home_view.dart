@@ -23,121 +23,130 @@ class HomeView extends StatelessWidget {
 
     return SafeArea(
         child: Scaffold(
-          drawer: CustomDrawer(),
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      drawer: CustomDrawer(),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomHomeAppBar(),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  Row(
                     children: [
-                      CustomHomeAppBar(),
-                      SizedBox(
-                        height: 12.h,
-                      ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            AssetsData.mapPinIcon,
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Text(
-                            profileController.profileData.value?.city ??
-                                'yourLocation'.tr,
-                            style: Styles.textStyleS12W400(),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          SvgPicture.asset(
-                            AssetsData.downArrowIcon,
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                        ],
+                      SvgPicture.asset(
+                        AssetsData.mapPinIcon,
+                        width: 24.w,
+                        height: 24.h,
                       ),
                       SizedBox(
-                        height: 12.h,
+                        width: 2.w,
                       ),
                       Text(
-                        'startStylishJourney'.tr,
-                        style: Styles.textStyleS16W700(
-                            color: ColorsData.primary),
+                        profileController.profileData.value?.city ??
+                            'yourLocation'.tr,
+                        style: Styles.textStyleS12W400(),
                       ),
                       SizedBox(
-                        height: 12.h,
+                        width: 2.w,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Get.toNamed(AppRouter.citySelectionPath);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(top: 9.h, left: 16.w),
-                                height: 52.h,
-                                child: TextFormField(
-                                  enabled: false,
-                                  style:
-                                  Styles.textStyleS14W400(color: Colors.black),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    fillColor: ColorsData.font,
-                                    filled: true,
-                                    hintStyle: Styles.textStyleS14W400(
-                                        color: ColorsData.cardStrock),
-                                    hintText: "whatIsCity".tr,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 16.w),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Get.toNamed(AppRouter.searchForTheTimePath);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(top: 9.h, left: 16.w),
-                                height: 40.h,
-                                decoration: BoxDecoration(
-                                    color: ColorsData.font,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                                  child: Text(
-                                    "when".tr,
-                                    style: Styles.textStyleS14W400(
-                                        color: ColorsData.cardStrock),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      SvgPicture.asset(
+                        AssetsData.downArrowIcon,
+                        width: 24.w,
+                        height: 24.h,
                       ),
-                      SizedBox(height: 12.h),
-                      const Divider(color: ColorsData.cardStrock),
-                      SizedBox(height: 12.h),
-                      const NearbySalonsSection(),
-                      SizedBox(height: 12.h),
                     ],
                   ),
-                ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  Text(
+                    'startStylishJourney'.tr,
+                    style: Styles.textStyleS16W700(color: ColorsData.primary),
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.toNamed(AppRouter.citySelectionPath)
+                                ?.then((value) {
+                              print("Selected city: $value");
+                              if (value != null &&
+                                  value is String &&
+                                  value.isNotEmpty) {
+                                homeController.getBarbersCity(city: value);
+                              } else {
+                                homeController.getBarbers();
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(top: 9.h, left: 16.w),
+                            height: 52.h,
+                            child: TextFormField(
+                              enabled: false,
+                              style:
+                                  Styles.textStyleS14W400(color: Colors.black),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                fillColor: ColorsData.font,
+                                filled: true,
+                                hintStyle: Styles.textStyleS14W400(
+                                    color: ColorsData.cardStrock),
+                                hintText: "whatIsCity".tr,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.toNamed(AppRouter.searchForTheTimePath);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(top: 9.h, left: 16.w),
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                                color: ColorsData.font,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "when".tr,
+                                style: Styles.textStyleS14W400(
+                                    color: ColorsData.cardStrock),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  const Divider(color: ColorsData.cardStrock),
+                  SizedBox(height: 12.h),
+                  const NearbySalonsSection(),
+                  SizedBox(height: 12.h),
+                ],
               ),
-            ],
+            ),
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }

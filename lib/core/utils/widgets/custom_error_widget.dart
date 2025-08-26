@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:q_cut/core/utils/styles.dart';
 

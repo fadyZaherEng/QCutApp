@@ -186,17 +186,17 @@ class _CustomAddNewServiceBottomSheetState
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-             Container(
-               height: 6.h,
-               width: 100.w,
-               decoration: BoxDecoration(
-                 shape: BoxShape.rectangle,
-                 color:Colors.grey,
-                 borderRadius: BorderRadius.circular(10.r),
-               ),
-             ),
-             const SizedBox(height: 12),
-             SvgPicture.asset(
+            Container(
+              height: 6.h,
+              width: 100.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SvgPicture.asset(
               height: 32.h,
               width: 32.w,
               AssetsData.addnewservicebottonicon,
@@ -372,15 +372,16 @@ class _CustomAddNewServiceBottomSheetState
                             width: 164.w,
                             height: 36.h,
                             child: // بدل TextFormField تبع Max Time:
-                            SizedBox(
+                                SizedBox(
                               width: 164.w,
                               height: 36.h,
                               child: DropdownButtonFormField<int>(
                                 value: null,
                                 items: List.generate(
                                   24, // 24 * 5 = 120 دقيقة كحد أقصى
-                                      (index) {
-                                    final value = (index + 1) * 5; // 5, 10, 15, ...
+                                  (index) {
+                                    final value =
+                                        (index + 1) * 5; // 5, 10, 15, ...
                                     return DropdownMenuItem<int>(
                                       value: value,
                                       child: Text(
@@ -394,15 +395,18 @@ class _CustomAddNewServiceBottomSheetState
                                 ),
                                 onChanged: (value) {
                                   if (value != null) {
-                                    serviceMaxTimeController.text = value.toString();
+                                    serviceMaxTimeController.text =
+                                        value.toString();
                                   }
                                 },
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 0),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4.r)),
                                     borderSide: const BorderSide(
                                       color: Color(0xFFAAA8BD),
                                       width: 1,

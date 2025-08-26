@@ -12,7 +12,7 @@ class CustomBookingAgainItem extends StatelessWidget {
   const CustomBookingAgainItem({
     super.key,
     required this.onBookingAgain,
-    required this. appointment,
+    required this.appointment,
   });
 
   @override
@@ -22,9 +22,9 @@ class CustomBookingAgainItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-            CustomBookItem(
-              appointment: appointment,
-            ),
+          CustomBookItem(
+            appointment: appointment,
+          ),
           SizedBox(height: 24.h),
           CustomBigButton(
             textData: "bookingAgain".tr,

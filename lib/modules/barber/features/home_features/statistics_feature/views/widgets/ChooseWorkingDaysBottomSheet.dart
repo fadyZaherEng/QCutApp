@@ -9,10 +9,12 @@ class ChooseWorkingDaysBottomSheet extends StatefulWidget {
   const ChooseWorkingDaysBottomSheet({super.key});
 
   @override
-  State<ChooseWorkingDaysBottomSheet> createState() => _ChooseWorkingDaysBottomSheetState();
+  State<ChooseWorkingDaysBottomSheet> createState() =>
+      _ChooseWorkingDaysBottomSheetState();
 }
 
-class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSheet> {
+class _ChooseWorkingDaysBottomSheetState
+    extends State<ChooseWorkingDaysBottomSheet> {
   final List<String> workingDays = [
     "Saturday".tr,
     "Sunday".tr,
@@ -34,8 +36,6 @@ class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSh
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
-            
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,13 +59,11 @@ class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSh
             ),
           ),
           SizedBox(height: 16.h),
-
           Text(
             "Choose the working days",
             style: Styles.textStyleS16W700(color: ColorsData.primary),
           ),
           SizedBox(height: 16.h),
-
           Column(
             children: workingDays.map((day) {
               return Padding(
@@ -75,7 +73,8 @@ class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSh
                   children: [
                     Text(
                       day,
-                      style: Styles.textStyleS16W700(color: ColorsData.secondary),
+                      style:
+                          Styles.textStyleS16W700(color: ColorsData.secondary),
                     ),
                     CustomCheckbox(
                       isChecked: selectedDays.contains(day),
@@ -100,6 +99,7 @@ class _ChooseWorkingDaysBottomSheetState extends State<ChooseWorkingDaysBottomSh
     );
   }
 }
+
 void showChooseWorkingDaysBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,

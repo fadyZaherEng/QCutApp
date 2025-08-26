@@ -12,7 +12,7 @@ class NotificationView extends StatelessWidget {
     // Initialize the controller
     Get.put(NotificationController());
 
-    return   Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(title: "Notifications".tr),
       body: NotificationViewBody(),
     );

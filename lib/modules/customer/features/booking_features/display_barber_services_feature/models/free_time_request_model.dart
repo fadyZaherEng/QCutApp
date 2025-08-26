@@ -33,9 +33,9 @@ class FreeTimeRequestModel {
   // Copy constructor with optional parameter to modify onHolding
   FreeTimeRequestModel copyWith({bool? onHolding}) {
     return FreeTimeRequestModel(
-      barber: this.barber,
-      services: this.services,
-      barberServices: this.barberServices,
+      barber: barber,
+      services: services,
+      barberServices: barberServices,
       onHolding: onHolding ?? this.onHolding,
     );
   }

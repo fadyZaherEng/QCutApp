@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_barber_list_view_item.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
@@ -27,7 +29,10 @@ class CustomBarberListView extends StatelessWidget {
       height: 281 * 3.h,
       child: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: SpinKitDoubleBounce(
+            color: ColorsData.primary,
+          ));
         } else {
           // Determine how many rows we need
           int totalItems = displayBarbers.isEmpty ? 9 : displayBarbers.length;

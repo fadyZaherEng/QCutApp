@@ -21,23 +21,23 @@
 //               child: TextField(style: Styles.textStyleS16W400(color: ColorsData.dark),
 //                 decoration: InputDecoration(
 //                  contentPadding: EdgeInsets.only(left: 31.w,right: 22.w),
-                 
+
 //                   hintText: "Enter your message",
 //                   fillColor: ColorsData.font,
-                  
+
 //                   filled: true,
 //                   border: OutlineInputBorder(
 //                     borderRadius: BorderRadius.circular(8.r),
 //                     borderSide: BorderSide.none,
-                    
+
 //                   ),
-               
+
 //                suffixIcon: InkWell(
 //                 onTap: onSend,
-                
+
 //                 child: const Icon(Icons.send)),
 //                suffixIconColor: ColorsData.thirty
-               
+
 //                 ),
 //               ),
 //             ),
@@ -56,4 +56,3 @@
 //     );
 //   }
 // }
-

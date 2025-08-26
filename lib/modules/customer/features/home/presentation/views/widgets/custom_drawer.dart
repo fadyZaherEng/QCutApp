@@ -90,7 +90,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
         },
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 12.h,
             horizontal: 4.w,
           ),
           child: Row(
@@ -124,38 +123,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget _buildNotificationsToggle() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: DrawerConstants.itemSpacing.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                AssetsData.notificationsIcon,
-                height: DrawerConstants.iconSize.h,
-                width: DrawerConstants.iconSize.w,
-                colorFilter: const ColorFilter.mode(
-                  ColorsData.primary,
-                  BlendMode.srcIn,
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            SvgPicture.asset(
+              AssetsData.notificationsIcon,
+              height: DrawerConstants.iconSize.h,
+              width: DrawerConstants.iconSize.w,
+              colorFilter: const ColorFilter.mode(
+                ColorsData.primary,
+                BlendMode.srcIn,
               ),
-              SizedBox(width: DrawerConstants.iconSpacing.w),
-              Text("Notifications".tr, style: Styles.textStyleS14W400()),
-            ],
-          ),
-          Transform.scale(
-            scale: 0.75,
-            child: Switch(
-              value: _isNotificationsEnabled,
-              onChanged: (value) =>
-                  setState(() => _isNotificationsEnabled = value),
-              inactiveThumbColor: ColorsData.cardStrock,
-              activeColor: ColorsData.primary,
             ),
+            SizedBox(width: DrawerConstants.iconSpacing.w),
+            Text("Notifications".tr, style: Styles.textStyleS14W400()),
+          ],
+        ),
+        Transform.scale(
+          scale: 0.75,
+          child: Switch(
+            value: _isNotificationsEnabled,
+            onChanged: (value) =>
+                setState(() => _isNotificationsEnabled = value),
+            inactiveThumbColor: ColorsData.cardStrock,
+            activeColor: ColorsData.primary,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

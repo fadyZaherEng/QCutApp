@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -17,13 +16,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title,style: Styles.textStyleS16W700(),),
-      leading: CustomArrowLeft(onPressed: onPressed ,
-      
+      title: Text(
+        title,
+        style: Styles.textStyleS16W700(),
+      ),
+      leading: CustomArrowLeft(
+        onPressed: onPressed,
       ),
     );
   }
 
   @override
-  Size get preferredSize =>  Size.fromHeight(67.h);
+  Size get preferredSize => Size.fromHeight(67.h);
 }

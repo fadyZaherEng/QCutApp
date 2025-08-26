@@ -20,7 +20,7 @@
 //   Widget build(BuildContext context) {
 //     return InkWell(
 //       onTap: onPressed,
-//       borderRadius: BorderRadius.circular(8), 
+//       borderRadius: BorderRadius.circular(8),
 //       child: SvgPicture.asset(
 //         svgPath,
 //         width: size,

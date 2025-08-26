@@ -8,7 +8,7 @@ class BPaymentTimeLineView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(title: "Payment Time line".tr),
       body: BPaymentTimeLineViewBody(),
     );

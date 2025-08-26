@@ -29,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
     _authController = Get.find<AuthController>();
     // Ensure text fields are clear when opening login screen
-    if (_authController.isSignUpSuccess.value&&mounted) {
+    if (_authController.isSignUpSuccess.value && mounted) {
       // If coming from successful signup, make sure fields are cleared
       _authController.phoneNumberController.clear();
       _authController.passwordController.clear();

@@ -123,7 +123,7 @@ class StatisticsController extends GetxController {
 
     try {
       final response = await _apiCall
-          .getData(Variables.BARBER_COUNT_MOUNTH + '67a0fd56178e0969cb60b765');
+          .getData('${Variables.BARBER_COUNT_MOUNTH}67a0fd56178e0969cb60b765');
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

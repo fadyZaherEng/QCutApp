@@ -17,7 +17,6 @@ class BConnectUsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.only(top: 32.h, left: 15.w, right: 15.w),
       child: Column(
@@ -43,7 +42,7 @@ class BConnectUsViewBody extends StatelessWidget {
           InkWell(
             onTap: () async {
               final instagramUrl =
-                  controller.profileData.value?.instagramPage?.trim();
+                  controller.profileData.value?.instagramPage.trim();
 
               // تأكد من أن الرابط موجود ويبدأ بـ http أو https
               if (instagramUrl != null &&
