@@ -9,4 +9,5 @@ class PrefKeys {
   static const String coverPic = 'coverPic';
   static const String fullName = 'fullName';
   static const String phoneNumber = 'phoneNumber';
+  static const String barberId = 'barberId';
 }

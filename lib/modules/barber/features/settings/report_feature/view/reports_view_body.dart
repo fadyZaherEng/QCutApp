@@ -1,18 +1,75 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
+import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
+import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/models/barber_profile_model.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/controller/report_controller.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/models/reports_models.dart';
 import 'package:intl/intl.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
-class ReportsViewBody extends StatelessWidget {
-  const ReportsViewBody({super.key});
+class ReportsViewBody extends StatefulWidget {
+  ReportsViewBody({super.key});
+
+  @override
+  State<ReportsViewBody> createState() => _ReportsViewBodyState();
+}
+
+class _ReportsViewBodyState extends State<ReportsViewBody> {
+  final totalEarnings = 0.0.obs;
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await fetchProfileData();
+    totalEarnings.value = (await getPreviousAppointments()).length.toDouble();
+  }
+  @override
+ void didUpdateWidget(covariant ReportsViewBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    fetchProfileData();
+    totalEarnings.value = (getPreviousAppointments() as double?) ?? 0.0;
+  }
+
+  Future<void> fetchProfileData() async {
+    try {
+      final response = await _apiCall.getData(Variables.GET_PROFILE);
+      final responseBody = json.decode(response.body);
+      print(responseBody);
+      if (response.statusCode == 200) {
+        final profileResponse = BarberProfileResponse.fromJson(responseBody);
+        // profileData.value = profileResponse.data;
+        SharedPref().removePreference(PrefKeys.profilePic);
+        SharedPref().removePreference(PrefKeys.coverPic);
+        profileImage = profileResponse.data.profilePic;
+        coverImage = profileResponse.data.coverPic;
+        currentBarberId = profileResponse.data.id;
+        await SharedPref()
+            .setString(PrefKeys.profilePic, profileResponse.data.profilePic);
+        await SharedPref()
+            .setString(PrefKeys.coverPic, profileResponse.data.coverPic);
+        // await SharedPref().setString(PrefKeys.fullName, profileResponse.data.fullName);
+        // await SharedPref()
+        //     .setString(PrefKeys.phoneNumber, profileResponse.data.phoneNumber);
+        await SharedPref()
+            .setString(PrefKeys.barberId, profileResponse.data.id);
+      } else {}
+    } catch (e) {
+      debugPrint("Error fetching profile: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,108 +117,169 @@ class ReportsViewBody extends StatelessWidget {
       }),
     );
   }
+
   // Widget _buildSummaryCards(ReportController controller) {
-  //   HomeController homeController = Get.find<HomeController>();
-  //   final isWorkingToday =
-  //   homeController.isBarberWorkingToday(controller.);
-  //
-  //   final nextDaysTitle =
-  //   isWorkingToday ? "Next 6 days" : "Next 7 days"; // ✅ dynamic text
-  //
-  //   return Row(
-  //     children: [
-  //       _summaryCard(
-  //         "Previous bookings", // ✅ ثابت
-  //         "${controller.reportCounts.value.previousAppointments}",
-  //         "appointment".tr,
-  //       ),
-  //       const SizedBox(width: 8),
-  //       _summaryCard(
-  //         "Today bookings", // ✅ plural
-  //         "${controller.reportCounts.value.todayAppointments}",
-  //         "appointment".tr,
-  //       ),
-  //       const SizedBox(width: 8),
-  //       _summaryCard(
-  //         nextDaysTitle, // ✅ dynamic حسب if working today
-  //         "${controller.reportCounts.value.upcomingAppointments}",
-  //         "appointment".tr,
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _buildSummaryCards(ReportController controller) {
-    return Row(
-      children: [
-        _summaryCard(
-          "previousBooking".tr,
-          "${controller.reportCounts.value.previousAppointments}",
-          "appointment".tr,
-        ),
-        const SizedBox(width: 8),
-        _summaryCard(
-          "todayBooking".tr,
-          "${controller.reportCounts.value.todayAppointments}",
-          "appointment".tr,
-        ),
-        const SizedBox(width: 8),
-        _summaryCard(
-          "nextFourDays".tr,
-          "${controller.reportCounts.value.upcomingAppointments}",
-          "appointment".tr,
-        ),
-      ],
-    );
-  }
+    return FutureBuilder<Barber?>(
+      future: getBarberById(currentBarberId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-  Widget _summaryCard(String title, String count, String subtitle) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: ColorsData.cardColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        final barber = snapshot.data;
+        final isWorkingToday = barber != null && isBarberWorkingToday(barber);
+        final nextDaysTitle =
+            isWorkingToday ? "Next 6 days".tr : "Next 7 days".tr;
+
+        return Row(
           children: [
-            SvgPicture.asset(AssetsData.calendarIcon,
-                height: 20, color: ColorsData.primary),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w400,
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => PreviousAppointmentsScreen(
+                        appointmentsFuture: getPreviousAppointments(),
+                      ));
+                },
+                child: _summaryCard(
+                  "previousBooking".tr,
+                  "${int.parse(totalEarnings.value.toStringAsFixed(0))}",
+                  "appointment".tr,
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              count,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _summaryCard(
+                "todayBooking".tr,
+                "${controller.reportCounts.value.todayAppointments}",
+                "appointment".tr,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: ColorsData.thirty,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w400,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _summaryCard(
+                nextDaysTitle,
+                "${controller.reportCounts.value.upcomingAppointments}",
+                "appointment".tr,
               ),
             ),
           ],
-        ),
+        );
+      },
+    );
+  }
+
+  Future<List<AppointmentPrvious>> getPreviousAppointments() async {
+    try {
+      final response = await _apiCall.getData(
+        "${Variables.APPOINTMENT}previous-currently",
+        body: {"type": "currently"},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print(data);
+        if (data["success"] == true) {
+          final List appointmentsJson = data["appointments"];
+          return appointmentsJson
+              .map((e) => AppointmentPrvious.fromJson(e))
+              .toList();
+        }
+      }
+    } catch (e) {
+      debugPrint("Error fetching previous appointments: $e");
+    }
+    return [];
+  }
+
+  Widget _summaryCard(String title, String count, String subtitle) {
+    return Container(
+      height: 150.h,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: ColorsData.cardColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(AssetsData.calendarIcon,
+              height: 20, color: ColorsData.primary),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            count,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: ColorsData.thirty,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  final NetworkAPICall _apiCall = NetworkAPICall();
+
+  Future<Barber?> getBarberById(String barberId) async {
+    try {
+      print("Fetching barber with ID: ${Variables.BARBER}$currentBarberId");
+      final response = await _apiCall
+          .getData("${Variables.BARBER}$currentBarberId"); // ✅ ضيف /
+      if (response.statusCode == 200) {
+        print("Barber response: ${response.body}");
+        final data = json.decode(response.body);
+
+        if (data is Map<String, dynamic>) {
+          return Barber.fromJson(data);
+        } else {
+          debugPrint("Unexpected response format: $data");
+        }
+      } else {
+        debugPrint(
+            "Failed to fetch barber. Status: ${response.statusCode}, Body: ${response.body}");
+      }
+    } catch (e) {
+      debugPrint("Error fetching barber: $e");
+    }
+    return null;
+  }
+
+  bool isBarberWorkingToday(Barber barber) {
+    final today = DateTime.now().weekday; // 1=Mon .. 7=Sun
+    final todayName = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ][today - 1];
+
+    return barber.workingDays.any((day) => day.day == todayName);
   }
 
   Widget _buildSearchBar(ReportController controller) {
@@ -402,6 +520,115 @@ class ReportsViewBody extends StatelessWidget {
           number,
           style: TextStyle(color: Colors.white, fontSize: 14),
         ),
+      ),
+    );
+  }
+}
+
+class AppointmentPrvious {
+  final String id;
+  final String userName;
+  final String barberName;
+  final String barberPic;
+  final List<ServiceItem> services;
+  final int price;
+  final int duration;
+  final String status;
+  final DateTime startDate;
+
+  AppointmentPrvious({
+    required this.id,
+    required this.userName,
+    required this.barberName,
+    required this.barberPic,
+    required this.services,
+    required this.price,
+    required this.duration,
+    required this.status,
+    required this.startDate,
+  });
+
+  factory AppointmentPrvious.fromJson(Map<String, dynamic> json) {
+    return AppointmentPrvious(
+      id: json["_id"],
+      userName: json["userName"] ?? "",
+      barberName: json["barber"]["fullName"] ?? "",
+      barberPic: json["barber"]["profilePic"] ?? "",
+      services: (json["service"] as List)
+          .map((e) => ServiceItem.fromJson(e))
+          .toList(),
+      price: json["price"],
+      duration: json["duration"],
+      status: json["status"],
+      startDate: DateTime.fromMillisecondsSinceEpoch(json["startDate"]),
+    );
+  }
+}
+
+class ServiceItem {
+  final String name;
+  final int price;
+  final int numberOfUsers;
+
+  ServiceItem({
+    required this.name,
+    required this.price,
+    required this.numberOfUsers,
+  });
+
+  factory ServiceItem.fromJson(Map<String, dynamic> json) {
+    return ServiceItem(
+      name: json["service"]["name"],
+      price: json["price"],
+      numberOfUsers: json["numberOfUsers"],
+    );
+  }
+}
+
+class PreviousAppointmentsScreen extends StatelessWidget {
+  final Future<List<AppointmentPrvious>> appointmentsFuture;
+
+  const PreviousAppointmentsScreen(
+      {super.key, required this.appointmentsFuture});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("previousBooking".tr)),
+      body: FutureBuilder<List<AppointmentPrvious>>(
+        future: appointmentsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+          final appointments = snapshot.data ?? [];
+          if (appointments.isEmpty) {
+            return Center(child: Text("noAppointments".tr));
+          }
+          return ListView.builder(
+            itemCount: appointments.length,
+            itemBuilder: (context, index) {
+              final appt = appointments[index];
+              return Card(
+                margin: const EdgeInsets.all(8),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(appt.barberPic),
+                  ),
+                  title: Text(appt.barberName),
+                  subtitle: Text(
+                    "${appt.userName} • ${appt.services.map((s) => s.name).join(", ")}\n"
+                    "${appt.status} • ${appt.startDate}",
+                  ),
+                  trailing: Text("${appt.price} \$"),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

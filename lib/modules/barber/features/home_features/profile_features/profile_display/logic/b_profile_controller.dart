@@ -89,10 +89,15 @@ class BProfileController extends GetxController {
         SharedPref().removePreference(PrefKeys.coverPic);
         profileImage = profileResponse.data.profilePic;
         coverImage = profileResponse.data.coverPic;
+        currentBarberId = profileResponse.data.id;
         await SharedPref()
             .setString(PrefKeys.profilePic, profileResponse.data.profilePic);
         await SharedPref()
             .setString(PrefKeys.coverPic, profileResponse.data.coverPic);
+        // await SharedPref().setString(PrefKeys.fullName, profileResponse.data.fullName);
+        // await SharedPref()
+        //     .setString(PrefKeys.phoneNumber, profileResponse.data.phoneNumber);
+        await SharedPref().setString(PrefKeys.barberId, profileResponse.data.id);
         if (profileData.value != null) {
           if (profileData.value!.barberShop.isEmpty) {
             profileData.value!.barberShop = 'My Barber Shop';
