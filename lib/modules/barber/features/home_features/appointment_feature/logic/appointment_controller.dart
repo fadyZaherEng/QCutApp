@@ -308,6 +308,7 @@ class BAppointmentController extends GetxController {
       return false;
     }
   }
+
   Future<bool> deleteAppointment(String appointmentId) async {
     try {
       print("${Variables.APPOINTMENT}cancel/$appointmentId");

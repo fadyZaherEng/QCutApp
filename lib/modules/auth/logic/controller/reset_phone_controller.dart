@@ -11,7 +11,6 @@ class ResetPhoneController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
 
-
   @override
   void onClose() {
     // Properly dispose controllers when the controller is removed from memory

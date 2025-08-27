@@ -12,7 +12,6 @@ import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
-import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/models/barber_profile_model.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/controller/report_controller.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/models/reports_models.dart';
@@ -21,7 +20,7 @@ import 'package:q_cut/modules/customer/features/home_features/home/logic/home_co
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class ReportsViewBody extends StatefulWidget {
-  ReportsViewBody({super.key});
+  const ReportsViewBody({super.key});
 
   @override
   State<ReportsViewBody> createState() => _ReportsViewBodyState();
@@ -36,8 +35,9 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
     await fetchProfileData();
     totalEarnings.value = (await getPreviousAppointments()).length.toDouble();
   }
+
   @override
- void didUpdateWidget(covariant ReportsViewBody oldWidget) {
+  void didUpdateWidget(covariant ReportsViewBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     fetchProfileData();
     totalEarnings.value = (getPreviousAppointments() as double?) ?? 0.0;

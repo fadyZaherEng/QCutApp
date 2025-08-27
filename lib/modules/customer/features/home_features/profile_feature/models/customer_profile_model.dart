@@ -1,4 +1,3 @@
-
 class CustomerProfileResponse {
   final CustomerProfileData data;
 

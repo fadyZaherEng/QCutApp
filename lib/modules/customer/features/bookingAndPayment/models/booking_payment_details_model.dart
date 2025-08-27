@@ -1,4 +1,3 @@
-
 class BookingPaymentDetailsModel {
   final String serviceTitle;
   final double servicePrice;

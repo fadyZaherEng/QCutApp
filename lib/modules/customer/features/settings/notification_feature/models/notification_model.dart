@@ -1,4 +1,3 @@
-
 class NotificationResponse {
   final bool success;
   final String message;

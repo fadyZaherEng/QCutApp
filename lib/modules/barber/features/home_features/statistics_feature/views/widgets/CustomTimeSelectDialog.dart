@@ -363,18 +363,16 @@ void showCustomTimeSelectDialog(BuildContext context,
                 style: Styles.textStyleS16W700(color: Colors.white),
               ),
               SizedBox(height: 16.h),
-              ...timeOptions
-                  .map((option) => _buildTimeOption(
-                        context,
-                        option,
-                        () {
-                          Navigator.pop(context);
-                          if (onTimeSelected != null) {
-                            onTimeSelected(option);
-                          }
-                        },
-                      ))
-                  ,
+              ...timeOptions.map((option) => _buildTimeOption(
+                    context,
+                    option,
+                    () {
+                      Navigator.pop(context);
+                      if (onTimeSelected != null) {
+                        onTimeSelected(option);
+                      }
+                    },
+                  )),
             ],
           ),
         ),

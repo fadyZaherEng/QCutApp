@@ -51,7 +51,7 @@ class LogoutDialog extends StatelessWidget {
                     onPressed: () {
                       SharedPref().clearPreferences();
 
-                      SharedPref().getBool(PrefKeys.userRole)??false
+                      SharedPref().getBool(PrefKeys.userRole) ?? false
                           ? Get.offAllNamed(AppRouter.loginPath)
                           : Get.offAllNamed(AppRouter.bloginPath);
                     },

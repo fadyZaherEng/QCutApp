@@ -9,14 +9,12 @@ import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/core/utils/widgets/custom_button.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_change_your_picture_dialog.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/widgets/show_change_user_info_bottom_sheet.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_log_out_dialog.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -318,14 +316,14 @@ class _MyProfileViewState extends State<MyProfileView> {
   }
 
   _buildDrawerItem(
-      String tr, IconData integration_instructions, Null Function() param2) {
+      String tr, IconData integrationInstructions, Null Function() param2) {
     bool isClicked = true;
     return GestureDetector(
       onTap: () async {
         if (isClicked) {
           isClicked = false;
           setState(() {});
-          param2!();
+          param2();
           await Future.delayed(const Duration(seconds: 2), () {
             isClicked = true;
             setState(() {});
@@ -340,7 +338,7 @@ class _MyProfileViewState extends State<MyProfileView> {
             Row(
               children: [
                 Icon(
-                  integration_instructions,
+                  integrationInstructions,
                   size: 24.sp,
                   color: ColorsData.primary,
                 ),

@@ -42,7 +42,6 @@ class ChangeLangugesView extends StatelessWidget {
               onPressed: () {
                 localeController.changeLang("en");
                 //restart app to apply language changes
-
               },
               isCustomStyle: Get.locale?.languageCode == 'en' ? false : true,
             ),

@@ -28,7 +28,7 @@ class ReportsView extends StatelessWidget {
           )
         ],
       ),
-      body:   ReportsViewBody(),
+      body: ReportsViewBody(),
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:q_cut/core/utils/network/network_helper.dart';
 class UploadMedia extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
 
-
   Future<String?> uploadFile(File file, String type) async {
     try {
       final presignedResponse = await _apiCall.getPresignedUrl(type, 1);
