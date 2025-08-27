@@ -10,11 +10,15 @@ import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
+import 'package:q_cut/core/utils/widgets/custom_button.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_change_your_picture_dialog.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/widgets/show_change_user_info_bottom_sheet.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_log_out_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MyProfileView extends StatefulWidget {
   const MyProfileView({super.key});
@@ -65,8 +69,10 @@ class _MyProfileViewState extends State<MyProfileView> {
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           alignment: Alignment.topCenter,
-                          image: CachedNetworkImageProvider(
-                              profileData!.coverPic ?? ""),
+                          image: AssetImage("assets/images/pattern.png"),
+
+                          // CachedNetworkImageProvider(
+                          //     profileData!.coverPic ?? ""),
                         ),
                       ),
                     ),
@@ -80,12 +86,14 @@ class _MyProfileViewState extends State<MyProfileView> {
                               Get.locale?.languageCode == "he"
                           ? 20.w
                           : null,
-                      child: CustomBigButton(
-                        width: 180.w,
-                        textData: "editYourProfile".tr,
+                      child: CustomButton(
+                        width: 200.w,
+                        text: "editYourProfile".tr,
                         onPressed: () {
                           showChangeUserInfoBottomSheet(
-                              context, profileController);
+                            context,
+                            profileController,
+                          );
                         },
                       ),
                     ),
@@ -132,7 +140,6 @@ class _MyProfileViewState extends State<MyProfileView> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     onTap: () {
-                                      debugPrint("Change your picture clicked");
                                       showChangeYourPictureDialog(context);
                                     },
                                     borderRadius: BorderRadius.circular(45),
@@ -169,7 +176,6 @@ class _MyProfileViewState extends State<MyProfileView> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 5.h, left: 16.w, right: 16.w),
-                width: double.infinity,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,12 +183,15 @@ class _MyProfileViewState extends State<MyProfileView> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0.w),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               fullName,
                               style: Styles.textStyleS16W700(),
                             ),
-                            SizedBox(height: 5.h),
+                            SizedBox(height: 10.h),
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -200,11 +209,9 @@ class _MyProfileViewState extends State<MyProfileView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 5.h),
+                            SizedBox(height: 10.h),
                             Text(
-                              '\u200E$phoneNumber'
-                              // LTR override for RTL languages
-                              ,
+                              '\u200E$phoneNumber',
                               style: Styles.textStyleS20W400(
                                   color: ColorsData.primary),
                             ),
@@ -228,12 +235,28 @@ class _MyProfileViewState extends State<MyProfileView> {
                         Get.toNamed(AppRouter.resetPhoneNumberPath);
                       }),
                       buildDivider(),
-                      buildDrawerItem("changeYourLocation".tr,
-                          AssetsData.mapPinIcon, () {}),
+                      buildDrawerItem(
+                          "changeYourLocation".tr, AssetsData.mapPinIcon,
+                          () async {
+                        await LocationHelper.requestLocationPermission(context);
+                      }),
+                      buildDivider(),
+                      buildDrawerItem(
+                          "Settings".tr, AssetsData.settingIcon, () {}),
+                      buildDivider(),
+                      _buildDrawerItem("Terms and Conditions".tr,
+                          Icons.integration_instructions, () {}),
+                      buildDivider(),
+                      _buildDrawerItem(
+                          "Privacy Policy".tr, Icons.policy, () {}),
+                      buildDivider(),
+                      buildDrawerItem(
+                          "Contact us".tr, AssetsData.callIcon, () {}),
                       buildDivider(),
                       buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
                         showLogoutDialog(context);
                       }),
+                      SizedBox(height: 150.h),
                     ],
                   ),
                 ),
@@ -271,7 +294,9 @@ class _MyProfileViewState extends State<MyProfileView> {
                   height: 24.h,
                   width: 24.w,
                   colorFilter: const ColorFilter.mode(
-                      ColorsData.primary, BlendMode.srcIn),
+                    ColorsData.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
                 SizedBox(width: 12.w),
                 Text(title, style: Styles.textStyleS14W500()),
@@ -290,6 +315,48 @@ class _MyProfileViewState extends State<MyProfileView> {
 
   Widget buildDivider() {
     return Divider(color: ColorsData.cardStrock.withOpacity(0.3));
+  }
+
+  _buildDrawerItem(
+      String tr, IconData integration_instructions, Null Function() param2) {
+    bool isClicked = true;
+    return GestureDetector(
+      onTap: () async {
+        if (isClicked) {
+          isClicked = false;
+          setState(() {});
+          param2!();
+          await Future.delayed(const Duration(seconds: 2), () {
+            isClicked = true;
+            setState(() {});
+          });
+        }
+      },
+      child: Padding(
+        padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  integration_instructions,
+                  size: 24.sp,
+                  color: ColorsData.primary,
+                ),
+                SizedBox(width: 12.w),
+                Text(tr, style: Styles.textStyleS14W500()),
+              ],
+            ),
+            SvgPicture.asset(
+              AssetsData.downArrowIcon,
+              height: 24.h,
+              width: 24.w,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -316,12 +383,38 @@ class FullScreenImageView extends StatelessWidget {
             top: 40,
             left: 20,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 30,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class LocationHelper {
+  /// يسألك عن إذن تحديد الموقع
+  static Future<void> requestLocationPermission(BuildContext context) async {
+    PermissionStatus status = await Permission.location.request();
+
+    if (status.isGranted) {
+      // لو وافق "بينما تستخدم التطبيق" → يجيب الموقع عادي
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      print("User location: ${position.latitude}, ${position.longitude}");
+    } else if (status.isDenied) {
+      // لو اختار "Don't allow" → تظهر رسالة فوق
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Location permissions are denied")),
+      );
+    } else if (status.isPermanentlyDenied) {
+      // لو اختار "Don't ask again" → افتح إعدادات التطبيق
+      openAppSettings();
+    }
   }
 }

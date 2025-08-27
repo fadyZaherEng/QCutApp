@@ -83,7 +83,10 @@ class _SettingViewBodyState extends State<SettingViewBody> {
               }),
               buildDivider(),
               buildDrawerItem(
-                  "changeYourLocation".tr, AssetsData.mapPinIcon, () {}),
+                "changeYourLocation".tr,
+                AssetsData.mapPinIcon,
+                () {},
+              ),
               buildDivider(),
               buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
                 showLogoutDialog(context);

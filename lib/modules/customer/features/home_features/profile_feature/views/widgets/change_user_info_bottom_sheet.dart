@@ -77,13 +77,23 @@ class ChangeUserInfoBottomSheet extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8.h),
+                // CustomTextFormField(
+                //   style: TextStyle(color: Colors.black, fontSize: 12.sp),
+                //   controller: profileController!.emailController,
+                //   fillColor: ColorsData.font,
+                //   hintText: "enterYourPhoneNumber".tr,
+                //   keyboardType: TextInputType.emailAddress,
+                // ),
                 CustomTextFormField(
                   style: TextStyle(color: Colors.black, fontSize: 12.sp),
                   controller: profileController!.emailController,
                   fillColor: ColorsData.font,
-                  hintText: "enterYourPhoneNumber".tr,
+                  hintText: profileController!.emailController.text.isEmpty
+                      ? "(optional)"
+                      : "enterYourPhoneNumber".tr,
                   keyboardType: TextInputType.emailAddress,
                 ),
+
                 SizedBox(height: 20.h),
                 CustomBigButton(
                   textData: profileController!.isLoading.value

@@ -169,9 +169,11 @@ class BAppointmentView extends StatelessWidget {
                           child: CustomBAppointmentListItem(
                             id: appointment.id,
                             onDeleteTap: () =>
-                                controller.deleteAppointment(appointment.id),
+                                controller.didntComeAppointment(appointment.id),
                             imageUrl: profileDrawerImage,
                             name: appointment.user.fullName,
+                            controller: controller,
+                            appointment: appointment,
                             location: "location".tr,
                             service: appointment.services.isNotEmpty
                                 ? appointment.services[0].service.name

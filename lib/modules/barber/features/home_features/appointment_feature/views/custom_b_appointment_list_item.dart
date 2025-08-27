@@ -6,8 +6,11 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/change_time_bottom_sheet.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/show_delete_appointment_dialog.dart';
+
+import '../logic/appointment_controller.dart';
 
 class CustomBAppointmentListItem extends StatelessWidget {
   final String imageUrl;
@@ -23,6 +26,9 @@ class CustomBAppointmentListItem extends StatelessWidget {
   final double price;
   final double finalPrice;
   final Function()? onDeleteTap;
+  final BAppointmentController controller;
+
+  final BarberAppointment appointment;
 
   const CustomBAppointmentListItem({
     super.key,
@@ -39,6 +45,8 @@ class CustomBAppointmentListItem extends StatelessWidget {
     required this.price,
     required this.finalPrice,
     this.onDeleteTap,
+    required this.controller,
+    required this.appointment,
   });
 
   @override
@@ -145,34 +153,103 @@ class CustomBAppointmentListItem extends StatelessWidget {
           SizedBox(height: 12.h),
 
           // **Buttons**
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: _customButton(
+          //         "change".tr,
+          //         ColorsData.primary,
+          //         () {
+          //           showChangeTimeBottomSheet(context, bookingDay, id);
+          //         },
+          //       ),
+          //     ),
+          //     SizedBox(width: 12.w),
+          //     Expanded(
+          //       child: _customButton(
+          //         "Didn’t come".tr,
+          //         ColorsData.cardStrock,
+          //         () {
+          //           showDeleteAppointmentDialog(
+          //             context: context,
+          //             onYes: () {
+          //               onDeleteTap?.call();
+          //             },
+          //             onNo: () {},
+          //           );
+          //         },
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // داخل Row الأزرار
           Row(
             children: [
+              if (DateTime.now().isBefore(
+                  appointment.startDate.subtract(const Duration(minutes: 30))))
+                Expanded(
+                  child: _customButton(
+                    "delete".tr,
+                    Colors.red,
+                    () => showDeleteAppointmentDialog(
+                      context: context,
+                      onYes: () => controller.deleteAppointment(appointment.id),
+                      onNo: () {},
+                    ),
+                  ),
+                ),
+              if (DateTime.now().isAfter(
+                  appointment.startDate.add(const Duration(minutes: 5))))
+                Expanded(
+                  child: _customButton(
+                    "Didn’t come".tr,
+                    Colors.orange,
+                    () => showDidNotComeDialog(
+                      context: context,
+                      onYes: () => showDeleteAppointmentDialog(
+                        context: context,
+                        onYes: () => onDeleteTap?.call(),
+                        onNo: () {},
+                      ),
+                    ),
+                  ),
+                ),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _customButton(
                   "change".tr,
                   ColorsData.primary,
-                  () {
-                    showChangeTimeBottomSheet(context, bookingDay, id);
-                  },
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: _customButton(
-                  "Didn’t come".tr,
-                  ColorsData.cardStrock,
-                  () {
-                    showDeleteAppointmentDialog(
-                      context: context,
-                      onYes: () {
-                        onDeleteTap?.call();
-                      },
-                      onNo: () {},
-                    );
-                  },
+                  () => showChangeTimeBottomSheet(context, bookingDay, id),
                 ),
               ),
             ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> showDidNotComeDialog({
+    required BuildContext context,
+    required VoidCallback onYes,
+  }) async {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Confirmation".tr),
+        content: Text("Are you sure the customer didn’t come?".tr,
+            style: TextStyle(fontSize: 16, color: Colors.black)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text("No".tr),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              onYes();
+            },
+            child: Text("Yes".tr),
           ),
         ],
       ),

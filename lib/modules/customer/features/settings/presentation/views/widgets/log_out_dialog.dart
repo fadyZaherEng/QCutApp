@@ -49,11 +49,11 @@ class LogoutDialog extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      SharedPref().getBool(PrefKeys.userRole)!
+                      SharedPref().clearPreferences();
+
+                      SharedPref().getBool(PrefKeys.userRole)??false
                           ? Get.offAllNamed(AppRouter.loginPath)
                           : Get.offAllNamed(AppRouter.bloginPath);
-
-                      SharedPref().clearPreferences();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorsData.primary,

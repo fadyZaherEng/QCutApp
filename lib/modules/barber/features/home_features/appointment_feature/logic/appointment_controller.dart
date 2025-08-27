@@ -279,7 +279,7 @@ class BAppointmentController extends GetxController {
   }
 
   // Delete appointment
-  Future<bool> deleteAppointment(String appointmentId) async {
+  Future<bool> didntComeAppointment(String appointmentId) async {
     try {
       print("${Variables.APPOINTMENT}not-come/$appointmentId");
 
@@ -287,6 +287,35 @@ class BAppointmentController extends GetxController {
           .putData("${Variables.APPOINTMENT}not-come/$appointmentId", []);
       print(response.body);
       print("${Variables.APPOINTMENT}not-come/$appointmentId");
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        appointments.removeWhere((element) => element.id == appointmentId);
+        filteredAppointments
+            .removeWhere((element) => element.id == appointmentId);
+
+        ShowToast.showSuccessSnackBar(
+            message: 'Appointment deleted successfully');
+        return true;
+      } else {
+        final responseBody = json.decode(response.body);
+        final message =
+            responseBody['message'] ?? 'Failed to delete appointment';
+        ShowToast.showError(message: message);
+        return false;
+      }
+    } catch (e) {
+      ShowToast.showError(message: 'Error occurred while deleting: $e');
+      return false;
+    }
+  }
+  Future<bool> deleteAppointment(String appointmentId) async {
+    try {
+      print("${Variables.APPOINTMENT}cancel/$appointmentId");
+
+      final response = await _apiCall
+          .putData("${Variables.APPOINTMENT}cancel/$appointmentId", []);
+      print(response.body);
+      print("${Variables.APPOINTMENT}cancel/$appointmentId");
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         appointments.removeWhere((element) => element.id == appointmentId);
