@@ -87,10 +87,12 @@ class _BarberServiceCardState extends State<BarberServiceCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      widget.name,
-                      style: Styles.textStyleS14W700(
-                        color: ColorsData.bodyFont,
+                    Expanded(
+                      child: Text(
+                        widget.name,
+                        style: Styles.textStyleS14W700(
+                          color: ColorsData.bodyFont,
+                        ),
                       ),
                     ),
                     Text(

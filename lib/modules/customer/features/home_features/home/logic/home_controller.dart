@@ -87,13 +87,13 @@ class HomeController extends GetxController {
         isError.value = true;
         errorMessage.value =
             responseBody['message'] ?? 'Failed to fetch barbers data';
-        ShowToast.showError(message: errorMessage.value);
+        // ShowToast.showError(message: errorMessage.value);
       }
     } catch (e) {
       isError.value = true;
       errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to connect to server',
-          backgroundColor: Colors.red, colorText: Colors.white);
+      // Get.snackbar('Error', 'Failed to connect to server',
+      //     backgroundColor: Colors.red, colorText: Colors.white);
 
       // Keep using static data if API fails
     } finally {
@@ -146,17 +146,17 @@ class HomeController extends GetxController {
         isError.value = true;
         errorMessage.value =
             responseBody['message'] ?? 'Failed to fetch barbers data';
-        ShowToast.showError(message: errorMessage.value);
+        // ShowToast.showError(message: errorMessage.value);
       }
     } catch (e) {
       isError.value = true;
       errorMessage.value = 'Network error: $e';
-      Get.snackbar(
-        'Error',
-        'Failed to connect to server',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to connect to server',
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
     } finally {
       isLoading.value = false;
     }
@@ -259,14 +259,14 @@ class HomeController extends GetxController {
         isError.value = true;
         errorMessage.value =
             responseBody['message'] ?? 'Failed to fetch barbers data';
-        ShowToast.showError(message: errorMessage.value);
+        // ShowToast.showError(message: errorMessage.value);
         searchResults.clear();
       }
     } catch (e) {
       isError.value = true;
       errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to connect to server',
-          backgroundColor: Colors.red, colorText: Colors.white);
+      // Get.snackbar('Error', 'Failed to connect to server',
+      //     backgroundColor: Colors.red, colorText: Colors.white);
       searchResults.clear();
     } finally {
       isLoading.value = false;

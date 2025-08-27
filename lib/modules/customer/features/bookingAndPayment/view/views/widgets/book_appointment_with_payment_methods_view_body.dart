@@ -128,7 +128,7 @@ class BookAppointmentWithPaymentMethodsViewBody
                       message: "appointmentBookedSuccessfully".tr);
                   Get.offAllNamed(AppRouter.bottomNavigationBar);
                 } else {
-                  ShowToast.showError(message: "failedToBookAppointment".tr);
+                  // ShowToast.showError(message: "failedToBookAppointment".tr);
                 }
               },
             ),

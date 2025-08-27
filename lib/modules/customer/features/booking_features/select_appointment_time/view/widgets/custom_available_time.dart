@@ -131,7 +131,7 @@ class CustomAvailableTime extends GetView<SelectAppointmentTimeController> {
   // Format time slot to display start and end time
   String _formatTimeSlot(TimeSlot slot) {
     final startTime = DateFormat('h:mm').format(slot.startTime);
-    final endTime = DateFormat('h:mm a').format(slot.endTime);
+    final endTime = DateFormat('h:mm').format(slot.endTime);
     return '$startTime - $endTime';
   }
 

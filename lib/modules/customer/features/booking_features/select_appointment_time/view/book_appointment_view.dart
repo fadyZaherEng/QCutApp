@@ -166,8 +166,8 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                 CustomBigButton(
                   textData: "confirm".tr,
                   onPressed: () {
-                    final startTime = DateFormat('h:mm a')
-                        .format(controller.selectedTimeSlot.value!.startTime);
+                    final startTime = DateFormat('h:mm ')
+                        .format(controller.selectedTimeSlot.value?.startTime??DateTime.now());
 
                     // Print booking model data
                     print({
@@ -219,29 +219,30 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                             appointmentDate: controller
                                 .selectedTimeSlot.value!.dayName
                                 .toString(),
-                            appointmentTime:
-                                startTime, // Force unwrap as we expect it to be non-null when confirming
+                            appointmentTime: startTime,
+                            // Force unwrap as we expect it to be non-null when confirming
                             serviceDuration: "20");
-                    Get.toNamed(AppRouter.bookAppointmentWithPaymentMethodsPath,
-                        arguments: {
-                          "pay": {
-                            "barber": controller.barberId.value,
-                            "service": selectedServices.services
-                                .asMap()
-                                .entries
-                                .map((entry) => {
-                                      "service": entry.value.service,
-                                      "numberOfUsers": selectedServices
-                                          .services[entry.key].numberOfUsers
-                                    })
-                                .toList(),
-                            "startDate": controller.selectedTimeSlot.value!
-                                .startTime.millisecondsSinceEpoch,
-                            "paymentMethod": "cash"
-                          },
-                          "bookingPaymentDetailsModel":
-                              bookingPaymentDetailsModel
-                        });
+                    Get.toNamed(
+                      AppRouter.bookAppointmentWithPaymentMethodsPath,
+                      arguments: {
+                        "pay": {
+                          "barber": controller.barberId.value,
+                          "service": selectedServices.services
+                              .asMap()
+                              .entries
+                              .map((entry) => {
+                                    "service": entry.value.service,
+                                    "numberOfUsers": selectedServices
+                                        .services[entry.key].numberOfUsers
+                                  })
+                              .toList(),
+                          "startDate": controller.selectedTimeSlot.value!
+                              .startTime.millisecondsSinceEpoch,
+                          "paymentMethod": "cash"
+                        },
+                        "bookingPaymentDetailsModel": bookingPaymentDetailsModel
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 24.h),
