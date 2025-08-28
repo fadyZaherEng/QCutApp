@@ -13,6 +13,7 @@ import 'package:q_cut/modules/customer/features/home_features/home/models/barber
 
 class CustomBarberShopWideCard extends StatelessWidget {
   final Barber barber;
+
   const CustomBarberShopWideCard({
     super.key,
     required this.barber,
@@ -24,8 +25,15 @@ class CustomBarberShopWideCard extends StatelessWidget {
       width: 343.w,
       height: 300.h,
       decoration: BoxDecoration(
-          color: ColorsData.cardColor,
-          borderRadius: BorderRadius.circular(16.r)),
+        color: ColorsData.cardColor,
+        borderRadius: BorderRadius.circular(
+          16.r,
+        ),
+        border: Border.all(
+          color: Colors.white,
+          width: 1.w,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

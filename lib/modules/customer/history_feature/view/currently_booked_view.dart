@@ -14,32 +14,41 @@ class CurrentlyBookedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => appointments.isEmpty
-        ? Center(
-            child: Text(
-              'No current appointments'.tr,
-              style: TextStyle(fontSize: 16),
-            ),
-          )
-        : ListView.builder(
-            itemCount: appointments.length,
-            itemBuilder: (context, index) {
-              final appointment = appointments[index];
-              return CustomHistoryDelete(
-                appointment: appointment,
-                onDelete: () {
-                  showDeleteAppointmentDialog(
-                    context: context,
-                    onYes: () {
-                      Navigator.pop(context);
-                    },
-                    onNo: () {
-                      Navigator.pop(context);
-                    },
-                  );
+    return Obx(() {
+      // 🔥 filter only pending appointments
+      final pendingAppointments = appointments
+          .where((appointment) => appointment.status.toLowerCase() == "pending")
+          .toList();
+
+      if (pendingAppointments.isEmpty) {
+        return Center(
+          child: Text(
+            'No current appointments'.tr,
+            style: const TextStyle(fontSize: 16),
+          ),
+        );
+      }
+
+      return ListView.builder(
+        itemCount: pendingAppointments.length,
+        itemBuilder: (context, index) {
+          final appointment = pendingAppointments[index];
+          return CustomHistoryDelete(
+            appointment: appointment,
+            onDelete: () {
+              showDeleteAppointmentDialog(
+                context: context,
+                onYes: () {
+                  Navigator.pop(context);
+                },
+                onNo: () {
+                  Navigator.pop(context);
                 },
               );
             },
-          ));
+          );
+        },
+      );
+    });
   }
 }

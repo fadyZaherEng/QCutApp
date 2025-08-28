@@ -25,6 +25,14 @@ class FavoriteView extends StatelessWidget {
             indicatorColor: ColorsData.primary,
             labelColor: ColorsData.font,
             unselectedLabelColor: ColorsData.font,
+            indicatorWeight: 4,
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            dividerColor: Colors.white,
+            dividerHeight: 1,
             tabs: [
               Tab(text: 'salon'.tr),
               Tab(text: 'cuts'.tr),

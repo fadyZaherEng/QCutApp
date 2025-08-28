@@ -23,6 +23,11 @@ class HistoryController extends GetxController {
       <CustomerHistoryAppointment>[].obs;
   final RxInt selectedTabIndex = 0.obs;
 
+  // 🔥 النسخة الأصلية (temp lists)
+  final RxList<CustomerHistoryAppointment> currentOriginal =
+      <CustomerHistoryAppointment>[].obs;
+  final RxList<CustomerHistoryAppointment> previousOriginal =
+      <CustomerHistoryAppointment>[].obs;
   // Pagination parameters
   final RxInt currentPage = 1.obs;
   final RxInt totalPages = 1.obs;
@@ -84,8 +89,11 @@ class HistoryController extends GetxController {
 
           if (type == "currently") {
             currentAppointments.value = appointments;
+            currentOriginal.value = appointments; // ✅ خزّن نسخة أصلية
+
           } else {
             previousAppointments.value = appointments;
+            previousOriginal.value = appointments; // ✅ خزّن نسخة أصلية
           }
         }
       } else {
@@ -99,7 +107,26 @@ class HistoryController extends GetxController {
       isLoading.value = false;
     }
   }
-
+// -------- فلترة المواعيد --------
+  void filterAppointments(String value, {required bool isPrevious}) {
+    if (isPrevious) {
+      if (value == 'all') {
+        previousAppointments.value = previousOriginal.toList();
+      } else {
+        previousAppointments.value = previousOriginal
+            .where((a) => a.status?.toLowerCase() == value.toLowerCase())
+            .toList();
+      }
+    } else {
+      if (value == 'all') {
+        currentAppointments.value = currentOriginal.toList();
+      } else {
+        currentAppointments.value = currentOriginal
+            .where((a) => a.status?.toLowerCase() == value.toLowerCase())
+            .toList();
+      }
+    }
+  }
   void onTabChanged(int index) {
     selectedTabIndex.value = index;
     fetchAppointments(index == 0 ? "previous" : "currently");

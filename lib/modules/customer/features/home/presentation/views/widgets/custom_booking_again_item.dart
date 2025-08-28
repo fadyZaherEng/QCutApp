@@ -25,7 +25,7 @@ class CustomBookingAgainItem extends StatelessWidget {
           CustomBookItem(
             appointment: appointment,
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 12.h),
           CustomBigButton(
             textData: "bookingAgain".tr,
             onPressed: onBookingAgain,
