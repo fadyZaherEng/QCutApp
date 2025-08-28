@@ -147,4 +147,13 @@ class ServiceInfo {
           : json['price'],
     );
   }
+  //to json
+  Map<String, dynamic> toJson() {
+    return {
+      'service': serviceId,
+      'numberOfUsers': numberOfUsers,
+      'price': price,
+      // 'serviceName': serviceName, // Not included as API doesn't require it
+    };
+  }
 }

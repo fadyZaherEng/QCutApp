@@ -23,7 +23,7 @@ class CustomerAppointmentController extends GetxController {
   final int limit = 10;
 
   // Filter states
-   final RxString statusFilter = 'Pending'.obs; // default
+  final RxString statusFilter = 'Pending'.obs; // default
 
   // UI States
   final RxBool isLoading = false.obs;
@@ -111,6 +111,7 @@ class CustomerAppointmentController extends GetxController {
       isLoadingMore.value = false;
     }
   }
+
   void applyFilters() {
     if (statusFilter.value == 'Pending') {
       filteredAppointments.value = appointments
@@ -121,26 +122,7 @@ class CustomerAppointmentController extends GetxController {
           .where((app) => app.status.toLowerCase() == 'completed')
           .toList();
     }
-
-    //temp date
-    filteredAppointments.add(
-      CustomerAppointment(
-        id: 'temp',
-        status: 'completed',
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        price: 0.0,
-        duration: 0,
-        barber: BarberInfo(id: "555", fullName: "temp", userType: "barber"),
-        createdAt: DateTime.now(),
-        paymentMethod: 'temp',
-        services: [],
-        user: "Fady zaher",
-        userName: "Fady zaher",
-      ),
-    );
   }
-
 
   // Set filter by status
   void setStatusFilter(String status) {
@@ -188,6 +170,42 @@ class CustomerAppointmentController extends GetxController {
       }
     } catch (e) {
       ShowToast.showError(message: 'Error occurred while deleting: $e');
+      return false;
+    }
+  }
+
+  Future<bool> bookingAgainAppointment(
+      CustomerAppointment customerAppointment) async {
+    await deleteAppointment(customerAppointment.id);
+    appointments.removeWhere((element) => element.id == customerAppointment.id);
+    filteredAppointments
+        .removeWhere((element) => element.id == customerAppointment.id);
+
+    try {
+      print(Variables.APPOINTMENT);
+
+      final response = await _apiCall.putData(Variables.APPOINTMENT, {
+        "barber": customerAppointment.barber.id,
+        "service": customerAppointment.services.map((e) => e.toJson()).toList(),
+        "startDate": customerAppointment.startDate.millisecondsSinceEpoch,
+        "paymentMethod": customerAppointment.paymentMethod,
+      });
+      print(response.body);
+      print(Variables.APPOINTMENT);
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        ShowToast.showSuccessSnackBar(
+            message: 'Appointment Booking Again successfully');
+        return true;
+      } else {
+        final responseBody = json.decode(response.body);
+        final message =
+            responseBody['message'] ?? 'Failed to Booking Again appointment';
+        ShowToast.showError(message: message);
+        return false;
+      }
+    } catch (e) {
+      ShowToast.showError(message: 'Error occurred while Booking Again: $e');
       return false;
     }
   }

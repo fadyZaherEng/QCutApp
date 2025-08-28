@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/models/customer_appointment_model.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class CustomDeleteAppointmentItem extends StatelessWidget {
   final VoidCallback onDelete;
@@ -285,11 +287,20 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
             ),
           if (appointment.status.toLowerCase() == 'completed')
             CustomBigButton(
-              onPressed: () {
-                // Get.to(() => TimeSelectionPage(
-                // barber: appointment.barber,
-                // services: appointment.services,
-                // ));
+              onPressed: () async {
+                onDelete;
+                Get.toNamed(AppRouter.barberServicesPath,
+                    arguments: Barber(
+                      id: appointment.barber.id,
+                      fullName: appointment.barber.fullName,
+                      phoneNumber: "",
+                      userType: appointment.barber.userType,
+                      city: "",
+                      isFavorite: false,
+                      status: appointment.status,
+                      offDay: [],
+                      workingDays: [],
+                    ));
               },
               textData: "Book again".tr,
             ),

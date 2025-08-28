@@ -23,7 +23,6 @@ class QCutServicesView extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.barberId.value = barber.id;
     controller.fetchServices(barber.id);
-
     return Scaffold(
       appBar: CustomAppBar(title: "qcutServices".tr),
       body: Padding(

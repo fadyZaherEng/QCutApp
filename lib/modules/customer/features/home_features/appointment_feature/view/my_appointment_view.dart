@@ -115,33 +115,91 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
   }
 
   Widget _buildFilterButton(CustomerAppointmentController controller) {
-    return PopupMenuButton<String>(
-      onSelected: (value) {
-        controller.setStatusFilter(value);
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'all',
-          child: Text('allAppointments'.tr),
-        ),
-        PopupMenuItem(
-          value: 'pending',
-          child: Text('Pending'.tr),
-        ),
-        PopupMenuItem(
-          value: 'cancelled',
-          child: Text('Cancelled'.tr),
-        ),
-        PopupMenuItem(
-          value: 'NotCome',
-          child: Text('Not Attended'.tr),
-        ),
-        PopupMenuItem(
-          value: 'completed',
-          child: Text('Completed'.tr),
-        ),
-      ],
-      icon: const Icon(Icons.filter_list),
-    );
+    return Obx(() {
+      return PopupMenuButton<String>(
+        initialValue: controller.statusFilter.value, // ensures default marked
+        onSelected: (value) {
+          controller.setStatusFilter(value);
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 'pending',
+            child: Row(
+              children: [
+                Text(
+                  'Pending'.tr,
+                  style: TextStyle(
+                    fontWeight: controller.statusFilter.value == 'pending'
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: controller.statusFilter.value == 'pending'
+                        ? ColorsData.primary
+                        : Colors.black,
+                  ),
+                ),
+                if (controller.statusFilter.value == 'pending') ...[
+                  const SizedBox(width: 6),
+                  const Icon(Icons.check, color: ColorsData.primary, size: 16),
+                ],
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 'completed',
+            child: Row(
+              children: [
+                Text(
+                  'Completed'.tr,
+                  style: TextStyle(
+                    fontWeight: controller.statusFilter.value == 'completed'
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: controller.statusFilter.value == 'completed'
+                        ? ColorsData.primary
+                        : Colors.black,
+                  ),
+                ),
+                if (controller.statusFilter.value == 'completed') ...[
+                  const SizedBox(width: 6),
+                  const Icon(Icons.check, color: ColorsData.primary, size: 16),
+                ],
+              ],
+            ),
+          ),
+        ],
+        icon: const Icon(Icons.filter_list),
+      );
+    });
   }
+
+// Widget _buildFilterButton(CustomerAppointmentController controller) {
+//   return PopupMenuButton<String>(
+//     onSelected: (value) {
+//       controller.setStatusFilter(value);
+//     },
+//     itemBuilder: (context) => [
+//       // PopupMenuItem(
+//       //   value: 'all',
+//       //   child: Text('allAppointments'.tr),
+//       // ),
+//       PopupMenuItem(
+//         value: 'pending',
+//         child: Text('Pending'.tr),
+//       ),
+//       // PopupMenuItem(
+//       //   value: 'cancelled',
+//       //   child: Text('Cancelled'.tr),
+//       // ),
+//       // PopupMenuItem(
+//       //   value: 'NotCome',
+//       //   child: Text('Not Attended'.tr),
+//       // ),
+//       PopupMenuItem(
+//         value: 'completed',
+//         child: Text('Completed'.tr),
+//       ),
+//     ],
+//     icon: const Icon(Icons.filter_list),
+//   );
+// }
 }
