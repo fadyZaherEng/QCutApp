@@ -9,7 +9,7 @@ class BConnectUsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: "contact us".tr),
+        appBar: CustomAppBar(title: "Contact us".tr),
         body: BConnectUsViewBody());
   }
 }
