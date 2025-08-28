@@ -23,7 +23,7 @@ class CustomerAppointmentController extends GetxController {
   final int limit = 10;
 
   // Filter states
-  final RxString statusFilter = 'all'.obs;
+   final RxString statusFilter = 'Pending'.obs; // default
 
   // UI States
   final RxBool isLoading = false.obs;
@@ -111,18 +111,36 @@ class CustomerAppointmentController extends GetxController {
       isLoadingMore.value = false;
     }
   }
-
-  // Apply filters based on status
   void applyFilters() {
-    if (statusFilter.value == 'all') {
-      filteredAppointments.value = appointments;
-    } else {
+    if (statusFilter.value == 'Pending') {
       filteredAppointments.value = appointments
-          .where((app) =>
-              app.status.toLowerCase() == statusFilter.value.toLowerCase())
+          .where((app) => app.status.toLowerCase() == 'pending')
+          .toList();
+    } else if (statusFilter.value == 'Completed') {
+      filteredAppointments.value = appointments
+          .where((app) => app.status.toLowerCase() == 'completed')
           .toList();
     }
+
+    //temp date
+    filteredAppointments.add(
+      CustomerAppointment(
+        id: 'temp',
+        status: 'completed',
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        price: 0.0,
+        duration: 0,
+        barber: BarberInfo(id: "555", fullName: "temp", userType: "barber"),
+        createdAt: DateTime.now(),
+        paymentMethod: 'temp',
+        services: [],
+        user: "Fady zaher",
+        userName: "Fady zaher",
+      ),
+    );
   }
+
 
   // Set filter by status
   void setStatusFilter(String status) {

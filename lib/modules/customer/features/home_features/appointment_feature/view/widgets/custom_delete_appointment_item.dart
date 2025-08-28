@@ -20,129 +20,278 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final remaining = appointment.startDate.difference(now);
+
+    final hours = remaining.inHours.toString().padLeft(2, '0');
+    final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
     return Padding(
-      padding: EdgeInsets.only(top: 24.h, left: 17.w, right: 17.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           IntrinsicHeight(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Left side image container
-                Container(
-                  width: 126.w,
-                  height: 194.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16.r),
-                      bottomRight: Radius.circular(16.r),
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16.r),
-                      bottomRight: Radius.circular(16.r),
-                    ),
-                    child: Image.asset(
-                      AssetsData.myAppointmentImage,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.centerLeft,
-                    ),
-                  ),
-                ),
-                // Right side details container
-                Expanded(
-                  child: Container(
+                //get language direction
+                if (Get.locale?.languageCode == 'ar')
+                  // Left side image container
+                  Container(
+                    width: 126.w,
                     height: 194.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16.r),
-                        bottomLeft: Radius.circular(16.r),
+                        topRight: Radius.circular(16.r),
+                        bottomRight: Radius.circular(16.r),
                       ),
-                      color: ColorsData.cardColor,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Barber name and payment method
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  appointment.barber.fullName,
-                                  style: Styles.textStyleS12W700(),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Text(
-                                appointment.paymentMethod,
-                                style: Styles.textStyleS14W400(
-                                    color: ColorsData.primary),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 6.h),
-                          // Barbershop location
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                AssetsData.mapPinIcon,
-                                width: 12.w,
-                                height: 12.h,
-                                colorFilter: const ColorFilter.mode(
-                                  ColorsData.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Expanded(
-                                child: Text(
-                                  "${appointment.barber.fullName} ",
-                                  style: Styles.textStyleS12W400(),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8.h),
-                          // Service details
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildInfoRow(
-                                    'service'.tr, appointment.serviceName),
-                                _buildInfoRow('servicePrice'.tr,
-                                    "\$${appointment.price.toStringAsFixed(0)}"),
-                                _buildInfoRow(
-                                    'qty'.tr, appointment.totalConsumers),
-                                _buildInfoRow(
-                                    'bookingDay'.tr, appointment.formattedDate),
-                                _buildInfoRow('bookingTime'.tr,
-                                    appointment.formattedTime),
-                                _buildInfoRow('status'.tr, appointment.status),
-                              ],
-                            ),
-                          ),
-                        ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16.r),
+                        bottomRight: Radius.circular(16.r),
+                      ),
+                      child: Image.asset(
+                        AssetsData.myAppointmentImage,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.centerLeft,
                       ),
                     ),
                   ),
-                ),
+                if (Get.locale?.languageCode == 'ar')
+                  // Right side details container
+                  Expanded(
+                    child: Container(
+                      height: 194.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                          bottomLeft: Radius.circular(16.r),
+                        ),
+                        color: ColorsData.cardColor,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Barber name and payment method
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    appointment.barber.fullName,
+                                    style: Styles.textStyleS12W700(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Text(
+                                  appointment.paymentMethod,
+                                  style: Styles.textStyleS14W400(
+                                      color: ColorsData.primary),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6.h),
+                            // Barbershop location
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  AssetsData.mapPinIcon,
+                                  width: 12.w,
+                                  height: 12.h,
+                                  colorFilter: const ColorFilter.mode(
+                                    ColorsData.primary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                SizedBox(width: 4.w),
+                                Expanded(
+                                  child: Text(
+                                    "${appointment.barber.fullName} ",
+                                    style: Styles.textStyleS12W400(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8.h),
+                            // Service details
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildInfoRow(
+                                      'service'.tr, appointment.serviceName),
+                                  _buildInfoRow('servicePrice'.tr,
+                                      "\$${appointment.price.toStringAsFixed(0)}"),
+                                  _buildInfoRow(
+                                      'qty'.tr, appointment.totalConsumers),
+                                  _buildInfoRow('bookingDay'.tr,
+                                      appointment.formattedDate),
+                                  _buildInfoRow('bookingTime'.tr,
+                                      appointment.formattedTime),
+                                  _buildInfoRow(
+                                      'status'.tr, appointment.status),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                if (Get.locale?.languageCode != 'ar')
+                  Expanded(
+                    child: Container(
+                      height: 194.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                          bottomLeft: Radius.circular(16.r),
+                        ),
+                        color: ColorsData.cardColor,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Barber name and payment method
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    appointment.barber.fullName,
+                                    style: Styles.textStyleS12W700(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Text(
+                                  appointment.paymentMethod,
+                                  style: Styles.textStyleS14W400(
+                                      color: ColorsData.primary),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6.h),
+                            // Barbershop location
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  AssetsData.mapPinIcon,
+                                  width: 12.w,
+                                  height: 12.h,
+                                  colorFilter: const ColorFilter.mode(
+                                    ColorsData.primary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                SizedBox(width: 4.w),
+                                Expanded(
+                                  child: Text(
+                                    "${appointment.barber.fullName} ",
+                                    style: Styles.textStyleS12W400(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8.h),
+                            // Service details
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildInfoRow(
+                                      'service'.tr, appointment.serviceName),
+                                  _buildInfoRow('servicePrice'.tr,
+                                      "\$${appointment.price.toStringAsFixed(0)}"),
+                                  _buildInfoRow(
+                                      'qty'.tr, appointment.totalConsumers),
+                                  _buildInfoRow('bookingDay'.tr,
+                                      appointment.formattedDate),
+                                  _buildInfoRow('bookingTime'.tr,
+                                      appointment.formattedTime),
+                                  _buildInfoRow(
+                                      'status'.tr, appointment.status),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                if (Get.locale?.languageCode != 'ar')
+                  Container(
+                    width: 126.w,
+                    height: 194.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16.r),
+                        bottomRight: Radius.circular(16.r),
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16.r),
+                        bottomRight: Radius.circular(16.r),
+                      ),
+                      child: Image.asset(
+                        AssetsData.myAppointmentImage,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.timer, size: 16, color: Colors.grey),
+              const SizedBox(width: 6),
+              remaining.isNegative
+                  ? Text(
+                      "Expired".tr,
+                      style: const TextStyle(fontSize: 14, color: Colors.red),
+                    )
+                  : Text(
+                      "${"Countdown".tr} : $hours:$minutes:$seconds",
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+            ],
+          ),
+          SizedBox(height: 16.h),
           if (appointment.status.toLowerCase() == 'pending')
             CustomBigButton(
-              textData: "delete".tr,
+              textData: "Cancel".tr,
               onPressed: onDelete,
+            ),
+          if (appointment.status.toLowerCase() == 'completed')
+            CustomBigButton(
+              onPressed: () {
+                // Get.to(() => TimeSelectionPage(
+                // barber: appointment.barber,
+                // services: appointment.services,
+                // ));
+              },
+              textData: "Book again".tr,
             ),
         ],
       ),
@@ -155,12 +304,15 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Styles.textStyleS14W400(),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         Expanded(
           child: Text(
             value,
-            style: Styles.textStyleS14W400(),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
           ),
