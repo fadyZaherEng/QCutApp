@@ -275,7 +275,12 @@ class _MyProfileViewState extends State<MyProfileView> {
                       }),
                       buildDivider(),
                       buildDrawerItem(
-                          "Settings".tr, AssetsData.settingIcon, () {}),
+                        "Settings".tr,
+                        AssetsData.settingIcon,
+                        () {
+                          Get.toNamed(AppRouter.settingsPath);
+                        },
+                      ),
                       buildDivider(),
                       _buildDrawerItem("Terms and Conditions".tr,
                           Icons.integration_instructions, () {}),
@@ -284,7 +289,12 @@ class _MyProfileViewState extends State<MyProfileView> {
                           "Privacy Policy".tr, Icons.policy, () {}),
                       buildDivider(),
                       buildDrawerItem(
-                          "Contact us".tr, AssetsData.callIcon, () {}),
+                        "Contact us".tr,
+                        AssetsData.callIcon,
+                        () {
+                          Get.toNamed(AppRouter.conectUsPath);
+                        },
+                      ),
                       buildDivider(),
                       buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
                         showLogoutDialog(context);
