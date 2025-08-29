@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/main.dart';
+import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/my_profile_view.dart';
 
 class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomHomeAppBar({super.key});
@@ -47,15 +48,30 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         const Spacer(),
-        CircleAvatar(
-          radius: 24,
-          backgroundImage: CachedNetworkImageProvider(
-            profileImage,
-            errorListener: (exception) =>
-                print("Error loading image: $exception"),
+        InkWell(
+          onTap: () {
+            // Get.toNamed(AppRouter.profilePath);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return MyProfileView(
+                    isBack: true,
+                  );
+                },
+              ),
+            );
+          },
+          child: CircleAvatar(
+            radius: 24,
+            backgroundImage: CachedNetworkImageProvider(
+              profileImage,
+              errorListener: (exception) =>
+                  print("Error loading image: $exception"),
+            ),
+            onBackgroundImageError: (exception, stackTrace) =>
+                const Icon(Icons.person, color: Colors.white),
           ),
-          onBackgroundImageError: (exception, stackTrace) =>
-              const Icon(Icons.person, color: Colors.white),
         ),
       ],
     );

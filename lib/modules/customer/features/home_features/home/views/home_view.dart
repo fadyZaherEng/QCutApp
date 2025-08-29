@@ -8,6 +8,7 @@ import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_home_app_bar.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
@@ -71,17 +72,13 @@ class HomeView extends StatelessWidget {
                   SizedBox(
                     height: 12.h,
                   ),
-                  Row(
+                   Row(
                     children: [
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            Get.toNamed(AppRouter.citySelectionPath)
-                                ?.then((value) {
-                              print("Selected city: $value");
-                              if (value != null &&
-                                  value is String &&
-                                  value.isNotEmpty) {
+                            Get.toNamed(AppRouter.citySelectionPath)?.then((value) {
+                              if (value != null && value is String && value.isNotEmpty) {
                                 homeController.getBarbersCity(city: value);
                               } else {
                                 homeController.getBarbers();
@@ -89,23 +86,16 @@ class HomeView extends StatelessWidget {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.only(top: 9.h, left: 16.w),
-                            height: 52.h,
-                            child: TextFormField(
-                              enabled: false,
-                              style:
-                                  Styles.textStyleS14W400(color: Colors.black),
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
-                                ),
-                                fillColor: ColorsData.font,
-                                filled: true,
-                                hintStyle: Styles.textStyleS14W400(
-                                    color: ColorsData.cardStrock),
-                                hintText: "whatIsCity".tr,
-                              ),
+                            height: 42.h,
+                            decoration: BoxDecoration(
+                              color: ColorsData.font,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Text(
+                              "where".tr,
+                              style: Styles.textStyleS14W400(color: ColorsData.cardStrock),
                             ),
                           ),
                         ),
@@ -117,27 +107,23 @@ class HomeView extends StatelessWidget {
                             Get.toNamed(AppRouter.searchForTheTimePath);
                           },
                           child: Container(
-                            padding: EdgeInsets.only(top: 9.h, left: 16.w),
-                            height: 40.h,
+                            height: 42.h, // ✅ same as "where"
                             decoration: BoxDecoration(
-                                color: ColorsData.font,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                "when".tr,
-                                style: Styles.textStyleS14W400(
-                                    color: ColorsData.cardStrock),
-                              ),
+                              color: ColorsData.font,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Text(
+                              "when".tr,
+                              style: Styles.textStyleS14W400(color: ColorsData.cardStrock),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12.h),
-                  const Divider(color: ColorsData.cardStrock),
+
                   SizedBox(height: 12.h),
                   const NearbySalonsSection(),
                   SizedBox(height: 12.h),
@@ -149,4 +135,5 @@ class HomeView extends StatelessWidget {
       ),
     ));
   }
+
 }

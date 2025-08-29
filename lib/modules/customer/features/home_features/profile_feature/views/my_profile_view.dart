@@ -19,7 +19,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MyProfileView extends StatefulWidget {
-  const MyProfileView({super.key});
+  final bool isBack;
+
+  const MyProfileView({
+    super.key,
+    this.isBack = false,
+  });
 
   @override
   State<MyProfileView> createState() => _MyProfileViewState();
@@ -169,6 +174,36 @@ class _MyProfileViewState extends State<MyProfileView> {
                         ),
                       ),
                     ),
+                    if (widget.isBack)
+                      Positioned(
+                        top: 40.h,
+                        left: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? null
+                            : 16.w,
+                        right: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? 16.w
+                            : null,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              color: ColorsData.font.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: ColorsData.secondary,
+                              size: 20.sp,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
