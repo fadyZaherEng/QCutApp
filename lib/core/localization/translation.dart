@@ -351,6 +351,8 @@ class MyTranslation extends Translations {
           "Enter Min Time": "أدخل وقت البدء",
           "Enter Max Time": "أدخل وقت الانتهاء",
           "Confirm": "تأكيد",
+          "youHave": "لديك ",
+          "favoriteCuts": "قصات مفضلة",
           "No Working Days Set": "لم يتم تعيين اي ايام عمل",
           "You have not set any working days yet":
               "لم يتم تعيين اي ايام عمل بعد",
@@ -931,6 +933,8 @@ class MyTranslation extends Translations {
           "Change Your Picture": "Change Your Picture",
           "Instagram link is not set": "Instagram link is not set",
           "Error": "Error",
+          "youHave": "You have ",
+          "favoriteCuts": " favorite cuts",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1160,6 +1164,8 @@ class MyTranslation extends Translations {
           "youHaveFavoriteCuts": "יש לך {0} תספורות מועדפות",
           "addPhotos": "הוסף תמונות",
           "uploading": "מעלה...",
+          "youHave": "יש לך ",
+          "favoriteCuts": " תספורות מועדפות",
           "photoAddedToFavorites": "התמונה נוספה למועדפים",
           "failedToAddPhoto": "נכשל בהוספת תמונה למועדפים",
           "failedToUploadPhotos": "נכשל בהעלאת תמונות",

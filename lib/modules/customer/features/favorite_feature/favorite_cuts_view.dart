@@ -12,7 +12,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:q_cut/modules/customer/features/settings/chat_feature/logic/upload_media.dart';
-import 'package:q_cut/core/utils/app_router.dart';
 
 class FavoriteCutsView extends StatefulWidget {
   const FavoriteCutsView({super.key});
@@ -47,8 +46,10 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
         if (mounted) {
           setState(() {
             favoriteCuts = List<String>.from(data['favoriteCuts']);
+            favoriteCuts = List<String>.from(data['favoriteCuts']);
             isFavorite =
-                List.generate(favoriteCuts.length, (index) => RxBool(false));
+                List.generate(favoriteCuts.length, (index) => RxBool(true));
+
             isLoading = false;
           });
         }
@@ -143,195 +144,222 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
   }
 
   @override
-  void dispose() {
-    // Cancel any pending operations if needed
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 12.h),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  favoriteCuts.isEmpty
-                      ? "noFavoriteCutsYet".tr
-                      : "youHaveFavoriteCuts"
-                          .trParams({'0': favoriteCuts.length.toString()}),
-                  style: Styles.textStyleS14W400(),
-                ),
-                InkWell(
-                  onTap: isUploadingPhotos ? null : addPhotosToFavorites,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                    decoration: BoxDecoration(
-                      color: ColorsData.secondary,
-                      border: Border.all(color: ColorsData.primary, width: 1.w),
-                      borderRadius: BorderRadius.circular(8.r),
+    return RefreshIndicator(
+      onRefresh: fetchFavoriteCuts,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 12.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (favoriteCuts.isEmpty)
+                    Text(
+                      "noFavoriteCutsYet".tr,
+                      style: Styles.textStyleS14W400(),
                     ),
-                    child: Row(
+                  if (favoriteCuts.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        isUploadingPhotos
-                            ? SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child: SpinKitDoubleBounce(
-                                  color: ColorsData.primary,
-                                ),
-                              )
-                            : SvgPicture.asset(
-                                AssetsData.addImageIcon,
-                                width: 24.w,
-                                height: 24.h,
-                              ),
-                        SizedBox(width: 2.w),
                         Text(
-                          isUploadingPhotos ? "uploading".tr : "addPhotos".tr,
-                          style: Styles.textStyleS16W400(),
+                          "youHave".tr,
+                          style: Styles.textStyleS14W400(),
+                        ),
+                        Text(
+                          " ${favoriteCuts.length} ",
+                          style: Styles.textStyleS20W700(
+                              color: ColorsData.primary),
+                        ),
+                        Text(
+                          "favoriteCuts".tr,
+                          style: Styles.textStyleS14W400(),
                         ),
                       ],
                     ),
+                  InkWell(
+                    onTap: isUploadingPhotos ? null : addPhotosToFavorites,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      decoration: BoxDecoration(
+                        color: ColorsData.secondary,
+                        border:
+                            Border.all(color: ColorsData.primary, width: 1.w),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Row(
+                        children: [
+                          isUploadingPhotos
+                              ? SizedBox(
+                                  width: 24.w,
+                                  height: 24.h,
+                                  child: SpinKitDoubleBounce(
+                                    color: ColorsData.primary,
+                                  ),
+                                )
+                              : SvgPicture.asset(
+                                  AssetsData.addImageIcon,
+                                  width: 24.w,
+                                  height: 24.h,
+                                ),
+                          SizedBox(width: 2.w),
+                          Text(
+                            isUploadingPhotos ? "uploading".tr : "addPhotos".tr,
+                            style: Styles.textStyleS16W400(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        SliverFillRemaining(
-          child: isLoading
-              ? Center(child: SpinKitDoubleBounce(color: ColorsData.primary))
-              : favoriteCuts.isEmpty
-                  ? _buildEmptyState()
-                  : RefreshIndicator(
-                      onRefresh: fetchFavoriteCuts,
-                      child: GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding:
-                            EdgeInsets.only(top: 16.h, left: 16.w, right: 17.w),
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 110.w,
-                          crossAxisSpacing: 6.h,
-                          mainAxisSpacing: 9.w,
-                        ),
-                        itemBuilder: (context, index) => GestureDetector(
-                          onTap: () {
-                            // Open the image in full screen
-                            _showFullScreenImage(context, favoriteCuts[index]);
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  border: Border.all(
-                                    color: ColorsData.cardStrock,
-                                    width: 1.w,
+          SliverFillRemaining(
+            child: isLoading
+                ? Center(child: SpinKitDoubleBounce(color: ColorsData.primary))
+                : favoriteCuts.isEmpty
+                    ? _buildEmptyState()
+                    : RefreshIndicator(
+                        onRefresh: fetchFavoriteCuts,
+                        child: GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(
+                              top: 16.h, left: 16.w, right: 17.w),
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 110.w,
+                            crossAxisSpacing: 6.h,
+                            mainAxisSpacing: 9.w,
+                          ),
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              // Open the image in full screen
+                              _showFullScreenImage(
+                                context,
+                                favoriteCuts[index],
+                                index,
+                              );
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                    border: Border.all(
+                                      color: ColorsData.cardStrock,
+                                      width: 1.w,
+                                    ),
                                   ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  child: Image.network(
-                                    favoriteCuts[index],
-                                    width: 108.w,
-                                    height: 94.h,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Image.asset(
-                                      AssetsData.hairCutInGallery,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                    child: Image.network(
+                                      favoriteCuts[index],
                                       width: 108.w,
                                       height: 94.h,
                                       fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              // Favorite button at top right
-                              Positioned(
-                                top: 4.h,
-                                right: 12.w,
-                                child: Container(
-                                  width: 32.w,
-                                  height: 32.h,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    // color: Colors.black.withOpacity(0.3),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: SizedBox(
-                                      width: 32.w,
-                                      height: 32.h,
-                                      child: IconButton(
-                                        alignment: Alignment.center,
-                                        icon: Obx(() => Center(
-                                              child: Icon(
-                                                isFavorite[index].value
-                                                    ? Icons.favorite
-                                                    : Icons.favorite_border,
-                                                color: isFavorite[index].value
-                                                    ? Colors.red
-                                                    : Colors.white,
-                                                size: 20.sp,
-                                              ),
-                                            )),
-                                        onPressed: () async {
-                                          var response =
-                                              await NetworkAPICall().addData({
-                                            "photoUrl": favoriteCuts[index],
-                                          }, "${Variables.baseUrl}favoriteForUser/toggle-favorite-photo");
-
-                                          if (response.statusCode == 200) {
-                                            isFavorite[index].value =
-                                                !isFavorite[index].value;
-                                            // barber.isFavorite = isFavorite.value;
-                                          } else {
-                                            ShowToast.showError(
-                                                message: "Error occurred");
-                                          }
-                                        },
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Image.asset(
+                                        AssetsData.hairCutInGallery,
+                                        width: 108.w,
+                                        height: 94.h,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+
+                                // Favorite button at top right
+                                Positioned(
+                                  top: 4.h,
+                                  right: 12.w,
+                                  child: Container(
+                                    width: 32.w,
+                                    height: 32.h,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      // color: Colors.black.withOpacity(0.3),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 32.w,
+                                        height: 32.h,
+                                        child: IconButton(
+                                          alignment: Alignment.center,
+                                          icon: Obx(() => Center(
+                                                child: Icon(
+                                                  isFavorite[index].value
+                                                      ? Icons.favorite
+                                                      : Icons.favorite_border,
+                                                  color: isFavorite[index].value
+                                                      ? Colors.red
+                                                      : Colors.white,
+                                                  size: 20.sp,
+                                                ),
+                                              )),
+                                          onPressed: () async {
+                                            isLoading = true;
+                                            final response =
+                                                await NetworkAPICall().addData(
+                                              {"photoUrl": favoriteCuts[index]},
+                                              "${Variables.baseUrl}favoriteForUser/toggle-favorite-photo",
+                                            );
+                                            if (response.statusCode == 200) {
+                                              fetchFavoriteCuts();
+                                              setState(() {});
+                                            }
+
+                                            //
+                                            // if (response.statusCode == 200) {
+                                            isFavorite[index].value =
+                                                !isFavorite[index].value;
+                                            // barber.isFavorite = isFavorite.value;
+                                            // } else {
+                                            //   ShowToast.showError(
+                                            //       message: "Error occurred");
+                                            // }
+                                          },
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          itemCount: favoriteCuts.length,
                         ),
-                        itemCount: favoriteCuts.length,
                       ),
-                    ),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
-  void _showFullScreenImage(BuildContext context, String imageUrl) {
-    // Use the existing imageView route if available, otherwise use a local viewer
-    try {
-      Get.toNamed(
-        AppRouter.imageViewPath,
-        arguments: imageUrl,
-      );
-    } catch (e) {
-      // Fallback to local image viewer if route not found
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => _ImageViewScreen(imageUrl: imageUrl),
-        ),
-      );
-    }
-  }
+  // void _showFullScreenImage(BuildContext context, String imageUrl) {
+  //   // Use the existing imageView route if available, otherwise use a local viewer
+  //   try {
+  //     Get.toNamed(
+  //       AppRouter.imageViewPath,
+  //       arguments: imageUrl,
+  //     );
+  //   } catch (e) {
+  //     // Fallback to local image viewer if route not found
+  //     Navigator.of(context).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => _ImageViewScreen(imageUrl: imageUrl),
+  //       ),
+  //     );
+  //   }
+  // }
 
   Widget _buildEmptyState() {
     return Center(
@@ -397,6 +425,60 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showFullScreenImage(BuildContext context, String imageUrl, int index) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.7), // background blur/dim
+      builder: (_) {
+        return Center(
+          child: Stack(
+            children: [
+              Hero(
+                tag: imageUrl,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: Obx(() => IconButton(
+                      icon: Icon(
+                        isFavorite[index].value
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color:
+                            isFavorite[index].value ? Colors.red : Colors.white,
+                        size: 32,
+                      ),
+                      onPressed: () async {
+                        final response = await _apiCall.addData(
+                          {"photoUrl": favoriteCuts[index]},
+                          "${Variables.baseUrl}favoriteForUser/toggle-favorite-photo",
+                        );
+                        if (response.statusCode == 200) {
+                          isFavorite[index].value = !isFavorite[index].value;
+                          if (!isFavorite[index].value) {
+                            favoriteCuts.removeAt(index);
+                            isFavorite.removeAt(index);
+                            Navigator.pop(context); // close if removed
+                          }
+                          setState(() {});
+                        }
+                      },
+                    )),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
