@@ -90,7 +90,6 @@ class HistoryController extends GetxController {
           if (type == "currently") {
             currentAppointments.value = appointments;
             currentOriginal.value = appointments; // ✅ خزّن نسخة أصلية
-
           } else {
             previousAppointments.value = appointments;
             previousOriginal.value = appointments; // ✅ خزّن نسخة أصلية
@@ -107,6 +106,7 @@ class HistoryController extends GetxController {
       isLoading.value = false;
     }
   }
+
 // -------- فلترة المواعيد --------
   void filterAppointments(String value, {required bool isPrevious}) {
     if (isPrevious) {
@@ -114,7 +114,7 @@ class HistoryController extends GetxController {
         previousAppointments.value = previousOriginal.toList();
       } else {
         previousAppointments.value = previousOriginal
-            .where((a) => a.status?.toLowerCase() == value.toLowerCase())
+            .where((a) => a.status.toLowerCase() == value.toLowerCase())
             .toList();
       }
     } else {
@@ -122,11 +122,12 @@ class HistoryController extends GetxController {
         currentAppointments.value = currentOriginal.toList();
       } else {
         currentAppointments.value = currentOriginal
-            .where((a) => a.status?.toLowerCase() == value.toLowerCase())
+            .where((a) => a.status.toLowerCase() == value.toLowerCase())
             .toList();
       }
     }
   }
+
   void onTabChanged(int index) {
     selectedTabIndex.value = index;
     fetchAppointments(index == 0 ? "previous" : "currently");

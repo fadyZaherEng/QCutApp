@@ -49,7 +49,7 @@ class NearbySalonsSection extends StatelessWidget {
         SizedBox(
           height: 12.h,
         ),
-          CustomBarberListView(isRecommended: false),
+        CustomBarberListView(isRecommended: false),
       ],
     );
   }

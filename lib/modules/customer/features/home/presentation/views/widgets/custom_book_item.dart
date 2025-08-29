@@ -48,7 +48,7 @@ class CustomBookItem extends StatelessWidget {
           /// Right content
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal:  8.w),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -78,8 +78,8 @@ class CustomBookItem extends StatelessWidget {
                   _buildInfoRow(
                     "service".tr,
                     appointment?.services
-                        .map((s) => s.service.name)
-                        .join(", ") ??
+                            .map((s) => s.service.name)
+                            .join(", ") ??
                         "Hair style",
                   ),
                   _buildInfoRow(
@@ -94,7 +94,7 @@ class CustomBookItem extends StatelessWidget {
                     "bookingDay".tr,
                     appointment != null
                         ? DateFormat('EEE dd/MM/yyyy')
-                        .format(appointment!.startDate)
+                            .format(appointment!.startDate)
                         : "Not set".tr,
                   ),
                   _buildInfoRow(
@@ -125,7 +125,6 @@ class CustomBookItem extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-
               style: isHighlight
                   ? Styles.textStyleS13W600(color: ColorsData.primary)
                   : Styles.textStyleS13W400(),

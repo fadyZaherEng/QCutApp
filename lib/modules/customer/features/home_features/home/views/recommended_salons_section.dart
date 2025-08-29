@@ -46,7 +46,7 @@ class RecommendedSalonsSection extends StatelessWidget {
         SizedBox(
           height: 12.h,
         ),
-          CustomBarberListView(isRecommended: true),
+        CustomBarberListView(isRecommended: true),
       ],
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,16 +12,16 @@ class CustomBarberListView extends StatelessWidget {
   final List<Barber>? barbers;
   final bool isRecommended;
 
-    CustomBarberListView({
+  CustomBarberListView({
     super.key,
     this.barbers,
     this.isRecommended = false,
   });
-    List<Barber> displayBarbers = [];
+  List<Barber> displayBarbers = [];
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
-     displayBarbers = barbers ??
+    displayBarbers = barbers ??
         (isRecommended
             ? controller.recommendedBarbers
             : controller.nearbyBarbers);

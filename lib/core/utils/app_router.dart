@@ -192,7 +192,7 @@ abstract class AppRouter {
     ),
     GetPage(
       name: historyPath,
-      page: () =>   HistoryView(),
+      page: () => HistoryView(),
       binding: HistoryBinding(),
     ),
     GetPage(

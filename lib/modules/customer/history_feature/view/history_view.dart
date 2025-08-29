@@ -33,7 +33,7 @@ class HistoryView extends GetView<HistoryController> {
             Builder(
               builder: (context) {
                 final tabController = DefaultTabController.of(context);
-                if (tabController != null && tabController.index == 0) {
+                if (tabController.index == 0) {
                   return _buildFilterButton(
                     list: controller.previousAppointments,
                     originalList: previousOriginal,
@@ -83,7 +83,7 @@ class HistoryView extends GetView<HistoryController> {
       onSelected: (value) {
         controller.filterAppointments(
           value,
-          isPrevious: DefaultTabController.of(context)?.index == 0,
+          isPrevious: DefaultTabController.of(context).index == 0,
         );
       },
       itemBuilder: (context) => [
