@@ -16,6 +16,7 @@ void showWorkingDaysBottomSheet(BuildContext context) {
     builder: (context) => const WorkingDaysBottomSheet(),
   );
 }
+
 void showBWorkingDaysBottomSheet(
     BuildContext context, List<WorkingDay> workingDays) {
   if (workingDays.isEmpty) {

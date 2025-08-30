@@ -10,15 +10,17 @@ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/logic/appointment_controller.dart';
 
 class ChangeTimeBottomSheet extends StatefulWidget {
   final String? day;
   final String appointmentId;
 
-  const ChangeTimeBottomSheet(
-      {super.key, this.day, required this.appointmentId});
+  const ChangeTimeBottomSheet({
+    super.key,
+    this.day,
+    required this.appointmentId,
+  });
 
   @override
   State<ChangeTimeBottomSheet> createState() => _ChangeTimeBottomSheetState();
@@ -31,7 +33,7 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
   final NetworkAPICall _networkAPICall = NetworkAPICall();
   final controller = Get.put(BAppointmentController());
   List<String> timeSlots = [];
-  String? selectedTimeSlot; // ✅ instead of timeController
+  String? selectedTimeSlot;
 
   @override
   void initState() {
@@ -42,9 +44,11 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
 
   Future<void> _getInitialTimeSlots() async {
     timeSlots = await controller.getTimeSlotAppointment(
-        widget.appointmentId,
-        DateFormat('yyyy-MM-dd')
-            .format(dynamicDays[selectedDayIndex]["fullDate"]));
+      widget.appointmentId,
+      DateFormat('yyyy-MM-dd').format(
+        dynamicDays[selectedDayIndex]["fullDate"],
+      ),
+    );
     if (mounted) {
       setState(() {});
     }

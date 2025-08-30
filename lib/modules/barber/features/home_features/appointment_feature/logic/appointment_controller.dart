@@ -308,6 +308,7 @@ class BAppointmentController extends GetxController {
       return false;
     }
   }
+
   Future<List<String>> getTimeSlotAppointment(
       String appointmentId, String date) async {
     try {
