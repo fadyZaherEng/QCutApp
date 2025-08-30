@@ -324,68 +324,141 @@ class BStaticsViewBody extends StatelessWidget {
   Widget _buildBookingChart() {
     final StatisticsController controller = Get.find<StatisticsController>();
 
-    return Obx(() => controller.isMonthlyStatsLoading.value
-        ? Center(
-            child: SpinKitDoubleBounce(
-              color: ColorsData.primary,
-            ),
-          )
-        : Container(
-            height: 250.h,
-            padding: EdgeInsets.all(10.w),
-            decoration: BoxDecoration(
-              color: ColorsData.cardColor,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 8.w, bottom: 14.h),
-                  child: Text(
-                    'salonBookingRate'.tr,
-                    style: Styles.textStyleS14W600(color: Colors.white),
+    return Obx(
+      () => controller.isMonthlyStatsLoading.value
+          ? Center(
+              child: SpinKitDoubleBounce(
+                color: ColorsData.primary,
+              ),
+            )
+          : Container(
+              height: 250.h,
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                color: ColorsData.cardColor,
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.w, bottom: 14.h),
+                    child: Text(
+                      'salonBookingRate'.tr,
+                      style: Styles.textStyleS14W600(color: Colors.white),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.spaceAround,
-                      maxY: _calculateMaxY(controller),
-                      barTouchData: BarTouchData(
-                        enabled: true,
-                        touchTooltipData: BarTouchTooltipData(
-                          getTooltipColor: (value) {
-                            return ColorsData.primary.withOpacity(0.8);
-                          },
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            final months = [
-                              'Jan'.tr,
-                              'Feb'.tr,
-                              'Mar'.tr,
-                              'Aug'.tr,
-                              'Sep'.tr,
-                              'Oct'.tr,
-                              'Nov'.tr,
-                              'Dec'.tr
-                            ];
-                            return BarTooltipItem(
-                              '${months[group.x.toInt()]}: ${rod.toY.toInt()}',
-                              TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12.sp,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
+                  // Expanded(
+                  //   child: BarChart(
+                  //     BarChartData(
+                  //       alignment: BarChartAlignment.spaceAround,
+                  //       maxY: _calculateMaxY(controller),
+                  //       barTouchData: BarTouchData(
+                  //         enabled: true,
+                  //         touchTooltipData: BarTouchTooltipData(
+                  //           getTooltipColor: (value) {
+                  //             return ColorsData.primary.withOpacity(0.8);
+                  //           },
+                  //           getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                  //             final months = [
+                  //               'Jan'.tr,
+                  //               'Feb'.tr,
+                  //               'Mar'.tr,
+                  //               'Aug'.tr,
+                  //               'Sep'.tr,
+                  //               'Oct'.tr,
+                  //               'Nov'.tr,
+                  //               'Dec'.tr
+                  //             ];
+                  //             return BarTooltipItem(
+                  //               '${months[group.x.toInt()]}: ${rod.toY.toInt()}',
+                  //               TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 fontSize: 12.sp,
+                  //               ),
+                  //             );
+                  //           },
+                  //         ),
+                  //       ),
+                  //       titlesData: FlTitlesData(
+                  //         show: true,
+                  //         bottomTitles: AxisTitles(
+                  //           sideTitles: SideTitles(
+                  //             showTitles: true,
+                  //             getTitlesWidget: (value, meta) {
+                  //               final months = [
+                  //                 'Jan'.tr,
+                  //                 'Feb'.tr,
+                  //                 'Mar'.tr,
+                  //                 'Apr'.tr,
+                  //                 'May'.tr,
+                  //                 'Jun'.tr,
+                  //                 'Jul'.tr,
+                  //                 'Aug'.tr,
+                  //                 'Sep'.tr,
+                  //                 'Oct'.tr,
+                  //                 'Nov'.tr,
+                  //                 'Dec'.tr,
+                  //               ];
+                  //               return Padding(
+                  //                 padding: EdgeInsets.only(top: 8.h),
+                  //                 child: Text(
+                  //                   months[value.toInt()],
+                  //                   style: Styles.textStyleS10W400(
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             },
+                  //             reservedSize: 30,
+                  //           ),
+                  //         ),
+                  //         // Hide left titles
+                  //         leftTitles: const AxisTitles(
+                  //           sideTitles: SideTitles(showTitles: false),
+                  //         ),
+                  //         // Show right titles
+                  //         rightTitles: AxisTitles(
+                  //           sideTitles: SideTitles(
+                  //             showTitles: true,
+                  //             getTitlesWidget: (value, meta) {
+                  //               return Text(
+                  //                 value.toInt().toString(),
+                  //                 style: Styles.textStyleS10W400(
+                  //                   color: Colors.white,
+                  //                 ).copyWith(
+                  //                     fontSize: 9.sp,
+                  //                     fontWeight: FontWeight.w400),
+                  //                 textAlign: TextAlign.right,
+                  //               );
+                  //             },
+                  //             reservedSize: 40,
+                  //           ),
+                  //         ),
+                  //         topTitles: const AxisTitles(
+                  //           sideTitles: SideTitles(showTitles: false),
+                  //         ),
+                  //       ),
+                  //       borderData: FlBorderData(show: false),
+                  //       gridData: const FlGridData(show: false),
+                  //       barGroups: _createBarGroups(controller),
+                  //     ),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: _calculateMaxY(controller),
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipPadding: EdgeInsets.all(6.w),
+                            tooltipRoundedRadius: 8.r,
+                            getTooltipColor: (value) =>
+                                ColorsData.primary.withOpacity(0.9),
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
                               final months = [
                                 'Jan'.tr,
                                 'Feb'.tr,
@@ -400,53 +473,121 @@ class BStaticsViewBody extends StatelessWidget {
                                 'Nov'.tr,
                                 'Dec'.tr,
                               ];
-                              return Padding(
-                                padding: EdgeInsets.only(top: 8.h),
-                                child: Text(
-                                  months[value.toInt()],
-                                  style: Styles.textStyleS10W400(
-                                      color: Colors.white),
-                                ),
-                              );
-                            },
-                            reservedSize: 30,
-                          ),
-                        ),
-                        // Hide left titles
-                        leftTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        // Show right titles
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              return Text(
-                                value.toInt().toString(),
-                                style: Styles.textStyleS10W400(
+                              return BarTooltipItem(
+                                '${months[group.x.toInt()]}: ',
+                                TextStyle(
                                   color: Colors.white,
-                                ).copyWith(
-                                    fontSize: 9.sp,
-                                    fontWeight: FontWeight.w400),
-                                textAlign: TextAlign.right,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.sp,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: '${rod.toY.toInt()}',
+                                    style: const TextStyle(
+                                      color: Colors.yellow,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               );
                             },
-                            reservedSize: 40,
                           ),
                         ),
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              getTitlesWidget: (value, meta) {
+                                final months = [
+                                  'Jan'.tr,
+                                  'Feb'.tr,
+                                  'Mar'.tr,
+                                  'Apr'.tr,
+                                  'May'.tr,
+                                  'Jun'.tr,
+                                  'Jul'.tr,
+                                  'Aug'.tr,
+                                  'Sep'.tr,
+                                  'Oct'.tr,
+                                  'Nov'.tr,
+                                  'Dec'.tr,
+                                ];
+                                return Padding(
+                                  padding: EdgeInsets.only(top: 8.h),
+                                  child: Text(
+                                    months[value.toInt()],
+                                    style: Styles.textStyleS10W600(
+                                      color: Colors.white,
+                                    ).copyWith(fontSize: 5.sp),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          leftTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: (value, meta) => Text(
+                                value.toInt().toString(),
+                                style:
+                                    Styles.textStyleS10W400(color: Colors.white)
+                                        .copyWith(
+                                  fontSize: 9.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
+                        borderData: FlBorderData(show: false),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Colors.white.withOpacity(0.15),
+                            strokeWidth: 1,
+                            dashArray: [5, 5],
+                          ),
+                        ),
+                        barGroups: _createBarGroups(controller).map((group) {
+                          return BarChartGroupData(
+                            x: group.x,
+                            barRods: group.barRods.map((rod) {
+                              return BarChartRodData(
+                                toY: rod.toY,
+                                width: 14.w,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    ColorsData.primary,
+                                    ColorsData.primary.withOpacity(0.6)
+                                  ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(8.r),
+                              );
+                            }).toList(),
+                          );
+                        }).toList(),
                       ),
-                      borderData: FlBorderData(show: false),
-                      gridData: const FlGridData(show: false),
-                      barGroups: _createBarGroups(controller),
+                      swapAnimationDuration: const Duration(milliseconds: 600),
+                      swapAnimationCurve: Curves.easeOut,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ));
+    );
   }
 
   double _calculateMaxY(StatisticsController controller) {

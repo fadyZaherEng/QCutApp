@@ -308,6 +308,41 @@ class BAppointmentController extends GetxController {
       return false;
     }
   }
+  Future<List<String>> getTimeSlotAppointment(
+      String appointmentId, String date) async {
+    try {
+      final url =
+          "${Variables.APPOINTMENT}$appointmentId/available-times?date=$date";
+      print("➡️ Request: $url");
+
+      final response = await _apiCall.getData(url); // ✅ GET مش PUT
+      print("⬅️ Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+
+        if (responseBody['availableTimes'] != null) {
+          final times = (responseBody['availableTimes'] as List)
+              .map((e) => e['slot'].toString())
+              .toList();
+
+          return times; // ✅ رجع list من ال slots
+        } else {
+          ShowToast.showError(message: "No available times found");
+          return [];
+        }
+      } else {
+        final responseBody = json.decode(response.body);
+        final message =
+            responseBody['message'] ?? 'Failed to fetch available times';
+        // ShowToast.showError(message: message);
+        return [];
+      }
+    } catch (e) {
+      ShowToast.showError(message: 'Error occurred: $e');
+      return [];
+    }
+  }
 
   Future<bool> deleteAppointment(String appointmentId) async {
     try {

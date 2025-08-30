@@ -349,6 +349,7 @@ class MyTranslation extends Translations {
           "Enter Service Name": "أدخل اسم الخدمة",
           "Enter Service Price": "أدخل سعر الخدمة",
           "Enter Min Time": "أدخل وقت البدء",
+          "request from customer": "طلب من الزبون",
           "Enter Max Time": "أدخل وقت الانتهاء",
           "Confirm": "تأكيد",
           "youHave": "لديك ",
@@ -480,6 +481,7 @@ class MyTranslation extends Translations {
               "Select the days you want to take a break",
           "Exclusive Offer": "Exclusive Offer",
           "forgetPassword": "Forget password",
+          "request from customer": "Request from customer",
           "Free Trial": "Free Trial",
           "enterYourPhoneNumberToSendOTP":
               "Enter Your Phone number to send OTP verification.",
@@ -1076,6 +1078,7 @@ class MyTranslation extends Translations {
           "Are you sure the customer didn’t come?":
               "האם אתה בטוח שהלקוח לא הגיע?",
           "cash": "מזומן",
+          "request from customer": "בקשה מהלקוח",
           "selectDate": "בחר תאריך",
           "noDateSelected": "לא נבחר תאריך",
           "quantity": "כמות",

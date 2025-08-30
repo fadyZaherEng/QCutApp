@@ -10,4 +10,5 @@ class PrefKeys {
   static const String fullName = 'fullName';
   static const String phoneNumber = 'phoneNumber';
   static const String barberId = 'barberId';
+  static const String instagramLink = 'instagramLink';
 }

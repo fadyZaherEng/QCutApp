@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,7 @@ import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../home_features/profile_features/profile_display/logic/b_profile_controller.dart';
@@ -41,26 +43,8 @@ class BConnectUsViewBody extends StatelessWidget {
           ),
           InkWell(
             onTap: () async {
-              final instagramUrl =
-                  controller.profileData.value?.instagramPage.trim();
-
-              // تأكد من أن الرابط موجود ويبدأ بـ http أو https
-              if (instagramUrl != null &&
-                  instagramUrl.isNotEmpty &&
-                  Uri.tryParse(instagramUrl)?.hasAbsolutePath == true) {
-                try {
-                  final uri = Uri.parse(instagramUrl);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  } else {
-                    showErrorSnackBar(context, "Could not open Instagram link");
-                  }
-                } catch (e) {
-                  showErrorSnackBar(context, "Invalid Instagram link");
-                }
-              } else {
-                showErrorSnackBar(context, "Instagram link is not set");
-              }
+              print('Instagram link: $instagramLink');
+              openLink(instagramLink, context);
             },
             child: Row(
               children: [
@@ -110,6 +94,17 @@ class BConnectUsViewBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void openLink(String url, BuildContext context) async {
+    try {
+      await launch(url);
+    } catch (e) {
+      showErrorSnackBar(context, "Invalid Instagram link");
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   void showErrorSnackBar(BuildContext context, String message) {

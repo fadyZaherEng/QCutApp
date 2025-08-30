@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
 import '../../../statistics_feature/views/widgets/ChooseOffDaysBottomSheet.dart';
 import '../../profile_display/models/barber_profile_model.dart';
@@ -21,7 +22,6 @@ class _BEditProfileViewState extends State<BEditProfileView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // Make sure the controller is registered
     final controller = Get.isRegistered<BEditProfileController>()
@@ -49,7 +49,9 @@ class _BEditProfileViewState extends State<BEditProfileView> {
     final controller = Get.isRegistered<BEditProfileController>()
         ? Get.find<BEditProfileController>()
         : Get.put(BEditProfileController());
-
+    instagramLink = controller.instagramController.text.isNotEmpty
+        ? controller.instagramController.text
+        : "https://www.instagram.com/";
     return Scaffold(
       backgroundColor: ColorsData.secondary,
       appBar: AppBar(
@@ -102,7 +104,9 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     SizedBox(height: 16.h),
                     _buildInputField("Change Your Instagram Page".tr,
                         "Instagram".tr, controller.instagramController),
-                    _buildNoteText("It's not necessary if you haven't".tr),
+                    _buildNoteText(
+                      "It's not necessary if you haven't".tr,
+                    ),
 
                     SizedBox(height: 24.h),
                     Divider(thickness: 1.w, color: ColorsData.cardStrock),

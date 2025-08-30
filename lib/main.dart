@@ -17,6 +17,8 @@ String coverImage = SharedPref().getString(PrefKeys.coverPic) ??
 String fullName = SharedPref().getString(PrefKeys.fullName) ?? "Your Name";
 String phoneNumber = SharedPref().getString(PrefKeys.phoneNumber) ?? "300300";
 String currentBarberId = SharedPref().getString(PrefKeys.barberId) ?? "";
+String instagramLink = SharedPref().getString(PrefKeys.instagramLink) ??
+    "https://www.instagram.com/";
 
 void main() async {
   // Ensure Flutter is initialized

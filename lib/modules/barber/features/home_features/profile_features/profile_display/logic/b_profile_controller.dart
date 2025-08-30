@@ -90,6 +90,7 @@ class BProfileController extends GetxController {
         profileImage = profileResponse.data.profilePic;
         coverImage = profileResponse.data.coverPic;
         currentBarberId = profileResponse.data.id;
+        instagramLink = profileResponse.data.instagramPage;
         await SharedPref()
             .setString(PrefKeys.profilePic, profileResponse.data.profilePic);
         await SharedPref()
@@ -99,6 +100,8 @@ class BProfileController extends GetxController {
         //     .setString(PrefKeys.phoneNumber, profileResponse.data.phoneNumber);
         await SharedPref()
             .setString(PrefKeys.barberId, profileResponse.data.id);
+        await SharedPref().setString(
+            PrefKeys.instagramLink, profileResponse.data.instagramPage);
         if (profileData.value != null) {
           if (profileData.value!.barberShop.isEmpty) {
             profileData.value!.barberShop = 'My Barber Shop';

@@ -16,11 +16,10 @@ void showWorkingDaysBottomSheet(BuildContext context) {
     builder: (context) => const WorkingDaysBottomSheet(),
   );
 }
-
 void showBWorkingDaysBottomSheet(
     BuildContext context, List<WorkingDay> workingDays) {
   if (workingDays.isEmpty) {
-    Get.closeAllSnackbars(); // ✅ اقفل أي Snackbar قديم
+    Get.closeAllSnackbars();
     Get.snackbar(
       'No Working Days'.tr,
       'You have not set any working days yet'.tr,
@@ -29,6 +28,21 @@ void showBWorkingDaysBottomSheet(
     );
     return;
   }
+
+  // ✅ رتب الأيام من الأحد للسبت
+  final dayOrder = {
+    "Sunday": 0,
+    "Monday": 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6,
+  };
+
+  workingDays.sort((a, b) {
+    return (dayOrder[a.day] ?? 7).compareTo(dayOrder[b.day] ?? 7);
+  });
 
   showModalBottomSheet(
     context: context,
@@ -79,7 +93,7 @@ void showBWorkingDaysBottomSheet(
                     style: Styles.textStyleS14W700(color: ColorsData.secondary),
                   ),
                   Text(
-                    "${day.startHour} ${day.startHour > 12 ? "PM" : "AM"} - ${day.endHour - 12} ${day.endHour > 12 ? "PM" : "AM"}",
+                    "${day.startHour} ${day.startHour > 12 ? "PM" : "AM"} - ${day.endHour > 12 ? (day.endHour - 12) : day.endHour} ${day.endHour > 12 ? "PM" : "AM"}",
                     style: Styles.textStyleS14W400(color: ColorsData.thirty),
                   ),
                 ],
@@ -91,3 +105,78 @@ void showBWorkingDaysBottomSheet(
     ),
   );
 }
+
+// void showBWorkingDaysBottomSheet(
+//     BuildContext context, List<WorkingDay> workingDays) {
+//   if (workingDays.isEmpty) {
+//     Get.closeAllSnackbars(); // ✅ اقفل أي Snackbar قديم
+//     Get.snackbar(
+//       'No Working Days'.tr,
+//       'You have not set any working days yet'.tr,
+//       backgroundColor: Colors.blueGrey,
+//       colorText: Colors.white,
+//     );
+//     return;
+//   }
+//
+//   showModalBottomSheet(
+//     context: context,
+//     isScrollControlled: true,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+//     ),
+//     builder: (context) => Container(
+//       width: double.infinity,
+//       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+//       ),
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Center(
+//             child: Container(
+//               width: 40.w,
+//               height: 4.h,
+//               margin: EdgeInsets.only(bottom: 16.h),
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(2.r),
+//               ),
+//             ),
+//           ),
+//           GestureDetector(
+//             onTap: () => Get.back(),
+//             child: Icon(Icons.close, size: 24.sp),
+//           ),
+//           SizedBox(height: 16.h),
+//           Text(
+//             "workingDays".tr,
+//             style: Styles.textStyleS14W700(color: ColorsData.primary),
+//           ),
+//           SizedBox(height: 16.h),
+//           ...workingDays.map((day) {
+//             return Padding(
+//               padding: EdgeInsets.symmetric(vertical: 8.h),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     day.day.tr,
+//                     style: Styles.textStyleS14W700(color: ColorsData.secondary),
+//                   ),
+//                   Text(
+//                     "${day.startHour} ${day.startHour > 12 ? "PM" : "AM"} - ${day.endHour - 12} ${day.endHour > 12 ? "PM" : "AM"}",
+//                     style: Styles.textStyleS14W400(color: ColorsData.thirty),
+//                   ),
+//                 ],
+//               ),
+//             );
+//           }),
+//         ],
+//       ),
+//     ),
+//   );
+// }

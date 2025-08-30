@@ -11,6 +11,7 @@ import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/logic/appointment_controller.dart';
 
 class ChangeTimeBottomSheet extends StatefulWidget {
   final String? day;
@@ -25,15 +26,28 @@ class ChangeTimeBottomSheet extends StatefulWidget {
 
 class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
   int selectedDayIndex = 0;
-  final TextEditingController timeController = TextEditingController();
   late List<Map<String, dynamic>> dynamicDays;
   bool isLoading = false;
   final NetworkAPICall _networkAPICall = NetworkAPICall();
+  final controller = Get.put(BAppointmentController());
+  List<String> timeSlots = [];
+  String? selectedTimeSlot; // ✅ instead of timeController
 
   @override
   void initState() {
     super.initState();
     dynamicDays = _generateDynamicDays();
+    _getInitialTimeSlots();
+  }
+
+  Future<void> _getInitialTimeSlots() async {
+    timeSlots = await controller.getTimeSlotAppointment(
+        widget.appointmentId,
+        DateFormat('yyyy-MM-dd')
+            .format(dynamicDays[selectedDayIndex]["fullDate"]));
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   List<Map<String, dynamic>> _generateDynamicDays() {
@@ -65,8 +79,23 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
     return days;
   }
 
+  bool isClicked = true;
+
   Future<void> _sendTimeChangeRequest() async {
-    if (timeController.text.isEmpty) {
+    if (isClicked == false) {
+      return; // Prevent multiple clicks
+    }
+    if (isClicked) {
+      setState(() {
+        isClicked = false;
+      });
+      await Future.delayed(const Duration(seconds: 3), () {
+        setState(() {
+          isClicked = true;
+        });
+      });
+    }
+    if (selectedTimeSlot == null || selectedTimeSlot!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please select a time")),
       );
@@ -78,30 +107,25 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
     });
 
     try {
-      // Get the selected date
       DateTime selectedDate = dynamicDays[selectedDayIndex]["fullDate"];
 
-      // Parse the selected time
-      final timeString = timeController.text;
+      final timeString = selectedTimeSlot!;
       final timeParts = timeString.split(RegExp(r'[: ]'));
 
       int hour = int.parse(timeParts[0]);
       int minute = int.parse(timeParts[1]);
 
-      // Adjust for PM if needed
       if (timeParts.length > 2 &&
           timeParts[2].toUpperCase() == 'PM' &&
           hour < 12) {
         hour += 12;
       }
-      // Adjust for AM if needed (12 AM should be 0 hour)
       if (timeParts.length > 2 &&
           timeParts[2].toUpperCase() == 'AM' &&
           hour == 12) {
         hour = 0;
       }
 
-      // Create a DateTime with the correct date and time
       final combinedDateTime = DateTime(
         selectedDate.year,
         selectedDate.month,
@@ -110,10 +134,8 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
         minute,
       );
 
-      // Convert to milliseconds since epoch
       final startDateMillis = combinedDateTime.millisecondsSinceEpoch;
 
-      // Send the request using NetworkAPICall
       final requestData = {
         'appointment': widget.appointmentId,
         'startDate': startDateMillis,
@@ -123,25 +145,18 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
         requestData,
         '${Variables.baseUrl}request-change-appointment-time',
       );
-      // Check if the widget is still mounted before accessing context
+
       if (!mounted) return;
 
       final dynamic responseBody =
           response.body is String ? jsonDecode(response.body) : response.body;
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Success
         ShowToast.showSuccessSnackBar(
           message: responseBody['message'] ?? 'Request sent successfully',
         );
         Get.back();
-      } else if (response.statusCode == 400) {
-        // Bad request
-        ShowToast.showError(
-          message: responseBody['message'] ?? 'Bad request',
-        );
-        Get.back();
       } else {
-        // Other errors
         ShowToast.showError(
           message: responseBody['message'] ?? 'An error occurred',
         );
@@ -222,7 +237,13 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
               children: List.generate(dynamicDays.length, (index) {
                 bool isSelected = selectedDayIndex == index;
                 return GestureDetector(
-                  onTap: () => setState(() => selectedDayIndex = index),
+                  onTap: () async {
+                    setState(() => selectedDayIndex = index);
+                    timeSlots = await controller.getTimeSlotAppointment(
+                        widget.appointmentId,
+                        DateFormat('yyyy-MM-dd')
+                            .format(dynamicDays[selectedDayIndex]["fullDate"]));
+                  },
                   child: Container(
                     width: 60.w,
                     padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -258,6 +279,8 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
               }),
             ),
             SizedBox(height: 20.h),
+            //TODO ADD TIME SLOT WIDGET
+            SizedBox(height: 20.h),
 
             Row(
               children: [
@@ -272,34 +295,55 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  "time".tr,
+                  "timeSlots".tr,
                   style: Styles.textStyleS14W500(color: Colors.black),
                 ),
               ],
             ),
             SizedBox(height: 12.h),
 
-            InkWell(
-              onTap: () async {
-                TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (pickedTime != null) {
-                  setState(() {
-                    timeController.text = pickedTime.format(context);
-                  });
-                }
-              },
-              child: IgnorePointer(
-                child: CustomTextFormField(
-                  style: Styles.textStyleS14W400(color: ColorsData.secondary),
-                  fillColor: ColorsData.font,
-                  controller: timeController,
-                  hintText: "When?".tr,
-                ),
-              ),
-            ),
+            timeSlots.isEmpty
+                ? Center(
+                    child: Text(
+                      "noAvailableTimeSlots".tr,
+                      style: Styles.textStyleS14W400(color: Colors.grey),
+                    ),
+                  )
+                : Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: List.generate(timeSlots.length, (index) {
+                      final slot = timeSlots[index];
+                      final isSelected = selectedTimeSlot == slot;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedTimeSlot = slot;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.h, horizontal: 16.w),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? const Color(0xFFC49A58)
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            slot,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+
             SizedBox(height: 20.h),
 
             SizedBox(
@@ -316,12 +360,12 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 child: isLoading
                     ? const SpinKitDoubleBounce(color: ColorsData.primary)
                     : Text(
-                        "sendToCustomer".tr,
+                        "request from customer".tr,
                         style: Styles.textStyleS16W600(color: Colors.white),
                       ),
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 48.h),
           ],
         ),
       ),
