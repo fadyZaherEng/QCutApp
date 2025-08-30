@@ -246,8 +246,8 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
   Future<Barber?> getBarberById(String barberId) async {
     try {
       print("Fetching barber with ID: ${Variables.BARBER}$currentBarberId");
-      final response = await _apiCall
-          .getData("${Variables.BARBER}$currentBarberId"); // ✅ ضيف /
+      final response =
+          await _apiCall.getData("${Variables.BARBER}$currentBarberId");
       if (response.statusCode == 200) {
         print("Barber response: ${response.body}");
         final data = json.decode(response.body);
@@ -294,9 +294,7 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
           : const SizedBox.shrink()),
       fillColor: Colors.white,
       controller: controller.searchController,
-      // Use directly without .value
       readOnly: true,
-      // Make it read-only as we're using a date picker
       onTap: () => controller.showDatePickerAndSearch(Get.context!),
     );
   }
@@ -304,7 +302,6 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
   void updateReportCounts(Barber barber, List<Appointment> allAppointments) {
     HomeController homeController = Get.find<HomeController>();
 
-    final today = DateTime.now();
     final isWorking = homeController.isBarberWorkingToday(barber);
 
     final previous = homeController.countPreviousAppointments(allAppointments);
@@ -330,21 +327,34 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
       children: [
         Row(
           children: [
-            SvgPicture.asset(AssetsData.calendarIcon,
-                height: 16, color: ColorsData.primary),
+            SvgPicture.asset(
+              AssetsData.calendarIcon,
+              height: 16,
+              color: ColorsData.primary,
+            ),
             const SizedBox(width: 6),
-            Text('allReports'.tr,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp)),
+            Text(
+              'allReports'.tr,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp),
+            ),
             const Spacer(),
             TextButton.icon(
               onPressed: () {},
-              icon:
-                  const Icon(Icons.download, color: ColorsData.font, size: 16),
-              label: Text('download'.tr,
-                  style: TextStyle(color: ColorsData.font, fontSize: 12.sp)),
+              icon: const Icon(
+                Icons.download,
+                color: ColorsData.font,
+                size: 16,
+              ),
+              label: Text(
+                'download'.tr,
+                style: TextStyle(
+                  color: ColorsData.font,
+                  fontSize: 12.sp,
+                ),
+              ),
             ),
           ],
         ),
@@ -356,7 +366,10 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
                 : 'hereYouCanSeeAllYourBookingReports'.tr;
             return Text(
               dateText,
-              style: TextStyle(color: Colors.grey, fontSize: 12.sp),
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.sp,
+              ),
             );
           },
         ),
@@ -390,11 +403,14 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
     return Expanded(
       flex: flex,
       child: Center(
-        child: Text(text,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 9.sp)),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 9.sp,
+          ),
+        ),
       ),
     );
   }
@@ -404,8 +420,13 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
       return Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
-          child: Text('noReportsFound'.tr,
-              style: TextStyle(color: Colors.white, fontSize: 14.sp)),
+          child: Text(
+            'noReportsFound'.tr,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14.sp,
+            ),
+          ),
         ),
       );
     }
@@ -432,8 +453,6 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
           _tableCell('${bill.serviceCount} ${'services'.tr.toLowerCase()}',
               flex: 2),
           _tableCell('\$${bill.price.toStringAsFixed(0)}'),
-          // _tableCell('\$${bill.taxAmount.toStringAsFixed(0)}', flex: 2),
-          // _tableCell('\$${bill.priceAfterTax.toStringAsFixed(0)}'),
         ],
       ),
     );
@@ -443,8 +462,14 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
     return Expanded(
       flex: flex,
       child: Center(
-          child: Text(text,
-              style: TextStyle(fontSize: 9.sp, color: Colors.black))),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 9.sp,
+            color: Colors.black,
+          ),
+        ),
+      ),
     );
   }
 
@@ -588,8 +613,10 @@ class ServiceItem {
 class PreviousAppointmentsScreen extends StatelessWidget {
   final Future<List<AppointmentPrvious>> appointmentsFuture;
 
-  const PreviousAppointmentsScreen(
-      {super.key, required this.appointmentsFuture});
+  const PreviousAppointmentsScreen({
+    super.key,
+    required this.appointmentsFuture,
+  });
 
   @override
   Widget build(BuildContext context) {
