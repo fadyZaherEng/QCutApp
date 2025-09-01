@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,10 +15,11 @@ import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/
 
 import '../../../../../../../core/utils/app_router.dart';
 import '../../../../../../../core/utils/network/network_helper.dart';
+bool isClick=true;
 
 class BookAppointmentWithPaymentMethodsViewBody
     extends GetView<SelectAppointmentTimeController> {
-  const BookAppointmentWithPaymentMethodsViewBody({super.key});
+    const BookAppointmentWithPaymentMethodsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,27 +111,38 @@ class BookAppointmentWithPaymentMethodsViewBody
             CustomBigButton(
               textData: "confirm".tr,
               onPressed: () async {
-                // Format the pay object to match the exact required structure
-                final Map<String, dynamic> formattedPayload = {
-                  "barber": pay["barber"],
-                  "service": pay["service"],
-                  "startDate": pay["startDate"],
-                  "paymentMethod": "cash" // Ensure it's a string without quotes
-                };
+                if(isClick) {
+                  isClick=false;
 
-                final NetworkAPICall apiCall = NetworkAPICall();
-                final response = await apiCall.addData(
-                    formattedPayload, Variables.APPOINTMENT);
+                  // Format the pay object to match the exact required structure
+                  final Map<String, dynamic> formattedPayload = {
+                    "barber": pay["barber"],
+                    "service": pay["service"],
+                    "startDate": pay["startDate"],
+                    "paymentMethod": "cash"
+                    // Ensure it's a string without quotes
+                  };
 
-                print("API Request Payload: $formattedPayload");
-                print("API Response: ${response.body}");
+                  final NetworkAPICall apiCall = NetworkAPICall();
+                  final response = await apiCall.addData(
+                      formattedPayload, Variables.APPOINTMENT);
 
-                if (response.statusCode == 200) {
-                  ShowToast.showSuccessSnackBar(
-                      message: "appointmentBookedSuccessfully".tr);
-                  Get.offAllNamed(AppRouter.bottomNavigationBar);
-                } else {
-                  // ShowToast.showError(message: "failedToBookAppointment".tr);
+                  print("API Request Payload: $formattedPayload");
+                  print("API Response: ${response.body}");
+
+                  if (response.statusCode == 200) {
+                    ShowToast.showSuccessSnackBar(
+                        message: "appointmentBookedSuccessfully".tr);
+                    Get.offAllNamed(AppRouter.bottomNavigationBar);
+                  } else {
+                    // ShowToast.showError(message: "failedToBookAppointment".tr);
+                    // ShowToast.showError(message: response.body["message"]);
+
+                    final data = jsonDecode(response.body); // ده اللي يبقى Map
+                    ShowToast.showError(message: data["message"]);
+                  }
+                  await Future.delayed(const Duration(seconds: 2));
+                  isClick=true;
                 }
               },
             ),
