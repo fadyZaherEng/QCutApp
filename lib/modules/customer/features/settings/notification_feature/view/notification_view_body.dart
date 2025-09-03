@@ -69,14 +69,18 @@ class NotificationViewBody extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () async => viewModel.refreshNotifications(),
         child: ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
           itemCount: viewModel.displayedNotifications.length,
-          separatorBuilder: (context, index) => SizedBox(height: 16.h),
+          separatorBuilder: (context, index) =>
+              index != viewModel.displayedNotifications.length - 1
+                  ? SizedBox(height: 16.h)
+                  : SizedBox(height: 32.h),
           itemBuilder: (context, index) {
             final notification = viewModel.displayedNotifications[index];
             return NotificationCard(
               notification: notification,
               viewModel: viewModel,
+              isLast: index == viewModel.displayedNotifications.length - 1,
             );
           },
         ),
@@ -88,75 +92,102 @@ class NotificationViewBody extends StatelessWidget {
 class NotificationCard extends StatelessWidget {
   final dynamic notification;
   final NotificationViewModel viewModel;
+  final bool isLast;
 
   const NotificationCard({
     super.key,
     required this.notification,
     required this.viewModel,
+    this.isLast = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.r),
-        color: ColorsData.cardColor,
-      ),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.r),
+            color: ColorsData.cardColor,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 32.r,
-                foregroundImage: CachedNetworkImageProvider(
-                  viewModel.getProfileImage(notification),
-                ),
-                backgroundColor: ColorsData.secondary,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 32.r,
+                    foregroundImage: CachedNetworkImageProvider(
+                      viewModel.getProfileImage(notification),
+                    ),
+                    backgroundColor: ColorsData.secondary,
+                  ),
+                  SizedBox(width: 7.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          viewModel.getNotificationTitle(notification),
+                          style: Styles.textStyleS14W700(),
+                        ),
+                        Text(
+                          viewModel.getNotificationMessage(notification),
+                          style: Styles.textStyleS13W400(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(width: 7.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      viewModel.getNotificationTitle(notification),
-                      style: Styles.textStyleS14W700(),
-                    ),
-                    Text(
-                      viewModel.getNotificationMessage(notification),
-                      style: Styles.textStyleS13W400(),
-                    ),
-                  ],
+              // Only show action buttons if notification has a process
+              if (viewModel.hasActions(notification))
+                Padding(
+                  padding: EdgeInsets.only(top: 16.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CustomButton(
+                        width: 138.w,
+                        text: "Yes".tr,
+                        onPressed: () => viewModel
+                            .handleAppointmentConfirmation(notification, true),
+                      ),
+                      CustomButton(
+                        backgroundColor: ColorsData.cardStrock,
+                        width: 138.w,
+                        text: "No".tr,
+                        onPressed: () => viewModel
+                            .handleAppointmentConfirmation(notification, false),
+                      ),
+                    ],
+                  ),
+                ),
+
+              SizedBox(height: 4.h),
+              // Time ago
+              Align(
+                alignment: Get.locale!.languageCode == 'ar'
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: Text(
+                  viewModel.getTimeAgo(notification),
+                  style: Styles.textStyleS13W400(
+                    color: ColorsData.primary,
+                  ),
                 ),
               ),
             ],
           ),
-          // Only show action buttons if notification has a process
-          if (viewModel.hasActions(notification))
-            Padding(
-              padding: EdgeInsets.only(top: 16.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomButton(
-                    width: 138.w,
-                    text: "Yes".tr,
-                    onPressed: () => viewModel.handleAppointmentConfirmation(
-                        notification, true),
-                  ),
-                  CustomButton(
-                    backgroundColor: ColorsData.cardStrock,
-                    width: 138.w,
-                    text: "No".tr,
-                    onPressed: () => viewModel.handleAppointmentConfirmation(
-                        notification, false),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
+        ),
+        if (isLast) SizedBox(height: 48.h),
+      ],
     );
   }
 }

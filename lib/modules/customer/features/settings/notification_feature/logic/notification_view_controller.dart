@@ -103,4 +103,22 @@ class NotificationViewModel extends GetxController {
 
     refreshNotifications();
   }
+
+  String getTimeAgo(notification) {
+    final now = DateTime.now();
+    final difference = now.difference(notification.createdAt);
+
+    if (difference.inSeconds < 60) {
+      return 'just now'.tr;
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} ${'minutes ago'.tr}';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ${'hours ago'.tr}';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} ${'days ago'.tr}';
+    } else {
+      //date time format as dd/mm/yyyy hh:mm
+      return '${notification.createdAt.day}/${notification.createdAt.month}/${notification.createdAt.year} ${notification.createdAt.hour}:${notification.createdAt.minute}';
+    }
+  }
 }
