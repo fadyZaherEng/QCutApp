@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
@@ -55,7 +57,19 @@ class NotificationViewModel extends GetxController {
   }
 
   String getNotificationMessage(NotificationModel notification) {
-    return notification.message;
+    //check for language
+    Locale currentLocale = Get.locale ?? Locale('en');
+    print("Current Locale: ${currentLocale.languageCode}");
+    if (currentLocale.languageCode == 'ar' &&
+        notification.messageAr.isNotEmpty) {
+      return notification.messageAr;
+    } else if (currentLocale.languageCode == 'he' &&
+        notification.messageHe.isNotEmpty) {
+      return notification.messageHe;
+    }
+    return notification.messageEn.isNotEmpty
+        ? notification.messageEn
+        : notification.message;
   }
 
   String getProfileImage(NotificationModel notification) {
