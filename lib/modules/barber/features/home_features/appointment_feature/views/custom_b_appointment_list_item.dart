@@ -27,6 +27,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
   final double finalPrice;
   final Function()? onDeleteTap;
   final BAppointmentController controller;
+  final List<ServiceItem> services;
 
   final BarberAppointment appointment;
 
@@ -47,6 +48,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
     this.onDeleteTap,
     required this.controller,
     required this.appointment,
+    required this.services,
   });
 
   @override
@@ -219,7 +221,12 @@ class CustomBAppointmentListItem extends StatelessWidget {
                 child: _customButton(
                   "change".tr,
                   ColorsData.primary,
-                  () => showChangeTimeBottomSheet(context, bookingDay, id),
+                  () => showChangeTimeBottomSheet(
+                    context,
+                    bookingDay,
+                    id,
+                    services,
+                  ),
                 ),
               ),
             ],

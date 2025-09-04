@@ -137,8 +137,7 @@ class ServiceItem {
     required this.price,
     required this.id,
   });
-
-  factory ServiceItem.fromJson(Map<String, dynamic> json) {
+   factory ServiceItem.fromJson(Map<String, dynamic> json) {
     return ServiceItem(
       service: json['service'] is Map
           ? Service.fromJson(json['service'])
@@ -148,6 +147,14 @@ class ServiceItem {
       id: json['_id'] ?? '',
     );
   }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     "service": service.toJson(),
+  //     "numberOfUsers": numberOfUsers,
+  //     "price": price,
+  //     "_id": id,
+  //   };
+  // }
 }
 
 class Service {

@@ -10,16 +10,20 @@ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/logic/appointment_controller.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 
 class ChangeTimeBottomSheet extends StatefulWidget {
   final String? day;
   final String appointmentId;
+  final List<ServiceItem> services;
 
   const ChangeTimeBottomSheet({
     super.key,
     this.day,
     required this.appointmentId,
+    required this.services,
   });
 
   @override
@@ -44,10 +48,12 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
 
   Future<void> _getInitialTimeSlots() async {
     timeSlots = await controller.getTimeSlotAppointment(
-      widget.appointmentId,
-      DateFormat('yyyy-MM-dd').format(
-        dynamicDays[selectedDayIndex]["fullDate"],
-      ),
+      currentBarberId,
+      DateTime.parse(DateFormat('yyyy-MM-dd')
+              .format(dynamicDays[selectedDayIndex]["fullDate"]))
+          .millisecondsSinceEpoch
+          .toString(),
+      widget.services,
     );
     if (mounted) {
       setState(() {});
@@ -86,29 +92,23 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
   bool isClicked = true;
 
   Future<void> _sendTimeChangeRequest() async {
-    if (isClicked == false) {
-      return; // Prevent multiple clicks
-    }
-    if (isClicked) {
-      setState(() {
-        isClicked = false;
-      });
-      await Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          isClicked = true;
-        });
-      });
-    }
+    if (!isClicked) return; // Prevent multiple clicks
+
+    setState(() => isClicked = false);
+
     if (selectedTimeSlot == null || selectedTimeSlot!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please select a time")),
       );
+      if (mounted) {
+        setState(() => isClicked = true);
+      }
       return;
     }
 
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() => isLoading = true);
+    }
 
     try {
       DateTime selectedDate = dynamicDays[selectedDayIndex]["fullDate"];
@@ -152,24 +152,33 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
 
       if (!mounted) return;
 
-      final dynamic responseBody =
-          response.body is String ? jsonDecode(response.body) : response.body;
+      dynamic responseBody;
+      try {
+        responseBody = jsonDecode(response.body);
+      } catch (e) {
+        responseBody = {"message": response.body};
+      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         ShowToast.showSuccessSnackBar(
-          message: responseBody['message'] ?? 'Request sent successfully',
+          message: "Request sent successfully".tr,
         );
         Get.back();
       } else {
-        ShowToast.showError(
-          message: responseBody['message'] ?? 'An error occurred',
-        );
+        // ShowToast.showError(
+        //   message: responseBody['message'] ?? 'An error occurred',
+        // );
         Get.back();
       }
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
+
+    await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {
+      setState(() => isClicked = true);
     }
   }
 
@@ -242,11 +251,29 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 bool isSelected = selectedDayIndex == index;
                 return GestureDetector(
                   onTap: () async {
-                    setState(() => selectedDayIndex = index);
-                    timeSlots = await controller.getTimeSlotAppointment(
-                        widget.appointmentId,
-                        DateFormat('yyyy-MM-dd')
-                            .format(dynamicDays[selectedDayIndex]["fullDate"]));
+
+                    setState(() {
+                      selectedDayIndex = index;
+                      timeSlots = [];
+                      selectedTimeSlot = null;
+                      isLoading = true;
+                    });
+
+                    final newSlots = await controller.getTimeSlotAppointment(
+                      currentBarberId,
+                      DateTime.parse(DateFormat('yyyy-MM-dd').format(
+                              dynamicDays[selectedDayIndex]["fullDate"]))
+                          .millisecondsSinceEpoch
+                          .toString(),
+                      widget.services,
+                    );
+
+                    if (mounted) {
+                      setState(() {
+                        timeSlots = newSlots;
+                        isLoading = false;
+                      });
+                    }
                   },
                   child: Container(
                     width: 60.w,
@@ -285,37 +312,52 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
             SizedBox(height: 20.h),
             //TODO ADD TIME SLOT WIDGET
             SizedBox(height: 20.h),
-
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset(
-                  height: 20.h,
-                  width: 20.w,
-                  AssetsData.clockIcon,
-                  colorFilter: const ColorFilter.mode(
-                    ColorsData.primary,
-                    BlendMode.srcIn,
-                  ),
+                // العنوان مع الأيقونة
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      AssetsData.clockIcon,
+                      height: 20.h,
+                      width: 20.w,
+                      colorFilter: const ColorFilter.mode(
+                        ColorsData.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "timeSlots".tr,
+                      style: Styles.textStyleS14W500(color: Colors.black),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 8.w),
-                Text(
-                  "timeSlots".tr,
-                  style: Styles.textStyleS14W500(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.h),
-
-            timeSlots.isEmpty
-                ? Center(
+                SizedBox(height: 12.h),
+                if (isLoading)
+                  Center(
+                    child: SizedBox(
+                      width: 24.w,
+                      height: 24.w,
+                      child: SpinKitDoubleBounce(
+                        color: ColorsData.primary,
+                      ),
+                    ),
+                  )
+                else
+                // لو مفيش مواعيد
+                if (timeSlots.isEmpty)
+                  Center(
                     child: Text(
                       "noAvailableTimeSlots".tr,
                       style: Styles.textStyleS14W400(color: Colors.grey),
                     ),
                   )
-                : Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
+                else
+                  Wrap(
+                    spacing: 4.w,
+                    runSpacing: 4.h,
                     children: List.generate(timeSlots.length, (index) {
                       final slot = timeSlots[index];
                       final isSelected = selectedTimeSlot == slot;
@@ -326,28 +368,49 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                             selectedTimeSlot = slot;
                           });
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width:
+                              (MediaQuery.of(context).size.width - (12.w * 4)) /
+                                  3,
                           padding: EdgeInsets.symmetric(
-                              vertical: 10.h, horizontal: 16.w),
+                              vertical: 8.h, horizontal: 6.w),
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? const Color(0xFFC49A58)
-                                : Colors.grey[200],
-                            borderRadius: BorderRadius.circular(12),
+                            color:
+                                isSelected ? ColorsData.primary : Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: isSelected
+                                  ? ColorsData.primary
+                                  : Colors.grey[300]!,
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              if (isSelected)
+                                BoxShadow(
+                                  color: ColorsData.primary.withOpacity(0.3),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                            ],
                           ),
-                          child: Text(
-                            slot,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                              color: isSelected ? Colors.white : Colors.black,
+                          child: Center(
+                            child: Text(
+                              slot,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
                             ),
                           ),
                         ),
                       );
                     }),
-                  ),
-
+                  )
+              ],
+            ),
             SizedBox(height: 20.h),
 
             SizedBox(
@@ -360,9 +423,20 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: isLoading ? null : _sendTimeChangeRequest,
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        await _sendTimeChangeRequest();
+                      },
                 child: isLoading
-                    ? const SpinKitDoubleBounce(color: ColorsData.primary)
+                    ? SizedBox(
+                        width: 24.w,
+                        height: 24.w,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
                     : Text(
                         "request from customer".tr,
                         style: Styles.textStyleS16W600(color: Colors.white),
@@ -378,7 +452,11 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
 }
 
 void showChangeTimeBottomSheet(
-    BuildContext context, String day, String appointmentId) {
+  BuildContext context,
+  String day,
+  String appointmentId,
+  List<ServiceItem> services,
+) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -388,6 +466,7 @@ void showChangeTimeBottomSheet(
     builder: (context) => ChangeTimeBottomSheet(
       day: day,
       appointmentId: appointmentId,
+      services: services,
     ),
   );
 }

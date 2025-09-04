@@ -274,9 +274,15 @@ class SelectAppointmentTimeController extends GetxController {
         "service": selectedServices,
         "onHolding": ishold
       };
+      print("Fetching time slots with payload: $requestBody");
 
       final response = await _apiCall.addData(
           requestBody, "${Variables.baseUrl}appointment/free-slots");
+      print("Time slots API Response status code: ${response.statusCode}");
+      print("Time slots API Response body: ${response.body}");
+      print("Time slots API Response type: ${response.body.runtimeType}");
+      //url
+      print("Time slots API URL: ${response.request.url}");
 
       if (response.statusCode == 200) {
         var data;
@@ -381,7 +387,8 @@ class SelectAppointmentTimeController extends GetxController {
         if (startTime.day == day) {
           // Create a TimeSlot
           final slot = TimeSlot(
-            id: slots.length + 1, // Add an ID for uniqueness
+            id: slots.length + 1,
+            // Add an ID for uniqueness
             dayNumber: startTime.day,
             dayName: _getDayName(startTime.weekday),
             startTime: startTime,

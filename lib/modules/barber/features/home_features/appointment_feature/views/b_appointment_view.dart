@@ -163,6 +163,7 @@ class BAppointmentView extends StatelessWidget {
                               type: appointment.status,
                               price: appointment.price,
                               finalPrice: appointment.price,
+                              services: appointment.services,
                             ),
                           );
                         },

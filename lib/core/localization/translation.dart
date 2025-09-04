@@ -23,6 +23,7 @@ class MyTranslation extends Translations {
           "forgetPassword": "نسيت كلمة المرور",
           "enterYourPhoneNumberToSendOTP": "أدخل رقم هاتفك لإرسال رمز التحقق",
           "enterYourPhoneNumber": "أدخل رقم هاتفك",
+          "Request sent successfully": "تم إرسال الطلب بنجاح",
           "sendOTPVerification": "إرسال رمز التحقق",
           "otpVerification": "التحقق من الرمز",
           "enterOTPVerificationThatSendToYourNumber":
@@ -529,6 +530,7 @@ class MyTranslation extends Translations {
           "youAre": "You Are : ",
           "barber": "Barber",
           "Accept Offer": "Accept Offer",
+          "Request sent successfully": "Request sent successfully",
           "customer": "Customer",
           "Complete Profile": "Complete Profile",
           "nearbySalons": "Nearby Salons",
@@ -1337,6 +1339,7 @@ class MyTranslation extends Translations {
           "City": "עיר",
           "Bank Account": "חשבון בנק",
           "Instagram": "אינסטגרם",
+          "Request sent successfully": "הבקשה נשלחה בהצלחה",
           "Select off days": "בחר ימי חופשה",
           "From": "מ",
           "To": "עד",

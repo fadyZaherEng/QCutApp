@@ -148,6 +148,7 @@ class AuthController extends GetxController {
         isLoginSuccess.value = true;
         print("=============== ${loginResponse.value!.id} ==================");
         await SharedPref().setString(PrefKeys.id, loginResponse.value!.id);
+        await SharedPref().setString(PrefKeys.barberId, loginResponse.value!.id);
         await SharedPref()
             .setString(PrefKeys.accessToken, loginResponse.value!.accessToken);
         await SharedPref()
