@@ -1,3 +1,5 @@
+import 'package:q_cut/modules/barber/features/home_features/profile_features/models/barber_profile_model.dart';
+
 class BarberProfileResponse {
   final BarberProfileData data;
 
@@ -20,13 +22,14 @@ class BarberProfileData {
   String userType;
   String status;
   List<String> offDay;
-  List<dynamic> barberShopLocation;
-  List<WorkingDay> workingDays;
+   List<WorkingDay> workingDays;
   List<dynamic> breakTime;
   List<dynamic> favorites;
   String barberShop;
   String bankAccountNumber;
   String instagramPage;
+    BarberShopLocation barberShopLocation;
+
 
   BarberProfileData({
     required this.id,
@@ -39,13 +42,13 @@ class BarberProfileData {
     required this.userType,
     required this.status,
     required this.offDay,
-    required this.barberShopLocation,
-    required this.workingDays,
+     required this.workingDays,
     required this.breakTime,
     required this.favorites,
     required this.barberShop,
     required this.bankAccountNumber,
     required this.instagramPage,
+    required this.barberShopLocation,
   });
 
   factory BarberProfileData.fromJson(Map<String, dynamic> json) {
@@ -80,8 +83,8 @@ class BarberProfileData {
       status: json['status'] ?? '',
       offDay: offDay,
       barberShopLocation: json['barberShopLocation'] != null
-          ? List<dynamic>.from(json['barberShopLocation'].map((x) => x))
-          : [],
+          ? BarberShopLocation.fromJson(json['barberShopLocation'])
+          : BarberShopLocation(type: 'Point', coordinates: [0.0, 0.0]),
       workingDays: workingDays,
       breakTime: json['breakTime'] != null
           ? List<dynamic>.from(json['breakTime'].map((x) => x))

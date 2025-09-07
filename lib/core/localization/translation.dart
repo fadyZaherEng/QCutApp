@@ -408,6 +408,7 @@ class MyTranslation extends Translations {
           "Select days when you are not working": "اختر ايام العطل",
           "All days are already set as working days.":
               "جميع الايام موجودة بالفعل كايام عمل.",
+          "Location updated successfully": "تم تحديث الموقع بنجاح",
           "Payment Time line": "وقت الدفع",
           "Valid Period": "الفترة الصالحة",
           "Pay to QCUT": "دفع الى QCUT",
@@ -761,6 +762,7 @@ class MyTranslation extends Translations {
           "process": "Process",
           'today': "Today",
           'thisWeek': "This week",
+          "Location updated successfully": "Location updated successfully",
           'thisMonth': "This month",
           'thisYear': "This year",
           'allTime': "All time",
@@ -1018,6 +1020,7 @@ class MyTranslation extends Translations {
           "results": "תוצאות",
           "seeAll": "ראה הכל",
           "searchBarber": "חפש שם ספר, מספרה",
+          "Location updated successfully": "המיקום עודכן בהצלחה",
 
           "pleaseEnterYourBarberShopName": "אנא הזן את שם המספרה שלך",
           "inValidPhoneNumber": "מספר טלפון לא חוקי",

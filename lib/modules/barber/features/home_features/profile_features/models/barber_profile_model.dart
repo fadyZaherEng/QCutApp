@@ -10,6 +10,7 @@ class BarberProfileModel {
   final String coverPic;
   final String city;
   final List<WorkingDay> workingDays;
+  final BarberShopLocation barberShopLocation;
 
   BarberProfileModel({
     required this.fullName,
@@ -21,6 +22,7 @@ class BarberProfileModel {
     required this.coverPic,
     required this.city,
     required this.workingDays,
+    required this.barberShopLocation,
   });
 
   factory BarberProfileModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,25 @@ class BarberProfileModel {
               ?.map((e) => WorkingDay.fromJson(e))
               .toList() ??
           [],
+      barberShopLocation:
+          BarberShopLocation.fromJson(json['barberShopLocation'] ?? {}),
+    );
+  }
+}
+
+class BarberShopLocation {
+  final String type;
+  final List<double> coordinates;
+
+  BarberShopLocation({
+    required this.type,
+    required this.coordinates,
+  });
+
+  factory BarberShopLocation.fromJson(Map<String, dynamic> json) {
+    return BarberShopLocation(
+      type: json['type'] ?? '',
+      coordinates: List<double>.from(json['coordinates'] ?? []),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/custom_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,15 +13,69 @@ import 'package:q_cut/modules/customer/features/home_features/home/views/widgets
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize HomeController when the view is built
-    final homeController = Get.put(HomeController());
-    final ProfileController profileController = Get.put(ProfileController());
+  State<HomeView> createState() => _HomeViewState();
+}
 
+class _HomeViewState extends State<HomeView> {
+  double latitude = 0.0;
+  double longitude = 0.0;
+
+  // Initialize HomeController when the view is built
+  final homeController = Get.put(HomeController());
+  final ProfileController profileController = Get.put(ProfileController());
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await _determinePosition(context).then((Position? position) {
+      latitude = position!.latitude;
+      longitude = position.longitude;
+      homeController.getNearestBarbers(longitude, latitude);
+    }).catchError((e) {
+      // Handle the error, e.g., show a snackbar or dialog
+      print(e);
+    });
+  }
+
+  Future<Position?> _determinePosition(context) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error(
+          'Location services are disabled. Please enable them.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Navigator.pop(context);
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Navigator.pop(context);
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
+    return position;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       drawer: CustomDrawer(),
@@ -83,7 +138,10 @@ class HomeView extends StatelessWidget {
                                   value.isNotEmpty) {
                                 homeController.getBarbersCity(city: value);
                               } else {
-                                homeController.getBarbers();
+                                homeController.getNearestBarbers(
+                                  longitude,
+                                  latitude,
+                                );
                               }
                             });
                           },
@@ -110,7 +168,8 @@ class HomeView extends StatelessWidget {
                             Get.toNamed(AppRouter.searchForTheTimePath);
                           },
                           child: Container(
-                            height: 42.h, // ✅ same as "where"
+                            height: 42.h,
+                            // ✅ same as "where"
                             decoration: BoxDecoration(
                               color: ColorsData.font,
                               borderRadius: BorderRadius.circular(8),

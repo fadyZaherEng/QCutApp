@@ -399,6 +399,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                                   coverPic: profileData.coverPic,
                                   city: profileData.city,
                                   workingDays: profileData.workingDays,
+                                  barberShopLocation: profileData.barberShopLocation,
                                 ),
                               );
 

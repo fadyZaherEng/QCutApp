@@ -45,6 +45,8 @@ class AuthController extends GetxController {
 
   // Store userId from signup response
   final RxString userId = ''.obs;
+  double locationLatitude = 0.0;
+  double locationLongitude = 0.0;
 
   @override
   void onClose() {
@@ -75,7 +77,14 @@ class AuthController extends GetxController {
       final requestData = {
         'userType':
             SharedPref().getBool(PrefKeys.userRole)! ? "user" : 'barber',
-        'userData': userData.toJson(),
+        'userData':SharedPref().getBool(PrefKeys.userRole)! ? userData.toJson():
+        {
+          ...userData.toJson(),
+          "location": {
+            "type": "Point",
+            "coordinates": [locationLongitude, locationLatitude]
+          }
+        }
       };
 
       final response =
