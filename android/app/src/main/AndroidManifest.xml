@@ -9,6 +9,10 @@
         android:label="QCut"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA4LqOxrIrI4oZXDAU1vWMUGoE5xuWTY5s" /><!-- Add your API key here -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

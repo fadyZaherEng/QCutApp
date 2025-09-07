@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -182,6 +183,17 @@ class BAppointmentView extends StatelessWidget {
               );
             },
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.r),
+          ),
+          onPressed: () {
+            // controller.openAddAppointmentDialog();
+            Get.toNamed(AppRouter.selectedPath, arguments: currentBarber);
+          },
+          backgroundColor: ColorsData.primary,
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );

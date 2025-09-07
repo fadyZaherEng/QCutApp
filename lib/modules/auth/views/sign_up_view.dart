@@ -149,17 +149,21 @@ class _SignUpViewState extends State<SignUpView> {
                               ],
                             )
                           : SizedBox(height: 16.h),
-                      // CustomTextFormField(
-                      //   controller: _authController.city,
-                      //   hintText: 'enterYourCity'.tr,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your City'.tr;
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // SizedBox(height: 16.h),
+                      (SharedPref().getBool(PrefKeys.userRole)) == false
+                          ? CustomTextFormField(
+                              controller: _authController.city,
+                              hintText: 'enterYourCity'.tr,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your City'.tr;
+                                }
+                                return null;
+                              },
+                            )
+                          : SizedBox(height: 16.h),
+                      (SharedPref().getBool(PrefKeys.userRole)) == false
+                          ? SizedBox(height: 16.h)
+                          : SizedBox.shrink(),
                       CustomTextFormField(
                         controller: _authController.passwordController,
                         keyboardType: TextInputType.visiblePassword,

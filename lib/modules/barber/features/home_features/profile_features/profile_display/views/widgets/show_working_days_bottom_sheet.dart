@@ -94,7 +94,7 @@ void showBWorkingDaysBottomSheet(
                     style: Styles.textStyleS14W700(color: ColorsData.secondary),
                   ),
                   Text(
-                    "${day.startHour} ${day.startHour > 12 ? "PM" : "AM"} - ${day.endHour > 12 ? (day.endHour - 12) : day.endHour} ${day.endHour > 12 ? "PM" : "AM"}",
+                    "${day.startHour} - ${day.endHour > 12 ? (day.endHour - 12) : day.endHour}",
                     style: Styles.textStyleS14W400(color: ColorsData.thirty),
                   ),
                 ],

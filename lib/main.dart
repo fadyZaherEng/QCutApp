@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/localization/change_local.dart';
 import 'package:q_cut/core/notification/firebase_cloud_messaging.dart';
 import 'package:q_cut/core/notification/notfication.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 import 'package:q_cut/qcut_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/services/shared_pref/pref_keys.dart';
@@ -19,6 +21,27 @@ String phoneNumber = SharedPref().getString(PrefKeys.phoneNumber) ?? "300300";
 String currentBarberId = SharedPref().getString(PrefKeys.barberId) ?? "";
 String instagramLink = SharedPref().getString(PrefKeys.instagramLink) ??
     "https://www.instagram.com/";
+
+String? barberJson = SharedPref().getString(PrefKeys.barber);
+
+Barber currentBarber = barberJson != null
+    ? Barber.fromJson(
+        jsonDecode(SharedPref().getString(PrefKeys.barber) ?? "{}"))
+    : Barber(
+        id: currentBarberId,
+        fullName: fullName,
+        phoneNumber: phoneNumber,
+        userType: "barber",
+        coverPic: coverImage,
+        instagramPage: instagramLink,
+        profilePic: profileImage,
+        city: "",
+        isFavorite: false,
+        status: "active",
+        offDay: [],
+        workingDays: [],
+      );
+
 
 void main() async {
   // Ensure Flutter is initialized
