@@ -67,6 +67,7 @@ class BAppointmentController extends GetxController {
 
       final response = await _apiCall
           .getData("${Variables.GET_BARBER_APPOINTMENTS}$formattedDate");
+      print("url ${Variables.GET_BARBER_APPOINTMENTS}$formattedDate}");
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

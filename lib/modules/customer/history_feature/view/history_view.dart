@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:q_cut/core/utils/constants/colors_data.dart';
+ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/customer/history_feature/controller/history_controller.dart';
 import 'package:q_cut/modules/customer/history_feature/view/history_view_body.dart';
 
@@ -11,12 +11,10 @@ class HistoryView extends GetView<HistoryController> {
   Widget build(BuildContext context) {
     final controller = Get.find<HistoryController>();
 
-    // 🔥 اعمل نسخة أصلية من المواعيد (مرة واحدة)
-    final RxList previousOriginal =
-        controller.previousAppointments.toList().obs;
-    final RxList currentOriginal = controller.currentAppointments.toList().obs;
-
-    return DefaultTabController(
+    // 🔥 الحالة المختارة للفلتر (افتراضي All)
+    final RxString selectedFilter = 'all'.obs;
+    //Get Language
+     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -36,20 +34,22 @@ class HistoryView extends GetView<HistoryController> {
                 if (tabController.index == 0) {
                   return _buildFilterButton(
                     list: controller.previousAppointments,
-                    originalList: previousOriginal,
+                    originalList: controller.previousAppointments.toList().obs,
                     context: context,
+                    selectedFilter: selectedFilter,
                   );
                 } else {
                   return _buildFilterButton(
                     list: controller.currentAppointments,
-                    originalList: currentOriginal,
+                    originalList: controller.currentAppointments.toList().obs,
                     context: context,
+                    selectedFilter: selectedFilter,
                   );
                 }
               },
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: ColorsData.primary,
             labelColor: ColorsData.font,
             unselectedLabelColor: ColorsData.font,
@@ -61,8 +61,9 @@ class HistoryView extends GetView<HistoryController> {
             dividerColor: Colors.white,
             dividerHeight: 1,
             tabs: [
-              Tab(text: 'Previous'),
-              Tab(text: 'Currently'),
+              //change locale
+              Tab(text: 'Currently'.tr),
+              Tab(text: 'Previous'.tr),
             ],
           ),
         ),
@@ -78,21 +79,49 @@ class HistoryView extends GetView<HistoryController> {
     required RxList list,
     required RxList originalList,
     required BuildContext context,
+    required RxString selectedFilter,
   }) {
-    return PopupMenuButton<String>(
-      onSelected: (value) {
-        controller.filterAppointments(
-          value,
-          isPrevious: DefaultTabController.of(context).index == 0,
-        );
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(value: 'all', child: Text('All'.tr)),
-        PopupMenuItem(value: 'completed', child: Text('Completed'.tr)),
-        PopupMenuItem(value: 'attended', child: Text('Attended'.tr)),
-        PopupMenuItem(value: 'cancelled', child: Text('Cancelled'.tr)),
-      ],
-      icon: const Icon(Icons.filter_list),
+    return Obx(() {
+      return PopupMenuButton<String>(
+        initialValue: selectedFilter.value, // 🔥 يحافظ على الاختيار الحالي
+        onSelected: (value) {
+          selectedFilter.value = value;
+          controller.filterAppointments(
+            value,
+            isPrevious: DefaultTabController.of(context).index == 0,
+          );
+        },
+        itemBuilder: (context) => [
+          _buildMenuItem('all', 'All'.tr, selectedFilter.value),
+          _buildMenuItem('completed', 'Completed'.tr, selectedFilter.value),
+          _buildMenuItem('attended', 'Attended'.tr, selectedFilter.value),
+          _buildMenuItem('cancelled', 'Cancelled'.tr, selectedFilter.value),
+        ],
+        icon: const Icon(Icons.filter_list),
+      );
+    });
+  }
+
+  PopupMenuItem<String> _buildMenuItem(
+      String value, String label, String selectedValue) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight:
+                  selectedValue == value ? FontWeight.bold : FontWeight.normal,
+              color: selectedValue == value ? ColorsData.primary : Colors.black,
+            ),
+          ),
+          if (selectedValue == value) ...[
+            const SizedBox(width: 6),
+            const Icon(Icons.check, color: ColorsData.primary, size: 16),
+          ],
+        ],
+      ),
     );
   }
 }

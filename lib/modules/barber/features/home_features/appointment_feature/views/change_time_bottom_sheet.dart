@@ -110,54 +110,62 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
       setState(() => isLoading = true);
     }
 
+    DateTime selectedDate = dynamicDays[selectedDayIndex]["fullDate"];
+
+    final timeString = selectedTimeSlot!;
+    final timeParts = timeString.split(RegExp(r'[: ]'));
+
+    int hour = int.parse(timeParts[0]);
+    int minute = int.parse(timeParts[1]);
+
+    if (timeParts.length > 2 &&
+        timeParts[2].toUpperCase() == 'PM' &&
+        hour < 12) {
+      hour += 12;
+    }
+    if (timeParts.length > 2 &&
+        timeParts[2].toUpperCase() == 'AM' &&
+        hour == 12) {
+      hour = 0;
+    }
+
+    final combinedDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      hour,
+      minute,
+    );
+
+    final startDateMillis = combinedDateTime.millisecondsSinceEpoch;
+
+    final requestData = {
+      'appointment': widget.appointmentId,
+      'startDate': startDateMillis,
+    };
+    print('Request Data: $requestData');
+
+    final response = await _networkAPICall.addData(
+      requestData,
+      '${Variables.baseUrl}request-change-appointment-time',
+    );
+    print('Response: $response');
+    print("url is :${Variables.baseUrl}request-change-appointment-time");
+
+    if (!mounted) return;
+    Map<String, dynamic> responseBody;
     try {
-      DateTime selectedDate = dynamicDays[selectedDayIndex]["fullDate"];
+      final bodyString = response.body.toString();
+      print('Raw Body: $bodyString');
 
-      final timeString = selectedTimeSlot!;
-      final timeParts = timeString.split(RegExp(r'[: ]'));
-
-      int hour = int.parse(timeParts[0]);
-      int minute = int.parse(timeParts[1]);
-
-      if (timeParts.length > 2 &&
-          timeParts[2].toUpperCase() == 'PM' &&
-          hour < 12) {
-        hour += 12;
-      }
-      if (timeParts.length > 2 &&
-          timeParts[2].toUpperCase() == 'AM' &&
-          hour == 12) {
-        hour = 0;
+      if (bodyString.trim().startsWith('{') ||
+          bodyString.trim().startsWith('[')) {
+        responseBody = jsonDecode(bodyString);
+      } else {
+        responseBody = {"message": bodyString};
       }
 
-      final combinedDateTime = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        hour,
-        minute,
-      );
-
-      final startDateMillis = combinedDateTime.millisecondsSinceEpoch;
-
-      final requestData = {
-        'appointment': widget.appointmentId,
-        'startDate': startDateMillis,
-      };
-
-      final response = await _networkAPICall.addData(
-        requestData,
-        '${Variables.baseUrl}request-change-appointment-time',
-      );
-
-      if (!mounted) return;
-
-      dynamic responseBody;
-      try {
-        responseBody = jsonDecode(response.body);
-      } catch (e) {
-        responseBody = {"message": response.body};
-      }
+      print('Response Body: $responseBody');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         ShowToast.showSuccessSnackBar(
@@ -165,11 +173,14 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
         );
         Get.back();
       } else {
-        // ShowToast.showError(
-        //   message: responseBody['message'] ?? 'An error occurred',
-        // );
+        ShowToast.showError(
+          message: responseBody['message'] ?? 'An error occurred',
+        );
         Get.back();
       }
+    } catch (e) {
+      print('Error decoding response: $e');
+      ShowToast.showError(message: 'Unexpected response format');
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -251,7 +262,6 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                 bool isSelected = selectedDayIndex == index;
                 return GestureDetector(
                   onTap: () async {
-
                     setState(() {
                       selectedDayIndex = index;
                       timeSlots = [];
@@ -374,7 +384,9 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                               (MediaQuery.of(context).size.width - (12.w * 4)) /
                                   3,
                           padding: EdgeInsets.symmetric(
-                              vertical: 8.h, horizontal: 6.w),
+                            vertical: 8.h,
+                            horizontal: 6.w,
+                          ),
                           decoration: BoxDecoration(
                             color:
                                 isSelected ? ColorsData.primary : Colors.white,

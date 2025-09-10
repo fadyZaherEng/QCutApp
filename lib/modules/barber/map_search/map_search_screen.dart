@@ -45,7 +45,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
 
   Future<List<dynamic>> _getPredictions(String input) async {
     final url = Uri.parse(
-      'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${"kGoogleApiKey"}',
+      'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${"AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"}',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -58,7 +58,7 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
 
   Future<Map<String, dynamic>?> _getPlaceDetails(String placeId) async {
     final url = Uri.parse(
-      'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeId&key=${"kGoogleApiKey"}',
+      'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeId&key=${"AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"}',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);

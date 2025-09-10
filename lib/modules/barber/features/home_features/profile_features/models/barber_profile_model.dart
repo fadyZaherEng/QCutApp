@@ -57,7 +57,9 @@ class BarberShopLocation {
   factory BarberShopLocation.fromJson(Map<String, dynamic> json) {
     return BarberShopLocation(
       type: json['type'] ?? '',
-      coordinates: List<double>.from(json['coordinates'] ?? []),
+      coordinates:json['coordinates'] != null
+          ? List<double>.from(json['coordinates'].map((x) => x.toDouble()))
+          : [],
     );
   }
 }

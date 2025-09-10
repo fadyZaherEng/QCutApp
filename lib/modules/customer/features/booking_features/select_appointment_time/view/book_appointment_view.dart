@@ -166,86 +166,83 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                 CustomBigButton(
                   textData: "confirm".tr,
                   onPressed: () {
-                    final startTime = DateFormat('h:mm ').format(
-                        controller.selectedTimeSlot.value?.startTime ??
-                            DateTime.now());
+                    final slot = controller.selectedTimeSlot.value!;
+                    final startTime = DateFormat('h:mm').format(slot.startTime);
 
-                    // Print booking model data
-                    print({
+                    // 🟢 جهز بيانات الخدمات مرة واحدة
+                    final services = selectedServices.services;
+                    final barberServices = selectedServices.barberServices!;
+
+                    final serviceList = services.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final selected = entry.value;
+                      final barberService = barberServices[index];
+                      return {
+                        "service": selected.service,
+                        "numberOfUsers": selected.numberOfUsers,
+                        "name": barberService.name,
+                        "price": barberService.price,
+                        "total": barberService.price * selected.numberOfUsers,
+                      };
+                    }).toList();
+
+                    // 🟢 العناوين + الأسعار
+                    final serviceTitle = serviceList
+                        .map((s) => "${s["name"]} x${s["numberOfUsers"]}")
+                        .join(", ");
+                    final servicePrice = serviceList.fold<double>(
+                      0,
+                      (sum, s) =>
+                          sum +
+                          ((s["price"] as num).toDouble() *
+                              (s["numberOfUsers"] as int)),
+                    );
+
+                    final totalAmount = serviceList.fold<double>(
+                        0, (sum, s) => sum + (s["total"] as num).toDouble());
+
+                    // 🟢 إنشاء الموديل
+                    final bookingPaymentDetailsModel =
+                        BookingPaymentDetailsModel(
+                      serviceTitle: serviceTitle,
+                      servicePrice: servicePrice,
+                      totalAmount: totalAmount,
+                      barberName: controller.barberName.value,
+                      barberImage: controller.barberImage.value,
+                      salonName: barberServices.first.name,
+                      appointmentDate: slot.dayName.toString(),
+                      appointmentTime: startTime,
+                      serviceDuration: "20", // TODO: احسبها ديناميك لو متاحة
+                    );
+
+                    // 🟢 بيانات الدفع
+                    final bookingData = {
                       "barber": controller.barberId.value,
-                      "service": selectedServices.services
-                          .asMap()
-                          .entries
-                          .map((entry) => {
-                                "service": entry.value.service,
-                                "numberOfUsers": entry.value.numberOfUsers
+                      "service": serviceList
+                          .map((s) => {
+                                "service": s["service"],
+                                "numberOfUsers": s["numberOfUsers"],
                               })
                           .toList(),
-                      "startDate": controller.selectedTimeSlot.value!.startTime
-                          .millisecondsSinceEpoch,
-                      "paymentMethod": "cash"
-                    });
+                      "startDate": slot.startTime.millisecondsSinceEpoch,
+                      "paymentMethod": "cash",
+                    };
 
-                    BookingPaymentDetailsModel bookingPaymentDetailsModel =
-                        BookingPaymentDetailsModel(
-                            serviceTitle: selectedServices.services
-                                .asMap()
-                                .entries
-                                .map((entry) =>
-                                    "${selectedServices.barberServices![entry.key].name} x${entry.value.numberOfUsers}")
-                                .join(", "),
-                            servicePrice: selectedServices.barberServices!
-                                .asMap()
-                                .entries
-                                .map((entry) =>
-                                    entry.value.price *
-                                    selectedServices
-                                        .services[entry.key].numberOfUsers)
-                                .reduce((a, b) => a + b)
-                                .toDouble(),
-                            totalAmount: selectedServices.services
-                                .asMap()
-                                .entries
-                                .map((entry) =>
-                                    selectedServices
-                                        .barberServices![entry.key].price *
-                                    selectedServices
-                                        .services[entry.key].numberOfUsers)
-                                .reduce((a, b) => a + b)
-                                .toDouble(),
-                            barberName: controller.barberName.value,
-                            barberImage: controller.barberImage.value,
-                            salonName:
-                                selectedServices.barberServices!.first.name,
-                            appointmentDate: controller
-                                .selectedTimeSlot.value!.dayName
-                                .toString(),
-                            appointmentTime: startTime,
-                            // Force unwrap as we expect it to be non-null when confirming
-                            serviceDuration: "20");
+                    // Debug log
+                    print(bookingData);
+
+                    // 🟢 الانتقال مع البيانات
                     Get.toNamed(
                       AppRouter.bookAppointmentWithPaymentMethodsPath,
                       arguments: {
-                        "pay": {
-                          "barber": controller.barberId.value,
-                          "service": selectedServices.services
-                              .asMap()
-                              .entries
-                              .map((entry) => {
-                                    "service": entry.value.service,
-                                    "numberOfUsers": selectedServices
-                                        .services[entry.key].numberOfUsers
-                                  })
-                              .toList(),
-                          "startDate": controller.selectedTimeSlot.value!
-                              .startTime.millisecondsSinceEpoch,
-                          "paymentMethod": "cash"
-                        },
-                        "bookingPaymentDetailsModel": bookingPaymentDetailsModel
+                        "pay": bookingData,
+                        "bookingPaymentDetailsModel":
+                            bookingPaymentDetailsModel,
                       },
                     );
                   },
                 ),
+
                 SizedBox(height: 24.h),
               ],
             ),

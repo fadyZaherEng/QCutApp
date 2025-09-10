@@ -22,14 +22,13 @@ class BarberProfileData {
   String userType;
   String status;
   List<String> offDay;
-   List<WorkingDay> workingDays;
-  List<dynamic> breakTime;
+  List<WorkingDay> workingDays;
+  List<BreakTime> breakTime;
   List<dynamic> favorites;
   String barberShop;
   String bankAccountNumber;
   String instagramPage;
-    BarberShopLocation barberShopLocation;
-
+  BarberShopLocation barberShopLocation;
 
   BarberProfileData({
     required this.id,
@@ -42,7 +41,7 @@ class BarberProfileData {
     required this.userType,
     required this.status,
     required this.offDay,
-     required this.workingDays,
+    required this.workingDays,
     required this.breakTime,
     required this.favorites,
     required this.barberShop,
@@ -84,11 +83,12 @@ class BarberProfileData {
       offDay: offDay,
       barberShopLocation: json['barberShopLocation'] != null
           ? BarberShopLocation.fromJson(json['barberShopLocation'])
-          : BarberShopLocation(type: 'Point', coordinates: [0.0, 0.0]),
+          : BarberShopLocation(type: 'Point', coordinates: [0, 0]),
       workingDays: workingDays,
       breakTime: json['breakTime'] != null
-          ? List<dynamic>.from(json['breakTime'].map((x) => x))
+          ? List<BreakTime>.from(json['breakTime'].map((x) => BreakTime.fromJson(x)))
           : [],
+
       favorites: json['favorites'] != null
           ? List<dynamic>.from(json['favorites'].map((x) => x))
           : [],

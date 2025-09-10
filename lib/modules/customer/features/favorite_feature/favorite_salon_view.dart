@@ -58,11 +58,15 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
           isLoading = false;
         });
       } else {
-        setState(() => isLoading = false);
+        if (mounted) {
+          setState(() => isLoading = false);
+        }
         ShowToast.showError(message: 'failedToFetchFavorites'.tr);
       }
     } catch (e) {
-      setState(() => isLoading = false);
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
       ShowToast.showError(
           message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
     }

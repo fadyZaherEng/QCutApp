@@ -111,41 +111,88 @@ class BookAppointmentWithPaymentMethodsViewBody
             CustomBigButton(
               textData: "confirm".tr,
               onPressed: () async {
-                if(isClick) {
-                  isClick=false;
+                if (!isClick) return; // ⛔ منع الضغط المتكرر
+                isClick = false;
 
-                  // Format the pay object to match the exact required structure
-                  final Map<String, dynamic> formattedPayload = {
+                try {
+                  // 🟢 تجهيز البيانات المطلوبة
+                  final formattedPayload = {
                     "barber": pay["barber"],
                     "service": pay["service"],
                     "startDate": pay["startDate"],
-                    "paymentMethod": "cash"
-                    // Ensure it's a string without quotes
+                    "paymentMethod": "cash",
                   };
 
-                  final NetworkAPICall apiCall = NetworkAPICall();
-                  final response = await apiCall.addData(
-                      formattedPayload, Variables.APPOINTMENT);
+                  print("➡️ API Request Payload: $formattedPayload");
 
-                  print("API Request Payload: $formattedPayload");
-                  print("API Response: ${response.body}");
+                  final apiCall = NetworkAPICall();
+                  final response = await apiCall.addData(formattedPayload, Variables.APPOINTMENT);
+                 print("${Variables.APPOINTMENT}");
+                  print("⬅️ API Response (${response.statusCode}): ${response.body}");
 
                   if (response.statusCode == 200) {
                     ShowToast.showSuccessSnackBar(
-                        message: "appointmentBookedSuccessfully".tr);
+                      message: "appointmentBookedSuccessfully".tr,
+                    );
                     Get.offAllNamed(AppRouter.bottomNavigationBar);
                   } else {
-                    // ShowToast.showError(message: "failedToBookAppointment".tr);
-                    // ShowToast.showError(message: response.body["message"]);
-
-                    final data = jsonDecode(response.body); // ده اللي يبقى Map
-                    ShowToast.showError(message: data["message"]);
+                    try {
+                      final data = jsonDecode(response.body);
+                      final errorMessage = data["message"] ?? "failedToBookAppointment".tr;
+                      ShowToast.showError(message: errorMessage);
+                    } catch (e) {
+                      ShowToast.showError(message: "failedToBookAppointment".tr);
+                    }
                   }
+                } catch (e) {
+                  print("❌ Error while booking appointment: $e");
+                  ShowToast.showError(message: "somethingWentWrong".tr);
+                } finally {
+                  // 🟢 رجّع الزر يشتغل بعد ثانيتين
                   await Future.delayed(const Duration(seconds: 2));
-                  isClick=true;
+                  isClick = true;
                 }
               },
             ),
+
+            // CustomBigButton(
+            //   textData: "confirm".tr,
+            //   onPressed: () async {
+            //     if(isClick) {
+            //       isClick=false;
+            //
+            //       // Format the pay object to match the exact required structure
+            //       final Map<String, dynamic> formattedPayload = {
+            //         "barber": pay["barber"],
+            //         "service": pay["service"],
+            //         "startDate": pay["startDate"],
+            //         "paymentMethod": "cash"
+            //         // Ensure it's a string without quotes
+            //       };
+            //
+            //       final NetworkAPICall apiCall = NetworkAPICall();
+            //       final response = await apiCall.addData(
+            //           formattedPayload, Variables.APPOINTMENT);
+            //
+            //       print("API Request Payload: $formattedPayload");
+            //       print("API Response: ${response.body}");
+            //
+            //       if (response.statusCode == 200) {
+            //         ShowToast.showSuccessSnackBar(
+            //             message: "appointmentBookedSuccessfully".tr);
+            //         Get.offAllNamed(AppRouter.bottomNavigationBar);
+            //       } else {
+            //         // ShowToast.showError(message: "failedToBookAppointment".tr);
+            //         // ShowToast.showError(message: response.body["message"]);
+            //
+            //         final data = jsonDecode(response.body); // ده اللي يبقى Map
+            //         ShowToast.showError(message: data["message"]);
+            //       }
+            //       await Future.delayed(const Duration(seconds: 2));
+            //       isClick=true;
+            //     }
+            //   },
+            // ),
           ],
         ),
       ),

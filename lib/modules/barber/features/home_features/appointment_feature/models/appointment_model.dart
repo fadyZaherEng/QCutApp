@@ -85,7 +85,7 @@ class BarberAppointment {
 
     // Format the date and time
     final formattedDate = DateFormat('yyyy-MM-dd').format(startDate);
-    final formattedTime = DateFormat('h:mm a')
+    final formattedTime = DateFormat('h:mm')
         .format(startDate); // Format time as hour:minute AM/PM
 
     return BarberAppointment(
