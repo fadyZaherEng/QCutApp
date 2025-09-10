@@ -10,6 +10,7 @@ class ProfileController extends GetxController {
 
   // Form Controllers
   final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -19,11 +20,18 @@ class ProfileController extends GetxController {
 
   // Getters
   TextEditingController get fullNameController => _fullNameController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get passwordController => _passwordController;
+
+  TextEditingController get cityController => _cityController;
+
   TextEditingController get confirmPasswordController =>
       _confirmPasswordController;
+
   TextEditingController get otpController => _otpController;
+
   TextEditingController get emailController => _emailController;
 
   // Profile data
@@ -77,7 +85,7 @@ class ProfileController extends GetxController {
 
         _fullNameController.text = profileData.value?.fullName ?? '';
         _phoneNumberController.text = profileData.value?.phoneNumber ?? '';
-
+        _cityController.text = profileData.value?.city ?? '';
         _emailController.text = ''; // Clear email as it's not in the response
       } else {
         isError.value = true;
@@ -96,7 +104,9 @@ class ProfileController extends GetxController {
   }
 
   // Update profile data
-  Future<void> updateProfile() async {
+  Future<void> updateProfile({
+    bool cityChanged = false,
+  }) async {
     isLoading.value = true;
     isError.value = false;
     errorMessage.value = '';
@@ -104,11 +114,16 @@ class ProfileController extends GetxController {
     try {
       final response = await _apiCall.putData(
         "${Variables.baseUrl}authentication/editUser",
-        {
-          "fullName": fullNameController.text,
-          // Only include email if it's provided
-          if (emailController.text.isNotEmpty) "email": emailController.text,
-        },
+        cityChanged
+            ? {
+                "city": cityController.text,
+              }
+            : {
+                "fullName": fullNameController.text,
+                // Only include email if it's provided
+                if (emailController.text.isNotEmpty)
+                  "email": emailController.text,
+              },
       );
       final responseBody = json.decode(response.body);
       if (response.statusCode == 200) {

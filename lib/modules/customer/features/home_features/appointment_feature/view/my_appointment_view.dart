@@ -57,100 +57,105 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("myAppointments".tr),
-        actions: [
-          _buildFilterButton(controller),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await controller.refreshAppointments();
-        },
-        child: Obx(() {
-          if (controller.isLoading.value && controller.appointments.isEmpty) {
-            return Center(
-              child: SpinKitDoubleBounce(
-                color: ColorsData.primary,
-              ),
-            );
-          } else if (controller.isError.value &&
-              controller.appointments.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    controller.errorMessage.value,
-                    style: Styles.textStyleS14W400(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (isClicked) {
-                        isClicked = false;
-                        controller.refreshAppointments();
-                        Future.delayed(const Duration(seconds: 2), () {
-                          isClicked = true;
-                        });
-                      }
-                    },
-                    child: Text('Retry'.tr),
-                  ),
-                ],
-              ),
-            );
-          } else if (controller.filteredAppointments.isEmpty) {
-            return Center(
-              child: Text(
-                'noAppointmentsFound'.tr,
-                style: Styles.textStyleS14W400(),
-              ),
-            );
-          } else {
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: controller.filteredAppointments.length +
-                  (controller.isLoadingMore.value ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index < controller.filteredAppointments.length) {
-                  final appointment = controller.filteredAppointments[index];
-                  return CustomDeleteAppointmentItem(
-                    appointment: appointment,
-                    onDelete: () {
-                      showDeleteAppointmentDialog(
-                        context: context,
-                        onYes: () async {
-                          final success = await controller
-                              .deleteAppointment(appointment.id);
-                          if (success && context.mounted) {
-                            Get.back();
-                          }
-                        },
-                        onNo: () {
-                          Get.back();
-                        },
-                      );
-                    },
-                  );
-                } else {
-                  // loader at bottom while loading more
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: SpinKitThreeBounce(
-                        color: ColorsData.primary,
-                        size: 20,
-                      ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await controller.refreshAppointments();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("myAppointments".tr),
+          actions: [
+            _buildFilterButton(controller),
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await controller.refreshAppointments();
+          },
+          child: Obx(() {
+            if (controller.isLoading.value && controller.appointments.isEmpty) {
+              return Center(
+                child: SpinKitDoubleBounce(
+                  color: ColorsData.primary,
+                ),
+              );
+            } else if (controller.isError.value &&
+                controller.appointments.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      controller.errorMessage.value,
+                      style: Styles.textStyleS14W400(color: Colors.red),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                }
-              },
-            );
-          }
-        }),
+                    SizedBox(height: 16.h),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (isClicked) {
+                          isClicked = false;
+                          controller.refreshAppointments();
+                          Future.delayed(const Duration(seconds: 2), () {
+                            isClicked = true;
+                          });
+                        }
+                      },
+                      child: Text('Retry'.tr),
+                    ),
+                  ],
+                ),
+              );
+            } else if (controller.filteredAppointments.isEmpty) {
+              return Center(
+                child: Text(
+                  'noAppointmentsFound'.tr,
+                  style: Styles.textStyleS14W400(),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                controller: _scrollController,
+                itemCount: controller.filteredAppointments.length +
+                    (controller.isLoadingMore.value ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index < controller.filteredAppointments.length) {
+                    final appointment = controller.filteredAppointments[index];
+                    return CustomDeleteAppointmentItem(
+                      appointment: appointment,
+                      onDelete: () {
+                        showDeleteAppointmentDialog(
+                          context: context,
+                          onYes: () async {
+                            final success = await controller
+                                .deleteAppointment(appointment.id);
+                            if (success && context.mounted) {
+                              Get.back();
+                            }
+                          },
+                          onNo: () {
+                            Get.back();
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    // loader at bottom while loading more
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: SpinKitThreeBounce(
+                          color: ColorsData.primary,
+                          size: 20,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
+            }
+          }),
+        ),
       ),
     );
   }

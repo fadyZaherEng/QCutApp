@@ -35,279 +35,290 @@ class _MyProfileViewState extends State<MyProfileView> {
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.put(ProfileController());
 
-    return Scaffold(
-      body: Obx(() {
-        if (profileController.isLoading.value) {
-          return const Center(
-            child: SpinKitDoubleBounce(
-              color: ColorsData.primary,
-            ),
-          );
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        await profileController.fetchProfileData();
+      },
+      child: Scaffold(
+        body: Obx(() {
+          if (profileController.isLoading.value) {
+            return const Center(
+              child: SpinKitDoubleBounce(
+                color: ColorsData.primary,
+              ),
+            );
+          }
 
-        if (profileController.isError.value) {
-          return Center(child: Text(profileController.errorMessage.value));
-        }
+          if (profileController.isError.value) {
+            return Center(child: Text(profileController.errorMessage.value));
+          }
 
-        final profileData = profileController.profileData.value;
+          final profileData = profileController.profileData.value;
 
-        final String fullName = profileData?.fullName ?? "User";
-        final String phoneNumber = profileData?.phoneNumber ?? "";
-        final String city = profileData?.city ?? "";
+          final String fullName = profileData?.fullName ?? "User";
+          final String phoneNumber = profileData?.phoneNumber ?? "";
+          final String city = profileData?.city ?? "";
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 300.h,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 250.h,
-                      decoration: BoxDecoration(
-                        color: ColorsData.secondary,
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          alignment: Alignment.topCenter,
-                          image: AssetImage("assets/images/pattern.png"),
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 300.h,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 250.h,
+                        decoration: BoxDecoration(
+                          color: ColorsData.secondary,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            alignment: Alignment.topCenter,
+                            image: AssetImage("assets/images/pattern.png"),
 
-                          // CachedNetworkImageProvider(
-                          //     profileData!.coverPic ?? ""),
+                            // CachedNetworkImageProvider(
+                            //     profileData!.coverPic ?? ""),
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 70.h,
-                      right: Get.locale?.languageCode == 'ar' ||
-                              Get.locale?.languageCode == "he"
-                          ? null
-                          : 20.w,
-                      left: Get.locale?.languageCode == 'ar' ||
-                              Get.locale?.languageCode == "he"
-                          ? 20.w
-                          : null,
-                      child: CustomButton(
-                        width: 200.w,
-                        text: "editYourProfile".tr,
-                        onPressed: () {
-                          showChangeUserInfoBottomSheet(
-                            context,
-                            profileController,
-                          );
-                        },
+                      Positioned(
+                        bottom: 70.h,
+                        right: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? null
+                            : 20.w,
+                        left: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? 20.w
+                            : null,
+                        child: CustomButton(
+                          width: 200.w,
+                          text: "editYourProfile".tr,
+                          onPressed: () {
+                            showChangeUserInfoBottomSheet(
+                              context,
+                              profileController,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 0.h,
-                      left: Get.locale?.languageCode == 'ar' ||
-                              Get.locale?.languageCode == "he"
-                          ? null
-                          : 30.w,
-                      right: Get.locale?.languageCode == 'ar' ||
-                              Get.locale?.languageCode == "he"
-                          ? 30.w
-                          : null,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  FullScreenImageView(imageUrl: profileImage),
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: 120.w,
-                          height: 120.h,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              CircleAvatar(
-                                radius: 60,
-                                backgroundColor: ColorsData.secondary,
-                                child: CircleAvatar(
-                                  radius: 55,
-                                  foregroundImage:
-                                      CachedNetworkImageProvider(profileImage),
-                                  backgroundColor: ColorsData.secondary,
-                                ),
+                      Positioned(
+                        bottom: 0.h,
+                        left: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? null
+                            : 30.w,
+                        right: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? 30.w
+                            : null,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FullScreenImageView(imageUrl: profileImage),
                               ),
-                              Positioned(
-                                right: 9,
-                                bottom: 0,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      showChangeYourPictureDialog(context);
-                                    },
-                                    borderRadius: BorderRadius.circular(45),
-                                    child: Container(
-                                      width: 50.17.w,
-                                      height: 50.17.h,
-                                      decoration: const BoxDecoration(
-                                        color: ColorsData.primary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          AssetsData.addImageIcon,
-                                          fit: BoxFit.fill,
-                                          width: 25.w,
-                                          height: 25.h,
-                                          colorFilter: const ColorFilter.mode(
-                                            ColorsData.font,
-                                            BlendMode.srcIn,
+                            );
+                          },
+                          child: SizedBox(
+                            width: 120.w,
+                            height: 120.h,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: ColorsData.secondary,
+                                  child: CircleAvatar(
+                                    radius: 55,
+                                    foregroundImage:
+                                        CachedNetworkImageProvider(profileImage),
+                                    backgroundColor: ColorsData.secondary,
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 9,
+                                  bottom: 0,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showChangeYourPictureDialog(context);
+                                      },
+                                      borderRadius: BorderRadius.circular(45),
+                                      child: Container(
+                                        width: 50.17.w,
+                                        height: 50.17.h,
+                                        decoration: const BoxDecoration(
+                                          color: ColorsData.primary,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            AssetsData.addImageIcon,
+                                            fit: BoxFit.fill,
+                                            width: 25.w,
+                                            height: 25.h,
+                                            colorFilter: const ColorFilter.mode(
+                                              ColorsData.font,
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (widget.isBack)
+                        Positioned(
+                          top: 40.h,
+                          left: Get.locale?.languageCode == 'ar' ||
+                                  Get.locale?.languageCode == "he"
+                              ? null
+                              : 16.w,
+                          right: Get.locale?.languageCode == 'ar' ||
+                                  Get.locale?.languageCode == "he"
+                              ? 16.w
+                              : null,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 40.w,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                color: ColorsData.font.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: ColorsData.secondary,
+                                size: 20.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 5.h, left: 16.w, right: 16.w),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                fullName,
+                                style: Styles.textStyleS16W700(),
+                              ),
+                              SizedBox(height: 10.h),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AssetsData.mapPinIcon,
+                                    height: 16.h,
+                                    width: 16.w,
+                                    colorFilter: const ColorFilter.mode(
+                                        ColorsData.primary, BlendMode.srcIn),
+                                  ),
+                                  SizedBox(width: 5.w),
+                                  Flexible(
+                                    child: Text(
+                                      city,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.textStyleS14W400(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                '\u200E$phoneNumber',
+                                style: Styles.textStyleS20W400(
+                                    color: ColorsData.primary),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                    if (widget.isBack)
-                      Positioned(
-                        top: 40.h,
-                        left: Get.locale?.languageCode == 'ar' ||
-                                Get.locale?.languageCode == "he"
-                            ? null
-                            : 16.w,
-                        right: Get.locale?.languageCode == 'ar' ||
-                                Get.locale?.languageCode == "he"
-                            ? 16.w
-                            : null,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 40.w,
-                            height: 40.h,
-                            decoration: BoxDecoration(
-                              color: ColorsData.font.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: ColorsData.secondary,
-                              size: 20.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 5.h, left: 16.w, right: 16.w),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              fullName,
-                              style: Styles.textStyleS16W700(),
-                            ),
-                            SizedBox(height: 10.h),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset(
-                                  AssetsData.mapPinIcon,
-                                  height: 16.h,
-                                  width: 16.w,
-                                  colorFilter: const ColorFilter.mode(
-                                      ColorsData.primary, BlendMode.srcIn),
-                                ),
-                                SizedBox(width: 5.w),
-                                Text(
-                                  city,
-                                  style: Styles.textStyleS14W400(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10.h),
-                            Text(
-                              '\u200E$phoneNumber',
-                              style: Styles.textStyleS20W400(
-                                  color: ColorsData.primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
-                      buildDrawerItem("resetPassword".tr,
-                          AssetsData.resetPasswordBottomSheetIcon, () {
-                        Get.toNamed(AppRouter.resetPasswordPath);
-                      }),
-                      buildDivider(),
-                      buildDrawerItem(
-                          "changeLanguage".tr, AssetsData.changeLanguagesIcon,
+                        SizedBox(height: 20.h),
+                        buildDrawerItem("resetPassword".tr,
+                            AssetsData.resetPasswordBottomSheetIcon, () {
+                          Get.toNamed(AppRouter.resetPasswordPath);
+                        }),
+                        buildDivider(),
+                        buildDrawerItem(
+                            "changeLanguage".tr, AssetsData.changeLanguagesIcon,
+                            () {
+                          Get.toNamed(AppRouter.changeLangugesPath);
+                        }),
+                        buildDivider(),
+                        buildDrawerItem(
+                            "changePhoneNumber".tr, AssetsData.callIcon, () {
+                          Get.toNamed(AppRouter.resetPhoneNumberPath);
+                        }),
+                        buildDivider(),
+                        buildDrawerItem(
+                            "changeYourLocation".tr, AssetsData.mapPinIcon,
+                            () async {
+                          await LocationHelper.requestLocationPermission(context);
+                          showChangeUserLocationBottomSheet(
+                              context, profileController);
+                        }),
+                        buildDivider(),
+                        buildDrawerItem(
+                          "Settings".tr,
+                          AssetsData.settingIcon,
                           () {
-                        Get.toNamed(AppRouter.changeLangugesPath);
-                      }),
-                      buildDivider(),
-                      buildDrawerItem(
-                          "changePhoneNumber".tr, AssetsData.callIcon, () {
-                        Get.toNamed(AppRouter.resetPhoneNumberPath);
-                      }),
-                      buildDivider(),
-                      buildDrawerItem(
-                          "changeYourLocation".tr, AssetsData.mapPinIcon,
-                          () async {
-                        await LocationHelper.requestLocationPermission(context);
-                      }),
-                      buildDivider(),
-                      buildDrawerItem(
-                        "Settings".tr,
-                        AssetsData.settingIcon,
-                        () {
-                          Get.toNamed(AppRouter.settingsPath);
-                        },
-                      ),
-                      buildDivider(),
-                      _buildDrawerItem("Terms and Conditions".tr,
-                          Icons.integration_instructions, () {}),
-                      buildDivider(),
-                      _buildDrawerItem(
-                          "Privacy Policy".tr, Icons.policy, () {}),
-                      buildDivider(),
-                      buildDrawerItem(
-                        "Contact us".tr,
-                        AssetsData.callIcon,
-                        () {
-                          Get.toNamed(AppRouter.conectUsPath);
-                        },
-                      ),
-                      buildDivider(),
-                      buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
-                        showLogoutDialog(context);
-                      }),
-                      SizedBox(height: 150.h),
-                    ],
+                            Get.toNamed(AppRouter.settingsPath);
+                          },
+                        ),
+                        buildDivider(),
+                        _buildDrawerItem("Terms and Conditions".tr,
+                            Icons.integration_instructions, () {}),
+                        buildDivider(),
+                        _buildDrawerItem(
+                            "Privacy Policy".tr, Icons.policy, () {}),
+                        buildDivider(),
+                        buildDrawerItem(
+                          "Contact us".tr,
+                          AssetsData.callIcon,
+                          () {
+                            Get.toNamed(AppRouter.conectUsPath);
+                          },
+                        ),
+                        buildDivider(),
+                        buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
+                          showLogoutDialog(context);
+                        }),
+                        SizedBox(height: 150.h),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 

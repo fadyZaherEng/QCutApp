@@ -35,6 +35,10 @@ class CustomBarberListView extends StatelessWidget {
         }
 
         if (displayBarbers.isEmpty) {
+          if (controller.isLoading.value) {
+            return SpinKitDoubleBounce(color: ColorsData.primary);
+          }
+
           return Text(
             "No barbers available".tr,
             style: TextStyle(

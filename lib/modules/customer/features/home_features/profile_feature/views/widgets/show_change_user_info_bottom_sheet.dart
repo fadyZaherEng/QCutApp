@@ -17,3 +17,17 @@ void showChangeUserInfoBottomSheet(
         ChangeUserInfoBottomSheet(profileController: profileController),
   );
 }
+void showChangeUserLocationBottomSheet(
+    BuildContext context, ProfileController? profileController) {
+  if (profileController == null) return;
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+    ),
+    builder: (context) =>
+        ChangeUserLocationBottomSheet(profileController: profileController),
+  );
+}
