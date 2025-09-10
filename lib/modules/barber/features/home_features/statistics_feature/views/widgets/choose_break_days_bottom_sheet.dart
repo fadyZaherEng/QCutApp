@@ -18,6 +18,7 @@ class _ChooseBreakDaysBottomSheetState
     extends State<ChooseBreakDaysBottomSheet> {
   int? _selectedDay;
   List<DateTime> _breakDays = [];
+  bool isClicked = true;
 
   @override
   void initState() {
@@ -212,61 +213,68 @@ class _ChooseBreakDaysBottomSheetState
     );
   }
 
+
   Future<void> _addBreak() async {
-    if (_selectedDay == null) {
-      Get.snackbar(
-        "Error",
-        "Please select a day first",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return;
-    }
+    if (isClicked) {
+      isClicked = false;
 
-    try {
-      DateTime start = DateTime(
-          DateTime.now().year, DateTime.now().month, _selectedDay!, 8, 0);
-      DateTime end = DateTime(
-          DateTime.now().year, DateTime.now().month, _selectedDay!, 9, 0);
-
-      int startTimestamp = (start.millisecondsSinceEpoch / 1000).round();
-      int endTimestamp = (end.millisecondsSinceEpoch / 1000).round();
-
-      final body = {
-        "breaks": [
-          {"startDate": startTimestamp, "endDate": endTimestamp}
-        ]
-      };
-
-      final response = await NetworkAPICall().putData(
-        "${Variables.BARBER}take-break",
-        body,
-      );
-
-      if (response.statusCode == 200) {
-        Get.back();
-        Get.snackbar(
-          "Success".tr,
-          "Break added successfully".tr,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
+      if (_selectedDay == null) {
         Get.snackbar(
           "Error",
-          "Failed to add break: ${response.body}",
+          "Please select a day first",
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+        return;
       }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+
+      try {
+        DateTime start = DateTime(
+            DateTime.now().year, DateTime.now().month, _selectedDay!, 8, 0);
+        DateTime end = DateTime(
+            DateTime.now().year, DateTime.now().month, _selectedDay!, 9, 0);
+
+        int startTimestamp = (start.millisecondsSinceEpoch / 1000).round();
+        int endTimestamp = (end.millisecondsSinceEpoch / 1000).round();
+
+        final body = {
+          "breaks": [
+            {"startDate": startTimestamp, "endDate": endTimestamp}
+          ]
+        };
+
+        final response = await NetworkAPICall().putData(
+          "${Variables.BARBER}take-break",
+          body,
+        );
+
+        if (response.statusCode == 200) {
+          Get.back();
+          Get.snackbar(
+            "Success".tr,
+            "Break added successfully".tr,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+        } else {
+          // Get.snackbar(
+          //   "Error",
+          //   "Failed to add break: ${response.body}",
+          //   backgroundColor: Colors.red,
+          //   colorText: Colors.white,
+          // );
+        }
+      } catch (e) {
+        // Get.snackbar(
+        //   "Error",
+        //   "Something went wrong: $e",
+        //   backgroundColor: Colors.red,
+        //   colorText: Colors.white,
+        // );
+      }
     }
+    await Future.delayed(const Duration(seconds: 2));
+    isClicked = true;
   }
 }
 

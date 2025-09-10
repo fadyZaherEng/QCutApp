@@ -42,6 +42,7 @@ class Barber {
   final List<WorkingDay> workingDays;
   bool isFavorite;
 
+
   Barber({
     required this.id,
     required this.fullName,
@@ -79,5 +80,23 @@ class Barber {
               json['workingDays'].map((x) => WorkingDay.fromJson(x)))
           : <WorkingDay>[],
     );
+  }
+  //to json
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'fullName': fullName,
+      'phoneNumber': phoneNumber,
+      'userType': userType,
+      'city': city,
+      'status': status,
+      'barberShop': barberShop,
+      'profilePic': profilePic,
+      'coverPic': coverPic,
+      'instagramPage': instagramPage,
+      'isFavorite': isFavorite,
+      'offDay': offDay,
+      'workingDays': workingDays.map((x) => x.toJson()).toList(),
+    };
   }
 }

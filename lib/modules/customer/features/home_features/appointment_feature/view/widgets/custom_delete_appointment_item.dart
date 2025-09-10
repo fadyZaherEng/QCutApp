@@ -9,8 +9,9 @@ import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/models/customer_appointment_model.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
+import 'dart:async';
 
-class CustomDeleteAppointmentItem extends StatelessWidget {
+class CustomDeleteAppointmentItem extends StatefulWidget {
   final VoidCallback onDelete;
   final CustomerAppointment appointment;
 
@@ -21,27 +22,55 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final remaining = appointment.startDate.difference(now);
+  State<CustomDeleteAppointmentItem> createState() =>
+      _CustomDeleteAppointmentItemState();
+}
 
+class _CustomDeleteAppointmentItemState
+    extends State<CustomDeleteAppointmentItem> {
+  Timer? _timer;
+  Duration remaining = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateRemaining();
+
+    // تحديث كل ثانية
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateRemaining();
+    });
+  }
+
+  void _updateRemaining() {
+    final now = DateTime.now();
+    setState(() {
+      remaining = widget.appointment.startDate.difference(now);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final hours = remaining.inHours.toString().padLeft(2, '0');
     final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           IntrinsicHeight(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                //get language direction
                 if (Get.locale?.languageCode == 'ar')
-                  // Left side image container
                   Container(
                     width: 126.w,
                     height: 194.h,
@@ -64,7 +93,6 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                     ),
                   ),
                 if (Get.locale?.languageCode == 'ar')
-                  // Right side details container
                   Expanded(
                     child: Container(
                       height: 194.h,
@@ -81,26 +109,24 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Barber name and payment method
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Text(
-                                    appointment.barber.fullName,
+                                    widget.appointment.barber.fullName,
                                     style: Styles.textStyleS12W700(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Text(
-                                  appointment.paymentMethod,
+                                  widget.appointment.paymentMethod,
                                   style: Styles.textStyleS14W400(
                                       color: ColorsData.primary),
                                 ),
                               ],
                             ),
                             SizedBox(height: 6.h),
-                            // Barbershop location
                             Row(
                               children: [
                                 SvgPicture.asset(
@@ -115,7 +141,7 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                                 SizedBox(width: 4.w),
                                 Expanded(
                                   child: Text(
-                                    "${appointment.barber.fullName} ",
+                                    "${widget.appointment.barber.fullName} ",
                                     style: Styles.textStyleS12W400(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -123,24 +149,23 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                               ],
                             ),
                             SizedBox(height: 8.h),
-                            // Service details
                             Expanded(
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildInfoRow(
-                                      'service'.tr, appointment.serviceName),
+                                  _buildInfoRow('service'.tr,
+                                      widget.appointment.serviceName),
                                   _buildInfoRow('servicePrice'.tr,
-                                      "\$${appointment.price.toStringAsFixed(0)}"),
-                                  _buildInfoRow(
-                                      'qty'.tr, appointment.totalConsumers),
+                                      "\$${widget.appointment.price.toStringAsFixed(0)}"),
+                                  _buildInfoRow('qty'.tr,
+                                      widget.appointment.totalConsumers),
                                   _buildInfoRow('bookingDay'.tr,
-                                      appointment.formattedDate),
+                                      widget.appointment.formattedDate),
                                   _buildInfoRow('bookingTime'.tr,
-                                      appointment.formattedTime),
+                                      widget.appointment.formattedTime),
                                   _buildInfoRow(
-                                      'status'.tr, appointment.status),
+                                      'status'.tr, widget.appointment.status),
                                 ],
                               ),
                             ),
@@ -166,26 +191,24 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Barber name and payment method
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Text(
-                                    appointment.barber.fullName,
+                                    widget.appointment.barber.fullName,
                                     style: Styles.textStyleS12W700(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Text(
-                                  appointment.paymentMethod,
+                                  widget.appointment.paymentMethod,
                                   style: Styles.textStyleS14W400(
                                       color: ColorsData.primary),
                                 ),
                               ],
                             ),
                             SizedBox(height: 6.h),
-                            // Barbershop location
                             Row(
                               children: [
                                 SvgPicture.asset(
@@ -200,7 +223,7 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                                 SizedBox(width: 4.w),
                                 Expanded(
                                   child: Text(
-                                    "${appointment.barber.fullName} ",
+                                    "${widget.appointment.barber.fullName} ",
                                     style: Styles.textStyleS12W400(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -208,24 +231,23 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                               ],
                             ),
                             SizedBox(height: 8.h),
-                            // Service details
                             Expanded(
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildInfoRow(
-                                      'service'.tr, appointment.serviceName),
+                                  _buildInfoRow('service'.tr,
+                                      widget.appointment.serviceName),
                                   _buildInfoRow('servicePrice'.tr,
-                                      "\$${appointment.price.toStringAsFixed(0)}"),
-                                  _buildInfoRow(
-                                      'qty'.tr, appointment.totalConsumers),
+                                      "\$${widget.appointment.price.toStringAsFixed(0)}"),
+                                  _buildInfoRow('qty'.tr,
+                                      widget.appointment.totalConsumers),
                                   _buildInfoRow('bookingDay'.tr,
-                                      appointment.formattedDate),
+                                      widget.appointment.formattedDate),
                                   _buildInfoRow('bookingTime'.tr,
-                                      appointment.formattedTime),
+                                      widget.appointment.formattedTime),
                                   _buildInfoRow(
-                                      'status'.tr, appointment.status),
+                                      'status'.tr, widget.appointment.status),
                                 ],
                               ),
                             ),
@@ -262,7 +284,6 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
           SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(Icons.timer, size: 16, color: Colors.grey),
               const SizedBox(width: 6),
@@ -273,34 +294,33 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
                     )
                   : Text(
                       "${"Countdown".tr} : $hours:$minutes:$seconds",
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(fontSize: 14),
                     ),
             ],
           ),
           SizedBox(height: 16.h),
-          if (appointment.status.toLowerCase() == 'pending')
+          if (widget.appointment.status.toLowerCase() == 'pending')
             CustomBigButton(
               textData: "Cancel".tr,
-              onPressed: onDelete,
+              onPressed: widget.onDelete,
             ),
-          if (appointment.status.toLowerCase() == 'completed')
+          if (widget.appointment.status.toLowerCase() == 'completed')
             CustomBigButton(
               onPressed: () async {
-                onDelete;
-                Get.toNamed(AppRouter.barberServicesPath,
-                    arguments: Barber(
-                      id: appointment.barber.id,
-                      fullName: appointment.barber.fullName,
-                      phoneNumber: "",
-                      userType: appointment.barber.userType,
-                      city: "",
-                      isFavorite: false,
-                      status: appointment.status,
-                      offDay: [],
-                      workingDays: [],
-                    ));
+                Get.toNamed(
+                  AppRouter.barberServicesPath,
+                  arguments: Barber(
+                    id: widget.appointment.barber.id,
+                    fullName: widget.appointment.barber.fullName,
+                    phoneNumber: "",
+                    userType: widget.appointment.barber.userType,
+                    city: "",
+                    isFavorite: false,
+                    status: widget.appointment.status,
+                    offDay: [],
+                    workingDays: [],
+                  ),
+                );
               },
               textData: "Book again".tr,
             ),
@@ -310,25 +330,30 @@ class CustomDeleteAppointmentItem extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.end,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 4.h),
+      child: Row(
+        children: [
+          Text(
+            label,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.start,
+            style: Styles.textStyleS12W400(),
           ),
-        ),
-      ],
+          const Expanded(child: SizedBox()),
+          Expanded(
+            flex: 5,
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: Styles.textStyleS13W500(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

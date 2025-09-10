@@ -63,6 +63,8 @@ class BEditProfileController extends GetxController {
   final cityController = TextEditingController();
   // final bankAccountController = TextEditingController();
   final instagramController = TextEditingController();
+  double locationLatitude = 0.0;
+  double locationLongitude = 0.0;
 
   @override
   void onInit() {
@@ -215,7 +217,7 @@ class BEditProfileController extends GetxController {
         'fullName': nameController.text,
         'phoneNumber': phoneController.text,
         'barberShop': saloonController.text,
-        'city': "city", // cityController.text,
+        'city':  cityController.text,
         'instagramPage': instagramController.text,
         'bankAccountNumber': "123456", // bankAccountController.text,
         'offDay': offDays,
@@ -228,6 +230,10 @@ class BEditProfileController extends GetxController {
             .toList(),
         'profilePic': profilePicUrl,
         'coverPic': coverPicUrl,
+        'barberShopLocation': {
+          'type': 'Point',
+          'coordinates': [locationLongitude, locationLatitude],
+        },
       };
 
       print('Payload workingDays: ${payload['workingDays']}');
@@ -286,7 +292,7 @@ class BEditProfileController extends GetxController {
     nameController.dispose();
     phoneController.dispose();
     saloonController.dispose();
-    // cityController.dispose();
+    cityController.dispose();
     // bankAccountController.dispose();
     instagramController.dispose();
     super.onClose();

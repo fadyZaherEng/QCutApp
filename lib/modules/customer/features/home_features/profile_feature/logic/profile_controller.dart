@@ -77,6 +77,7 @@ class ProfileController extends GetxController {
 
         _fullNameController.text = profileData.value?.fullName ?? '';
         _phoneNumberController.text = profileData.value?.phoneNumber ?? '';
+
         _emailController.text = ''; // Clear email as it's not in the response
       } else {
         isError.value = true;

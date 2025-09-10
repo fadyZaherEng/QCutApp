@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/custom_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,16 +16,90 @@ import 'package:q_cut/modules/customer/features/home_features/home/logic/home_co
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_home_app_bar.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
+import 'package:q_cut/modules/customer/features/home_features/profile_feature/models/customer_profile_model.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize HomeController when the view is built
-    final homeController = Get.put(HomeController());
-    final ProfileController profileController = Get.put(ProfileController());
+  State<HomeView> createState() => _HomeViewState();
+}
 
+class _HomeViewState extends State<HomeView> {
+  double latitude = 0.0;
+  double longitude = 0.0;
+
+  // Initialize HomeController when the view is built
+  final homeController = Get.put(HomeController());
+  final ProfileController profileController = Get.put(ProfileController());
+  String city = '';
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await fetchProfileData();
+    await _determinePosition(context).then((Position? position) {
+      latitude = position!.latitude;
+      longitude = position.longitude;
+      homeController.getNearestBarbers(longitude, latitude);
+    }).catchError((e) {
+      // Handle the error, e.g., show a snackbar or dialog
+      print(e);
+    });
+  }
+
+  Future<void> fetchProfileData() async {
+    final NetworkAPICall apiCall = NetworkAPICall();
+
+    try {
+      final response = await apiCall.getData(Variables.GET_PROFILE);
+      final responseBody = json.decode(response.body);
+      print("Profile response: ${response.body}");
+      if (response.statusCode == 200) {
+        final profileResponse = CustomerProfileResponse.fromJson(responseBody);
+        profileController.profileData.value = profileResponse.data;
+        profileController.fullNameController.text =
+            profileResponse.data.fullName ?? '';
+        city = profileResponse.data.city ?? '';
+      }
+    } catch (e) {}
+  }
+
+  Future<Position?> _determinePosition(context) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error(
+          'Location services are disabled. Please enable them.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Navigator.pop(context);
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Navigator.pop(context);
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
+    return position;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       drawer: CustomDrawer(),
@@ -33,9 +112,7 @@ class HomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomHomeAppBar(),
-                  SizedBox(
-                    height: 12.h,
-                  ),
+                  SizedBox(height: 12.h),
                   Row(
                     children: [
                       SvgPicture.asset(
@@ -43,17 +120,12 @@ class HomeView extends StatelessWidget {
                         width: 24.w,
                         height: 24.h,
                       ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
+                      SizedBox(width: 2.w),
                       Text(
-                        profileController.profileData.value?.city ??
-                            'yourLocation'.tr,
+                        profileController.profileData.value?.city ?? city,
                         style: Styles.textStyleS12W400(),
                       ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
+                      SizedBox(width: 2.w),
                       SvgPicture.asset(
                         AssetsData.downArrowIcon,
                         width: 24.w,
@@ -61,16 +133,12 @@ class HomeView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 12.h,
-                  ),
+                  SizedBox(height: 12.h),
                   Text(
                     'startStylishJourney'.tr,
                     style: Styles.textStyleS16W700(color: ColorsData.primary),
                   ),
-                  SizedBox(
-                    height: 12.h,
-                  ),
+                  SizedBox(height: 12.h),
                   Row(
                     children: [
                       Expanded(
@@ -83,7 +151,10 @@ class HomeView extends StatelessWidget {
                                   value.isNotEmpty) {
                                 homeController.getBarbersCity(city: value);
                               } else {
-                                homeController.getBarbers();
+                                homeController.getNearestBarbers(
+                                  longitude,
+                                  latitude,
+                                );
                               }
                             });
                           },
@@ -110,7 +181,8 @@ class HomeView extends StatelessWidget {
                             Get.toNamed(AppRouter.searchForTheTimePath);
                           },
                           child: Container(
-                            height: 42.h, // ✅ same as "where"
+                            height: 42.h,
+                            // ✅ same as "where"
                             decoration: BoxDecoration(
                               color: ColorsData.font,
                               borderRadius: BorderRadius.circular(8),

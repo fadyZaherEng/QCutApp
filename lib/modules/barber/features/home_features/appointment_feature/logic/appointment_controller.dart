@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
+import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
+import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 
 class BAppointmentController extends GetxController {
@@ -64,6 +67,7 @@ class BAppointmentController extends GetxController {
 
       final response = await _apiCall
           .getData("${Variables.GET_BARBER_APPOINTMENTS}$formattedDate");
+      print("url ${Variables.GET_BARBER_APPOINTMENTS}$formattedDate}");
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -310,33 +314,55 @@ class BAppointmentController extends GetxController {
   }
 
   Future<List<String>> getTimeSlotAppointment(
-      String appointmentId, String date) async {
+    String barberId,
+    String day,
+    List<ServiceItem> services, {
+    bool onHolding = false,
+  }) async {
     try {
-      final url =
-          "${Variables.APPOINTMENT}$appointmentId/available-times?date=$date";
+      final url = "${Variables.APPOINTMENT}free-slots";
       print("➡️ Request: $url");
+      final body = {
+        "day": int.parse(day),
+        "barber": SharedPref().getString(PrefKeys.barberId),
+        "service": services
+            .map((e) => {
+                  "service": e.service.id,
+                  "numberOfUsers": e.numberOfUsers,
+                })
+            .toList(),
+        "onHolding": onHolding,
+      };
+      print("➡️ Body: $body");
+      final response = await _apiCall.addData(body, url);
 
-      final response = await _apiCall.getData(url); // ✅ GET مش PUT
       print("⬅️ Response: ${response.body}");
-
+      print("⬅️ Status Code: ${response.statusCode}");
       if (response.statusCode == 200) {
-        final responseBody = json.decode(response.body);
+        final List<dynamic> responseBody = json.decode(response.body);
 
-        if (responseBody['availableTimes'] != null) {
-          final times = (responseBody['availableTimes'] as List)
-              .map((e) => e['slot'].toString())
-              .toList();
+        final times = responseBody.map((slot) {
+          final startMillis = slot['startInterval'] as int;
+          final endMillis = slot['endInterval'] as int;
 
-          return times; // ✅ رجع list من ال slots
-        } else {
-          ShowToast.showError(message: "No available times found");
-          return [];
-        }
+          final start = DateTime.fromMillisecondsSinceEpoch(startMillis);
+          final end = DateTime.fromMillisecondsSinceEpoch(endMillis);
+
+          // ⏰ format الوقت "HH:mm - HH:mm"
+          final startStr =
+              "${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}";
+          final endStr =
+              "${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}";
+
+          return "$startStr - $endStr";
+        }).toList();
+
+        return times;
       } else {
         final responseBody = json.decode(response.body);
         final message =
             responseBody['message'] ?? 'Failed to fetch available times';
-        // ShowToast.showError(message: message);
+        ShowToast.showError(message: message);
         return [];
       }
     } catch (e) {

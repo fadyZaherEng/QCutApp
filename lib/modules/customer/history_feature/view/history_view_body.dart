@@ -18,8 +18,8 @@ class HistoryViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
-        PreviousBookingsView(appointments: previousAppointments),
         CurrentlyBookedView(appointments: currentAppointments),
+        PreviousBookingsView(appointments: previousAppointments),
       ],
     );
   }

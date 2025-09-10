@@ -6,6 +6,7 @@ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import '../../../statistics_feature/views/widgets/ChooseOffDaysBottomSheet.dart';
 import '../../profile_display/models/barber_profile_model.dart';
 import '../logic/b_edit_profile_controller.dart';
@@ -84,26 +85,49 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     _buildTitle("Change Your Details".tr),
                     SizedBox(height: 20.h),
                     _buildInputField("Change your name".tr, "Full Name".tr,
-                        controller.nameController),
+                        controller.nameController,controller),
                     SizedBox(height: 16.h),
                     _buildInputField(
                       "Change Your Phone Number".tr,
                       "Phone Number".tr,
                       controller.phoneController,
+                      controller,
                       isPhone: true,
                     ),
                     SizedBox(height: 16.h),
                     _buildInputField("change your barber shop name".tr,
-                        "Saloon Name".tr, controller.saloonController),
+                        "Saloon Name".tr, controller.saloonController,controller,),
                     SizedBox(height: 16.h),
-                    // _buildInputField("Change Your City".tr, "City".tr,
-                    //     controller.cityController),
-                    // SizedBox(height: 16.h),
+                    InkWell(
+                      onTap: () {
+                        // // Future.delayed to ensure the tap is registered properly
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        //   return MapSearchScreen(
+                        //     initialLatitude:32.0853,
+                        //     initialLongitude: 34.7818,
+                        //     onLocationSelected: ( lat, lng, address) {
+                        //       controller.cityController.text = address;
+                        //       controller.locationLatitude = lat;
+                        //       controller.locationLongitude = lng;
+                        //       setState(() {});
+                        //     },
+                        //   );
+                        // }));
+                      },
+                      child: _buildInputField(
+                        "Change Your City".tr,
+                        "City".tr,
+                        controller.cityController,
+                        controller,
+                        readOnly: true,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
                     // _buildInputField("Change Your Bank Account".tr,
                     //     "Bank Account".tr, controller.bankAccountController),
                     SizedBox(height: 16.h),
                     _buildInputField("Change Your Instagram Page".tr,
-                        "Instagram".tr, controller.instagramController),
+                        "Instagram".tr, controller.instagramController,controller,),
                     _buildNoteText(
                       "It's not necessary if you haven't".tr,
                     ),
@@ -230,8 +254,9 @@ class _BEditProfileViewState extends State<BEditProfileView> {
   }
 
   Widget _buildInputField(
-      String label, String hint, TextEditingController controller,
-      {bool isPhone = false}) {
+      String label, String hint, TextEditingController controll,
+      controller,
+      {bool isPhone = false, bool readOnly = false}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: Column(
@@ -240,9 +265,25 @@ class _BEditProfileViewState extends State<BEditProfileView> {
           Text(label, style: Styles.textStyleS14W500(color: ColorsData.thirty)),
           SizedBox(height: 8.h),
           CustomTextFormField(
+            onTap: (){
+              // Future.delayed to ensure the tap is registered properly
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return MapSearchScreen(
+                  initialLatitude:32.0853,
+                  initialLongitude: 34.7818,
+                  onLocationSelected: ( lat, lng, address) {
+                    controller.cityController.text = address;
+                    controller.locationLatitude = lat;
+                    controller.locationLongitude = lng;
+                    setState(() {});
+                  },
+                );
+              }));
+            },
+            readOnly: readOnly,
             fillColor: ColorsData.secondary,
             hintText: hint,
-            controller: controller,
+            controller: controll,
             keyboardType: isPhone ? TextInputType.phone : null,
           ),
         ],

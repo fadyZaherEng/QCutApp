@@ -5,6 +5,7 @@ import 'notfication.dart';
 class FirebaseMessagingNavigate {
   // forground
   static Future<void> forGroundHandler(RemoteMessage? message) async {
+    print("foreground $message");
     if (message != null) {
       await LocalNotificationService.showSimpleNotification(
         title: message.notification!.title ?? '',

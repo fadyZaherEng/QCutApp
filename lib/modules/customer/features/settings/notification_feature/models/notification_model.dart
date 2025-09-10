@@ -35,6 +35,9 @@ class NotificationModel {
   final String id;
   final UserModel user;
   final String message;
+  final String messageEn;
+  final String messageAr;
+  final String messageHe;
   final String process;
   final String processId;
   final String receiver;
@@ -52,6 +55,9 @@ class NotificationModel {
     required this.sendToAdmin,
     required this.createdAt,
     required this.updatedAt,
+    required this.messageEn,
+    required this.messageAr,
+    required this.messageHe,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -67,6 +73,9 @@ class NotificationModel {
           DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
       updatedAt:
           DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
+      messageEn: json['messageEn'] ?? '',
+      messageAr: json['messageAr'] ?? '',
+      messageHe: json['messageHe'] ?? '',
     );
   }
 }

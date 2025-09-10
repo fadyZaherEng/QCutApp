@@ -336,6 +336,8 @@ class MainController extends GetxController {
                               coverPic: profileData?.coverPic.trim() ?? '',
                               city: profileData?.city ?? 'New City',
                               workingDays: profileData?.workingDays ?? [],
+                              barberShopLocation: profileData?.barberShopLocation ??
+                                  BarberShopLocation(type: 'Point', coordinates: [0, 0]),
                             ),
                           );
 

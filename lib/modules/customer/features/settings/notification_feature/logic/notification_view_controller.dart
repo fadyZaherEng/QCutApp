@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
@@ -55,7 +57,19 @@ class NotificationViewModel extends GetxController {
   }
 
   String getNotificationMessage(NotificationModel notification) {
-    return notification.message;
+    //check for language
+    Locale currentLocale = Get.locale ?? Locale('en');
+    print("Current Locale: ${currentLocale.languageCode}");
+    if (currentLocale.languageCode == 'ar' &&
+        notification.messageAr.isNotEmpty) {
+      return notification.messageAr;
+    } else if (currentLocale.languageCode == 'he' &&
+        notification.messageHe.isNotEmpty) {
+      return notification.messageHe;
+    }
+    return notification.messageEn.isNotEmpty
+        ? notification.messageEn
+        : notification.message;
   }
 
   String getProfileImage(NotificationModel notification) {
@@ -88,5 +102,23 @@ class NotificationViewModel extends GetxController {
         : ShowToast.showError(message: "Failed to update notification");
 
     refreshNotifications();
+  }
+
+  String getTimeAgo(notification) {
+    final now = DateTime.now();
+    final difference = now.difference(notification.createdAt);
+
+    if (difference.inSeconds < 60) {
+      return 'just now'.tr;
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} ${'minutes ago'.tr}';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ${'hours ago'.tr}';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} ${'days ago'.tr}';
+    } else {
+      //date time format as dd/mm/yyyy hh:mm
+      return '${notification.createdAt.day}/${notification.createdAt.month}/${notification.createdAt.year} ${notification.createdAt.hour}:${notification.createdAt.minute}';
+    }
   }
 }

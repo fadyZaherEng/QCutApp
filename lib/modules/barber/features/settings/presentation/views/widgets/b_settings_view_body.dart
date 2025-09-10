@@ -6,15 +6,18 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/functions/show_delete_account_dialog.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/functions/show_log_out_dialog.dart'
     show showLogoutDialog;
+import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_change_your_name_bottom_sheet.dart';
 
 class BSettingViewBody extends StatelessWidget {
-  const BSettingViewBody({super.key});
+  BSettingViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +72,27 @@ class BSettingViewBody extends StatelessWidget {
               // buildDrawerItem("Change Phone number", AssetsData.callIcon, () {
               //   context.push(AppRouter.bresetPhoneNumberPath);
               // }),
+
               buildDivider(),
               buildDrawerItem(
-                  "changeYourLocation".tr, AssetsData.mapPinIcon, () {}),
+                "changeYourLocation".tr,
+                AssetsData.mapPinIcon,
+                () {
+                  // Future.delayed to ensure the tap is registered properly
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return MapSearchScreen(
+                      initialLatitude: 32.0853,
+                      initialLongitude: 34.7818,
+                      onLocationSelected: (lat, lng, address) {
+                        updateProfile(
+                          locationLatitude: lat,
+                          locationLongitude: lng,
+                        );
+                      },
+                    );
+                  }));
+                },
+              ),
               buildDivider(),
               buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
                 showLogoutDialog(context);
@@ -85,6 +106,46 @@ class BSettingViewBody extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  dynamic isLoading = false.obs;
+
+  Future<void> updateProfile({
+    required double locationLatitude,
+    required double locationLongitude,
+  }) async {
+    final NetworkAPICall _apiCall = NetworkAPICall();
+
+    isLoading.value = true;
+    try {
+      // Build payload with properly formatted working days
+      final Map<String, dynamic> payload = {
+        'barberShopLocation': {
+          'type': 'Point',
+          'coordinates': [locationLongitude, locationLatitude],
+        },
+      };
+
+      print('Payload workingDays: ${payload['workingDays']}');
+      final response = await _apiCall.editData(
+          '${Variables.baseUrl}authentication', payload);
+
+      if (response.statusCode == 200) {
+        Get.snackbar('Success'.tr, 'Location updated successfully'.tr);
+        // Update local state if necessary
+        // profileController.fetchUserProfile();
+        // Optionally refresh the page or navigate
+        // Get.offAllNamed(AppRouter.bsettingsPath);
+      } else {
+        Get.snackbar(
+            'Error', 'Failed to update profile: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+      Get.snackbar('Error', 'Something went wrong. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {

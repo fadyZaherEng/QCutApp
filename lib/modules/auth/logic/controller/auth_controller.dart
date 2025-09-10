@@ -10,6 +10,7 @@ import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/auth/models/auth_response_model.dart';
 import 'package:q_cut/modules/auth/models/user_model.dart';
 import 'package:q_cut/modules/auth/views/otp_verification_view.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class AuthController extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
@@ -44,6 +45,8 @@ class AuthController extends GetxController {
 
   // Store userId from signup response
   final RxString userId = ''.obs;
+  double locationLatitude = 0.0;
+  double locationLongitude = 0.0;
 
   @override
   void onClose() {
@@ -64,16 +67,24 @@ class AuthController extends GetxController {
 
     try {
       final userData = UserModel(
-          fullName: fullNameController.text.trim(),
-          phoneNumber:
-              "+972${phoneNumberController.text.trim().replaceAll('\u200E', '')}",
-          password: passwordController.text,
-          city: "New City");
+        fullName: fullNameController.text.trim(),
+        phoneNumber:
+            "+972${phoneNumberController.text.trim().replaceAll('\u200E', '')}",
+        password: passwordController.text,
+        city: city.text.trim(),
+      );
 
       final requestData = {
         'userType':
             SharedPref().getBool(PrefKeys.userRole)! ? "user" : 'barber',
-        'userData': userData.toJson(),
+        'userData':SharedPref().getBool(PrefKeys.userRole)! ? userData.toJson():
+        {
+          ...userData.toJson(),
+          "location": {
+            "type": "Point",
+            "coordinates": [locationLongitude, locationLatitude]
+          }
+        }
       };
 
       final response =
@@ -149,6 +160,8 @@ class AuthController extends GetxController {
         print("=============== ${loginResponse.value!.id} ==================");
         await SharedPref().setString(PrefKeys.id, loginResponse.value!.id);
         await SharedPref()
+            .setString(PrefKeys.barberId, loginResponse.value!.id);
+        await SharedPref()
             .setString(PrefKeys.accessToken, loginResponse.value!.accessToken);
         await SharedPref()
             .setString(PrefKeys.profilePic, loginResponse.value!.profilePic);
@@ -159,6 +172,11 @@ class AuthController extends GetxController {
         await SharedPref()
             .setString(PrefKeys.fullName, loginResponse.value!.fullName);
         await SharedPref().setBool(PrefKeys.saveMe, isChecked);
+        if((SharedPref().getBool(PrefKeys.userRole)) == false){
+          ///todo barber
+          Barber barber = Barber.fromJson(responseBody);
+          await SharedPref().setString(PrefKeys.barber, jsonEncode(barber.toJson()));
+        }
 
         // You might want to show a success message
 

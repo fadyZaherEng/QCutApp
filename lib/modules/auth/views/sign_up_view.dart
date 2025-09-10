@@ -13,6 +13,7 @@ import 'package:q_cut/core/utils/widgets/custom_checkbox.dart';
 import 'package:q_cut/modules/auth/logic/controller/auth_controller.dart';
 import 'package:q_cut/modules/auth/views/functions/validate_egyptian_phone_number.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -149,17 +150,39 @@ class _SignUpViewState extends State<SignUpView> {
                               ],
                             )
                           : SizedBox(height: 16.h),
-                      // CustomTextFormField(
-                      //   controller: _authController.city,
-                      //   hintText: 'enterYourCity'.tr,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your City'.tr;
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // SizedBox(height: 16.h),
+                      (SharedPref().getBool(PrefKeys.userRole)) == false
+                          ? CustomTextFormField(
+                              onTap: () {
+                                // Implement location picker here
+                                // Future.delayed to ensure the tap is registered properly
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return MapSearchScreen(
+                                    initialLatitude: 32.0853,
+                                    initialLongitude: 34.7818,
+                                    onLocationSelected: (lat, lng, address) {
+                                      _authController.city.text = address;
+                                      _authController.locationLatitude = lat;
+                                      _authController.locationLongitude = lng;
+                                      setState(() {});
+                                    },
+                                  );
+                                }));
+                              },
+                              readOnly: true,
+                              controller: _authController.city,
+                              hintText: 'enterYourCity'.tr,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your City'.tr;
+                                }
+                                return null;
+                              },
+                            )
+                          : SizedBox(height: 16.h),
+                      (SharedPref().getBool(PrefKeys.userRole)) == false
+                          ? SizedBox(height: 16.h)
+                          : SizedBox.shrink(),
                       CustomTextFormField(
                         controller: _authController.passwordController,
                         keyboardType: TextInputType.visiblePassword,

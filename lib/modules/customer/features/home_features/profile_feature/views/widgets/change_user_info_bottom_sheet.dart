@@ -91,8 +91,7 @@ class ChangeUserInfoBottomSheet extends StatelessWidget {
                   hintText: profileController!.emailController.text.isEmpty
                       ? "(optional)"
                       : "enterYourPhoneNumber".tr,
-                  keyboardType: TextInputType.emailAddress,
-                ),
+                 ),
 
                 SizedBox(height: 20.h),
                 CustomBigButton(

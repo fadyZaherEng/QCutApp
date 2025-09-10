@@ -4,6 +4,25 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
+class NearestBarberResponse {
+  final bool success;
+  final List<Barber> barbers;
+
+  NearestBarberResponse({
+    required this.success,
+    required this.barbers,
+  });
+
+  factory NearestBarberResponse.fromJson(Map<String, dynamic> json) {
+    return NearestBarberResponse(
+      success: json['success'] ?? false,
+      barbers: (json['data'] as List<dynamic>?)
+          ?.map((e) => Barber.fromJson(e))
+          .toList() ??
+          [],
+    );
+  }
+}
 
 class HomeController extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
@@ -45,7 +64,7 @@ class HomeController extends GetxController {
     // Initialize with static data first
 
     // Then try to fetch from API
-    getBarbers();
+    // getBarbers();
   }
 
   @override
@@ -59,43 +78,82 @@ class HomeController extends GetxController {
   }
 
   // Fetch barbers data from API
-  Future<void> getBarbers() async {
+  // Future<void> getBarbers() async {
+  //   isLoading.value = true;
+  //   isError.value = false;
+  //   errorMessage.value = '';
+  //
+  //   try {
+  //     final response = await _apiCall.getData(Variables.GET_BARBERS);
+  //     final responseBody = json.decode(response.body);
+  //
+  //     if (response.statusCode == 200) {
+  //       final barbersResponse = BarbersResponse.fromJson(responseBody);
+  //       print("Barbers response: ${response.body}");
+  //       // Update total count
+  //       totalBarbers.value = barbersResponse.totalBarbers;
+  //       currentPage.value = barbersResponse.page;
+  //
+  //       // Filter and assign barbers
+  //       final allBarbers = barbersResponse.barbers;
+  //
+  //       // For simplicity, we'll consider all barbers as nearby
+  //       // and active barbers as recommended
+  //       nearbyBarbers.value = allBarbers;
+  //       recommendedBarbers.value =
+  //           allBarbers.where((barber) => barber.status == 'active').toList();
+  //     } else {
+  //       isError.value = true;
+  //       errorMessage.value =
+  //           responseBody['message'] ?? 'Failed to fetch barbers data';
+  //       // ShowToast.showError(message: errorMessage.value);
+  //     }
+  //   } catch (e) {
+  //     isError.value = true;
+  //     errorMessage.value = 'Network error: $e';
+  //     // Get.snackbar('Error', 'Failed to connect to server',
+  //     //     backgroundColor: Colors.red, colorText: Colors.white);
+  //
+  //     // Keep using static data if API fails
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+  Future<void> getNearestBarbers(double longitude, double latitude) async {
     isLoading.value = true;
     isError.value = false;
     errorMessage.value = '';
 
     try {
-      final response = await _apiCall.getData(Variables.GET_BARBERS);
+      final response = await _apiCall.getData(
+        "${Variables.baseUrl}user/nearest-barber?longitude=$longitude&latitude=$latitude",
+      );
       final responseBody = json.decode(response.body);
-
+      print(
+          "${Variables.baseUrl}user/nearest-barber?longitude=$longitude&latitude=$latitude");
+      print("Response: ${response.body}");
       if (response.statusCode == 200) {
-        final barbersResponse = BarbersResponse.fromJson(responseBody);
-        print("Barbers response: ${response.body}");
-        // Update total count
-        totalBarbers.value = barbersResponse.totalBarbers;
-        currentPage.value = barbersResponse.page;
+        final nearestBarbersResponse =
+        NearestBarberResponse.fromJson(responseBody);
 
-        // Filter and assign barbers
-        final allBarbers = barbersResponse.barbers;
+        print("Nearest barbers response: ${response.body}");
 
-        // For simplicity, we'll consider all barbers as nearby
-        // and active barbers as recommended
-        nearbyBarbers.value = allBarbers;
-        recommendedBarbers.value =
-            allBarbers.where((barber) => barber.status == 'active').toList();
+        // التعيين
+        nearbyBarbers.value = nearestBarbersResponse.barbers;
+
+        // التوصية باللي حالتهم active
+        recommendedBarbers.value = nearestBarbersResponse.barbers
+            .where((barber) => barber.status == 'active')
+            .toList();
+
       } else {
         isError.value = true;
         errorMessage.value =
-            responseBody['message'] ?? 'Failed to fetch barbers data';
-        // ShowToast.showError(message: errorMessage.value);
+            responseBody['message'] ?? 'Failed to fetch nearest barbers data';
       }
     } catch (e) {
       isError.value = true;
       errorMessage.value = 'Network error: $e';
-      // Get.snackbar('Error', 'Failed to connect to server',
-      //     backgroundColor: Colors.red, colorText: Colors.white);
-
-      // Keep using static data if API fails
     } finally {
       isLoading.value = false;
     }

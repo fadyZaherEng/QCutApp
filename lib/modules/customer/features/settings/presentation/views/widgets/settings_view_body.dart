@@ -81,12 +81,12 @@ class _SettingViewBodyState extends State<SettingViewBody> {
 
                 // context.push(AppRouter.resetPhoneNumberPath);
               }),
-              buildDivider(),
-              buildDrawerItem(
-                "changeYourLocation".tr,
-                AssetsData.mapPinIcon,
-                () {},
-              ),
+              // buildDivider(),
+              // buildDrawerItem(
+              //   "changeYourLocation".tr,
+              //   AssetsData.mapPinIcon,
+              //   () {},
+              // ),
               buildDivider(),
               buildDrawerItem("logout".tr, AssetsData.logOutIcon, () {
                 showLogoutDialog(context);
