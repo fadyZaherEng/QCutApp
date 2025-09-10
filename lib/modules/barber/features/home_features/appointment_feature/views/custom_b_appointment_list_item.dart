@@ -12,7 +12,7 @@ import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/
 
 import '../logic/appointment_controller.dart';
 
-class CustomBAppointmentListItem extends StatelessWidget {
+class CustomBAppointmentListItem extends StatefulWidget {
   final String imageUrl;
   final String name;
   final String id;
@@ -52,6 +52,13 @@ class CustomBAppointmentListItem extends StatelessWidget {
   });
 
   @override
+  State<CustomBAppointmentListItem> createState() =>
+      _CustomBAppointmentListItemState();
+}
+
+class _CustomBAppointmentListItemState
+    extends State<CustomBAppointmentListItem> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
@@ -66,7 +73,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 28.r,
-                foregroundImage: CachedNetworkImageProvider(imageUrl),
+                foregroundImage: CachedNetworkImageProvider(widget.imageUrl),
                 backgroundColor: ColorsData.secondary,
               ),
               const Spacer(),
@@ -102,7 +109,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
 
           // **Name**
           Text(
-            name,
+            widget.name,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.sp,
@@ -113,6 +120,8 @@ class CustomBAppointmentListItem extends StatelessWidget {
 
           // **Location**
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SvgPicture.asset(
                 height: 16.h,
@@ -125,32 +134,42 @@ class CustomBAppointmentListItem extends StatelessWidget {
               ),
               SizedBox(width: 4.w),
               Expanded(
-                child: Text(
-                  location,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ),
+                  child: FutureBuilder<String>(
+                future: widget.appointment.barber.location?.getAddress(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading address...");
+                  }
+                  if (snapshot.hasError) {
+                    return Text("Error loading address");
+                  }
+                  return Text(
+                    snapshot.data ?? "Address not available",
+                    style: Styles.textStyleS12W400(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  );
+                },
+              )),
             ],
           ),
           SizedBox(height: 12.h),
 
           // **Details in Rows**
-          _infoRow("service".tr, service),
-          _infoRow("Qty".tr, qty),
-          _infoRow("bookingDay".tr, bookingDay),
-          _infoRow("bookingTime".tr, bookingTime),
-          _infoRow("type".tr, type),
+          _infoRow("service".tr, widget.service),
+          _infoRow("Qty".tr, widget.qty),
+          _infoRow("bookingDay".tr, widget.bookingDay),
+          _infoRow("bookingTime".tr, widget.bookingTime),
+          _infoRow("type".tr, widget.type),
 
           SizedBox(height: 12.h),
 
           // **Price Details**
           Divider(color: Colors.white.withOpacity(0.3)),
           SizedBox(height: 8.h),
-          _infoRow("price".tr, "\$ ${price.toStringAsFixed(2)}"),
-          _infoRow("finalPrice".tr, "\$ ${finalPrice.toStringAsFixed(2)}",
+          _infoRow("price".tr, "\$ ${widget.price.toStringAsFixed(2)}"),
+          _infoRow(
+              "finalPrice".tr, "\$ ${widget.finalPrice.toStringAsFixed(2)}",
               color: ColorsData.primary),
           SizedBox(height: 12.h),
 
@@ -187,21 +206,22 @@ class CustomBAppointmentListItem extends StatelessWidget {
           // داخل Row الأزرار
           Row(
             children: [
-              if (DateTime.now().isBefore(
-                  appointment.startDate.subtract(const Duration(minutes: 30))))
+              if (DateTime.now().isBefore(widget.appointment.startDate
+                  .subtract(const Duration(minutes: 30))))
                 Expanded(
                   child: _customButton(
                     "delete".tr,
                     Colors.red,
                     () => showDeleteAppointmentDialog(
                       context: context,
-                      onYes: () => controller.deleteAppointment(appointment.id),
+                      onYes: () => widget.controller
+                          .deleteAppointment(widget.appointment.id),
                       onNo: () {},
                     ),
                   ),
                 ),
               if (DateTime.now().isAfter(
-                  appointment.startDate.add(const Duration(minutes: 5))))
+                  widget.appointment.startDate.add(const Duration(minutes: 5))))
                 Expanded(
                   child: _customButton(
                     "Didn’t come".tr,
@@ -210,7 +230,7 @@ class CustomBAppointmentListItem extends StatelessWidget {
                       context: context,
                       onYes: () => showDeleteAppointmentDialog(
                         context: context,
-                        onYes: () => onDeleteTap?.call(),
+                        onYes: () => widget.onDeleteTap?.call(),
                         onNo: () {},
                       ),
                     ),
@@ -223,9 +243,9 @@ class CustomBAppointmentListItem extends StatelessWidget {
                   ColorsData.primary,
                   () => showChangeTimeBottomSheet(
                     context,
-                    bookingDay,
-                    id,
-                    services,
+                    widget.bookingDay,
+                    widget.id,
+                    widget.services,
                   ),
                 ),
               ),
@@ -271,11 +291,11 @@ class CustomBAppointmentListItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Styles.textStyleS10W400(),
+            style: Styles.textStyleS12W400(),
           ),
           Text(
             value,
-            style: Styles.textStyleS10W400(color: color),
+            style: Styles.textStyleS12W400(color: color),
           ),
         ],
       ),

@@ -108,11 +108,13 @@ class BarberInfo {
   final String id;
   final String fullName;
   final String userType;
+  final String city;
 
   BarberInfo({
     required this.id,
     required this.fullName,
     required this.userType,
+    required this.city,
   });
 
   factory BarberInfo.fromJson(Map<String, dynamic> json) {
@@ -120,6 +122,7 @@ class BarberInfo {
       id: json['_id'],
       fullName: json['fullName'],
       userType: json['userType'],
+      city: json['city'],
     );
   }
 }

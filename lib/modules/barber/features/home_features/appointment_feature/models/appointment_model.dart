@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 
 class BarberAppointmentResponse {
@@ -17,7 +18,7 @@ class BarberAppointmentResponse {
 
 class BarberAppointment {
   final String id;
-  final String barber;
+  final BarberInfo barber; // ✅ Barber Info بدل String
   final UserInfo user;
   final List<ServiceItem> services;
   final double price;
@@ -45,12 +46,20 @@ class BarberAppointment {
   });
 
   factory BarberAppointment.fromJson(Map<String, dynamic> json) {
-    // Handle the nested user object
+    // ✅ Parse barber info as object
+    BarberInfo barberInfo;
+    if (json['barber'] != null && json['barber'] is Map) {
+      barberInfo =
+          BarberInfo.fromJson(Map<String, dynamic>.from(json['barber']));
+    } else {
+      barberInfo = BarberInfo.empty();
+    }
+
+    // ✅ Handle the nested user object
     UserInfo userInfo;
     if (json['user'] != null && json['user'] is Map) {
       userInfo = UserInfo.fromJson(json['user']);
     } else {
-      // Fallback for when user data isn't properly structured
       userInfo = UserInfo(
         id: '',
         fullName: json['userName'] ?? 'Unknown',
@@ -58,7 +67,7 @@ class BarberAppointment {
       );
     }
 
-    // Handle the service array
+    // ✅ Handle the service array
     List<ServiceItem> serviceItems = [];
     if (json['service'] != null && json['service'] is List) {
       serviceItems = (json['service'] as List)
@@ -66,12 +75,12 @@ class BarberAppointment {
           .toList();
     }
 
-    // Parse dates
+    // ✅ Parse dates safely
     DateTime startDate;
     try {
       startDate = DateTime.fromMillisecondsSinceEpoch(
           json['startDate'] is int ? json['startDate'] : 0);
-    } catch (e) {
+    } catch (_) {
       startDate = DateTime.now();
     }
 
@@ -79,18 +88,16 @@ class BarberAppointment {
     try {
       endDate = DateTime.fromMillisecondsSinceEpoch(
           json['endDate'] is int ? json['endDate'] : 0);
-    } catch (e) {
+    } catch (_) {
       endDate = DateTime.now().add(Duration(minutes: json['duration'] ?? 0));
     }
 
-    // Format the date and time
     final formattedDate = DateFormat('yyyy-MM-dd').format(startDate);
-    final formattedTime = DateFormat('h:mm')
-        .format(startDate); // Format time as hour:minute AM/PM
+    final formattedTime = DateFormat('h:mm').format(startDate);
 
     return BarberAppointment(
       id: json['_id'] ?? '',
-      barber: json['barber'] ?? '',
+      barber: barberInfo,
       user: userInfo,
       services: serviceItems,
       price: (json['price'] ?? 0).toDouble(),
@@ -100,8 +107,103 @@ class BarberAppointment {
       endDate: endDate,
       paymentMethod: json['paymentMethod'] ?? 'unknown',
       formattedDate: formattedDate,
-      formattedTime: formattedTime, // Add the formatted time
+      formattedTime: formattedTime,
     );
+  }
+}
+
+class BarberInfo {
+  final String id;
+  final String fullName;
+  final String userType;
+  final BarberLocation? location;
+  final String barberShop;
+
+  BarberInfo({
+    required this.id,
+    required this.fullName,
+    required this.userType,
+    required this.location,
+    required this.barberShop,
+  });
+
+  factory BarberInfo.fromJson(Map<String, dynamic> json) {
+    return BarberInfo(
+      id: json['_id'] ?? '',
+      fullName: json['fullName'] ?? '',
+      userType: json['userType'] ?? '',
+      location: json['barberShopLocation'] != null &&
+              json['barberShopLocation'] is Map
+          ? BarberLocation.fromJson(json['barberShopLocation'])
+          : null,
+      barberShop: json['barberShop'] ?? '',
+    );
+  }
+
+  factory BarberInfo.empty() {
+    return BarberInfo(
+      id: '',
+      fullName: '',
+      userType: '',
+      location: null,
+      barberShop: '',
+    );
+  }
+}
+
+
+class BarberLocation {
+  final String type;
+  final List<double> coordinates;
+  final String address;
+
+  BarberLocation({
+    required this.type,
+    required this.coordinates,
+    this.address = '',
+  });
+
+  factory BarberLocation.fromJson(Map<String, dynamic> json) {
+    final coords = (json['coordinates'] as List)
+        .map((c) => (c as num).toDouble())
+        .toList();
+
+    return BarberLocation(
+      type: json['type'] ?? '',
+      coordinates: coords,
+      address: json['address'] ?? '',
+    );
+  }
+
+  /// دالة Async تجيب العنوان الصحيح
+  Future<String> getAddress() async {
+    if (address.isNotEmpty) return address;
+
+    if (coordinates.length != 2) return 'Address not available';
+
+    final latitude = coordinates[1];
+    final longitude = coordinates[0];
+
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(latitude, longitude);
+
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        return [
+          place.street,
+          place.subLocality,
+          place.locality,
+          place.administrativeArea,
+          place.country,
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+      } else {
+        return 'Address not available';
+      }
+    } catch (e) {
+      print("❌ Error getting address: $e");
+      return 'Address not available';
+    }
   }
 }
 
@@ -137,7 +239,8 @@ class ServiceItem {
     required this.price,
     required this.id,
   });
-   factory ServiceItem.fromJson(Map<String, dynamic> json) {
+
+  factory ServiceItem.fromJson(Map<String, dynamic> json) {
     return ServiceItem(
       service: json['service'] is Map
           ? Service.fromJson(json['service'])
@@ -147,14 +250,6 @@ class ServiceItem {
       id: json['_id'] ?? '',
     );
   }
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     "service": service.toJson(),
-  //     "numberOfUsers": numberOfUsers,
-  //     "price": price,
-  //     "_id": id,
-  //   };
-  // }
 }
 
 class Service {

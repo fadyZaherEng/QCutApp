@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/main.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,8 +18,18 @@ import 'package:q_cut/modules/barber/features/home_features/appointment_feature/
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_appointment_list_item.dart';
 import 'picker.dart';
 
-class BAppointmentView extends StatelessWidget {
+class BAppointmentView extends StatefulWidget {
   const BAppointmentView({super.key});
+
+  @override
+  State<BAppointmentView> createState() => _BAppointmentViewState();
+}
+
+class _BAppointmentViewState extends State<BAppointmentView> {
+  Future<void> loadAddress(BarberLocation location) async {
+    String addr = await location.getAddress();
+    print("📍 Barber Address: $addr");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +165,8 @@ class BAppointmentView extends StatelessWidget {
                               name: appointment.user.fullName,
                               controller: controller,
                               appointment: appointment,
-                              location: "location".tr,
+                              location:
+                                    "location".tr,
                               service: appointment.services.isNotEmpty
                                   ? appointment.services[0].service.name
                                   : "service".tr,

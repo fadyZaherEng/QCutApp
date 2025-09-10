@@ -73,7 +73,7 @@ class _CustomDeleteAppointmentItemState
                 if (Get.locale?.languageCode == 'ar')
                   Container(
                     width: 126.w,
-                    height: 194.h,
+                    // height: 194.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(16.r),
@@ -95,7 +95,7 @@ class _CustomDeleteAppointmentItemState
                 if (Get.locale?.languageCode == 'ar')
                   Expanded(
                     child: Container(
-                      height: 194.h,
+                      // height: 194.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(16.r),
@@ -122,12 +122,15 @@ class _CustomDeleteAppointmentItemState
                                 Text(
                                   widget.appointment.paymentMethod,
                                   style: Styles.textStyleS14W400(
-                                      color: ColorsData.primary),
+                                    color: ColorsData.primary,
+                                  ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 6.h),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SvgPicture.asset(
                                   AssetsData.mapPinIcon,
@@ -141,7 +144,8 @@ class _CustomDeleteAppointmentItemState
                                 SizedBox(width: 4.w),
                                 Expanded(
                                   child: Text(
-                                    "${widget.appointment.barber.fullName} ",
+                                    "${widget.appointment.barber.city} ",
+                                    maxLines: 3,
                                     style: Styles.textStyleS12W400(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
