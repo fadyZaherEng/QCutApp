@@ -298,12 +298,12 @@ class BAppointmentController extends GetxController {
             .removeWhere((element) => element.id == appointmentId);
 
         ShowToast.showSuccessSnackBar(
-            message: 'Appointment deleted successfully');
+            message: 'Appointment Did Not Come successfully'.tr);
         return true;
       } else {
         final responseBody = json.decode(response.body);
         final message =
-            responseBody['message'] ?? 'Failed to delete appointment';
+            responseBody['message'] ?? 'Failed to Did Not Come appointment';
         ShowToast.showError(message: message);
         return false;
       }
@@ -386,7 +386,7 @@ class BAppointmentController extends GetxController {
             .removeWhere((element) => element.id == appointmentId);
 
         ShowToast.showSuccessSnackBar(
-            message: 'Appointment deleted successfully');
+            message: 'Appointment deleted successfully'.tr);
         return true;
       } else {
         final responseBody = json.decode(response.body);

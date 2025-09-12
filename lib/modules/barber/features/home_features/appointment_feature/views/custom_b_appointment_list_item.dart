@@ -25,7 +25,7 @@ class CustomBAppointmentListItem extends StatefulWidget {
   final String type;
   final double price;
   final double finalPrice;
-  final Function()? onDeleteTap;
+  final void Function() onDidNotComeTap;
   final BAppointmentController controller;
   final List<ServiceItem> services;
 
@@ -45,7 +45,7 @@ class CustomBAppointmentListItem extends StatefulWidget {
     required this.type,
     required this.price,
     required this.finalPrice,
-    this.onDeleteTap,
+    required this.onDidNotComeTap,
     required this.controller,
     required this.appointment,
     required this.services,
@@ -228,11 +228,8 @@ class _CustomBAppointmentListItemState
                     Colors.orange,
                     () => showDidNotComeDialog(
                       context: context,
-                      onYes: () => showDeleteAppointmentDialog(
-                        context: context,
-                        onYes: () => widget.onDeleteTap?.call(),
-                        onNo: () {},
-                      ),
+                      onYes: () => widget.controller
+                          .didntComeAppointment(widget.appointment.id),
                     ),
                   ),
                 ),
@@ -258,7 +255,7 @@ class _CustomBAppointmentListItemState
 
   Future<void> showDidNotComeDialog({
     required BuildContext context,
-    required VoidCallback onYes,
+    required Future Function() onYes,
   }) async {
     return showDialog(
       context: context,
@@ -272,9 +269,9 @@ class _CustomBAppointmentListItemState
             child: Text("No".tr),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              await onYes();
               Navigator.of(ctx).pop();
-              onYes();
             },
             child: Text("Yes".tr),
           ),

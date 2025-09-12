@@ -159,7 +159,7 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                                 left: 16.w, right: 16.w, bottom: 12.h),
                             child: CustomBAppointmentListItem(
                               id: appointment.id,
-                              onDeleteTap: () => controller
+                              onDidNotComeTap: () => controller
                                   .didntComeAppointment(appointment.id),
                               imageUrl: profileDrawerImage,
                               name: appointment.user.fullName,
