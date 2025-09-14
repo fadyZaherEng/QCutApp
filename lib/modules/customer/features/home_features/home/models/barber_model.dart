@@ -40,8 +40,8 @@ class Barber {
   final String? instagramPage;
   final List<String> offDay;
   final List<WorkingDay> workingDays;
+  final BarberShopLocation? barberShopLocation; // ✅ أضفنا اللوكيشن
   bool isFavorite;
-
 
   Barber({
     required this.id,
@@ -54,9 +54,10 @@ class Barber {
     this.barberShop,
     this.profilePic,
     this.coverPic,
-    this.instagramPage,
+    required this.instagramPage,
     required this.offDay,
     required this.workingDays,
+    this.barberShopLocation,
   });
 
   factory Barber.fromJson(Map<String, dynamic> json) {
@@ -64,10 +65,10 @@ class Barber {
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
-      userType: json['userType'] ?? '', // may not exist
+      userType: json['userType'] ?? '',
       city: json['city'] ?? '',
       status: json['status'] ?? '',
-      barberShop: json['barberShop'], // keep nullable
+      barberShop: json['barberShop'],
       profilePic: json['profilePic'],
       coverPic: json['coverPic'],
       instagramPage: json['instagramPage'],
@@ -77,11 +78,14 @@ class Barber {
           : <String>[],
       workingDays: (json['workingDays'] is List)
           ? List<WorkingDay>.from(
-              json['workingDays'].map((x) => WorkingDay.fromJson(x)))
+          json['workingDays'].map((x) => WorkingDay.fromJson(x)))
           : <WorkingDay>[],
+      barberShopLocation: json['barberShopLocation'] != null
+          ? BarberShopLocation.fromJson(json['barberShopLocation'])
+          : null,
     );
   }
-  //to json
+
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
@@ -97,6 +101,40 @@ class Barber {
       'isFavorite': isFavorite,
       'offDay': offDay,
       'workingDays': workingDays.map((x) => x.toJson()).toList(),
+      'barberShopLocation': barberShopLocation?.toJson(), // ✅
     };
   }
+}
+
+/// ✅ كلاس جديد للوكيشن
+class BarberShopLocation {
+  final String type;
+  final List<double> coordinates;
+
+  BarberShopLocation({
+    required this.type,
+    required this.coordinates,
+  });
+
+  factory BarberShopLocation.fromJson(Map<String, dynamic> json) {
+    return BarberShopLocation(
+      type: json['type'] ?? '',
+      coordinates: (json['coordinates'] as List)
+          .map((c) => (c as num).toDouble())
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'coordinates': coordinates,
+    };
+  }
+
+  double? get latitude =>
+      coordinates.length == 2 ? coordinates[1] : null;
+
+  double? get longitude =>
+      coordinates.length == 2 ? coordinates[0] : null;
 }

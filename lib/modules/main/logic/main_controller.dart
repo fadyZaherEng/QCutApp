@@ -338,6 +338,7 @@ class MainController extends GetxController {
                               workingDays: profileData?.workingDays ?? [],
                               barberShopLocation: profileData?.barberShopLocation ??
                                   BarberShopLocation(type: 'Point', coordinates: [0, 0]),
+                              phoneNumber: profileData?.phoneNumber ?? '',
                             ),
                           );
 

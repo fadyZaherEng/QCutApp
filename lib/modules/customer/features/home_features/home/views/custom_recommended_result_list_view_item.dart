@@ -65,13 +65,17 @@ class CustomBarberShopWideCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(barber.barberShop ?? 'barberSalon'.tr,
-                    style: Styles.textStyleS14W400()),
+                Text(
+                  barber.barberShop ?? 'barberSalon'.tr,
+                  style: Styles.textStyleS14W400(),
+                ),
                 SizedBox(height: 4.h),
-                Text(barber.fullName.splitMapJoin(', '),
-                    style: Styles.textStyleS14W400(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
+                Text(
+                  barber.fullName.splitMapJoin(', '),
+                  style: Styles.textStyleS14W400(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 SizedBox(height: 4.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

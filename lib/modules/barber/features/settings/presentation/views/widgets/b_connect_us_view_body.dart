@@ -31,16 +31,12 @@ class BConnectUsViewBody extends StatelessWidget {
               height: 190.h,
             ),
           ),
-          SizedBox(
-            height: 32.h,
-          ),
+          SizedBox(height: 32.h),
           Text(
             "You can contact by".tr,
             style: Styles.textStyleS16W700(color: ColorsData.primary),
           ),
-          SizedBox(
-            height: 16.h,
-          ),
+          SizedBox(height: 16.h),
           InkWell(
             onTap: () async {
               print('Instagram link: $instagramLink');
@@ -49,23 +45,23 @@ class BConnectUsViewBody extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(
-                  height: 24.h,
-                  width: 24.w,
-                  AssetsData.changeLanguagesIcon,
+                  height: 22.h,
+                  width: 22.w,
+                  AssetsData.instagramIcon,
+                  colorFilter: const ColorFilter.mode(
+                    ColorsData.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
-                SizedBox(
-                  width: 8.w,
-                ),
+                SizedBox(width: 8.w),
                 Text(
-                  "Instagram".tr,
+                  "INSTGRAM".tr,
                   style: Styles.textStyleS16W400(),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: 24.h,
-          ),
+          SizedBox(height: 24.h),
           InkWell(
             onTap: () {
               Get.toNamed(AppRouter.chatWithUsPath);
@@ -81,9 +77,7 @@ class BConnectUsViewBody extends StatelessWidget {
                     BlendMode.srcIn,
                   ),
                 ),
-                SizedBox(
-                  width: 8.w,
-                ),
+                SizedBox(width: 8.w),
                 Text(
                   "Chat with us".tr,
                   style: Styles.textStyleS16W400(),

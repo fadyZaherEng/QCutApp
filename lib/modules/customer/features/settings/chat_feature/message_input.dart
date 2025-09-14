@@ -24,7 +24,7 @@ class MessageInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     return Padding(
-      padding: EdgeInsets.only(left: 7.w, right: 5.w, top: 25.h, bottom: 12.h),
+      padding: EdgeInsets.only(left: 7.w, right: 5.w, top: 25.h, bottom: 25.h),
       child: Row(
         children: [
           Expanded(
@@ -40,24 +40,30 @@ class MessageInput extends StatelessWidget {
                   }
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 31.w, right: 22.w),
-                    hintText: "enterYourMessage".tr,
-                    fillColor: ColorsData.font,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                      borderSide: BorderSide.none,
+                  contentPadding: EdgeInsets.only(left: 31.w, right: 22.w),
+                  hintText: "enterYourMessage".tr,
+                  fillColor: ColorsData.font,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      if (controller.text.trim().isNotEmpty &&
+                          onSendMessage != null) {
+                        onSendMessage!(controller.text);
+                        controller.clear();
+                      }
+                    },
+                    child: const Icon(
+                      Icons.send,
+                      color: ColorsData.thirty,
+                      size: 24,
                     ),
-                    suffixIcon: InkWell(
-                        onTap: () {
-                          if (controller.text.trim().isNotEmpty &&
-                              onSendMessage != null) {
-                            onSendMessage!(controller.text);
-                            controller.clear();
-                          }
-                        },
-                        child: const Icon(Icons.send)),
-                    suffixIconColor: ColorsData.thirty),
+                  ),
+                  suffixIconColor: ColorsData.thirty,
+                ),
               ),
             ),
           ),
@@ -65,14 +71,26 @@ class MessageInput extends StatelessWidget {
             width: 4.w,
           ),
           InkWell(
-              onTap: onCameraTap,
-              child: SvgPicture.asset(AssetsData.cameraIcon)),
+            onTap: onCameraTap,
+            child: SvgPicture.asset(
+              AssetsData.cameraIcon,
+              height: 24.h,
+              width: 24.w,
+              color: Colors.white,
+            ),
+          ),
           SizedBox(
             width: 8.w,
           ),
           InkWell(
-              onTap: onRecTap,
-              child: SvgPicture.asset(AssetsData.microphoneIcon)),
+            onTap: onRecTap,
+            child: SvgPicture.asset(
+              AssetsData.microphoneIcon,
+              height: 24.h,
+              width: 24.w,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -43,7 +44,7 @@ class CustomBarberListViewItem extends StatelessWidget {
                       height: 170.h,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
+                          const Center(child: SpinKitDoubleBounce(color: ColorsData.primary)),
                       errorWidget: (context, url, error) => Image.asset(
                         AssetsData.barberSalonImage,
                         width: 211.w,

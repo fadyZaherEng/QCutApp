@@ -18,7 +18,9 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/widgets/custom_edit_new_service_bottom_sheet.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_change_your_picture_dialog.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_working_days_bottom_sheet.dart';
+import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/my_profile_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/barber_profile_model.dart';
 
@@ -366,13 +368,58 @@ class _BProfileViewBodyState extends State<BProfileView>
                           SizedBox(height: 8.h),
                           _buildInfoRow(AssetsData.personIcon, fullName),
                           SizedBox(height: 8.h),
-                          _buildInfoRow(AssetsData.mapPinIcon, city),
+                          InkWell(
+                            onTap: () {
+                              // Handle city tap if needed
+                              // Future.delayed to ensure the tap is registered properly
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return MapSearchScreen(
+                                  initialLatitude: profileData
+                                          .barberShopLocation
+                                          .coordinates
+                                          .isNotEmpty
+                                      ? profileData
+                                          .barberShopLocation.coordinates[1]
+                                      : 31.0461,
+                                  initialLongitude: profileData
+                                          .barberShopLocation
+                                          .coordinates
+                                          .isNotEmpty
+                                      ? profileData
+                                          .barberShopLocation.coordinates[0]
+                                      : 34.8516,
+                                  onLocationSelected: (lat, lng, address) {
+                                    setState(() {});
+                                  },
+                                );
+                              }));
+                            },
+                            child: _buildInfoRow(AssetsData.mapPinIcon, city),
+                          ),
                           SizedBox(height: 8.h),
-                          _buildInfoRow(AssetsData.callIcon,
-                              "\u200E${profileData.phoneNumber}"),
+                          InkWell(
+                            onTap: () {
+                              // Handle phone number tap if needed
+                              launchPhoneDialer(profileData.phoneNumber);
+                            },
+                            child: _buildInfoRow(AssetsData.callIcon,
+                                "\u200E${profileData.phoneNumber}"),
+                          ),
                           SizedBox(height: 8.h),
-                          _buildInfoRow(
-                              AssetsData.instagramIcon, instagramPage),
+                          InkWell(
+                            onTap: () {
+                              // Handle Instagram tap if needed
+                              try {
+                                launch(profileData.instagramPage);
+                              } catch (e) {
+                                print('Could not launch Instagram: $e');
+                                // s(context, "Invalid Instagram link".tr);
+                              }
+                            },
+                            child: _buildInfoRow(
+                                AssetsData.instagramIcon, instagramPage),
+                          ),
                           SizedBox(height: 16.h),
                           CustomBigButton(
                             color: const Color(0xA6C59D4E),
@@ -399,7 +446,9 @@ class _BProfileViewBodyState extends State<BProfileView>
                                   coverPic: profileData.coverPic,
                                   city: profileData.city,
                                   workingDays: profileData.workingDays,
-                                  barberShopLocation: profileData.barberShopLocation,
+                                  barberShopLocation:
+                                      profileData.barberShopLocation,
+                                  phoneNumber: profileData.phoneNumber,
                                 ),
                               );
 
@@ -883,5 +932,14 @@ class _BProfileViewBodyState extends State<BProfileView>
         ),
       ],
     );
+  }
+
+  void launchPhoneDialer(String phoneNumber) {
+    //launch phone dialer with the given phone number
+    try {
+      launch("tel:$phoneNumber");
+    } catch (e) {
+      print('Could not launch phone dialer: $e');
+    }
   }
 }

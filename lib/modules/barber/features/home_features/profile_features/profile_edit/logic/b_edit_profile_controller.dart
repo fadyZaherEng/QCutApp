@@ -94,11 +94,15 @@ class BEditProfileController extends GetxController {
 
   void _initializeControllers() {
     nameController.text = initialData.fullName;
-    // phoneController.text = initialData.p ?? '';
+    phoneController.text = initialData.phoneNumber.replaceFirst("+972", "") ?? '';
     saloonController.text = initialData.barberShop;
     cityController.text = initialData.city;
     // bankAccountController.text = initialData.bankAccountNumber;
     instagramController.text = initialData.instagramPage;
+    if (initialData.barberShopLocation.coordinates.length == 2) {
+      locationLongitude = initialData.barberShopLocation.coordinates[0];
+      locationLatitude = initialData.barberShopLocation.coordinates[1];
+    }
   }
 
   Future<void> pickProfileImage() async {

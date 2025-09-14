@@ -6,6 +6,7 @@ class BarberProfileModel {
   final String barberShop;
   final String bankAccountNumber;
   final String instagramPage;
+  final String phoneNumber;
   final String profilePic;
   final String coverPic;
   final String city;
@@ -23,6 +24,7 @@ class BarberProfileModel {
     required this.city,
     required this.workingDays,
     required this.barberShopLocation,
+    required this.phoneNumber,
   });
 
   factory BarberProfileModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class BarberProfileModel {
           [],
       barberShopLocation:
           BarberShopLocation.fromJson(json['barberShopLocation'] ?? {}),
+      phoneNumber: json['phoneNumber'] ?? '',
     );
   }
 }

@@ -12,8 +12,11 @@ import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/core/utils/widgets/custom_button.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_how_many_consumer_bottom_sheet.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_working_days_bottom_sheet.dart';
+import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/controllers/gallery_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
+import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 
 class SelectedView extends StatefulWidget {
   const SelectedView({super.key});
@@ -42,11 +45,26 @@ class _SelectedViewState extends State<SelectedView> {
     });
   }
 
+  Future<void> navigateToLocation(double lat, double lng) async {
+    final String androidUrl =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+    final String iosUrl = 'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d';
+
+    final Uri uri = Uri.parse(Platform.isIOS ? iosUrl : androidUrl);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch map for $lat, $lng';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Safely get the barber object
     if (!Get.arguments.runtimeType.toString().contains('Barber')) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+          body: Center(child: SpinKitDoubleBounce(color: ColorsData.primary)));
     }
 
     barber = Get.arguments as Barber;
@@ -98,96 +116,131 @@ class _SelectedViewState extends State<SelectedView> {
                         Row(
                           children: [
                             // Instagram button
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(7.r),
-                                  height: 30.h,
-                                  width: 30.w,
-                                  decoration: BoxDecoration(
-                                    color: ColorsData.font,
-                                    borderRadius: BorderRadius.circular(25.r),
-                                  ),
-                                  child: SvgPicture.asset(
-                                    height: 16.h,
-                                    width: 16.w,
-                                    AssetsData.instagramIcon,
-                                    colorFilter: const ColorFilter.mode(
-                                      ColorsData.primary,
-                                      BlendMode.srcIn,
+
+                            InkWell(
+                              onTap: () async {
+                                final String? instaUrl = barber.instagramPage;
+                                if (instaUrl != null && instaUrl.isNotEmpty) {
+                                  launch(barber.instagramPage!);
+                                } else {
+                                  ShowToast.showError(
+                                      message:
+                                          "No Instagram link available for this barber"
+                                              .tr);
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(7.r),
+                                    height: 30.h,
+                                    width: 30.w,
+                                    decoration: BoxDecoration(
+                                      color: ColorsData.font,
+                                      borderRadius: BorderRadius.circular(25.r),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      height: 16.h,
+                                      width: 16.w,
+                                      AssetsData.instagramIcon,
+                                      colorFilter: const ColorFilter.mode(
+                                        ColorsData.primary,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Text(
-                                  "instagram".tr,
-                                  style: Styles.textStyleS14W500(),
-                                ),
-                              ],
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    "instagram".tr,
+                                    style: Styles.textStyleS14W500(),
+                                  ),
+                                ],
+                              ),
                             ),
+
                             const Spacer(),
                             // Direction button
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(7.r),
-                                  height: 30.h,
-                                  width: 30.w,
-                                  decoration: BoxDecoration(
-                                    color: ColorsData.font,
-                                    borderRadius: BorderRadius.circular(25.r),
-                                  ),
-                                  child: SvgPicture.asset(
-                                    height: 16.h,
-                                    width: 16.w,
-                                    AssetsData.directionIcon,
-                                    colorFilter: const ColorFilter.mode(
-                                      ColorsData.primary,
-                                      BlendMode.srcIn,
+                            InkWell(
+                              onTap: () {
+                                // Handle Direction button tap
+                                if (barber.barberShopLocation?.coordinates
+                                        .isNotEmpty ??
+                                    false) {
+                                  debugPrint(
+                                      "📍 Navigating to barber location: ${barber.barberShopLocation!.coordinates}");
+                                  final coords =
+                                      barber.barberShopLocation!.coordinates;
+                                  navigateToLocation(coords[1], coords[0]);
+                                } else {
+                                  ShowToast.showError(
+                                      message: "Location not available");
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(7.r),
+                                    height: 30.h,
+                                    width: 30.w,
+                                    decoration: BoxDecoration(
+                                      color: ColorsData.font,
+                                      borderRadius: BorderRadius.circular(25.r),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      height: 16.h,
+                                      width: 16.w,
+                                      AssetsData.directionIcon,
+                                      colorFilter: const ColorFilter.mode(
+                                        ColorsData.primary,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Text(
-                                  "direction".tr,
-                                  style: Styles.textStyleS14W500(),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  Text(
+                                    "direction".tr,
+                                    style: Styles.textStyleS14W500(),
+                                  ),
+                                ],
+                              ),
                             ),
                             const Spacer(),
                             // Share button
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(7.r),
-                                  height: 30.h,
-                                  width: 30.w,
-                                  decoration: BoxDecoration(
-                                    color: ColorsData.font,
-                                    borderRadius: BorderRadius.circular(25.r),
-                                  ),
-                                  child: SvgPicture.asset(
-                                    height: 16.h,
-                                    width: 16.w,
-                                    AssetsData.shareIcon,
-                                    colorFilter: const ColorFilter.mode(
-                                      ColorsData.primary,
-                                      BlendMode.srcIn,
+                            InkWell(
+                              onTap: () {
+                                // Handle Share button tap
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(7.r),
+                                    height: 30.h,
+                                    width: 30.w,
+                                    decoration: BoxDecoration(
+                                      color: ColorsData.font,
+                                      borderRadius: BorderRadius.circular(25.r),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      height: 16.h,
+                                      width: 16.w,
+                                      AssetsData.shareIcon,
+                                      colorFilter: const ColorFilter.mode(
+                                        ColorsData.primary,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Text(
-                                  "share".tr,
-                                  style: Styles.textStyleS14W500(),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  Text(
+                                    "share".tr,
+                                    style: Styles.textStyleS14W500(),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               width: 10,
@@ -198,30 +251,57 @@ class _SelectedViewState extends State<SelectedView> {
                           height: 18.h,
                         ),
                         // Address information
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              AssetsData.mapPinIcon,
-                              width: 18.w,
-                              height: 18.h,
-                              colorFilter: const ColorFilter.mode(
-                                ColorsData.primary,
-                                BlendMode.srcIn,
+                        InkWell(
+                          onTap: () {
+                            // Handle city tap if needed
+                            // Future.delayed to ensure the tap is registered properly
+                            if (barber.barberShopLocation == null ||
+                                barber
+                                    .barberShopLocation!.coordinates.isEmpty) {
+                              return;
+                            }
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MapSearchScreen(
+                                initialLatitude: barber.barberShopLocation!
+                                        .coordinates.isNotEmpty
+                                    ? barber.barberShopLocation!.coordinates[1]
+                                    : 31.0461,
+                                initialLongitude: barber.barberShopLocation!
+                                        .coordinates.isNotEmpty
+                                    ? barber.barberShopLocation!.coordinates[0]
+                                    : 34.8516,
+                                onLocationSelected: (lat, lng, address) {
+                                  setState(() {});
+                                },
+                              );
+                            }));
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                AssetsData.mapPinIcon,
+                                width: 18.w,
+                                height: 18.h,
+                                colorFilter: const ColorFilter.mode(
+                                  ColorsData.primary,
+                                  BlendMode.srcIn,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            // Show actual address if available
-                            Expanded(
-                              child: Text(
-                                barber.city,
-                                style: Styles.textStyleS14W500(),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                              SizedBox(
+                                width: 2.w,
                               ),
-                            ),
-                          ],
+                              // Show actual address if available
+                              Expanded(
+                                child: Text(
+                                  barber.city,
+                                  style: Styles.textStyleS14W500(),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 8.h,

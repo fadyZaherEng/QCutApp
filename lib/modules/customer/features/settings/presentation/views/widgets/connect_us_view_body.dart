@@ -52,25 +52,27 @@ class ConnectUsViewBody extends StatelessWidget {
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
                   } else {
-                    showErrorSnackBar(context, "Could not open Instagram link");
+                    showErrorSnackBar(context, "Instagram link is not set".tr);
                   }
                 } catch (e) {
-                  showErrorSnackBar(context, "Invalid Instagram link");
+                  showErrorSnackBar(context, "Instagram link is not set".tr);
                 }
               } else {
-                showErrorSnackBar(context, "Instagram link is not set");
+                showErrorSnackBar(context, "Instagram link is not set".tr);
               }
             },
             child: Row(
               children: [
                 SvgPicture.asset(
-                  height: 24.h,
-                  width: 24.w,
-                  AssetsData.changeLanguagesIcon,
+                  height: 22.h,
+                  width: 22.w,
+                  AssetsData.instagramIcon,
+                  colorFilter: const ColorFilter.mode(
+                    ColorsData.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
-                SizedBox(
-                  width: 8.w,
-                ),
+                SizedBox(width: 8.w),
                 Text(
                   "INSTGRAM".tr,
                   style: Styles.textStyleS16W400(),
@@ -78,9 +80,7 @@ class ConnectUsViewBody extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: 24.h,
-          ),
+          SizedBox(height: 24.h),
           InkWell(
             onTap: () {
               Get.toNamed(AppRouter.chatWithUsPath);

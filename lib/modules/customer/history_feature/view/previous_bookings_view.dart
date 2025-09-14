@@ -36,6 +36,7 @@ class PreviousBookingsView extends StatelessWidget {
                       status: appointments[index].status,
                       offDay: [],
                       workingDays: [],
+                      instagramPage: "",
                     ),
                   );
                 },

@@ -323,6 +323,7 @@ class _CustomDeleteAppointmentItemState
                     status: widget.appointment.status,
                     offDay: [],
                     workingDays: [],
+                    instagramPage: "",
                   ),
                 );
               },

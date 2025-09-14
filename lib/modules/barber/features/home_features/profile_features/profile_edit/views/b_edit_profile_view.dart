@@ -85,7 +85,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     _buildTitle("Change Your Details".tr),
                     SizedBox(height: 20.h),
                     _buildInputField("Change your name".tr, "Full Name".tr,
-                        controller.nameController,controller),
+                        controller.nameController, controller),
                     SizedBox(height: 16.h),
                     _buildInputField(
                       "Change Your Phone Number".tr,
@@ -95,8 +95,12 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                       isPhone: true,
                     ),
                     SizedBox(height: 16.h),
-                    _buildInputField("change your barber shop name".tr,
-                        "Saloon Name".tr, controller.saloonController,controller,),
+                    _buildInputField(
+                      "change your barber shop name".tr,
+                      "Saloon Name".tr,
+                      controller.saloonController,
+                      controller,
+                    ),
                     SizedBox(height: 16.h),
                     InkWell(
                       onTap: () {
@@ -126,8 +130,12 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                     // _buildInputField("Change Your Bank Account".tr,
                     //     "Bank Account".tr, controller.bankAccountController),
                     SizedBox(height: 16.h),
-                    _buildInputField("Change Your Instagram Page".tr,
-                        "Instagram".tr, controller.instagramController,controller,),
+                    _buildInputField(
+                      "Change Your Instagram Page".tr,
+                      "Instagram".tr,
+                      controller.instagramController,
+                      controller,
+                    ),
                     _buildNoteText(
                       "It's not necessary if you haven't".tr,
                     ),
@@ -254,8 +262,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
   }
 
   Widget _buildInputField(
-      String label, String hint, TextEditingController controll,
-      controller,
+      String label, String hint, TextEditingController controll, controller,
       {bool isPhone = false, bool readOnly = false}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
@@ -265,13 +272,19 @@ class _BEditProfileViewState extends State<BEditProfileView> {
           Text(label, style: Styles.textStyleS14W500(color: ColorsData.thirty)),
           SizedBox(height: 8.h),
           CustomTextFormField(
-            onTap: (){
+            onTap: () {
+              if (!readOnly) return;
               // Future.delayed to ensure the tap is registered properly
+
+              // Make sure the controller is registered
+              final controllers = Get.isRegistered<BEditProfileController>()
+                  ? Get.find<BEditProfileController>()
+                  : Get.put(BEditProfileController());
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return MapSearchScreen(
-                  initialLatitude:32.0853,
-                  initialLongitude: 34.7818,
-                  onLocationSelected: ( lat, lng, address) {
+                  initialLatitude:controllers.locationLatitude?? 32.0853,
+                  initialLongitude:controllers.locationLongitude?? 34.7818,
+                  onLocationSelected: (lat, lng, address) {
                     controller.cityController.text = address;
                     controller.locationLatitude = lat;
                     controller.locationLongitude = lng;
