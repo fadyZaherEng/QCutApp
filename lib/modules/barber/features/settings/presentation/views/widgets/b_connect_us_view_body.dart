@@ -39,8 +39,14 @@ class BConnectUsViewBody extends StatelessWidget {
           SizedBox(height: 16.h),
           InkWell(
             onTap: () async {
-              print('Instagram link: $instagramLink');
-              openLink(instagramLink, context);
+              final instagramUrl =
+                  "https://www.instagram.com/moataz.abnha?igsh=MW12b2JyYzJtMjY0bA%3D%3D&utm_source=qr";
+              try {
+                final uri = Uri.parse(instagramUrl);
+                   await launchUrl(uri);
+              } catch (e) {
+                showErrorSnackBar(context, "Instagram link is not set".tr);
+              }
             },
             child: Row(
               children: [

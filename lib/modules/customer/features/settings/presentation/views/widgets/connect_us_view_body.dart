@@ -41,23 +41,11 @@ class ConnectUsViewBody extends StatelessWidget {
           InkWell(
             onTap: () async {
               final instagramUrl =
-                  profileController.profileData.value?.fullName.trim();
-
-              // تأكد من أن الرابط موجود ويبدأ بـ http أو https
-              if (instagramUrl != null &&
-                  instagramUrl.isNotEmpty &&
-                  Uri.tryParse(instagramUrl)?.hasAbsolutePath == true) {
-                try {
-                  final uri = Uri.parse(instagramUrl);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  } else {
-                    showErrorSnackBar(context, "Instagram link is not set".tr);
-                  }
-                } catch (e) {
-                  showErrorSnackBar(context, "Instagram link is not set".tr);
-                }
-              } else {
+                  "https://www.instagram.com/moataz.abnha?igsh=MW12b2JyYzJtMjY0bA%3D%3D&utm_source=qr";
+              try {
+                final uri = Uri.parse(instagramUrl);
+                await launchUrl(uri);
+              } catch (e) {
                 showErrorSnackBar(context, "Instagram link is not set".tr);
               }
             },

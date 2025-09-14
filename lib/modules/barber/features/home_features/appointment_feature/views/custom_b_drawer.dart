@@ -157,48 +157,9 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
 
                     buildDrawerItem(
                         "Notifications".tr, AssetsData.notificationsIcon, () {
-                      // Get.toNamed(AppRouter.bsettingsPath);
-                      Get.toNamed(AppRouter.notificationPath);
+                       Get.toNamed(AppRouter.notificationPath);
                     }),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Row(
-                    //       children: [
-                    //         SvgPicture.asset(
-                    //           AssetsData.notificationsIcon,
-                    //           height: 24.h,
-                    //           width: 24.w,
-                    //           colorFilter: const ColorFilter.mode(
-                    //               ColorsData.primary, BlendMode.srcIn),
-                    //         ),
-                    //         SizedBox(width: 12.w),
-                    //         Text(
-                    //           "Notifications".tr,
-                    //           style: Styles.textStyleS14W400(),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     SizedBox(
-                    //       height: 16.h,
-                    //       width: 34.w,
-                    //       child: Transform.scale(
-                    //         scale: .75,
-                    //         child: Switch(
-                    //           value: isNotificationsEnabled,
-                    //           onChanged: (value) {
-                    //             setState(() {
-                    //               isNotificationsEnabled = value;
-                    //             });
-                    //           },
-                    //           inactiveThumbColor: ColorsData.cardStrock,
-                    //           activeColor: ColorsData.primary,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    SizedBox(
+                     SizedBox(
                       height: 10.h,
                     ),
                     buildDivider(),
