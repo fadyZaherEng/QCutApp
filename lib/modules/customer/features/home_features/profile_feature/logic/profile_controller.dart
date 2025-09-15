@@ -59,12 +59,12 @@ class ProfileController extends GetxController {
 
   @override
   void onClose() {
-    _fullNameController.dispose();
-    _phoneNumberController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _emailController.dispose();
-    _otpController.dispose();
+    // _fullNameController.dispose();
+    // _phoneNumberController.dispose();
+    // _passwordController.dispose();
+    // _confirmPasswordController.dispose();
+    // _emailController.dispose();
+    // _otpController.dispose();
     super.onClose();
   }
 
