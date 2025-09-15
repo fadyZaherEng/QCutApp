@@ -70,7 +70,7 @@ class CustomTextFormField extends StatelessWidget {
             top: 14.h,
             bottom: 14.h,
           ),
-          prefixIcon: Container(
+          suffixIcon: Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
             // margin: EdgeInsets.only(left: 8.w, right: 4.w),
             decoration: BoxDecoration(
@@ -78,11 +78,11 @@ class CustomTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Text(
-              "+972",
+              "\u200E+972",
               style: Styles.textStyleS14W500(color: ColorsData.primary),
             ),
           ),
-          suffixIcon: suffixIcon,
+          // suffixIcon: suffixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
             borderSide: const BorderSide(color: ColorsData.cardStrock),
