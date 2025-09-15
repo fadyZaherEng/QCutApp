@@ -33,7 +33,10 @@ class CitySelectionView extends StatelessWidget {
           style: Styles.textStyleS20W700(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
           onPressed: () => Get.back(),
         ),
       ),
@@ -48,14 +51,18 @@ class CitySelectionView extends StatelessWidget {
           children: [
             // Available Cities Button
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 24.0),
+                  vertical: 16.0,
+                  horizontal: 24.0,
+                ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD4AF37), // Golden color
+                  color: ColorsData.primary, // Golden color
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Row(
@@ -111,7 +118,7 @@ class CitySelectionView extends StatelessWidget {
                   Obx(() => Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: const BoxDecoration(
-                          color: Color(0xFFD4AF37),
+                          color: ColorsData.primary,
                           shape: BoxShape.circle,
                         ),
                         child: Text(
@@ -230,18 +237,20 @@ class CitySelectionView extends StatelessWidget {
       child: ListTile(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        leading:
-            const Icon(Icons.location_city, color: Color(0xFFD4AF37), size: 28),
+        leading: const Icon(Icons.location_city,
+            color: ColorsData.primary, size: 28),
         title: Text(
           city.name,
           style: Styles.textStyleS16W600(),
         ),
         trailing: isSelectionMode
-            ? Obx(() => Checkbox(
+            ? Obx(
+                () => Checkbox(
                   value: controller.isCitySelected(city),
                   onChanged: (_) => controller.toggleCitySelection(city),
                   activeColor: ColorsData.primary,
-                ))
+                ),
+              )
             : Container(
                 width: 32,
                 height: 32,

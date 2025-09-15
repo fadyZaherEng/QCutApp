@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
+/// دالة Async تجيب العنوان الصحيح
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class BarberAppointmentResponse {
   final List<BarberAppointment> appointments;
@@ -175,8 +180,8 @@ class BarberLocation {
     );
   }
 
-  /// دالة Async تجيب العنوان الصحيح
-  Future<String> getAddress() async {
+
+  Future<String> getAddress(String appLanguageCode) async {
     if (address.isNotEmpty) return address;
 
     if (coordinates.length != 2) return 'Address not available';
@@ -185,27 +190,70 @@ class BarberLocation {
     final longitude = coordinates[0];
 
     try {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(latitude, longitude);
+      // ✅ تحديد لغة التطبيق
+      final lang = appLanguageCode == "ar" ? "ar" : "en";
 
-      if (placemarks.isNotEmpty) {
-        final place = placemarks.first;
-        return [
-          place.street,
-          place.subLocality,
-          place.locality,
-          place.administrativeArea,
-          place.country,
-        ].where((e) => e != null && e.isNotEmpty).join(', ');
+      // ✅ Google Geocoding API
+      final url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json"
+            "?latlng=$latitude,$longitude"
+            "&key=AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"
+            "&language=$lang",
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data["status"] == "OK" && data["results"].isNotEmpty) {
+          final components = data["results"][0]["address_components"];
+
+          String street = "";
+          String city = "";
+          String country = "";
+
+          for (var comp in components) {
+            final types = List<String>.from(comp["types"]);
+
+            if (types.contains("route")) {
+              street = comp["long_name"];
+            }
+
+            if (types.contains("locality")) {
+              city = comp["long_name"];
+            }
+
+            // ✅ fallback لو مفيش locality
+            if (city.isEmpty && types.contains("administrative_area_level_2")) {
+              city = comp["long_name"];
+            }
+
+            if (city.isEmpty && types.contains("sublocality")) {
+              city = comp["long_name"];
+            }
+
+            if (types.contains("country")) {
+              country = comp["long_name"];
+            }
+          }
+
+          return [street, city, country]
+              .where((e) => e.isNotEmpty)
+              .join(", ");
+        } else {
+          return "Address not available";
+        }
       } else {
-        return 'Address not available';
+        return "Address not available";
       }
     } catch (e) {
       print("❌ Error getting address: $e");
-      return 'Address not available';
+      return "Address not available";
     }
   }
-}
+
+ }
 
 class UserInfo {
   final String id;

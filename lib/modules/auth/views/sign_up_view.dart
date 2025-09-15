@@ -64,7 +64,7 @@ class _SignUpViewState extends State<SignUpView> {
                 height: 57.h,
               ),
               Container(
-                width: 220.w,
+                width: 260.w,
                 height: 48.h,
                 padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
                 decoration: BoxDecoration(

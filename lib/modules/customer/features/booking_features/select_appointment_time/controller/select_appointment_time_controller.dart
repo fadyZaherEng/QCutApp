@@ -366,43 +366,88 @@ class SelectAppointmentTimeController extends GetxController {
   }
 
   // Override the getTimeSlotsByDay method to use the API data
+  // List<TimeSlot> getTimeSlotsByDay(int day) {
+  //   // First check if we have raw data
+  //   if (rawData.isEmpty) {
+  //     print('No time slots available. Raw data empty');
+  //     return [];
+  //   }
+  //
+  //   final List<TimeSlot> slots = [];
+  //
+  //   for (var data in rawData) {
+  //     try {
+  //       // Create a DateTime from the timestamps
+  //       final startTime =
+  //           DateTime.fromMillisecondsSinceEpoch(data['startInterval']);
+  //       final endTime =
+  //           DateTime.fromMillisecondsSinceEpoch(data['endInterval']);
+  //
+  //       // Only include slots for the selected day
+  //       if (startTime.day == day) {
+  //         // Create a TimeSlot
+  //         final slot = TimeSlot(
+  //           id: slots.length + 1,
+  //           // Add an ID for uniqueness
+  //           dayNumber: startTime.day,
+  //           dayName: _getDayName(startTime.weekday),
+  //           startTime: startTime,
+  //           endTime: endTime,
+  //           formattedDate: _getFormattedDate(startTime),
+  //         );
+  //         slots.add(slot);
+  //       }
+  //     } catch (e) {
+  //       print('Error processing time slot: $e');
+  //     }
+  //   }
+  //
+  //   // Sort by start time
+  //   slots.sort((a, b) => a.startTime.compareTo(b.startTime));
+  //   return slots;
+  // }
   List<TimeSlot> getTimeSlotsByDay(int day) {
-    // First check if we have raw data
     if (rawData.isEmpty) {
       print('No time slots available. Raw data empty');
       return [];
     }
 
     final List<TimeSlot> slots = [];
+    final now = DateTime.now(); // ⬅ الوقت الحالي
 
     for (var data in rawData) {
       try {
-        // Create a DateTime from the timestamps
         final startTime =
-            DateTime.fromMillisecondsSinceEpoch(data['startInterval']);
+        DateTime.fromMillisecondsSinceEpoch(data['startInterval']);
         final endTime =
-            DateTime.fromMillisecondsSinceEpoch(data['endInterval']);
+        DateTime.fromMillisecondsSinceEpoch(data['endInterval']);
 
-        // Only include slots for the selected day
+        // لو اليوم نفس اليوم المختار
         if (startTime.day == day) {
-          // Create a TimeSlot
-          final slot = TimeSlot(
+          // ⬅ لو اليوم المختار النهاردة لازم نتأكد ان startTime بعد الوقت الحالي
+          final isToday = startTime.year == now.year &&
+              startTime.month == now.month &&
+              startTime.day == now.day;
+
+          if (isToday && startTime.isBefore(now)) {
+            // ⬅ استبعد الـ slot ده
+            continue;
+          }
+
+          slots.add(TimeSlot(
             id: slots.length + 1,
-            // Add an ID for uniqueness
             dayNumber: startTime.day,
             dayName: _getDayName(startTime.weekday),
             startTime: startTime,
             endTime: endTime,
             formattedDate: _getFormattedDate(startTime),
-          );
-          slots.add(slot);
+          ));
         }
       } catch (e) {
         print('Error processing time slot: $e');
       }
     }
 
-    // Sort by start time
     slots.sort((a, b) => a.startTime.compareTo(b.startTime));
     return slots;
   }

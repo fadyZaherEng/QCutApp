@@ -160,19 +160,31 @@ class _HomeViewState extends State<HomeView> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Get.toNamed(AppRouter.citySelectionPath)
-                                  ?.then((value) {
-                                if (value != null &&
-                                    value is String &&
-                                    value.isNotEmpty) {
+                              // Get.toNamed(AppRouter.citySelectionPath)?.then(
+                              //   (value) {
+                              //     if (value.isNotEmpty) {
+                              //       print("CCCCCCCCCCCCCCCCCCCCC $value");
+                              //       homeController.getBarbersCity(city: value);
+                              //     } else {
+                              //       homeController.getNearestBarbers(
+                              //         longitude,
+                              //         latitude,
+                              //       );
+                              //     }
+                              //   },
+                              // );
+                              Get.toNamed(AppRouter.citySelectionPath)?.then((value) {
+                                print("🔄 Returned from CitySelection: $value (${value.runtimeType})");
+
+                                if (value != null && value.toString().isNotEmpty) {
+                                  print("✅ Calling getBarbersCity with: $value");
                                   homeController.getBarbersCity(city: value);
                                 } else {
-                                  homeController.getNearestBarbers(
-                                    longitude,
-                                    latitude,
-                                  );
+                                  print("ℹ️ Value is empty, calling getNearestBarbers instead");
+                                  homeController.getNearestBarbers(longitude, latitude);
                                 }
                               });
+
                             },
                             child: Container(
                               height: 42.h,
@@ -180,12 +192,17 @@ class _HomeViewState extends State<HomeView> {
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              child: Text(
-                                "where".tr,
-                                style: Styles.textStyleS14W400(
-                                    color: ColorsData.cardStrock),
+                              child: Center(
+                                child: Text(
+                                  "where".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: Styles.textStyleS14W400(
+                                      color: ColorsData.cardStrock),
+                                ),
                               ),
                             ),
                           ),
@@ -203,10 +220,13 @@ class _HomeViewState extends State<HomeView> {
                                 color: ColorsData.font,
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(horizontal: 16.w),
                               child: Text(
                                 "when".tr,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
                                 style: Styles.textStyleS14W400(
                                     color: ColorsData.cardStrock),
                               ),

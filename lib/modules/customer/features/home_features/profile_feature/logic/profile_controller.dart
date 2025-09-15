@@ -128,7 +128,7 @@ class ProfileController extends GetxController {
       final responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
         await fetchProfileData();
-        ShowToast.showSuccessSnackBar(message: "Profile updated successfully");
+        ShowToast.showSuccessSnackBar(message: "Profile updated successfully".tr);
       } else {
         isError.value = true;
         errorMessage.value =

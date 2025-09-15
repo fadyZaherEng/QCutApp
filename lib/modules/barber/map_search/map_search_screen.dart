@@ -9,6 +9,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/barber/map_search/widgets/header_widget.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class MapSearchScreen extends StatefulWidget {
   final double initialLatitude;
@@ -95,9 +97,10 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
               );
               _changeLocation(
                   10, LatLng(argument.latitude, argument.longitude));
-
+              _currentPosition = LatLng(argument.latitude, argument.longitude);
               setState(() {
-                _setAddress(argument.latitude, argument.longitude);
+                _setAddress(argument.latitude, argument.longitude,
+                    Get.locale?.languageCode ?? 'en');
               });
             },
             markers: markers,
@@ -205,27 +208,54 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsData.primary,
-                      minimumSize: const Size.fromHeight(50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsData.primary,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      "confirmLocation".tr,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      child: Text(
+                        "confirmLocation".tr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context, address);
-                      widget.onLocationSelected(_currentPosition!.latitude,
-                          _currentPosition!.longitude, address);
-                    },
-                  ),
+                      // onPressed: () {
+                      //   try {
+                      //     widget.onLocationSelected(
+                      //       _currentPosition!.latitude,
+                      //       _currentPosition!.longitude,
+                      //       address,
+                      //     );
+                      //   } catch (e) {
+                      //     Get.snackbar("Error", "Please select a location");
+                      //   }
+                      // },
+                      onPressed: () {
+                        if (_currentPosition == null) {
+                          Get.snackbar(
+                              "Error", "Please select a location first");
+                          return;
+                        }
+
+                        if (address.isEmpty) {
+                          Get.snackbar(
+                              "Error", "Address not found, please try again");
+                          return;
+                        }
+
+                        widget.onLocationSelected(
+                          _currentPosition!.latitude,
+                          _currentPosition!.longitude,
+                          address,
+                        );
+
+                        Navigator.pop(
+                            context); // ✅ اقفل الشاشة بعد الاختيار لو ده المطلوب
+                      }),
                 ),
               ],
             ),
@@ -239,7 +269,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
                 shape: const CircleBorder(),
               ),
               onPressed: () {
-                _determinePosition(context).then((value) {
+                _determinePosition(context, Get.locale?.languageCode ?? 'en')
+                    .then((value) {
                   if (value != null) {
                     _changeLocation(
                       13,
@@ -284,7 +315,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
 
   void _mapPreProcessing() async {
     try {
-      Position? currentPosition = await _determinePosition(context);
+      Position? currentPosition =
+          await _determinePosition(context, Get.locale?.languageCode ?? 'en');
       if (currentPosition != null) {
         final latLng =
             LatLng(currentPosition.latitude, currentPosition.longitude);
@@ -301,7 +333,8 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
     }
   }
 
-  Future<Position?> _determinePosition(context) async {
+  Future<Position?> _determinePosition(
+      BuildContext context, String appLanguageCode) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
@@ -328,10 +361,76 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    // تعيين العنوان من الموقع الحالي
-    _setAddress(position.latitude, position.longitude);
+    // ✅ استدعاء API لجلب العنوان حسب لغة التطبيق
+    await _setAddress(position.latitude, position.longitude, appLanguageCode);
 
     return position;
+  }
+
+  Future<void> _setAddress(
+      double latitude, double longitude, String appLanguageCode) async {
+    try {
+      final url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json"
+        "?latlng=$latitude,$longitude"
+        "&key=AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"
+        "&language=$appLanguageCode",
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data["status"] == "OK" && data["results"].isNotEmpty) {
+          final components = data["results"][0]["address_components"];
+
+          String street = "";
+          String city = "";
+          String country = "";
+
+          for (var comp in components) {
+            final types = List<String>.from(comp["types"]);
+
+            if (types.contains("route")) {
+              street = comp["long_name"];
+            }
+
+            if (types.contains("locality")) {
+              city = comp["long_name"];
+            }
+
+            // ✅ fallback لو المدينة فاضية
+            if (city.isEmpty && types.contains("administrative_area_level_2")) {
+              city = comp["long_name"];
+            }
+
+            if (city.isEmpty && types.contains("sublocality")) {
+              city = comp["long_name"];
+            }
+
+            if (types.contains("country")) {
+              country = comp["long_name"];
+            }
+          }
+
+          address =
+              [street, city, country].where((e) => e.isNotEmpty).join(", ");
+
+          setState(() {});
+        } else {
+          address = "Address not available";
+          setState(() {});
+        }
+      } else {
+        address = "Address not available";
+        setState(() {});
+      }
+    } catch (e) {
+      print("❌ Error fetching address: $e");
+      address = "Address not available";
+      setState(() {});
+    }
   }
 
   void _changeLocation(double zoom, LatLng latLng) {
@@ -346,23 +445,5 @@ class _MapSearchScreenState extends State<MapSearchScreen> {
         Marker(markerId: const MarkerId('1'), position: latLng),
       );
     });
-  }
-
-  void _setAddress(double latitude, double longitude) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
-
-    if (placemarks.isNotEmpty) {
-      Placemark place = placemarks.first;
-      String fullAddress = [
-        place.street,
-        place.subLocality,
-        place.locality,
-        place.administrativeArea,
-        place.country,
-      ].where((element) => element != null && element.isNotEmpty).join(', ');
-      address = fullAddress;
-      setState(() {});
-    }
   }
 }

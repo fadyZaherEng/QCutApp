@@ -34,7 +34,8 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                 clipBehavior: Clip.none, // Add this to allow child to overflow
                 children: [
                   // Cover image container (background layer)
-                  Container(
+                  if (coverImage.isNotEmpty)
+                    Container(
                       width: double.infinity,
                       height: 127.h,
                       decoration: BoxDecoration(
@@ -50,9 +51,11 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                             blurRadius: 0,
                           ),
                         ],
-                      )),
+                      ),
+                    ),
 
                   // Profile image (foreground layer)
+                  if (profileImage.isNotEmpty)
                   Positioned(
                     top: 80.h,
                     left: 19.w,
@@ -154,12 +157,11 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                     SizedBox(
                       height: 10.h,
                     ),
-
                     buildDrawerItem(
                         "Notifications".tr, AssetsData.notificationsIcon, () {
-                       Get.toNamed(AppRouter.notificationPath);
+                      Get.toNamed(AppRouter.notificationPath);
                     }),
-                     SizedBox(
+                    SizedBox(
                       height: 10.h,
                     ),
                     buildDivider(),

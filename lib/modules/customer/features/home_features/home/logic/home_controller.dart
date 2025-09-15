@@ -78,47 +78,47 @@ class HomeController extends GetxController {
   }
 
   // Fetch barbers data from API
-  // Future<void> getBarbers() async {
-  //   isLoading.value = true;
-  //   isError.value = false;
-  //   errorMessage.value = '';
-  //
-  //   try {
-  //     final response = await _apiCall.getData(Variables.GET_BARBERS);
-  //     final responseBody = json.decode(response.body);
-  //
-  //     if (response.statusCode == 200) {
-  //       final barbersResponse = BarbersResponse.fromJson(responseBody);
-  //       print("Barbers response: ${response.body}");
-  //       // Update total count
-  //       totalBarbers.value = barbersResponse.totalBarbers;
-  //       currentPage.value = barbersResponse.page;
-  //
-  //       // Filter and assign barbers
-  //       final allBarbers = barbersResponse.barbers;
-  //
-  //       // For simplicity, we'll consider all barbers as nearby
-  //       // and active barbers as recommended
-  //       nearbyBarbers.value = allBarbers;
-  //       recommendedBarbers.value =
-  //           allBarbers.where((barber) => barber.status == 'active').toList();
-  //     } else {
-  //       isError.value = true;
-  //       errorMessage.value =
-  //           responseBody['message'] ?? 'Failed to fetch barbers data';
-  //       // ShowToast.showError(message: errorMessage.value);
-  //     }
-  //   } catch (e) {
-  //     isError.value = true;
-  //     errorMessage.value = 'Network error: $e';
-  //     // Get.snackbar('Error', 'Failed to connect to server',
-  //     //     backgroundColor: Colors.red, colorText: Colors.white);
-  //
-  //     // Keep using static data if API fails
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+  Future<void> getBarbers() async {
+    isLoading.value = true;
+    isError.value = false;
+    errorMessage.value = '';
+
+    try {
+      final response = await _apiCall.getData(Variables.GET_BARBERS);
+      final responseBody = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        final barbersResponse = BarbersResponse.fromJson(responseBody);
+        print("Barbers response: ${response.body}");
+        // Update total count
+        totalBarbers.value = barbersResponse.totalBarbers;
+        currentPage.value = barbersResponse.page;
+
+        // Filter and assign barbers
+        final allBarbers = barbersResponse.barbers;
+
+        // For simplicity, we'll consider all barbers as nearby
+        // and active barbers as recommended
+        nearbyBarbers.value = allBarbers;
+        recommendedBarbers.value =
+            allBarbers.where((barber) => barber.status == 'active').toList();
+      } else {
+        isError.value = true;
+        errorMessage.value =
+            responseBody['message'] ?? 'Failed to fetch barbers data';
+        // ShowToast.showError(message: errorMessage.value);
+      }
+    } catch (e) {
+      isError.value = true;
+      errorMessage.value = 'Network error: $e';
+      // Get.snackbar('Error', 'Failed to connect to server',
+      //     backgroundColor: Colors.red, colorText: Colors.white);
+
+      // Keep using static data if API fails
+    } finally {
+      isLoading.value = false;
+    }
+  }
   Future<void> getNearestBarbers(double longitude, double latitude) async {
     isLoading.value = true;
     isError.value = false;
@@ -168,7 +168,9 @@ class HomeController extends GetxController {
 
     try {
       final response = await _apiCall.getData(Variables.GET_BARBERS);
+      print(Variables.GET_BARBERS);
       final responseBody = json.decode(response.body);
+      print("city: $city");
 
       if (response.statusCode == 200) {
         final barbersResponse = BarbersResponse.fromJson(responseBody);

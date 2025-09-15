@@ -8,6 +8,8 @@ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CustomBAppointmentAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -105,56 +107,111 @@ class AddressController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCurrentAddress();
+    getCurrentAddress(
+      language: Get.locale?.languageCode ?? "en",
+    );
   }
 
-  Future<void> getCurrentAddress() async {
+
+    String googleApiKey = "AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w";
+
+  Future<void> getCurrentAddress({String language = "en"}) async {
     try {
       isLoading.value = true;
 
-      // Check service
+      // ✅ Check service
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        currentAddress.value = "Location services are disabled";
-        isLoading.value = false;
+        currentAddress.value =
+        language == "ar" ? "خدمات الموقع معطلة" : "Location services are disabled";
         return;
       }
 
-      // Check permission
+      // ✅ Check permission
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          currentAddress.value = "Permission denied";
-          isLoading.value = false;
+          currentAddress.value =
+          language == "ar" ? "تم رفض الإذن" : "Permission denied";
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        currentAddress.value = "Permission permanently denied";
-        isLoading.value = false;
+        currentAddress.value = language == "ar"
+            ? "تم رفض الإذن بشكل دائم"
+            : "Permission permanently denied";
         return;
       }
 
-      // Get position
+      // ✅ Get position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Reverse geocoding
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
+      // ✅ Call Google Geocoding API
+      final url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json"
+            "?latlng=${position.latitude},${position.longitude}"
+            "&language=$language"
+            "&key=$googleApiKey",
       );
 
-      Placemark place = placemarks.first;
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data["status"] == "OK" && data["results"].isNotEmpty) {
+          final result = data["results"].first;
+          final components = result["address_components"];
+
+          String street = "";
+          String city = "";
+          String country = "";
+          for (var comp in components) {
+            final types = List<String>.from(comp["types"]);
+
+            if (types.contains("route")) {
+              street = comp["long_name"];
+            }
+
+            if (types.contains("locality")) {
+              city = comp["long_name"];
+            }
+
+            // ✅ fallback لو locality فاضية
+            if (city.isEmpty && types.contains("administrative_area_level_2")) {
+              city = comp["long_name"];
+            }
+
+            if (city.isEmpty && types.contains("sublocality")) {
+              city = comp["long_name"];
+            }
+
+            if (types.contains("country")) {
+              country = comp["long_name"];
+            }
+          }
+
+
+          currentAddress.value = "$street, $city, $country".trim();
+        } else {
+          currentAddress.value =
+          language == "ar" ? "لم يتم العثور على عنوان" : "No address found";
+        }
+      } else {
+        currentAddress.value =
+        language == "ar" ? "خطأ في جلب البيانات" : "Error fetching data";
+      }
+    } catch (e, stack) {
+      debugPrint("Error fetching address: $e\n$stack");
       currentAddress.value =
-          "${place.street}, ${place.locality}, ${place.country}";
-    } catch (e) {
-      currentAddress.value = "Unable to fetch address";
+      language == "ar" ? "تعذر الحصول على العنوان" : "Unable to fetch address";
     } finally {
       isLoading.value = false;
     }
   }
+
 }

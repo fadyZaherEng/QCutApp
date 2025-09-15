@@ -81,8 +81,13 @@ class Barber {
           json['workingDays'].map((x) => WorkingDay.fromJson(x)))
           : <WorkingDay>[],
       barberShopLocation: json['barberShopLocation'] != null
+          ? (json['barberShopLocation'] is List && json['barberShopLocation'].isNotEmpty)
+          ? BarberShopLocation.fromJson(json['barberShopLocation'][0])
+          : (json['barberShopLocation'] is Map<String, dynamic>)
           ? BarberShopLocation.fromJson(json['barberShopLocation'])
+          : null
           : null,
+
     );
   }
 

@@ -27,7 +27,9 @@ class BAppointmentView extends StatefulWidget {
 
 class _BAppointmentViewState extends State<BAppointmentView> {
   Future<void> loadAddress(BarberLocation location) async {
-    String addr = await location.getAddress();
+    String addr = await location.getAddress(
+      Get.locale?.languageCode ?? "en",
+    );
     print("📍 Barber Address: $addr");
   }
 
@@ -55,12 +57,14 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                radius: 32.r,
-                                foregroundImage:
-                                    CachedNetworkImageProvider(profileImage),
-                                backgroundColor: ColorsData.secondary,
-                              ),
+                              if (profileImage.isNotEmpty)
+                                CircleAvatar(
+                                  radius: 32.r,
+                                  foregroundImage:
+                                      CachedNetworkImageProvider(profileImage),
+                                  backgroundColor: ColorsData.secondary,
+                                ),
+                              if (profileImage.isNotEmpty)
                               SizedBox(height: 10.h),
                               Text(
                                 controller.barberName,
@@ -165,8 +169,7 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                               name: appointment.user.fullName,
                               controller: controller,
                               appointment: appointment,
-                              location:
-                                    "location".tr,
+                              location: "location".tr,
                               service: appointment.services.isNotEmpty
                                   ? appointment.services[0].service.name
                                   : "service".tr,

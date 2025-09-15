@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -19,7 +20,7 @@ class CustomAvailableTime extends GetView<SelectAppointmentTimeController> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(color: ColorsData.primary),
+                SpinKitDoubleBounce(color: ColorsData.primary),
                 SizedBox(height: 10.h),
                 Text(
                   'Loading time slots...',
