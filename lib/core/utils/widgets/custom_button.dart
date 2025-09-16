@@ -67,19 +67,24 @@ class _CustomButtonState extends State<CustomButton> {
           if (isClicked) {
             isClicked = false;
             setState(() {});
-            widget.onPressed?.call();
-            await Future.delayed(const Duration(seconds: 2), () {
+            try {
+              widget.onPressed?.call();
+            } catch (e) {
               isClicked = true;
               setState(() {});
-            });
+            } finally {
+              await Future.delayed(const Duration(seconds: 2), () {
+                isClicked = true;
+                setState(() {});
+              });
+            }
           }
         },
         child: Center(
           child: Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: 8.w), // Add horizontal padding
-            child: widget
-                    .isLoading // Display loading indicator when isLoading is true
+            child: widget.isLoading
                 ? SizedBox(
                     width: 20,
                     height: 20,

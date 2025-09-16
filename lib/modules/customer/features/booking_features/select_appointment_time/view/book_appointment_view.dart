@@ -166,6 +166,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                 CustomBigButton(
                   textData: "confirm".tr,
                   onPressed: () {
+                    print("confirmButtonPressed".tr);
                     final slot = controller.selectedTimeSlot.value!;
                     final startTime = DateFormat('h:mm').format(slot.startTime);
 

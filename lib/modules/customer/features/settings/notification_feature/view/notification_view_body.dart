@@ -77,6 +77,7 @@ class NotificationViewBody extends StatelessWidget {
                   : SizedBox(height: 32.h),
           itemBuilder: (context, index) {
             final notification = viewModel.displayedNotifications[index];
+            print(notification.process);
             return NotificationCard(
               notification: notification,
               viewModel: viewModel,

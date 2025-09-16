@@ -393,6 +393,7 @@ class MyTranslation extends Translations {
           "Saloon Name": "اسم المحل الحلاقة",
           "Success": "نجاح",
           "City": "المدينة",
+          "Notification is Expired": "الاشعار منتهي",
           "Bank Account": "حساب البنك",
           "No current appointments": "لا توجد مواعيد حالية",
           "Instagram": "صفحة Instagram",
@@ -625,6 +626,7 @@ class MyTranslation extends Translations {
           "No Instagram link available for this barber":
               "No Instagram link available for this barber",
           "youHave": "You have ",
+          "Notification is Expired": "Notification is Expired",
           "noHistoryItemsFound": "No history items found",
           "booking": "Booking",
           "consumer": "consumer",
@@ -1012,6 +1014,7 @@ class MyTranslation extends Translations {
           "editYourProfile": "ערוך את הפרופיל שלך",
           "warning": "אזהרה",
           "changeYourPicture": "שנה את התמונה שלך",
+          "Notification is Expired": "ההתראה פגה",
           "resetPassword": "אפס סיסמה",
           "changeLanguage": "שנה שפה",
           "changePhoneNumber": "שנה מספר טלפון",

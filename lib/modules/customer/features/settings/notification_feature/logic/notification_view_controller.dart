@@ -91,6 +91,8 @@ class NotificationViewModel extends GetxController {
 
   void handleAppointmentConfirmation(
       NotificationModel notification, bool confirmed) async {
+    print(
+        "Handling appointment ${confirmed ? 'confirmation' : 'rejection'} for notification ID: ${notification.id}");
     var response = await NetworkAPICall().editData(
       "${Variables.baseUrl}request-change-appointment-time/${confirmed ? "approve" : "reject"}/${notification.processId}/${notification.id}",
       {},
@@ -99,7 +101,7 @@ class NotificationViewModel extends GetxController {
     response.statusCode == 200
         ? ShowToast.showSuccessSnackBar(
             message: "Appointment ${confirmed ? 'confirmed' : 'rejected'}")
-        : ShowToast.showError(message: "Failed to update notification");
+        : ShowToast.showError(message: "Notification is Expired".tr);
 
     refreshNotifications();
   }

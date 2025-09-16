@@ -36,19 +36,25 @@ class _CustomBigButtonState extends State<CustomBigButton> {
       height: widget.height ?? 48.h,
       width: widget.width ?? 343.w,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           FocusManager.instance.primaryFocus?.unfocus();
           if (isClicked) {
             isClicked = false;
             setState(() {});
-            widget.onPressed?.call();
-            Future.delayed(const Duration(seconds: 2), () {
+            try {
+              widget.onPressed?.call();
+            } catch (e) {
               isClicked = true;
-              if (mounted) {
-                FocusManager.instance.primaryFocus?.unfocus();
-                setState(() {});
-              }
-            });
+              setState(() {});
+            } finally {
+              await Future.delayed(const Duration(seconds: 2), () {
+                isClicked = true;
+                if (mounted) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  setState(() {});
+                }
+              });
+            }
           }
         },
         style: widget.color != null
