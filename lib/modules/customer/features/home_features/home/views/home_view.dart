@@ -231,7 +231,14 @@ class _HomeViewState extends State<HomeView> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Get.toNamed(AppRouter.searchForTheTimePath);
+                              Get.toNamed(AppRouter.searchForTheTimePath)
+                                  ?.then((selectedDateTime) {
+                                if (selectedDateTime != null &&
+                                    selectedDateTime is DateTime) {
+                                  // homeController.getBarbersByTime(
+                                  //     selectedDateTime);
+                                }
+                              });
                             },
                             child: Container(
                               height: 42.h,

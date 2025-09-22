@@ -1,140 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 class SimpleTimePicker extends StatefulWidget {
-  const SimpleTimePicker({super.key});
+  final DateTime selectedDate;
+  final TimeOfDay initialTime;
+  final ValueChanged<TimeOfDay> onTimeSelected;
+
+  const SimpleTimePicker({
+    super.key,
+    required this.selectedDate,
+    required this.initialTime,
+    required this.onTimeSelected,
+  });
 
   @override
   State<SimpleTimePicker> createState() => _SimpleTimePickerState();
 }
 
 class _SimpleTimePickerState extends State<SimpleTimePicker> {
-  int selectedHour = 1;
-  int selectedMinute = 0;
-  bool isPM = true;
+  late int selectedHour;
+  late int selectedMinute;
+  bool isToday = false;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedHour = widget.initialTime.hour;
+    selectedMinute = widget.initialTime.minute;
+  }
+
+  List<int> getHours() {
+    final now = DateTime.now();
+    isToday = widget.selectedDate.year == now.year &&
+        widget.selectedDate.month == now.month &&
+        widget.selectedDate.day == now.day;
+
+    if (isToday) {
+      return List.generate(24 - now.hour, (index) => now.hour + index);
+    } else {
+      return List.generate(24, (index) => index);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final hours = getHours();
+    final hourIndex = hours.indexOf(selectedHour).clamp(0, hours.length - 1);
+
     return Container(
-      decoration: const BoxDecoration(),
       height: 182.h,
-      child: Stack(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Container(
-              width: double.infinity,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
+          // Hours
+          SizedBox(
+            width: 60,
+            child: ListWheelScrollView.useDelegate(
+              controller: FixedExtentScrollController(initialItem: hourIndex),
+              itemExtent: 40,
+              perspective: 0.005,
+              diameterRatio: 1.5,
+              physics: const FixedExtentScrollPhysics(),
+              childDelegate: ListWheelChildBuilderDelegate(
+                childCount: hours.length,
+                builder: (context, index) {
+                  final hour = hours[index];
+                  final isSelected = hour == selectedHour;
+                  return Center(
+                    child: Text(
+                      hour.toString().padLeft(2, '0'),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: isSelected ? Colors.white : Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
+              onSelectedItemChanged: (index) {
+                setState(() => selectedHour = hours[index]);
+                widget.onTimeSelected(
+                  TimeOfDay(hour: selectedHour, minute: selectedMinute),
+                );
+              },
             ),
           ),
 
-          // Time pickers
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Hours
-              SizedBox(
-                width: 60,
-                child: ListWheelScrollView.useDelegate(
-                  itemExtent: 40,
-                  perspective: 0.005,
-                  diameterRatio: 1.5,
-                  physics: const FixedExtentScrollPhysics(),
-                  childDelegate: ListWheelChildBuilderDelegate(
-                    childCount: 12,
-                    builder: (context, index) {
-                      final isSelected = index == selectedHour - 1;
-                      return Center(
-                        child: Text(
-                          '${index + 1}'.padLeft(2, '0'),
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: isSelected ? Colors.black : Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  onSelectedItemChanged: (index) {
-                    setState(() => selectedHour = index + 1);
-                  },
-                ),
-              ),
+          const SizedBox(width: 8),
 
-              const SizedBox(width: 8),
-
-              // Minutes
-              SizedBox(
-                width: 60,
-                child: ListWheelScrollView.useDelegate(
-                  itemExtent: 40,
-                  perspective: 0.005,
-                  diameterRatio: 1.5,
-                  physics: const FixedExtentScrollPhysics(),
-                  childDelegate: ListWheelChildBuilderDelegate(
-                    childCount: 60,
-                    builder: (context, index) {
-                      final isSelected = index == selectedMinute;
-                      return Center(
-                        child: Text(
-                          index.toString().padLeft(2, '0'),
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: isSelected ? Colors.black : Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  onSelectedItemChanged: (index) {
-                    setState(() => selectedMinute = index);
-                  },
-                ),
-              ),
-
-              const SizedBox(width: 8),
-
-              // AM/PM
-              SizedBox(
-                width: 60,
-                child: ListWheelScrollView(
-                  itemExtent: 40,
-                  perspective: 0.005,
-                  diameterRatio: 1.5,
-                  physics: const FixedExtentScrollPhysics(),
-                  children: [
-                    Center(
-                      child: Text(
-                        'AM',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: !isPM ? Colors.black : Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
+          // Minutes
+          SizedBox(
+            width: 60,
+            child: ListWheelScrollView.useDelegate(
+              controller:
+              FixedExtentScrollController(initialItem: selectedMinute),
+              itemExtent: 40,
+              perspective: 0.005,
+              diameterRatio: 1.5,
+              physics: const FixedExtentScrollPhysics(),
+              childDelegate: ListWheelChildBuilderDelegate(
+                childCount: 60,
+                builder: (context, index) {
+                  final isSelected = index == selectedMinute;
+                  return Center(
+                    child: Text(
+                      index.toString().padLeft(2, '0'),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: isSelected ? Colors.white : Colors.grey,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        'PM',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: isPM ? Colors.black : Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                  onSelectedItemChanged: (index) {
-                    setState(() => isPM = index == 1);
-                  },
-                ),
+                  );
+                },
               ),
-            ],
+              onSelectedItemChanged: (index) {
+                setState(() => selectedMinute = index);
+                widget.onTimeSelected(
+                  TimeOfDay(hour: selectedHour, minute: selectedMinute),
+                );
+              },
+            ),
           ),
         ],
       ),
