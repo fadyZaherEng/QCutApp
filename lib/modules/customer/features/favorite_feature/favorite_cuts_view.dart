@@ -35,6 +35,7 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
   }
 
   Future<void> fetchFavoriteCuts() async {
+    if (!mounted) return;
     try {
       final response =
           await _apiCall.getData("${Variables.baseUrl}favoriteForUser/cuts");
@@ -62,8 +63,8 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
     } catch (e) {
       if (mounted) {
         setState(() => isLoading = false);
-        ShowToast.showError(
-            message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
+        // ShowToast.showError(
+        //     message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
       }
     }
   }
@@ -71,6 +72,7 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
   Future<void> addPhotosToFavorites() async {
     try {
       if (!mounted) return;
+      await Future.delayed(const Duration(milliseconds: 500));
 
       setState(() {
         isUploadingPhotos = true;
@@ -343,23 +345,6 @@ class _FavoriteCutsViewState extends State<FavoriteCutsView> {
       ),
     );
   }
-
-  // void _showFullScreenImage(BuildContext context, String imageUrl) {
-  //   // Use the existing imageView route if available, otherwise use a local viewer
-  //   try {
-  //     Get.toNamed(
-  //       AppRouter.imageViewPath,
-  //       arguments: imageUrl,
-  //     );
-  //   } catch (e) {
-  //     // Fallback to local image viewer if route not found
-  //     Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder: (context) => _ImageViewScreen(imageUrl: imageUrl),
-  //       ),
-  //     );
-  //   }
-  // }
 
   Widget _buildEmptyState() {
     return Center(

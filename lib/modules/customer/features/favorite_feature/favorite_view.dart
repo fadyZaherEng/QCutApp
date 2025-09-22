@@ -3,9 +3,14 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/customer/features/favorite_feature/favorite_view_body.dart';
 
-class FavoriteView extends StatelessWidget {
+class FavoriteView extends StatefulWidget {
   const FavoriteView({super.key});
 
+  @override
+  State<FavoriteView> createState() => _FavoriteViewState();
+}
+
+class _FavoriteViewState extends State<FavoriteView> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

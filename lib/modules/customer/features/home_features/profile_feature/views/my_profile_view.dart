@@ -135,8 +135,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                                   backgroundColor: ColorsData.secondary,
                                   child: CircleAvatar(
                                     radius: 55,
-                                    foregroundImage:
-                                        CachedNetworkImageProvider(profileImage),
+                                    foregroundImage: CachedNetworkImageProvider(
+                                        profileImage),
                                     backgroundColor: ColorsData.secondary,
                                   ),
                                 ),
@@ -252,9 +252,10 @@ class _MyProfileViewState extends State<MyProfileView> {
                               ),
                               SizedBox(height: 10.h),
                               Text(
-                                '\u200E$phoneNumber',
+                                '\u200E${phoneNumber.replaceFirst('+972', '+972  ')}', // ← مسافتين هنا
                                 style: Styles.textStyleS20W400(
-                                    color: ColorsData.primary),
+                                  color: ColorsData.primary,
+                                ),
                               ),
                             ],
                           ),
@@ -279,7 +280,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                         buildDrawerItem(
                             "changeYourLocation".tr, AssetsData.mapPinIcon,
                             () async {
-                          await LocationHelper.requestLocationPermission(context);
+                          await LocationHelper.requestLocationPermission(
+                              context);
                           showChangeUserLocationBottomSheet(
                               context, profileController);
                         }),
@@ -293,10 +295,10 @@ class _MyProfileViewState extends State<MyProfileView> {
                         ),
                         buildDivider(),
                         _buildDrawerItem("Terms and Conditions".tr,
-                            Icons.integration_instructions, () {}),
+                            Icons.integration_instructions_outlined, () {}),
                         buildDivider(),
                         _buildDrawerItem(
-                            "Privacy Policy".tr, Icons.policy, () {}),
+                            "Privacy Policy".tr, Icons.policy_outlined, () {}),
                         buildDivider(),
                         buildDrawerItem(
                           "Contact us".tr,
@@ -322,8 +324,9 @@ class _MyProfileViewState extends State<MyProfileView> {
     );
   }
 
+  bool isClicked = true;
+
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
-    bool isClicked = true;
     return GestureDetector(
       onTap: () async {
         if (isClicked) {

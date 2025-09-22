@@ -130,14 +130,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             SvgPicture.asset(
               AssetsData.notificationsIcon,
-              height: DrawerConstants.iconSize.h,
-              width: DrawerConstants.iconSize.w,
+              height: DrawerConstants.iconSize.h-2,
+              width: DrawerConstants.iconSize.w-2,
               colorFilter: const ColorFilter.mode(
                 ColorsData.primary,
                 BlendMode.srcIn,
               ),
             ),
-            SizedBox(width: DrawerConstants.iconSpacing.w),
+            SizedBox(width: DrawerConstants.iconSpacing.w-2),
             Text("Notifications".tr, style: Styles.textStyleS14W400()),
           ],
         ),

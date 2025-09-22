@@ -20,7 +20,7 @@ class ResetPhoneNumberView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "resetPhoneNumber".tr),
+      appBar: CustomAppBar(title: "changePhoneNumber".tr),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -39,7 +39,7 @@ class ResetPhoneNumberView extends StatelessWidget {
                     height: 79.h,
                   ),
                   Text(
-                    'resetPhoneNumber'.tr,
+                    'changePhoneNumber'.tr,
                     style: Styles.textStyleS16W700(color: ColorsData.primary),
                   ),
                   SizedBox(

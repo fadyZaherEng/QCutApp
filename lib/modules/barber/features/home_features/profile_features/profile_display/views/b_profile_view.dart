@@ -404,7 +404,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                               launchPhoneDialer(profileData.phoneNumber);
                             },
                             child: _buildInfoRow(AssetsData.callIcon,
-                                "\u200E${profileData.phoneNumber}"),
+                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}"),
                           ),
                           SizedBox(height: 8.h),
                           InkWell(

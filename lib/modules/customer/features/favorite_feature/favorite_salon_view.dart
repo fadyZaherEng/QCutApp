@@ -32,13 +32,8 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
     fetchFavorites();
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   Future<void> fetchFavorites() async {
+     if (!mounted) return;
     setState(() {
       isLoading = true;
     });
@@ -67,8 +62,8 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
       if (mounted) {
         setState(() => isLoading = false);
       }
-      ShowToast.showError(
-          message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
+      // ShowToast.showError(
+      //     message: '${'errorOccurredWhileFetchingFavorites'.tr}: $e');
     }
   }
 
@@ -89,6 +84,7 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
   }
 
   void _onSearchChanged(String query) {
+    if (!mounted) return;
     setState(() {
       searchQuery = query;
       _filterFavorites();

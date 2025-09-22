@@ -105,7 +105,10 @@ class CustomBookItem extends StatelessWidget {
                   ),
                   _buildInfoRow(
                     "status".tr,
-                    appointment?.status ?? "Pending".tr,
+                    appointment?.status == "NotCome" ||
+                            appointment?.status == "Notcome"
+                        ? "Didn't Come".tr
+                        : appointment?.status ?? "Pending".tr,
                     isHighlight: true,
                   ),
                 ],

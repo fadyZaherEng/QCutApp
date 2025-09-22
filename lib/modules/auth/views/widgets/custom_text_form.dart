@@ -46,54 +46,78 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Special handling for phone field
+    final languageCode = Localizations.localeOf(context).languageCode;
     if (keyboardType == TextInputType.phone ||
         keyboardType == TextInputType.number) {
-      return TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(9), // allow only 9 digits
-        ],
-        validator: validator,
-        onChanged: onChanged,
-        onSaved: onSaved,
-        style: style ?? Styles.textStyleS14W500(),
-        decoration: InputDecoration(
-          hintText: hintText ?? "5xxxxxxxx",
-          hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
-          fillColor: fillColor ?? ColorsData.secondary,
-          filled: true,
-          contentPadding: EdgeInsets.only(
-            left: 16.w,
-            right: 16.w,
-            top: 14.h,
-            bottom: 14.h,
-          ),
-          suffixIcon: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
-            // margin: EdgeInsets.only(left: 8.w, right: 4.w),
-            decoration: BoxDecoration(
-              color: ColorsData.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(6.r),
+      return Directionality(
+        textDirection: TextDirection.ltr,
+        child: TextFormField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(9), // allow only 9 digits
+          ],
+          validator: validator,
+          onChanged: onChanged,
+          onSaved: onSaved,
+          style: style ?? Styles.textStyleS14W500(),
+          decoration: InputDecoration(
+            hintText: hintText ?? "5xxxxxxxx",
+            hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
+            fillColor: fillColor ?? ColorsData.secondary,
+            filled: true,
+            contentPadding: EdgeInsets.only(
+              left: 24.w,
+              right: 24.w,
+              top: 14.h,
+              bottom: 14.h,
             ),
-            child: Text(
-              "\u200E+972",
-              style: Styles.textStyleS14W500(color: ColorsData.primary),
+            //get the suffix icon with the country code
+            suffixIcon: languageCode == 'ar'
+                ? Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+
+                    // margin: EdgeInsets.only(left: 8.w, right: 4.w),
+                    decoration: BoxDecoration(
+                      color: ColorsData.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: Text(
+                      "\u200E+972",
+                      style: Styles.textStyleS14W500(color: ColorsData.primary),
+                    ),
+                  )
+                : null,
+            prefixIcon: languageCode == 'en'
+                ? Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+                    // margin: EdgeInsets.only(left: 8.w, right: 4.w),
+                    decoration: BoxDecoration(
+                      color: ColorsData.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: Text(
+                      "\u200E+972",
+                      style: Styles.textStyleS14W500(color: ColorsData.primary),
+                    ),
+                  )
+                : null,
+            // suffixIcon: suffixIcon,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.r),
+              borderSide: const BorderSide(color: ColorsData.cardStrock),
             ),
-          ),
-          // suffixIcon: suffixIcon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.r),
-            borderSide: const BorderSide(color: ColorsData.cardStrock),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.r),
-            borderSide: const BorderSide(color: ColorsData.cardStrock),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.r),
-            borderSide: const BorderSide(color: ColorsData.cardStrock),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.r),
+              borderSide: const BorderSide(color: ColorsData.cardStrock),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.r),
+              borderSide: const BorderSide(color: ColorsData.cardStrock),
+            ),
           ),
         ),
       );
