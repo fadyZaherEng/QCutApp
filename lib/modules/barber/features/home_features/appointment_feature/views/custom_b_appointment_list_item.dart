@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -57,10 +59,38 @@ class CustomBAppointmentListItem extends StatefulWidget {
       _CustomBAppointmentListItemState();
 }
 
-class _CustomBAppointmentListItemState
-    extends State<CustomBAppointmentListItem> {
+class _CustomBAppointmentListItemState extends State<CustomBAppointmentListItem>
+    with TickerProviderStateMixin {
+  late DateTime now;
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    now = DateTime.now();
+
+    // ✅ يحدث الوقت كل دقيقة عشان الأزرار تتغير أوتوماتيك
+    timer = Timer.periodic(const Duration(minutes: 1), (_) {
+      setState(() {
+        now = DateTime.now();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appointmentStart = widget.appointment.startDate;
+    final canDelete =
+        now.isBefore(appointmentStart.subtract(const Duration(minutes: 30)));
+    final canMarkDidntCome =
+        now.isAfter(appointmentStart.add(const Duration(minutes: 5)));
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -175,41 +205,9 @@ class _CustomBAppointmentListItemState
               color: ColorsData.primary),
           SizedBox(height: 12.h),
 
-          // **Buttons**
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: _customButton(
-          //         "change".tr,
-          //         ColorsData.primary,
-          //         () {
-          //           showChangeTimeBottomSheet(context, bookingDay, id);
-          //         },
-          //       ),
-          //     ),
-          //     SizedBox(width: 12.w),
-          //     Expanded(
-          //       child: _customButton(
-          //         "Didn’t come".tr,
-          //         ColorsData.cardStrock,
-          //         () {
-          //           showDeleteAppointmentDialog(
-          //             context: context,
-          //             onYes: () {
-          //               onDeleteTap?.call();
-          //             },
-          //             onNo: () {},
-          //           );
-          //         },
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // داخل Row الأزرار
           Row(
             children: [
-              if (DateTime.now().isBefore(widget.appointment.startDate
-                  .subtract(const Duration(minutes: 30))))
+              if (canDelete)
                 Expanded(
                   child: _customButton(
                     "delete".tr,
@@ -222,8 +220,7 @@ class _CustomBAppointmentListItemState
                     ),
                   ),
                 ),
-              if (DateTime.now().isAfter(
-                  widget.appointment.startDate.add(const Duration(minutes: 5))))
+              if (canMarkDidntCome)
                 Expanded(
                   child: _customButton(
                     "Didn’t come".tr,
@@ -249,7 +246,51 @@ class _CustomBAppointmentListItemState
                 ),
               ),
             ],
-          )
+          ),
+          // Row(
+          //   children: [
+          //     if (DateTime.now().isBefore(widget.appointment.startDate
+          //         .subtract(const Duration(minutes: 30))))
+          //       Expanded(
+          //         child: _customButton(
+          //           "delete".tr,
+          //           Colors.red,
+          //           () => showDeleteAppointmentDialog(
+          //             context: context,
+          //             onYes: () => widget.controller
+          //                 .deleteAppointment(widget.appointment.id),
+          //             onNo: () {},
+          //           ),
+          //         ),
+          //       ),
+          //     if (DateTime.now().isAfter(
+          //         widget.appointment.startDate.add(const Duration(minutes: 5))))
+          //       Expanded(
+          //         child: _customButton(
+          //           "Didn’t come".tr,
+          //           Colors.orange,
+          //           () => showDidNotComeDialog(
+          //             context: context,
+          //             onYes: () => widget.controller
+          //                 .didntComeAppointment(widget.appointment.id),
+          //           ),
+          //         ),
+          //       ),
+          //     SizedBox(width: 12.w),
+          //     Expanded(
+          //       child: _customButton(
+          //         "change".tr,
+          //         ColorsData.primary,
+          //         () => showChangeTimeBottomSheet(
+          //           context,
+          //           widget.bookingDay,
+          //           widget.id,
+          //           widget.services,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // )
         ],
       ),
     );

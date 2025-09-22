@@ -25,7 +25,8 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
     return Obx(() {
       if (_controller.isLoading.value) {
         return const Center(
-            child: SpinKitDoubleBounce(color: ColorsData.primary));
+          child: SpinKitDoubleBounce(color: ColorsData.primary),
+        );
       }
 
       if (_controller.isError.value) {
