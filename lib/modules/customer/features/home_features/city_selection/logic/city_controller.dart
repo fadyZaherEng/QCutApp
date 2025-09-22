@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home_features/city_selection/models/city_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CityController extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
@@ -21,23 +21,7 @@ class CityController extends GetxController {
 
   // ✅ multi selection
   final RxSet<City> selectedCities = <City>{}.obs;
-
-  bool isCitySelected(City city) {
-    return selectedCities.any((c) => c.name == city.name);
-  }
-
-  void toggleCitySelection(City city) {
-    if (isCitySelected(city)) {
-      selectedCities.removeWhere((c) => c.name == city.name);
-    } else {
-      selectedCities.add(city);
-    }
-    selectedCities.refresh();
-  }
-
-  String getSelectedCitiesAsString() {
-    return selectedCities.map((c) => c.name.trim()).join(', ');
-  }
+  final String _selectedCitiesKey = "selectedCities"; // مفتاح التخزين
 
   @override
   void onInit() {
@@ -62,6 +46,10 @@ class CityController extends GetxController {
         final cityResponse = CityResponse.fromJson(responseBody);
         cities.assignAll(cityResponse.cities);
         filterCities(searchQuery.value);
+
+        // ✅ بعد تحميل المدن من API نحمل الاختيارات المحفوظة ونربطها
+        await loadSelectedCities();
+
         totalBarbers.value = cityResponse.totalBarbers;
         totalPages.value = cityResponse.pagination.totalPages;
       } else {
@@ -111,41 +99,71 @@ class CityController extends GetxController {
     if (query.isEmpty) {
       filteredCities.assignAll(cities);
     } else {
-      filteredCities.assignAll(cities
-          .where(
-              (city) => city.name.toLowerCase().contains(query.toLowerCase()))
-          .toList());
+      filteredCities.assignAll(
+        cities
+            .where((city) =>
+            city.name.toLowerCase().contains(query.toLowerCase()))
+            .toList(),
+      );
     }
   }
 
-  // ✅ multi-selection methods
-  // void toggleCitySelection(City city) {
-  //   if (selectedCityIds.contains(city.id)) {
-  //     selectedCityIds.remove(city.id);
-  //   } else {
-  //     selectedCityIds.add(city.id);
-  //   }
-  // }
-  //
-  // bool isCitySelected(City city) => selectedCityIds.contains(city.id);
+  bool isCitySelected(City city) {
+    return selectedCities.any((c) => c.name == city.name);
+  }
+
+  void toggleCitySelection(City city) async {
+    if (isCitySelected(city)) {
+      selectedCities.removeWhere((c) => c.name == city.name);
+    } else {
+      selectedCities.add(city);
+    }
+    selectedCities.refresh();
+    await saveSelectedCities(); // ✅ حفظ الاختيارات بعد أي تغيير
+  }
+
+  String getSelectedCitiesAsString() {
+    return selectedCities.map((c) => c.name.trim()).join(', ');
+  }
 
   List<City> getSelectedCitiesAsList() {
     return selectedCities.toList();
   }
 
-  void clearSelection() {
+  void clearSelection() async {
     selectedCities.clear();
+    await saveSelectedCities();
   }
 
-  void clearSelections() {
+  void clearSelections() async {
     selectedCities.clear();
+    await saveSelectedCities();
+  }
+
+  // ✅ حفظ المدن المختارة في التخزين المحلي
+  Future<void> saveSelectedCities() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ids = selectedCities.map((city) => city.name).toList();
+    await prefs.setStringList(_selectedCitiesKey, ids);
+  }
+
+  // ✅ استرجاع المدن المختارة من التخزين المحلي
+  Future<void> loadSelectedCities() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedNames = prefs.getStringList(_selectedCitiesKey) ?? [];
+
+    final restoredCities = cities
+        .where((city) => savedNames.contains(city.name))
+        .toSet();
+
+    selectedCities.assignAll(restoredCities);
+    selectedCities.refresh();
   }
 
   @override
   void onClose() {
     searchQuery.close();
     selectedCities.close();
-    // tempSelectedCities.close();
     super.onClose();
   }
 }

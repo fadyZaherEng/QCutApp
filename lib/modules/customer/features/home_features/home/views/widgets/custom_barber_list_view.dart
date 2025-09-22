@@ -10,11 +10,13 @@ import 'package:q_cut/modules/customer/features/home_features/home/models/barber
 class CustomBarberListView extends StatelessWidget {
   final List<Barber>? barbers;
   final bool isRecommended;
+  final bool isSearching;
 
   const CustomBarberListView({
     super.key,
     this.barbers,
     this.isRecommended = false,
+    this.isSearching = false,
   });
 
   static const int itemsPerRow = 5;
@@ -22,10 +24,12 @@ class CustomBarberListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
-    final displayBarbers = barbers ??
-        (isRecommended
-            ? controller.recommendedBarbers
-            : controller.nearbyBarbers);
+    final displayBarbers = isSearching
+        ? controller.searchResults.value
+        : barbers ??
+            (isRecommended
+                ? controller.recommendedBarbers
+                : controller.nearbyBarbers);
 
     return SizedBox(
       height: 281 * 3.h,
@@ -39,12 +43,19 @@ class CustomBarberListView extends StatelessWidget {
             return SpinKitDoubleBounce(color: ColorsData.primary);
           }
 
-          return Text(
-            "No barbers available".tr,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height * 0.5,
+              ),
+              child: Text(
+                "No barbers available".tr,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           );
         }
@@ -55,8 +66,9 @@ class CustomBarberListView extends StatelessWidget {
         return Column(
           children: List.generate(numberOfRows, (rowIndex) {
             final startIdx = rowIndex * itemsPerRow;
-            final endIdx =
-            (startIdx + itemsPerRow > totalItems) ? totalItems : startIdx + itemsPerRow;
+            final endIdx = (startIdx + itemsPerRow > totalItems)
+                ? totalItems
+                : startIdx + itemsPerRow;
 
             final rowItems = displayBarbers.sublist(startIdx, endIdx);
 

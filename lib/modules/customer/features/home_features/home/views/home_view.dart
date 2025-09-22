@@ -12,11 +12,14 @@ import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/modules/customer/features/home_features/city_selection/logic/city_controller.dart';
+import 'package:q_cut/modules/customer/features/home_features/city_selection/models/city_model.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/logic/home_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_home_app_bar.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/models/customer_profile_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -33,6 +36,7 @@ class _HomeViewState extends State<HomeView> {
   final homeController = Get.put(HomeController());
   final ProfileController profileController = Get.put(ProfileController());
   String city = '';
+  bool isSearching = false;
 
   @override
   void didChangeDependencies() async {
@@ -41,7 +45,14 @@ class _HomeViewState extends State<HomeView> {
     await _determinePosition(context).then((Position? position) {
       latitude = position!.latitude;
       longitude = position.longitude;
-      homeController.getNearestBarbers(longitude, latitude);
+      loadSelectedCities();
+      setState(() {});
+      if (selectedCities.isNotEmpty) {
+        homeController.getBarbersCity(city: selectedCities.join(', '));
+      } else {
+        homeController.getNearestBarbers(longitude, latitude);
+      }
+      // homeController.getNearestBarbers(longitude, latitude);
     }).catchError((e) {
       // Handle the error, e.g., show a snackbar or dialog
       print(e);
@@ -98,8 +109,23 @@ class _HomeViewState extends State<HomeView> {
     return position;
   }
 
+  // ✅ multi selection
+  List<String> selectedCities = [];
+  final String _selectedCitiesKey = "selectedCities"; // مفتاح التخزين
+
+  // ✅ استرجاع المدن المختارة من التخزين المحلي
+  Future<void> loadSelectedCities() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> savedNames = prefs.getStringList(_selectedCitiesKey) ?? [];
+    setState(() {
+      selectedCities = savedNames;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadSelectedCities();
+
     return RefreshIndicator(
       onRefresh: () async {
         await fetchProfileData();
@@ -123,7 +149,14 @@ class _HomeViewState extends State<HomeView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomHomeAppBar(),
+                    CustomHomeAppBar(
+                      onSearchTap: (query) {
+                        homeController.searchBarbers(query);
+                        setState(() {
+                          isSearching = query.isNotEmpty;
+                        });
+                      },
+                    ),
                     SizedBox(height: 12.h),
                     Row(
                       children: [
@@ -160,31 +193,16 @@ class _HomeViewState extends State<HomeView> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              // Get.toNamed(AppRouter.citySelectionPath)?.then(
-                              //   (value) {
-                              //     if (value.isNotEmpty) {
-                              //       print("CCCCCCCCCCCCCCCCCCCCC $value");
-                              //       homeController.getBarbersCity(city: value);
-                              //     } else {
-                              //       homeController.getNearestBarbers(
-                              //         longitude,
-                              //         latitude,
-                              //       );
-                              //     }
-                              //   },
-                              // );
-                              Get.toNamed(AppRouter.citySelectionPath)?.then((value) {
-                                print("🔄 Returned from CitySelection: $value (${value.runtimeType})");
-
-                                if (value != null && value.toString().isNotEmpty) {
-                                  print("✅ Calling getBarbersCity with: $value");
+                              Get.toNamed(AppRouter.citySelectionPath)
+                                  ?.then((value) {
+                                if (value != null &&
+                                    value.toString().isNotEmpty) {
                                   homeController.getBarbersCity(city: value);
                                 } else {
-                                  print("ℹ️ Value is empty, calling getNearestBarbers instead");
-                                  homeController.getNearestBarbers(longitude, latitude);
+                                  homeController.getNearestBarbers(
+                                      longitude, latitude);
                                 }
                               });
-
                             },
                             child: Container(
                               height: 42.h,
@@ -196,7 +214,9 @@ class _HomeViewState extends State<HomeView> {
                               padding: EdgeInsets.symmetric(horizontal: 16.w),
                               child: Center(
                                 child: Text(
-                                  "where".tr,
+                                  selectedCities.isNotEmpty
+                                      ? selectedCities.map((e) => e).join(', ')
+                                      : "where".tr,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
@@ -236,7 +256,9 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                     SizedBox(height: 12.h),
-                    const NearbySalonsSection(),
+                    NearbySalonsSection(
+                      isSearching: isSearching,
+                    ),
                     SizedBox(height: 12.h),
                   ],
                 ),

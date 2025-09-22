@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class NearestBarberResponse {
   final bool success;
   final List<Barber> barbers;
@@ -17,8 +19,8 @@ class NearestBarberResponse {
     return NearestBarberResponse(
       success: json['success'] ?? false,
       barbers: (json['data'] as List<dynamic>?)
-          ?.map((e) => Barber.fromJson(e))
-          .toList() ??
+              ?.map((e) => Barber.fromJson(e))
+              .toList() ??
           [],
     );
   }
@@ -119,6 +121,7 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> getNearestBarbers(double longitude, double latitude) async {
     isLoading.value = true;
     isError.value = false;
@@ -134,7 +137,7 @@ class HomeController extends GetxController {
       print("Response: ${response.body}");
       if (response.statusCode == 200) {
         final nearestBarbersResponse =
-        NearestBarberResponse.fromJson(responseBody);
+            NearestBarberResponse.fromJson(responseBody);
 
         print("Nearest barbers response: ${response.body}");
 
@@ -145,7 +148,6 @@ class HomeController extends GetxController {
         recommendedBarbers.value = nearestBarbersResponse.barbers
             .where((barber) => barber.status == 'active')
             .toList();
-
       } else {
         isError.value = true;
         errorMessage.value =
@@ -222,6 +224,22 @@ class HomeController extends GetxController {
     }
   }
 
+  /// ✅ دالة البحث
+  // RxList<Barber> filteredSearchBarbers = <Barber>[].obs;
+  // void searchBarbers(String query) {
+  //   if (query.isEmpty) {
+  //    } else {
+  //     final q = query.toLowerCase();
+  //     filteredSearchBarbers.value = recommendedBarbers.where((barber) {
+  //       final nameMatch = barber.fullName.toLowerCase().contains(q) ?? false;
+  //       final shopMatch =
+  //           barber.barberShop?.toLowerCase().contains(q) ?? false;
+  //       return nameMatch || shopMatch;
+  //     }).toList();
+  //   }
+  //   update(); // لتحديث الواجهة
+  // }
+
   Future<void> getBarbersByFilter({
     required String city,
     int page = 1,
@@ -282,6 +300,7 @@ class HomeController extends GetxController {
     if (query.isEmpty) {
       searchResults.clear();
       isSearching.value = false;
+      update();
       return;
     }
 
@@ -294,12 +313,18 @@ class HomeController extends GetxController {
     isLoading.value = true;
     isError.value = false;
     errorMessage.value = '';
+    print("Searching for: $salonName");
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("selectedCities", []);
 
     try {
       final response = await _apiCall
           .getData("${Variables.SEARCH_BARBER_NAME}?name=$salonName&page=1");
-      final responseBody = json.decode(response.body);
 
+      print("${Variables.SEARCH_BARBER_NAME}?name=$salonName&page=1");
+      final responseBody = json.decode(response.body);
+      print("Search response: ${response.body}");
       if (response.statusCode == 200) {
         // Handle the specific response format for search
         final int page = responseBody['page'] ?? 1;
@@ -331,6 +356,7 @@ class HomeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+    update(); // لتحديث الواجهة
   }
 
   // Helper method to get working days as formatted string

@@ -5,60 +5,127 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/my_profile_view.dart';
 
-class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomHomeAppBar({super.key});
+class CustomHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final void Function(String)? onSearchTap;
+
+  const CustomHomeAppBar({
+    super.key,
+    this.onSearchTap,
+  });
+
+  @override
+  State<CustomHomeAppBar> createState() => _CustomHomeAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(67.h);
+}
+
+class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
+  final TextEditingController _searchController = TextEditingController();
+  bool isSearching = false;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         InkWell(
-            onTap: () {
-              Scaffold.of(context).openDrawer();
-            },
-            child: SvgPicture.asset(
-              AssetsData.menuIcon,
-              width: 24,
-              height: 24,
-            )),
-        SizedBox(
-          width: 11.w,
-        ),
-        InkWell(
-            onTap: () {
-              Get.toNamed(AppRouter.notificationPath);
-            },
-            child: SvgPicture.asset(
-              AssetsData.notificationsIcon,
-              width: 24,
-              height: 24,
-            )),
-        SizedBox(
-          width: 11.w,
-        ),
-        InkWell(
-          onTap: () {},
+          onTap: () {
+            Scaffold.of(context).openDrawer();
+          },
           child: SvgPicture.asset(
-            AssetsData.searchIcon,
+            AssetsData.menuIcon,
             width: 24,
             height: 24,
           ),
         ),
-        const Spacer(),
+        SizedBox(width: 11.w),
         InkWell(
           onTap: () {
-            // Get.toNamed(AppRouter.profilePath);
+            Get.toNamed(AppRouter.notificationPath);
+          },
+          child: SvgPicture.asset(
+            AssetsData.notificationsIcon,
+            width: 24,
+            height: 24,
+          ),
+        ),
+        SizedBox(width: 11.w),
+
+        // ✅ هنا التحويل بين الايقونة والسيرش بار
+        if ((widget.onSearchTap == null || _searchController.text.isEmpty) &&
+            !isSearching)
+          InkWell(
+            onTap: () {
+              setState(() {
+                isSearching = true;
+              });
+            },
+            child: SvgPicture.asset(
+              AssetsData.searchIcon,
+              width: 24,
+              height: 24,
+            ),
+          )
+        else
+          Expanded(
+            child: SizedBox(
+              height: 40.h,
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  widget.onSearchTap?.call(value);
+                  setState(() {});
+                  if (value.isEmpty) {
+                    isSearching = false;
+                  }
+                },
+                style: TextStyle(fontSize: 14.sp),
+                decoration: InputDecoration(
+                  // icon: SvgPicture.asset(
+                  //   AssetsData.searchIcon,
+                  //   width: 20,
+                  //   height: 20,
+                  //   color: Colors.grey.shade600,
+                  // ),
+                  hintText: "search".tr,
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.grey.shade500,
+                  ),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            size: 20,
+                            color: ColorsData.primary,
+                          ),
+                          onPressed: () {
+                            _searchController.clear();
+                            widget.onSearchTap?.call('');
+                            setState(() {});
+                          },
+                        )
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        if (widget.onSearchTap != null) SizedBox(width: 11.w),
+        if ((widget.onSearchTap == null || _searchController.text.isEmpty) &&
+            !isSearching)
+          const Spacer(),
+
+        InkWell(
+          onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) {
-                  return MyProfileView(
-                    isBack: true,
-                  );
-                },
+                builder: (context) => const MyProfileView(isBack: true),
               ),
             );
           },
@@ -76,7 +143,4 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(67.h);
 }
