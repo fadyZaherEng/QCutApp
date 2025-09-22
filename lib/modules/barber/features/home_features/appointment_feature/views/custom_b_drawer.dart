@@ -56,32 +56,37 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
 
                   // Profile image (foreground layer)
                   if (profileImage.isNotEmpty)
-                  Positioned(
-                    top: 80.h,
-                    left: 19.w,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
+                    Positioned(
+                      top: 80.h,
+                      left: 19.w,
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed(AppRouter.bprofilePath);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 43.r,
-                        backgroundColor: ColorsData.secondary,
-                        child: CircleAvatar(
-                          radius: 35.r,
-                          foregroundImage:
-                              CachedNetworkImageProvider(profileImage),
-                          backgroundColor: ColorsData.secondary,
+                          child: CircleAvatar(
+                            radius: 43.r,
+                            backgroundColor: ColorsData.secondary,
+                            child: CircleAvatar(
+                              radius: 35.r,
+                              foregroundImage:
+                                  CachedNetworkImageProvider(profileImage),
+                              backgroundColor: ColorsData.secondary,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
               Padding(

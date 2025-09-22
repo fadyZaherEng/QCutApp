@@ -576,7 +576,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                       return false;
                     },
                     child: ListView.separated(
-                      physics: const ClampingScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       // مش AlwaysScrollable
                       itemCount: controller.barberServices.length,
                       separatorBuilder: (context, index) =>
@@ -879,7 +880,7 @@ class _BProfileViewBodyState extends State<BProfileView>
               onRefresh: controller.fetchGallery,
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 8.w,
@@ -902,23 +903,25 @@ class _BProfileViewBodyState extends State<BProfileView>
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.r),
-                        child: CachedNetworkImage(
-                          imageUrl: photo,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: ColorsData.primary,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
+                        child: Flexible(
+                          child: CachedNetworkImage(
+                            imageUrl: photo,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Container(
+                              color: ColorsData.primary,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.r),
-                              color: ColorsData.secondary,
-                            ),
-                            child: const Icon(
-                              Icons.error,
-                              color: Colors.white,
+                            errorWidget: (context, url, error) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.r),
+                                color: ColorsData.secondary,
+                              ),
+                              child: const Icon(
+                                Icons.error,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

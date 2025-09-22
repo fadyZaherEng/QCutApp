@@ -634,7 +634,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           child: Obx(() {
             if (controller.isGalleryLoading.value) {
               return const Center(
-                child: CircularProgressIndicator(color: ColorsData.primary),
+                child: SpinKitDoubleBounce(color: ColorsData.primary),
               );
             }
 
@@ -676,22 +676,24 @@ class _BProfileViewBodyState extends State<BProfileView>
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.r),
-                        child: CachedNetworkImage(
-                          imageUrl: photo,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: ColorsData.secondary,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: ColorsData.primary,
+                        child: Flexible(
+                          child: CachedNetworkImage(
+                            imageUrl: photo,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Container(
+                              color: ColorsData.secondary,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: ColorsData.primary,
+                                ),
                               ),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: ColorsData.secondary,
-                            child: const Icon(
-                              Icons.error,
-                              color: Colors.white,
+                            errorWidget: (context, url, error) => Container(
+                              color: ColorsData.secondary,
+                              child: const Icon(
+                                Icons.error,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

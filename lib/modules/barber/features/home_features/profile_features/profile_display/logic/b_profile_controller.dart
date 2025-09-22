@@ -362,29 +362,29 @@ class BProfileController extends GetxController {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           await fetchGallery(); // Refresh gallery
-          Get.snackbar(
-            'Success'.tr,
-            'Photos added successfully'.tr,
-            backgroundColor: ColorsData.primary,
-            colorText: Colors.white,
-          );
+          // Get.snackbar(
+          //   'Success'.tr,
+          //   'Photos added successfully'.tr,
+          //   backgroundColor: ColorsData.primary,
+          //   colorText: Colors.white,
+          // );
         } else {
-          Get.snackbar(
-            'Error',
-            'Failed to add photos to gallery: ${response.statusCode}',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
+          // Get.snackbar(
+          //   'Error',
+          //   'Failed to add photos to gallery: ${response.statusCode}',
+          //   backgroundColor: Colors.red,
+          //   colorText: Colors.white,
+          // );
         }
       }
     } catch (e) {
       print('Error adding photos: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to upload photos: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to upload photos: ${e.toString()}',
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
     } finally {
       isUploadingPhotos.value = false;
     }

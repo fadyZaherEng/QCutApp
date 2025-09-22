@@ -16,11 +16,33 @@ class ImageView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 300,
+          Flexible(
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              // height: 300,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

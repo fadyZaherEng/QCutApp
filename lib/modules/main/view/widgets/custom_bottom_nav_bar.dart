@@ -55,14 +55,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: SharedPref().getBool(PrefKeys.userRole) == false
             ? [
-                _buildNavItem(AssetsData.bstaticsIcon, 'reports'.tr, 0),
-                _buildNavItem(AssetsData.calendarIcon, 'appointments'.tr, 1),
-                _buildNavItem(AssetsData.profileIcon, 'profile'.tr, 2),
+                Expanded(child: _buildNavItem(AssetsData.bstaticsIcon, 'reports'.tr, 0)),
+                Expanded(child: _buildNavItem(AssetsData.calendarIcon, 'appointments'.tr, 1)),
+                Expanded(child: _buildNavItem(AssetsData.profileIcon, 'profile'.tr, 2)),
               ]
             : [
-                _buildNavItem(AssetsData.homeIcon, 'home'.tr, 0),
-                _buildNavItem(AssetsData.calendarIcon, 'appointments'.tr, 1),
-                _buildNavItem(AssetsData.profileIcon, 'profile'.tr, 2),
+                Expanded(child: _buildNavItem(AssetsData.homeIcon, 'home'.tr, 0)),
+                Expanded(child: _buildNavItem(AssetsData.calendarIcon, 'appointments'.tr, 1)),
+                Expanded(child: _buildNavItem(AssetsData.profileIcon, 'profile'.tr, 2)),
               ],
       ),
     );

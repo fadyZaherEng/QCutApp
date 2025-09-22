@@ -120,19 +120,6 @@ class MainController extends GetxController {
 
       print('${Variables.baseUrl}deal/$id');
       print(response.body);
-      // showDealDialog(Deal(
-      //   id: '1',
-      //   dealDateStart: DateTime.now().millisecondsSinceEpoch,
-      //   dealDateEnd:
-      //       DateTime.now().add(Duration(days: 30)).millisecondsSinceEpoch,
-      //   qCuteSubscription: 100,
-      //   qCuteTax: 10,
-      //   freeDaysNumber: 5,
-      //   status: 'pending',
-      //   barber: 'barberId',
-      //   createdAt: DateTime.now().toIso8601String(),
-      //   updatedAt: DateTime.now().toIso8601String(),
-      // ));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
