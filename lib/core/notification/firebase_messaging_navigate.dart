@@ -1,4 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:q_cut/core/utils/app_router.dart';
+import 'package:get/get.dart';
 
 import 'notfication.dart';
 
@@ -30,6 +32,8 @@ class FirebaseMessagingNavigate {
   }
 
   static void _navigate(RemoteMessage message) {
+    Get.toNamed(AppRouter.notificationPath);
+
     if (int.parse(message.data['productId'].toString()) == -1) return;
     // sl<GlobalKey<NavigatorState>>().currentState!.context.pushName(
     //       AppRoutes.productDetails,

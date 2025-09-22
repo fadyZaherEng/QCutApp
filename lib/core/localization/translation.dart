@@ -962,7 +962,7 @@ class MyTranslation extends Translations {
           "Not Attended": "Not Attended",
           "Completed": "Completed",
           "status": "status",
-          "areYouSureDeleteAppointment": "areYouSureDeleteAppointment",
+          "areYouSureDeleteAppointment": "Are you sure you want to delete appointment?",
 
           "Previous": "Previous",
           "Currently": "Currently",
