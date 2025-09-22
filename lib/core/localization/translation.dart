@@ -393,6 +393,8 @@ class MyTranslation extends Translations {
           "Phone Number": "رقم الهاتف",
           "Saloon Name": "اسم المحل الحلاقة",
           "Success": "نجاح",
+          "clear": "مسح",
+          "close": "اغلاق",
           "City": "المدينة",
           "Notification is Expired": "الاشعار منتهي",
           "Bank Account": "حساب البنك",
@@ -615,6 +617,9 @@ class MyTranslation extends Translations {
           "yourAvailableService": "Your available service",
           "availableAppointments": "Available Appointments",
           "Photos added successfully": "Photos added successfully",
+
+          "clear": "Clear",
+          "close": "Close",
           "availableDays": "Available Days",
           "barberServices": "Barber services",
           "No Working Days": "No Working Days",
@@ -1024,6 +1029,9 @@ class MyTranslation extends Translations {
           "changeYourLocation": "שנה את המיקום שלך",
           "Next 6 days": "6 הימים הבאים",
           "Next 7 days": "7 הימים הבאים",
+
+          "clear": "נקה",
+          "close": "סגור",
           "logout": "התנתק",
           "confirm": "אישור",
           "verifying": "מאמת...",

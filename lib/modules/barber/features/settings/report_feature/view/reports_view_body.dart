@@ -88,9 +88,10 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
                 Text(
                   'allBookingAppointments'.tr,
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 _buildSummaryCards(controller),
