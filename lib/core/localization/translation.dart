@@ -304,6 +304,7 @@ class MyTranslation extends Translations {
           "hairStyleCutsFaceShaving": "قصص الشعر والحلاق",
           "Qty": "كمية",
           "bookingDay": "يوم الحجز",
+          "Choose break days": "اختر ايام الاستراحة",
           "bookingTime": "وقت الحجز",
           "finalPrice": "السعر النهائي",
           "type": "نوع",
@@ -740,6 +741,7 @@ class MyTranslation extends Translations {
           // Consumer booking bottom sheet translations
           "howManyConsumerWillBookAppointment":
               "How many consumers will book appointment?",
+          "Choose break days": "Choose break days",
           "onlyOneConsumer": "only 1 consumer",
           "twoConsumers": "2 consumers",
           "threeConsumers": "3 consumers",
@@ -1214,6 +1216,8 @@ class MyTranslation extends Translations {
           "youMustSelectAtLeast": "עליך לבחור לפחות",
           "services": "שירותים",
           "salon": "סלון",
+          "Choose break days":
+              "בחר ימי הפסקה שבהם אינך עובד במספרה",
           "cuts": "תספורות",
           "searchBarbersNameSalon": "חפש שם ספר, סלון",
           "selectFromRecommendedResults": "אתה יכול לבחור מהתוצאות המומלצות",
