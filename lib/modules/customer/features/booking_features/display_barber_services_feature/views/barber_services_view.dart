@@ -24,7 +24,6 @@ class BarberServicesView extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.barberId.value = barber.id;
     controller.fetchServices(barber.id);
-    print("fffffffffffffffffffffffffff: ${barber.id}");
 
     return Scaffold(
       appBar: CustomAppBar(title: "barberServices".tr),

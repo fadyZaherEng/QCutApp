@@ -41,9 +41,10 @@ class _CustomBDrawerState extends State<CustomBDrawer> {
                       decoration: BoxDecoration(
                         color: ColorsData.secondary,
                         image: DecorationImage(
-                            fit: BoxFit.fill,
-                            alignment: Alignment.topCenter,
-                            image: CachedNetworkImageProvider(coverImage)),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.topCenter,
+                          image: CachedNetworkImageProvider(coverImage),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Color(0x1A000000),

@@ -10,6 +10,7 @@ import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_drawer.dart';
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/widgets/choose_break_days_bottom_sheet.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
@@ -102,6 +103,10 @@ class _BProfileViewBodyState extends State<BProfileView>
           ? profileData.barberShop
           : 'My Barber Shop'.tr;
 
+      final location = BarberLocation(
+        type: profileData.barberShopLocation.type,
+        coordinates: profileData.barberShopLocation.coordinates,
+      );
       final city =
           profileData.city.isNotEmpty ? profileData.city : 'Not set'.tr;
 
@@ -366,7 +371,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                             thickness: 1.w,
                           ),
                           SizedBox(height: 8.h),
-                          _buildInfoRow(AssetsData.personIcon, fullName),
+                          _buildInfoRow(AssetsData.personIcon, fullName,location),
                           SizedBox(height: 8.h),
                           InkWell(
                             onTap: () {
@@ -395,7 +400,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 );
                               }));
                             },
-                            child: _buildInfoRow(AssetsData.mapPinIcon, city),
+                            child: _buildInfoRow(AssetsData.mapPinIcon, city,location, isAddress: true),
                           ),
                           SizedBox(height: 8.h),
                           InkWell(
@@ -404,7 +409,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                               launchPhoneDialer(profileData.phoneNumber);
                             },
                             child: _buildInfoRow(AssetsData.callIcon,
-                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}"),
+                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",location),
                           ),
                           SizedBox(height: 8.h),
                           InkWell(
@@ -418,7 +423,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                               }
                             },
                             child: _buildInfoRow(
-                                AssetsData.instagramIcon, instagramPage),
+                                AssetsData.instagramIcon, instagramPage,location),
                           ),
                           SizedBox(height: 16.h),
                           CustomBigButton(
@@ -721,7 +726,8 @@ class _BProfileViewBodyState extends State<BProfileView>
     );
   }
 
-  Widget _buildInfoRow(String svgIconPath, String text) {
+  Widget _buildInfoRow(String svgIconPath, String text, BarberLocation location,
+      {bool isAddress = false}) {
     return Row(
       children: [
         SvgPicture.asset(
@@ -734,17 +740,32 @@ class _BProfileViewBodyState extends State<BProfileView>
           ),
         ),
         SizedBox(width: 8.w),
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.white,
+        if (!isAddress)
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.white,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
           ),
-        ),
+        if (isAddress)
+          FutureBuilder(
+            future: location?.getAddress(Get.locale?.languageCode ?? "en"),
+            builder: (context, loc) {
+              return Expanded(
+                child: Text(
+                  loc.data ?? text,
+                  style: Styles.textStyleS12W400(),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            },
+          ),
       ],
     );
   }

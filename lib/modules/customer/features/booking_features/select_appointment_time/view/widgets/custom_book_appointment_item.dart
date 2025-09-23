@@ -87,7 +87,7 @@ class CustomBookAppointmentItem extends StatelessWidget {
               Divider(
                 color: Colors.grey.withOpacity(0.5),
                 thickness: 0.5,
-                height: 10.h,
+                height: 5.h,
               ),
               _buildInfoRow(
                 "total".tr,
@@ -99,30 +99,35 @@ class CustomBookAppointmentItem extends StatelessWidget {
         ] else
           _buildInfoRow("hairCutService".tr, "\$ 20"),
         SizedBox(height: 4.h),
-        Row(
-          children: [
-            SvgPicture.asset(
-              AssetsData.mapPinIcon,
-              width: 12.w,
-              height: 12.h,
-              colorFilter: const ColorFilter.mode(
-                ColorsData.primary,
-                BlendMode.srcIn,
+        Expanded(
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                AssetsData.mapPinIcon,
+                width: 12.w,
+                height: 12.h,
+                colorFilter: const ColorFilter.mode(
+                  ColorsData.primary,
+                  BlendMode.srcIn,
+                ),
               ),
-            ),
-            Text(
-              'yourLocation'.tr,
-              style: Styles.textStyleS12W400(),
-            ),
-          ],
+              Expanded(
+                child: Text(
+                  'yourLocation'.tr,
+                  style: Styles.textStyleS12W400(),
+                ),
+              ),
+            ],
+          ),
         ),
+        const SizedBox(height: 4),
       ],
     );
   }
 
   Widget _buildInfoRow(String label, String value, {bool isTotal = false}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 6.h),
+      padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
           Text(

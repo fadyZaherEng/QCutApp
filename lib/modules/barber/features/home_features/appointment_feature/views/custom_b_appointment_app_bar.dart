@@ -11,9 +11,16 @@ import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
+
 class CustomBAppointmentAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const CustomBAppointmentAppBar({super.key});
+  final BarberLocation? location;
+
+  const CustomBAppointmentAppBar({
+    super.key,
+    this.location,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +44,22 @@ class CustomBAppointmentAppBar extends StatelessWidget
             SizedBox(width: 4.w),
 
             /// ✅ العنوان الحالي
-            Obx(() => SizedBox(
-                  width: 200.w,
-                  child: Text(
-                    addressController.currentAddress.value,
+
+            SizedBox(
+              width: 200.w,
+              child: FutureBuilder(
+                future: location?.getAddress(Get.locale?.languageCode ?? "en"),
+                builder: (context, loc) {
+                  return Text(
+                    loc.data ?? "Loading...",
+                    //addressController.currentAddress.value,
                     style: Styles.textStyleS12W400(),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                )),
+                  );
+                },
+              ),
+            ),
             SizedBox(width: 4.w),
 
             /// ⟳ زرار تحديث العنوان أو لودينج
@@ -112,8 +126,7 @@ class AddressController extends GetxController {
     );
   }
 
-
-    String googleApiKey = "AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w";
+  String googleApiKey = "AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w";
 
   Future<void> getCurrentAddress({String language = "en"}) async {
     try {
@@ -122,8 +135,9 @@ class AddressController extends GetxController {
       // ✅ Check service
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        currentAddress.value =
-        language == "ar" ? "خدمات الموقع معطلة" : "Location services are disabled";
+        currentAddress.value = language == "ar"
+            ? "خدمات الموقع معطلة"
+            : "Location services are disabled";
         return;
       }
 
@@ -133,7 +147,7 @@ class AddressController extends GetxController {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           currentAddress.value =
-          language == "ar" ? "تم رفض الإذن" : "Permission denied";
+              language == "ar" ? "تم رفض الإذن" : "Permission denied";
           return;
         }
       }
@@ -153,9 +167,9 @@ class AddressController extends GetxController {
       // ✅ Call Google Geocoding API
       final url = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json"
-            "?latlng=${position.latitude},${position.longitude}"
-            "&language=$language"
-            "&key=$googleApiKey",
+        "?latlng=${position.latitude},${position.longitude}"
+        "&language=$language"
+        "&key=$googleApiKey",
       );
 
       final response = await http.get(url);
@@ -195,23 +209,22 @@ class AddressController extends GetxController {
             }
           }
 
-
           currentAddress.value = "$street, $city, $country".trim();
         } else {
           currentAddress.value =
-          language == "ar" ? "لم يتم العثور على عنوان" : "No address found";
+              language == "ar" ? "لم يتم العثور على عنوان" : "No address found";
         }
       } else {
         currentAddress.value =
-        language == "ar" ? "خطأ في جلب البيانات" : "Error fetching data";
+            language == "ar" ? "خطأ في جلب البيانات" : "Error fetching data";
       }
     } catch (e, stack) {
       debugPrint("Error fetching address: $e\n$stack");
-      currentAddress.value =
-      language == "ar" ? "تعذر الحصول على العنوان" : "Unable to fetch address";
+      currentAddress.value = language == "ar"
+          ? "تعذر الحصول على العنوان"
+          : "Unable to fetch address";
     } finally {
       isLoading.value = false;
     }
   }
-
 }

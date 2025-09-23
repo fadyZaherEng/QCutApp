@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_print
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/app_router.dart';
+import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/models/appointment_model.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_drawer.dart';
@@ -16,6 +16,8 @@ import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/logic/appointment_controller.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_appointment_app_bar.dart';
 import 'package:q_cut/modules/barber/features/home_features/appointment_feature/views/custom_b_appointment_list_item.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/models/barber_profile_model.dart';
+import '../../../../../../core/utils/network/network_helper.dart';
 import 'picker.dart';
 
 class BAppointmentView extends StatefulWidget {
@@ -26,16 +28,51 @@ class BAppointmentView extends StatefulWidget {
 }
 
 class _BAppointmentViewState extends State<BAppointmentView> {
-  Future<void> loadAddress(BarberLocation location) async {
-    String addr = await location.getAddress(
-      Get.locale?.languageCode ?? "en",
-    );
-    print("📍 Barber Address: $addr");
+  BarberLocation? location;
+
+  Future<void> fetchProfileData() async {
+    final NetworkAPICall apiCall = NetworkAPICall();
+
+    try {
+      final response = await apiCall.getData(Variables.GET_PROFILE);
+      final responseBody = json.decode(response.body);
+      print(responseBody);
+      if (response.statusCode == 200) {
+        final profileResponse = BarberProfileResponse.fromJson(responseBody);
+
+        location = BarberLocation(
+          type: profileResponse.data.barberShopLocation.type,
+          coordinates: profileResponse.data.barberShopLocation.coordinates,
+        );
+      } else {}
+    } finally {}
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProfileData();
+  }
+
+  @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchProfileData();
+  }
+
+  @override
+  didUpdateWidget(covariant BAppointmentView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    fetchProfileData();
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(BAppointmentController());
+    // fetchProfileData();
 
     return SafeArea(
       child: Scaffold(
@@ -52,7 +89,9 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 24.h),
                       child: Column(
                         children: [
-                          const CustomBAppointmentAppBar(),
+                          CustomBAppointmentAppBar(
+                            location: location,
+                          ),
                           SizedBox(height: 16.h),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +104,7 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                                   backgroundColor: ColorsData.secondary,
                                 ),
                               if (profileImage.isNotEmpty)
-                              SizedBox(height: 10.h),
+                                SizedBox(height: 10.h),
                               Text(
                                 controller.barberName,
                                 style: Styles.textStyleS14W700(),
@@ -206,7 +245,11 @@ class _BAppointmentViewState extends State<BAppointmentView> {
           ),
           onPressed: () {
             // controller.openAddAppointmentDialog();
-            Get.toNamed(AppRouter.selectedPath, arguments: currentBarber);
+            // Get.toNamed(AppRouter.selectedPath, arguments: currentBarber);
+            Get.toNamed(AppRouter.qCutServicesPath, arguments: {
+              "barber": currentBarber,
+              "isMultiple": 1,
+            });
           },
           backgroundColor: ColorsData.primary,
           child: const Icon(Icons.add, color: Colors.white),
