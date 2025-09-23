@@ -60,6 +60,34 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
     }
   }
 
+  // List<Map<String, dynamic>> _generateDynamicDays() {
+  //   DateTime startDate;
+  //
+  //   // Try to parse the provided date string or fall back to today
+  //   if (widget.day != null) {
+  //     try {
+  //       startDate = DateTime.parse(widget.day!);
+  //     } catch (e) {
+  //       print('Error parsing date: ${widget.day}. Using current date instead.');
+  //       startDate = DateTime.now();
+  //     }
+  //   } else {
+  //     startDate = DateTime.now();
+  //   }
+  //
+  //   final List<Map<String, dynamic>> days = [];
+  //
+  //   // Generate 3 days starting from the provided date
+  //   for (int i = 0; i < 3; i++) {
+  //     final day = startDate.add(Duration(days: i));
+  //     days.add({
+  //       "day": DateFormat('E').format(day), // Short day name (Mon, Tue, etc.)
+  //       "date": day.day.toString(), // Day of month
+  //       "fullDate": day, // Store the full date for reference
+  //     });
+  //   }
+  //   return days;
+  // }
   List<Map<String, dynamic>> _generateDynamicDays() {
     DateTime startDate;
 
@@ -77,8 +105,8 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
 
     final List<Map<String, dynamic>> days = [];
 
-    // Generate 3 days starting from the provided date
-    for (int i = 0; i < 3; i++) {
+    // ✅ Generate 7 days starting from the provided date
+    for (int i = 0; i < 7; i++) {
       final day = startDate.add(Duration(days: i));
       days.add({
         "day": DateFormat('E').format(day), // Short day name (Mon, Tue, etc.)
@@ -256,68 +284,71 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
               ],
             ),
             SizedBox(height: 12.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(dynamicDays.length, (index) {
-                bool isSelected = selectedDayIndex == index;
-                return GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      selectedDayIndex = index;
-                      timeSlots = [];
-                      selectedTimeSlot = null;
-                      isLoading = true;
-                    });
-
-                    final newSlots = await controller.getTimeSlotAppointment(
-                      currentBarberId,
-                      DateTime.parse(DateFormat('yyyy-MM-dd').format(
-                              dynamicDays[selectedDayIndex]["fullDate"]))
-                          .millisecondsSinceEpoch
-                          .toString(),
-                      widget.services,
-                    );
-
-                    if (mounted) {
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(dynamicDays.length, (index) {
+                  bool isSelected = selectedDayIndex == index;
+                  return GestureDetector(
+                    onTap: () async {
                       setState(() {
-                        timeSlots = newSlots;
-                        isLoading = false;
+                        selectedDayIndex = index;
+                        timeSlots = [];
+                        selectedTimeSlot = null;
+                        isLoading = true;
                       });
-                    }
-                  },
-                  child: Container(
-                    width: 60.w,
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                    margin: EdgeInsets.symmetric(horizontal: 6.w),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? const Color(0xFFC49A58)
-                          : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          dynamicDays[index]["day"],
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : Colors.black,
+
+                      final newSlots = await controller.getTimeSlotAppointment(
+                        currentBarberId,
+                        DateTime.parse(DateFormat('yyyy-MM-dd').format(
+                                dynamicDays[selectedDayIndex]["fullDate"]))
+                            .millisecondsSinceEpoch
+                            .toString(),
+                        widget.services,
+                      );
+
+                      if (mounted) {
+                        setState(() {
+                          timeSlots = newSlots;
+                          isLoading = false;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: 60.w,
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      margin: EdgeInsets.symmetric(horizontal: 6.w),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? const Color(0xFFC49A58)
+                            : Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            dynamicDays[index]["day"],
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                           ),
-                        ),
-                        Text(
-                          dynamicDays[index]["date"],
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : Colors.black,
+                          Text(
+                            dynamicDays[index]["date"],
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
             SizedBox(height: 20.h),
             //TODO ADD TIME SLOT WIDGET
