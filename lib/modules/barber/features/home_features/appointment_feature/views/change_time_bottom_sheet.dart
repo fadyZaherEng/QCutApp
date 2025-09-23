@@ -109,7 +109,10 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
     for (int i = 0; i < 7; i++) {
       final day = startDate.add(Duration(days: i));
       days.add({
-        "day": DateFormat('E').format(day), // Short day name (Mon, Tue, etc.)
+        "day": DateFormat('E')
+            .format(day)
+            .toLowerCase()
+            .tr, // Short day name (Mon, Tue, etc.)
         "date": day.day.toString(), // Day of month
         "fullDate": day, // Store the full date for reference
       });
@@ -330,8 +333,8 @@ class _ChangeTimeBottomSheetState extends State<ChangeTimeBottomSheet> {
                           Text(
                             dynamicDays[index]["day"],
                             style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
                               color: isSelected ? Colors.white : Colors.black,
                             ),
                           ),
