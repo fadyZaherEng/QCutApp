@@ -223,6 +223,65 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+  Future<void> getAvailableBarbers({
+    required String city, // ممكن يكون "Cairo,Alexandria,Giza"
+    required int startDate, // 1744297200000
+    required int endDate,   // 1744300800000
+  }) async {
+    isLoading.value = true;
+    isError.value = false;
+    errorMessage.value = '';
+
+    try {
+      final url =
+          "${Variables.baseUrl}appointment/available?startDate=$startDate&endDate=$endDate&city=$city";
+      print("API URL: $url");
+
+      final response = await _apiCall.getData(url);
+      final responseBody = json.decode(response.body);
+
+      print("city: $city");
+      print("API Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final availableBarbers = (responseBody["availableBarbers"] as List)
+            .map((e) => Barber.fromJson(e))
+            .toList();
+
+        // ✨ دعم المدن المتعددة
+        final cityList = city
+            .split(',')
+            .map((c) => c.trim().toLowerCase())
+            .where((c) => c.isNotEmpty)
+            .toList();
+
+        final filteredBarbers = availableBarbers.where((barber) {
+          final barberCity = barber.city.toLowerCase();
+          return cityList.any((c) => barberCity.contains(c));
+        }).toList();
+
+        // update observables
+        totalBarbers.value = filteredBarbers.length;
+        currentPage.value = responseBody["currentPage"] ?? 1;
+
+        nearbyBarbers.value = filteredBarbers;
+
+        recommendedBarbers.value = filteredBarbers
+            .where((barber) => barber.status == "active")
+            .toList();
+      } else {
+        isError.value = true;
+        errorMessage.value =
+            responseBody['message'] ?? 'Failed to fetch available barbers';
+      }
+    } catch (e) {
+      isError.value = true;
+      errorMessage.value = 'Network error: $e';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 
   /// ✅ دالة البحث
   // RxList<Barber> filteredSearchBarbers = <Barber>[].obs;

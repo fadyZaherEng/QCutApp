@@ -122,12 +122,35 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  DateTime? selectedDateTime;
+
+  void _clearSelection() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_selectedCitiesKey);
+    setState(() {
+      selectedCities.clear();
+      selectedDateTime = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _clearSelection();
+    return super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     loadSelectedCities();
 
     return RefreshIndicator(
       onRefresh: () async {
+        setState(() {
+          isSearching = false;
+          selectedCities.clear();
+          selectedDateTime = null;
+          _clearSelection();
+        });
         await fetchProfileData();
         await _determinePosition(context).then((Position? position) {
           latitude = position!.latitude;
@@ -235,8 +258,19 @@ class _HomeViewState extends State<HomeView> {
                                   ?.then((selectedDateTime) {
                                 if (selectedDateTime != null &&
                                     selectedDateTime is DateTime) {
-                                  // homeController.getBarbersByTime(
-                                  //     selectedDateTime);
+                                  setState(() {
+                                    this.selectedDateTime = selectedDateTime;
+                                  });
+                                  homeController.getAvailableBarbers(
+                                    city: selectedCities.isNotEmpty
+                                        ? selectedCities.first
+                                        : "",
+                                    startDate:
+                                        selectedDateTime.millisecondsSinceEpoch,
+                                    endDate: selectedDateTime
+                                        .add(const Duration(days: 180))
+                                        .millisecondsSinceEpoch,
+                                  );
                                 }
                               });
                             },
@@ -250,7 +284,9 @@ class _HomeViewState extends State<HomeView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(horizontal: 16.w),
                               child: Text(
-                                "when".tr,
+                                selectedDateTime != null
+                                    ? "${selectedDateTime!.day}/${selectedDateTime!.month}/${selectedDateTime!.year}"
+                                    : "when".tr,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 textAlign: TextAlign.center,
