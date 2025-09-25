@@ -56,7 +56,7 @@ class CustomBookPaymentMethodsItem extends StatelessWidget {
             ),
             child: Container(
               width: double.infinity,
-              // height: 194.h,
+              height: 194.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(16.r),

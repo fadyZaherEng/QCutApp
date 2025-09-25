@@ -249,6 +249,9 @@ class _SignUpViewState extends State<SignUpView> {
                                 textData: 'request'.tr,
                                 onPressed: () {
                                   if (isChecked) {
+                                    if(_authController.city.text.isEmpty ){
+                                      _authController.city.text="Not Set".tr;
+                                    }
                                     _authController.signUp(context);
                                   } else {
                                     Get.snackbar(

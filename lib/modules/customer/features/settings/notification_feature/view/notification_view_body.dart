@@ -123,7 +123,7 @@ class NotificationCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 32.r,
+                    radius: 28.r,
                     foregroundImage: CachedNetworkImageProvider(
                       viewModel.getProfileImage(notification),
                     ),

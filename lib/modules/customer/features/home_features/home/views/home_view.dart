@@ -133,11 +133,11 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  @override
-  void dispose() {
-    _clearSelection();
-    return super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _clearSelection();
+  //   return super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
