@@ -29,29 +29,50 @@ class CityController extends GetxController {
     fetchCities();
   }
 
-  Future<void> fetchCities() async {
+  Future<void> fetchCities({int limit = 20}) async {
     try {
       isLoading.value = true;
       isError.value = false;
       errorMessage.value = '';
 
       final response = await _apiCall.getData(
-        '${Variables.baseUrl}mainDashboard/countBarber/byCity?page=${currentPage.value}',
+        '${Variables.baseUrl}mainDashboard/cities?page=${currentPage.value}&limit=$limit',
       );
 
       final responseBody = json.decode(response.body);
       print(responseBody);
 
-      if (response.statusCode == 200) {
-        final cityResponse = CityResponse.fromJson(responseBody);
-        cities.assignAll(cityResponse.cities);
+      if (response.statusCode == 200 && responseBody['success'] == true) {
+        final List<City> fetchedCities = (responseBody['cities']
+                as List<dynamic>)
+            .map((cityName) => City(name: cityName.toString(), barberCount: 0))
+            .toList();
+
+        cities.assignAll(fetchedCities);
+        //remove repeated cities or duplicates if any only remove one not all
+        //
+        // cities.removeWhere((city) =>
+        //     cities
+        //         .where((c) =>
+        //             c.name.trim().toLowerCase() ==
+        //             city.name.trim().toLowerCase())
+        //         .length >
+        //     1);
+        // ✅ المدن راجعة كـ List<String>
+        // final List<String> fetchedCities =
+        // List<String>.from(responseBody['cities'] ?? []);
+        //
+        // cities.assignAll(fetchedCities);
         filterCities(searchQuery.value);
 
         // ✅ بعد تحميل المدن من API نحمل الاختيارات المحفوظة ونربطها
         await loadSelectedCities();
 
-        totalBarbers.value = cityResponse.totalBarbers;
-        totalPages.value = cityResponse.pagination.totalPages;
+        // ✅ تحديث معلومات الباجينيشن
+        final pagination = responseBody['pagination'] ?? {};
+        totalPages.value = pagination['totalPages'] ?? 1;
+        // totalCities.value = pagination['totalCities'] ?? fetchedCities.length;
+        currentPage.value = pagination['currentPage'] ?? 1;
       } else {
         isError.value = true;
         errorMessage.value =
@@ -77,6 +98,54 @@ class CityController extends GetxController {
     }
   }
 
+  // Future<void> fetchCities() async {
+  //   try {
+  //     isLoading.value = true;
+  //     isError.value = false;
+  //     errorMessage.value = '';
+  //
+  //     final response = await _apiCall.getData(
+  //       '${Variables.baseUrl}mainDashboard/countBarber/byCity?page=${currentPage.value}',
+  //     );
+  //
+  //     final responseBody = json.decode(response.body);
+  //     print(responseBody);
+  //
+  //     if (response.statusCode == 200) {
+  //       final cityResponse = CityResponse.fromJson(responseBody);
+  //       cities.assignAll(cityResponse.cities);
+  //       filterCities(searchQuery.value);
+  //
+  //       // ✅ بعد تحميل المدن من API نحمل الاختيارات المحفوظة ونربطها
+  //       await loadSelectedCities();
+  //
+  //       totalBarbers.value = cityResponse.totalBarbers;
+  //       totalPages.value = cityResponse.pagination.totalPages;
+  //     } else {
+  //       isError.value = true;
+  //       errorMessage.value =
+  //           responseBody['message'] ?? 'Failed to fetch cities';
+  //       Get.snackbar(
+  //         'Error',
+  //         errorMessage.value,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     isError.value = true;
+  //     errorMessage.value = 'Network error: $e';
+  //     Get.snackbar(
+  //       'Error',
+  //       'Failed to connect to server',
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
   void loadMore() async {
     if (currentPage.value < totalPages.value) {
       currentPage.value++;
@@ -101,8 +170,8 @@ class CityController extends GetxController {
     } else {
       filteredCities.assignAll(
         cities
-            .where((city) =>
-            city.name.toLowerCase().contains(query.toLowerCase()))
+            .where(
+                (city) => city.name.toLowerCase().contains(query.toLowerCase()))
             .toList(),
       );
     }
@@ -152,9 +221,8 @@ class CityController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     final savedNames = prefs.getStringList(_selectedCitiesKey) ?? [];
 
-    final restoredCities = cities
-        .where((city) => savedNames.contains(city.name))
-        .toSet();
+    final restoredCities =
+        cities.where((city) => savedNames.contains(city.name)).toSet();
 
     selectedCities.assignAll(restoredCities);
     selectedCities.refresh();
