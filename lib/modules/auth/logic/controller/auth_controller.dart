@@ -77,14 +77,15 @@ class AuthController extends GetxController {
       final requestData = {
         'userType':
             SharedPref().getBool(PrefKeys.userRole)! ? "user" : 'barber',
-        'userData':SharedPref().getBool(PrefKeys.userRole)! ? userData.toJson():
-        {
-          ...userData.toJson(),
-          "location": {
-            "type": "Point",
-            "coordinates": [locationLongitude, locationLatitude]
-          }
-        }
+        'userData': SharedPref().getBool(PrefKeys.userRole)!
+            ? userData.toJson()
+            : {
+                ...userData.toJson(),
+                "location": {
+                  "type": "Point",
+                  "coordinates": [locationLongitude, locationLatitude]
+                }
+              }
       };
 
       final response =
@@ -124,7 +125,18 @@ class AuthController extends GetxController {
 
   // Get FCM token
   Future<String> getFCMToken() async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    print("FCM Token: $fcmToken");
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      fcmToken = newToken;
+      // Handle token refresh if needed
+      print('FCM Token refreshed: $newToken');
+    });
+    if (fcmToken == null) {
+      print('Failed to get FCM token');
+    } else {
+      print('FCM Token: $fcmToken');
+    }
     return fcmToken ?? '';
   }
 
@@ -172,10 +184,11 @@ class AuthController extends GetxController {
         await SharedPref()
             .setString(PrefKeys.fullName, loginResponse.value!.fullName);
         await SharedPref().setBool(PrefKeys.saveMe, isChecked);
-        if((SharedPref().getBool(PrefKeys.userRole)) == false){
+        if ((SharedPref().getBool(PrefKeys.userRole)) == false) {
           ///todo barber
           Barber barber = Barber.fromJson(responseBody);
-          await SharedPref().setString(PrefKeys.barber, jsonEncode(barber.toJson()));
+          await SharedPref()
+              .setString(PrefKeys.barber, jsonEncode(barber.toJson()));
         }
 
         // You might want to show a success message
