@@ -124,20 +124,17 @@ class FirebaseCloudMessaging {
     final Map<String, dynamic> serviceAccountJson = {
       "type": "service_account",
       "project_id": "qcute-c4d8f",
-      "private_key_id": "b9a71672bc185036ea63f8f992ede3746f74aba3",
-      "private_key":
-          "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC4OuJja0o0xSbb\n3XC5yCd2kay3CpzT/B3DRkkGT7x3kGaEwicAuW949OBpWRIOeHpHR9y+8ydElnSF\nB7qcovZj+3V0BMIbi73ht42zGtJ+8TTd2wn+G6dU19b1p9WcLNwZQJHfkeB9h3NY\n5FGQfxTErPg3nn4+DdPrajajVNNt/SOy7IDw7uG8yCeRHwzTuAHUfS6q1HFSaK0F\nFQ5Gw0RdJIzmyqBpv6tq4Qh8SM7REXnZn2/a1CX5G5gpEnHnDtPmP75aD9b6G7Ss\nsC/lQ0L//Tz8fp5WiQostVkrV98xzNMEpN/RtWwy76lAVWNXZ37pikmx9s7j53Tx\noZq234DFAgMBAAECggEANEYFAYeqXRHJxl3tQ9GunN6VvrQkrqOdQFC7nK5YQCa5\naBb84SA8qHn3CP1Mec2miH4z/PxaWoREWJDKWvKEbfcmKv7EovNCM/8UlkrYiktf\noEmr6q2nC5RYuohePHugEgw3t9OY+pVJ3eGe4Ryl5G5d2c4/bNUYmfYfvbVubokG\nc2cee0YOr2axbaCWqv/Xkxog8ILiXp4L+VngG9ZbjHOSyZ+jm0acKBpqx2nwDE5m\nBcNcwvfuRmoGRI/RWQVV7d/o36rvkqXjfgsmidaDjEGUfvTYoD/sGWoNBf/h0RTG\nS19fOFTUgmkQEnAaKzcF5o4x7RiyyEMzzgks2Iu96wKBgQD2bPkE0/DUmXe6FkmH\nokDQay/eBj9Ia0KUAVi1UtwJAONIRCqnaMi5iGtiC+rYsvzZM7k9kbzm0ZiliXBL\nrONVfvXi1TpnuYfgXTHxgcz8rtycqcnHeRB2L2Gcy/U0Ojtky+mu6ntZSe93OiDP\nTfsTfx0kPkYBGUFheXCBvujTfwKBgQC/Y0tFLa1bovtkhSbrTNc3GQg0iwGkwXMd\nWj+J2XGoiJNNDsxeCg36RADFmjOGnfe9hYj8+BkmaSP2Hn/5fMjnWf+4UrRkGZqw\nrRksf67kYFoLQ0ov33PoBjDaCExR7JEyv0PDVKiBl3kTJTZvcLvN2Nkq4sJddI0y\n1XR+kHh9uwKBgQClW6CKHdIoR0cxBs2Wh0ko0hRPzy9d4CPP/0tQeWaPYBojnyJk\nLgsrfKBaLZcMjKbg9TVjXE0/MfxVcHF7RmtSLpy+9sh3W+cSplbiMXClSo1dTw3I\nnbNvKwI8XhyPTFgYnkCUEGJvGw7mmYn0seY+QfkDHgqJqDHYP85AMiQ37wKBgGbf\nnYb6zXMzQQPAGrJh5FDmcKWljmWb4h+F8h9LtS9M8jh6Wtm1d9vtD6kngMi8Qn0p\nuP+Y8BPYcg8KR+m37FmG49CVDAe+R4ruEFj97Oku7VeefNMMvkWahkm8KiHjEg0A\nCBGHgOffnqHu37q5EwnLpLfLmYQYcQlA+VRKnamfAoGAbro1q/iX6dCuVDZHS99z\nYd58cCbsecciuyEJlngYx5gtmxKnVd84l3g59SyuqdRhCfMSrn7NgARTCYf1ZBqG\nO6FV8sTdt2+sC2zkeWUj6Yob8IhLRfqQxwxiUHZQNBfGIEiySDJtzpXt1Aiwv6pP\nan3PZaIBY8bMA1WCu8muk5Y=\n-----END PRIVATE KEY-----\n",
-      "client_email":
-          "firebase-adminsdk-fbsvc@qcute-c4d8f.iam.gserviceaccount.com",
+      "private_key_id": "423a6523efdf5406d4e54bc7871a6452a7f6e9a8",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDOV2jwoSwptJGL\nai/5pnkNu/GGhn9klcO0+8pAAfQK5AmDpDS+04jSRLf50qcExRfFIx6gn3mG1ywy\nCNgR9/Cw3LThGPzFfUEcu6+bYWgLbLrc3x2MujuBYPxbAjMBRr2xHJYOaM9hkwzo\nxk1WLRwh++9itaApsmLDEiMCLUMhOPqQ/rhG5Il5Ah735m1tb9lVWDF2/57DE4Mq\nD4hWP4O7jg8u7OttewOfU9Di5nJCb4YcvO93Y2QZoerHFgmZYQEXZdDN3PjXRllx\nT4Jip9mtMy1NuQ4IJoDbH4TN4crfjq3HQmrhKW+/1J2gbsfD4qAXBeQKP6ihs6em\nwEN0HuUTAgMBAAECggEAPH5A3EcMKP/wqZRMk17cX4vpn7xfrdAAa9djsIdCEk1P\ngsIJ2qYulyKhY0MARzQ3J0sICCQo30DHCrYwDniHnnpeJx4JwSZbB/74WU/hznOm\nhul8gsz4dBJIea/33xhrtXiBf6D3p44Se03jz29zL31qbaB836yWKsVu8QzvANZp\ns92M1YSZPvgSJ5vmEpCRbkCzlcmLk5QWc5azq4igFwUR11G1Rq8ZVPcmAqkEWssx\nDhOHbxv4lY3Zu85XScRxjCs3EtoKcRNR6uSm2vjmMl4j/tsMIxCkFD1qyYeJRk7p\nRLHEd03XDWAnse5L06VjO1bHsQbt91qFCjr/LUVACQKBgQD8xCzSvyz07CXglunV\nLIM5V/bSGjNbFvetYXka9CDeA7IDaa09rpUafry7ZZqfEUqWZXsv4WXPD5q7Vqk6\nryePf/g4+1mFgnzL3DmNHwxjeI7Rf+WMB2YHdQMi4btgw77WnjT6vzXD2bFyL1Vs\n2Lm6jN9uW5BHeX2xZ2gpNzBKOQKBgQDQ+zDLPAEr8xWPzJjUQjHjwE0yDfOcoMtk\nKTzTqxCCS2TI9zMbNBjr1n7w9So1WiXuWLjguIOjgIMlzBRgN86HLMJ08im8gT7z\nWsks5z+yhQjKMW+C9fSrPtNA6b2jLxUfwuCPjmXu3MLeqv+aaHZNyIhqxcmHI9Ib\nW6aCM4vZqwKBgGJ5Gu1PxXf1uBvzL035dXYVqvbXdkJ6hCtr2f6CNXvI/MUPmop5\nRWV5EpX/U2m9Fs3Y41EYAs3USnfJn0xZiJQDSvUIFyxIVc4mEdXEztLB2QINTaRs\nDXfCQmKIhrOADw0VvZYigBO478SIZENve4wN7c3UpjTyQ+GlY5MLCSkhAoGAZbvi\n5Q0xBNQxiu9u9uXCo7zZ16QzE+yzFu98TQ7Z2pQZXDv7BSM3fpfM9EBla9OW45EN\nb1hjvRSyw5O116FTSTrg7010Q/AnVRC9Hr70o1NgFA482uQhV7wd21vulaI2BmA4\nMaqAtOeDdiKIjAKOlQ8qWdAvazpk7iyPwpKVYkECgYEAsAAK23/Qf2s3pnpl1jwn\nlhxLnDyLs8k8sLcESVH+APbjv+x/oJIQW2B2f0MMSaIwg3SZN2EhoPrbvJqAt62A\nZdeYPXMoFAl0yyH5XBVXBawxM2f2c7hxUrYncMUuyyCR3Bw9wwafAgyPiuHCebM7\nxoLXUq358QoiWbYzfB2qEhw=\n-----END PRIVATE KEY-----\n",
+      "client_email": "firebase-adminsdk-fbsvc@qcute-c4d8f.iam.gserviceaccount.com",
       "client_id": "102699095661913449899",
       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
       "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url":
-          "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url":
-          "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40qcute-c4d8f.iam.gserviceaccount.com",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40qcute-c4d8f.iam.gserviceaccount.com",
       "universe_domain": "googleapis.com"
-    };
+    }
+    ;
 
     List<String> scopes = [
       "https://www.googleapis.com/auth/userinfo.email",
@@ -152,10 +149,10 @@ class FirebaseCloudMessaging {
 
     // Obtain the access token
     auth.AccessCredentials credentials =
-        await auth.obtainAccessCredentialsViaServiceAccount(
-            auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
-            scopes,
-            client);
+    await auth.obtainAccessCredentialsViaServiceAccount(
+        auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
+        scopes,
+        client);
 
     // Close the HTTP client
     client.close();
