@@ -105,6 +105,7 @@ class NotificationViewModel extends GetxController {
 
     refreshNotifications();
   }
+
   String getTimeAgo(notification) {
     final now = DateTime.now();
     final difference = now.difference(notification.createdAt);
@@ -128,5 +129,4 @@ class NotificationViewModel extends GetxController {
       return '$day/$month/$year $hour:$minute';
     }
   }
-
 }

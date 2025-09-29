@@ -42,7 +42,6 @@ Barber currentBarber = barberJson != null
         workingDays: [],
       );
 
-
 void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();

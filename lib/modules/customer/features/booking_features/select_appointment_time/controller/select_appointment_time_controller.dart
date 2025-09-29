@@ -418,9 +418,9 @@ class SelectAppointmentTimeController extends GetxController {
     for (var data in rawData) {
       try {
         final startTime =
-        DateTime.fromMillisecondsSinceEpoch(data['startInterval']);
+            DateTime.fromMillisecondsSinceEpoch(data['startInterval']);
         final endTime =
-        DateTime.fromMillisecondsSinceEpoch(data['endInterval']);
+            DateTime.fromMillisecondsSinceEpoch(data['endInterval']);
 
         // لو اليوم نفس اليوم المختار
         if (startTime.day == day) {

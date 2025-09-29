@@ -86,9 +86,9 @@ class BarberProfileData {
           : BarberShopLocation(type: 'Point', coordinates: [0, 0]),
       workingDays: workingDays,
       breakTime: json['breakTime'] != null
-          ? List<BreakTime>.from(json['breakTime'].map((x) => BreakTime.fromJson(x)))
+          ? List<BreakTime>.from(
+              json['breakTime'].map((x) => BreakTime.fromJson(x)))
           : [],
-
       favorites: json['favorites'] != null
           ? List<dynamic>.from(json['favorites'].map((x) => x))
           : [],

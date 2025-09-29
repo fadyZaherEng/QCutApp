@@ -94,7 +94,8 @@ class BEditProfileController extends GetxController {
 
   void _initializeControllers() {
     nameController.text = initialData.fullName;
-    phoneController.text = initialData.phoneNumber.replaceFirst("+972", "") ?? '';
+    phoneController.text =
+        initialData.phoneNumber.replaceFirst("+972", "") ?? '';
     saloonController.text = initialData.barberShop;
     cityController.text = initialData.city;
     // bankAccountController.text = initialData.bankAccountNumber;
@@ -221,7 +222,7 @@ class BEditProfileController extends GetxController {
         'fullName': nameController.text,
         'phoneNumber': phoneController.text,
         'barberShop': saloonController.text,
-        'city':  cityController.text,
+        'city': cityController.text,
         'instagramPage': instagramController.text,
         'bankAccountNumber': "123456", // bankAccountController.text,
         'offDay': offDays,

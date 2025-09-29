@@ -53,7 +53,8 @@ class ReportsView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: SvgPicture.asset(
-                AssetsData.sortIcon, // <-- Make sure you have a filter icon in assets
+                AssetsData
+                    .sortIcon, // <-- Make sure you have a filter icon in assets
                 height: 26,
                 width: 26,
                 color: ColorsData.primary,

@@ -17,6 +17,7 @@ void showChangeUserInfoBottomSheet(
         ChangeUserInfoBottomSheet(profileController: profileController),
   );
 }
+
 void showChangeUserLocationBottomSheet(
     BuildContext context, ProfileController? profileController) {
   if (profileController == null) return;

@@ -10,7 +10,7 @@ class BookAppointmentWithPaymentMethodsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "bookAppointment".tr),
-      body:  const BookAppointmentWithPaymentMethodsViewBody(),
+      body: const BookAppointmentWithPaymentMethodsViewBody(),
     );
   }
 }

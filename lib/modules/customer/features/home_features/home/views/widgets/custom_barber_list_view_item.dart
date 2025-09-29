@@ -43,8 +43,9 @@ class CustomBarberListViewItem extends StatelessWidget {
                       width: 211.w,
                       height: 170.h,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const Center(child: SpinKitDoubleBounce(color: ColorsData.primary)),
+                      placeholder: (context, url) => const Center(
+                          child:
+                              SpinKitDoubleBounce(color: ColorsData.primary)),
                       errorWidget: (context, url, error) => Image.asset(
                         AssetsData.barberSalonImage,
                         width: 211.w,

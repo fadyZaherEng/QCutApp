@@ -2,15 +2,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/barber/map_search/widgets/header_widget.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class MapSearchScreen extends StatefulWidget {
   final double initialLatitude;

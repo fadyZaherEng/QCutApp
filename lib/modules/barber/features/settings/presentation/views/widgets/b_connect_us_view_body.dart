@@ -7,7 +7,6 @@ import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../home_features/profile_features/profile_display/logic/b_profile_controller.dart';
@@ -43,7 +42,7 @@ class BConnectUsViewBody extends StatelessWidget {
                   "https://www.instagram.com/moataz.abnha?igsh=MW12b2JyYzJtMjY0bA%3D%3D&utm_source=qr";
               try {
                 final uri = Uri.parse(instagramUrl);
-                   await launchUrl(uri);
+                await launchUrl(uri);
               } catch (e) {
                 showErrorSnackBar(context, "Instagram link is not set".tr);
               }

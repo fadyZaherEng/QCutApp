@@ -12,7 +12,6 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/customer/features/settings/chat_feature/logic/upload_media.dart';
 
 import '../../../../../../../core/services/shared_pref/pref_keys.dart';
-import '../../../../../../../core/utils/constants/colors_data.dart';
 import '../../../../../../../main.dart';
 
 class BProfileController extends GetxController {

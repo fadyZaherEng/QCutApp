@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -398,12 +397,10 @@ class ReportController extends GetxController {
                         Expanded(
                           child: TextButton(
                             onPressed: () {
-                              if (startDate != null && endDate != null) {
-                                Navigator.pop(context);
-                                // Call API with both dates
-                                fetchReports();
-                              }
-                            },
+                              Navigator.pop(context);
+                              // Call API with both dates
+                              fetchReports();
+                                                        },
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.amber,
                               shape: const RoundedRectangleBorder(
@@ -434,12 +431,10 @@ class ReportController extends GetxController {
     );
 
     // if both picked, send them
-    if (startDate != null && endDate != null) {
-      selectedStartDate.value = startDate;
-      selectedEndDate.value = endDate;
-      await fetchReports();
+    selectedStartDate.value = startDate;
+    selectedEndDate.value = endDate;
+    await fetchReports();
     }
-  }
 
   // Load more reports (pagination)
   Future<void> loadMoreReports() async {

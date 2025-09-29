@@ -305,7 +305,7 @@ class ChooseBreakDaysBottomSheet extends StatefulWidget {
 class _ChooseBreakDaysBottomSheetState
     extends State<ChooseBreakDaysBottomSheet> {
   int? _selectedDay;
-  List<DateTime> _breakDays = [];
+  final List<DateTime> _breakDays = [];
   bool isClicked = true;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;

@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
-/// دالة Async تجيب العنوان الصحيح
-import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class BarberAppointmentResponse {
@@ -156,7 +154,6 @@ class BarberInfo {
   }
 }
 
-
 class BarberLocation {
   final String type;
   final List<double> coordinates;
@@ -180,7 +177,6 @@ class BarberLocation {
     );
   }
 
-
   Future<String> getAddress(String appLanguageCode) async {
     if (address.isNotEmpty) return address;
 
@@ -196,9 +192,9 @@ class BarberLocation {
       // ✅ Google Geocoding API
       final url = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json"
-            "?latlng=$latitude,$longitude"
-            "&key=AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"
-            "&language=$lang",
+        "?latlng=$latitude,$longitude"
+        "&key=AIzaSyDIC2N5UajvIfWd0858c1Z0JDZ6R-78e2w"
+        "&language=$lang",
       );
 
       final response = await http.get(url);
@@ -238,9 +234,7 @@ class BarberLocation {
             }
           }
 
-          return [street, city, country]
-              .where((e) => e.isNotEmpty)
-              .join(", ");
+          return [street, city, country].where((e) => e.isNotEmpty).join(", ");
         } else {
           return "Address not available";
         }
@@ -252,8 +246,7 @@ class BarberLocation {
       return "Address not available";
     }
   }
-
- }
+}
 
 class UserInfo {
   final String id;

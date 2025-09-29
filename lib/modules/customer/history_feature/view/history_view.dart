@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
- import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/customer/history_feature/controller/history_controller.dart';
 import 'package:q_cut/modules/customer/history_feature/view/history_view_body.dart';
 
@@ -14,7 +14,7 @@ class HistoryView extends GetView<HistoryController> {
     // 🔥 الحالة المختارة للفلتر (افتراضي All)
     final RxString selectedFilter = 'all'.obs;
     //Get Language
-     return DefaultTabController(
+    return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(

@@ -32,10 +32,10 @@ class HeaderWidget extends StatelessWidget {
             controller: searchController,
             onChanged: (value) => getPredictions(value),
             decoration: InputDecoration(
-              hintText:"searchAboutYourLocation".tr,
+              hintText: "searchAboutYourLocation".tr,
               hintStyle: const TextStyle(
                 fontSize: 12,
-                color:Colors.grey,
+                color: Colors.grey,
               ),
               prefixIcon: const Icon(
                 Icons.my_location,

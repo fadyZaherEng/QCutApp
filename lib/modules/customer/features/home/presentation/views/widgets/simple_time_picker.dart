@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class SimpleTimePicker extends StatefulWidget {
   final DateTime selectedDate;
   final TimeOfDay initialTime;
@@ -48,7 +47,7 @@ class _SimpleTimePickerState extends State<SimpleTimePicker> {
     final hours = getHours();
     final hourIndex = hours.indexOf(selectedHour).clamp(0, hours.length - 1);
 
-    return Container(
+    return SizedBox(
       height: 182.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +94,7 @@ class _SimpleTimePickerState extends State<SimpleTimePicker> {
             width: 60,
             child: ListWheelScrollView.useDelegate(
               controller:
-              FixedExtentScrollController(initialItem: selectedMinute),
+                  FixedExtentScrollController(initialItem: selectedMinute),
               itemExtent: 40,
               perspective: 0.005,
               diameterRatio: 1.5,

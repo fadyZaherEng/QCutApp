@@ -33,7 +33,7 @@ class _FavoriteSalonViewState extends State<FavoriteSalonView> {
   }
 
   Future<void> fetchFavorites() async {
-     if (!mounted) return;
+    if (!mounted) return;
     setState(() {
       isLoading = true;
     });

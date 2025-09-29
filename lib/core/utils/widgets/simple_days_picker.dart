@@ -59,12 +59,12 @@ class SimpleDaysPicker extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24.r),
                     boxShadow: isSelected
                         ? [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      )
-                    ]
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            )
+                          ]
                         : [],
                   ),
                   child: Column(
@@ -90,8 +90,9 @@ class SimpleDaysPicker extends StatelessWidget {
                         child: Text(
                           "${day.day}",
                           style: TextStyle(
-                            color:
-                            isSelected ? Colors.black : Colors.grey.shade800,
+                            color: isSelected
+                                ? Colors.black
+                                : Colors.grey.shade800,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),

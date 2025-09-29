@@ -60,14 +60,6 @@ class HomeController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Initialize with static data first
-
-    // Then try to fetch from API
-    // getBarbers();
-  }
 
   @override
   void onClose() {
@@ -223,10 +215,11 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> getAvailableBarbers({
     required String city, // ممكن يكون "Cairo,Alexandria,Giza"
     required int startDate, // 1744297200000
-    required int endDate,   // 1744300800000
+    required int endDate, // 1744300800000
   }) async {
     isLoading.value = true;
     isError.value = false;
@@ -281,7 +274,6 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   /// ✅ دالة البحث
   // RxList<Barber> filteredSearchBarbers = <Barber>[].obs;

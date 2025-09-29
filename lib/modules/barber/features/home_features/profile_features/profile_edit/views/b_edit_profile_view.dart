@@ -282,8 +282,8 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                   : Get.put(BEditProfileController());
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return MapSearchScreen(
-                  initialLatitude:controllers.locationLatitude?? 32.0853,
-                  initialLongitude:controllers.locationLongitude?? 34.7818,
+                  initialLatitude: controllers.locationLatitude ?? 32.0853,
+                  initialLongitude: controllers.locationLongitude ?? 34.7818,
                   onLocationSelected: (lat, lng, address) {
                     controller.cityController.text = address;
                     controller.locationLatitude = lat;

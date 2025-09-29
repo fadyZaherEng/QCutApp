@@ -963,7 +963,8 @@ class MyTranslation extends Translations {
           "Not Attended": "Not Attended",
           "Completed": "Completed",
           "status": "status",
-          "areYouSureDeleteAppointment": "Are you sure you want to delete appointment?",
+          "areYouSureDeleteAppointment":
+              "Are you sure you want to delete appointment?",
 
           "Previous": "Previous",
           "Currently": "Currently",
@@ -1218,8 +1219,7 @@ class MyTranslation extends Translations {
           "youMustSelectAtLeast": "עליך לבחור לפחות",
           "services": "שירותים",
           "salon": "סלון",
-          "Choose break days":
-              "בחר ימי הפסקה שבהם אינך עובד במספרה",
+          "Choose break days": "בחר ימי הפסקה שבהם אינך עובד במספרה",
           "cuts": "תספורות",
           "searchBarbersNameSalon": "חפש שם ספר, סלון",
           "selectFromRecommendedResults": "אתה יכול לבחור מהתוצאות המומלצות",

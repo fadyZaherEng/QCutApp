@@ -371,7 +371,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                             thickness: 1.w,
                           ),
                           SizedBox(height: 8.h),
-                          _buildInfoRow(AssetsData.personIcon, fullName,location),
+                          _buildInfoRow(
+                              AssetsData.personIcon, fullName, location),
                           SizedBox(height: 8.h),
                           InkWell(
                             onTap: () {
@@ -400,7 +401,9 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 );
                               }));
                             },
-                            child: _buildInfoRow(AssetsData.mapPinIcon, city,location, isAddress: true),
+                            child: _buildInfoRow(
+                                AssetsData.mapPinIcon, city, location,
+                                isAddress: true),
                           ),
                           SizedBox(height: 8.h),
                           InkWell(
@@ -408,8 +411,10 @@ class _BProfileViewBodyState extends State<BProfileView>
                               // Handle phone number tap if needed
                               launchPhoneDialer(profileData.phoneNumber);
                             },
-                            child: _buildInfoRow(AssetsData.callIcon,
-                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",location),
+                            child: _buildInfoRow(
+                                AssetsData.callIcon,
+                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
+                                location),
                           ),
                           SizedBox(height: 8.h),
                           InkWell(
@@ -422,8 +427,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 // s(context, "Invalid Instagram link".tr);
                               }
                             },
-                            child: _buildInfoRow(
-                                AssetsData.instagramIcon, instagramPage,location),
+                            child: _buildInfoRow(AssetsData.instagramIcon,
+                                instagramPage, location),
                           ),
                           SizedBox(height: 16.h),
                           CustomBigButton(
@@ -754,7 +759,7 @@ class _BProfileViewBodyState extends State<BProfileView>
           ),
         if (isAddress)
           FutureBuilder(
-            future: location?.getAddress(Get.locale?.languageCode ?? "en"),
+            future: location.getAddress(Get.locale?.languageCode ?? "en"),
             builder: (context, loc) {
               return Expanded(
                 child: Text(

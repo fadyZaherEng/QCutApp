@@ -114,7 +114,7 @@ class BSettingViewBody extends StatelessWidget {
     required double locationLatitude,
     required double locationLongitude,
   }) async {
-    final NetworkAPICall _apiCall = NetworkAPICall();
+    final NetworkAPICall apiCall = NetworkAPICall();
 
     isLoading.value = true;
     try {
@@ -127,7 +127,7 @@ class BSettingViewBody extends StatelessWidget {
       };
 
       print('Payload workingDays: ${payload['workingDays']}');
-      final response = await _apiCall.editData(
+      final response = await apiCall.editData(
           '${Variables.baseUrl}authentication', payload);
 
       if (response.statusCode == 200) {

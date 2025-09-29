@@ -78,16 +78,16 @@ class Barber {
           : <String>[],
       workingDays: (json['workingDays'] is List)
           ? List<WorkingDay>.from(
-          json['workingDays'].map((x) => WorkingDay.fromJson(x)))
+              json['workingDays'].map((x) => WorkingDay.fromJson(x)))
           : <WorkingDay>[],
       barberShopLocation: json['barberShopLocation'] != null
-          ? (json['barberShopLocation'] is List && json['barberShopLocation'].isNotEmpty)
-          ? BarberShopLocation.fromJson(json['barberShopLocation'][0])
-          : (json['barberShopLocation'] is Map<String, dynamic>)
-          ? BarberShopLocation.fromJson(json['barberShopLocation'])
-          : null
+          ? (json['barberShopLocation'] is List &&
+                  json['barberShopLocation'].isNotEmpty)
+              ? BarberShopLocation.fromJson(json['barberShopLocation'][0])
+              : (json['barberShopLocation'] is Map<String, dynamic>)
+                  ? BarberShopLocation.fromJson(json['barberShopLocation'])
+                  : null
           : null,
-
     );
   }
 
@@ -137,9 +137,7 @@ class BarberShopLocation {
     };
   }
 
-  double? get latitude =>
-      coordinates.length == 2 ? coordinates[1] : null;
+  double? get latitude => coordinates.length == 2 ? coordinates[1] : null;
 
-  double? get longitude =>
-      coordinates.length == 2 ? coordinates[0] : null;
+  double? get longitude => coordinates.length == 2 ? coordinates[0] : null;
 }

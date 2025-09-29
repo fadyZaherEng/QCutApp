@@ -4,12 +4,6 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/models/customer_appointment_model.dart';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:q_cut/core/utils/network/api.dart';
-import 'package:q_cut/core/utils/network/network_helper.dart';
-import 'package:q_cut/modules/customer/features/home_features/appointment_feature/models/customer_appointment_model.dart';
 
 class CustomerAppointmentController extends GetxController {
   final NetworkAPICall _apiCall = NetworkAPICall();
@@ -20,7 +14,7 @@ class CustomerAppointmentController extends GetxController {
       <CustomerAppointment>[].obs;
 
   final Rx<CustomerAppointment?> selectedAppointment =
-  Rx<CustomerAppointment?>(null);
+      Rx<CustomerAppointment?>(null);
 
   // Pagination
   final int limit = 10;
@@ -59,7 +53,8 @@ class CustomerAppointmentController extends GetxController {
         "${Variables.APPOINTMENT}?limit=$limit&page=${currentPage.value}",
       );
 
-      print("API URL: ${Variables.APPOINTMENT}?limit=$limit&page=${currentPage.value}");
+      print(
+          "API URL: ${Variables.APPOINTMENT}?limit=$limit&page=${currentPage.value}");
       print("API Response: ${response.body}");
 
       if (response.statusCode == 200) {
@@ -74,9 +69,8 @@ class CustomerAppointmentController extends GetxController {
           throw Exception("Unexpected response format");
         }
 
-        final newAppointments = data
-            .map((e) => CustomerAppointment.fromJson(e))
-            .toList();
+        final newAppointments =
+            data.map((e) => CustomerAppointment.fromJson(e)).toList();
 
         if (loadMore) {
           appointments.addAll(newAppointments);
@@ -123,7 +117,8 @@ class CustomerAppointmentController extends GetxController {
       filteredAppointments.value = appointments;
     } else {
       filteredAppointments.value = appointments
-          .where((a) => a.status.toLowerCase() == statusFilter.value.toLowerCase())
+          .where(
+              (a) => a.status.toLowerCase() == statusFilter.value.toLowerCase())
           .toList();
     }
   }
@@ -200,7 +195,7 @@ class CustomerAppointmentController extends GetxController {
         final responseBody = json.decode(response.body);
         ShowToast.showError(
             message:
-            responseBody['message'] ?? 'Failed to book again appointment');
+                responseBody['message'] ?? 'Failed to book again appointment');
         return false;
       }
     } catch (e) {

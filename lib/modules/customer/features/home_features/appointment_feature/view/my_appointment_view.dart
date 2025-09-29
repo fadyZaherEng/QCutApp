@@ -7,15 +7,6 @@ import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/show_delete_appointment_dialog.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/logic/appointment_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/view/widgets/custom_delete_appointment_item.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
-import 'package:q_cut/core/utils/constants/colors_data.dart';
-import 'package:q_cut/core/utils/styles.dart';
-import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/show_delete_appointment_dialog.dart';
-import 'package:q_cut/modules/customer/features/home_features/appointment_feature/logic/appointment_controller.dart';
-import 'package:q_cut/modules/customer/features/home_features/appointment_feature/view/widgets/custom_delete_appointment_item.dart';
 
 class MyAppointmentView extends StatefulWidget {
   const MyAppointmentView({super.key});
