@@ -127,8 +127,8 @@ class BSettingViewBody extends StatelessWidget {
       };
 
       print('Payload workingDays: ${payload['workingDays']}');
-      final response = await apiCall.editData(
-          '${Variables.baseUrl}authentication', payload);
+      final response =
+          await apiCall.editData('${Variables.baseUrl}authentication', payload);
 
       if (response.statusCode == 200) {
         Get.snackbar('Success'.tr, 'Location updated successfully'.tr);

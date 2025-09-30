@@ -60,7 +60,6 @@ class HomeController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
-
   @override
   void onClose() {
     fullNameController.dispose();

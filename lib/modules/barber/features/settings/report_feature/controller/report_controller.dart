@@ -400,7 +400,7 @@ class ReportController extends GetxController {
                               Navigator.pop(context);
                               // Call API with both dates
                               fetchReports();
-                                                        },
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.amber,
                               shape: const RoundedRectangleBorder(
@@ -434,7 +434,7 @@ class ReportController extends GetxController {
     selectedStartDate.value = startDate;
     selectedEndDate.value = endDate;
     await fetchReports();
-    }
+  }
 
   // Load more reports (pagination)
   Future<void> loadMoreReports() async {
