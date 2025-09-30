@@ -21,9 +21,10 @@ class NotificationViewBody extends StatelessWidget {
       if (viewModel.isLoading.value &&
           viewModel.displayedNotifications.isEmpty) {
         return Center(
-            child: SpinKitDoubleBounce(
-          color: ColorsData.primary,
-        ));
+          child: SpinKitDoubleBounce(
+            color: ColorsData.primary,
+          ),
+        );
       }
 
       // Show error message if loading failed
@@ -32,8 +33,10 @@ class NotificationViewBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Failed to load notifications".tr,
-                  style: Styles.textStyleS14W700()),
+              Text(
+                "Failed to load notifications".tr,
+                style: Styles.textStyleS14W700(),
+              ),
               ElevatedButton(
                 onPressed: viewModel.refreshNotifications,
                 child: Text("Retry".tr),
@@ -44,18 +47,19 @@ class NotificationViewBody extends StatelessWidget {
       }
 
       // Show empty state if no notifications
-      if (viewModel.displayedNotifications.isEmpty) {
+      if (viewModel.displayedNotifications.isEmpty &&
+          !viewModel.isLoading.value &&
+          !viewModel.isError.value) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                child: SpinKitDoubleBounce(
-                  color: ColorsData.primary,
-                ),
+              Icon(Icons.notifications_off, size: 48, color: Colors.grey),
+              SizedBox(height: 12),
+              Text(
+                "No notifications available".tr,
+                style: Styles.textStyleS14W700(),
               ),
-              Text("No notifications available".tr,
-                  style: Styles.textStyleS14W700()),
               ElevatedButton(
                 onPressed: viewModel.refreshNotifications,
                 child: Text("Refresh".tr),
