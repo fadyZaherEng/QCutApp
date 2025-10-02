@@ -11,6 +11,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'core/services/shared_pref/pref_keys.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'firebase_options.dart';
+
 String profileImage = SharedPref().getString(PrefKeys.profilePic) ??
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzph4xv23B3sfc8O09BVewi1IeI-FWnHVvyxsnzqa6muN8-XWy08Vu0teNV7zXZrV1h8M&usqp=CAU";
 String coverImage = SharedPref().getString(PrefKeys.coverPic) ??
@@ -51,13 +53,7 @@ void main() async {
   await initializeDateFormatting();
 
   await Firebase.initializeApp(
-    name: "QCut",
-    options: const FirebaseOptions(
-      apiKey: 'b9a71672bc185036ea63f8f992ede3746f74aba3',
-      appId: '1:1050022864224:android:8e0ff4d00ace05ecbeaa05',
-      messagingSenderId: '752059871954',
-      projectId: 'qcute-c4d8f',
-    ),
+    options: DefaultFirebaseOptions.currentPlatform,
   ).then((value) async {
     // Setup services after Firebase has initialized
     await FirebaseCloudMessaging().init();
