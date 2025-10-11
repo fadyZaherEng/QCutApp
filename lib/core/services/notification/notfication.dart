@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+BehaviorSubject<String>? onNotificationClick;
 
 class LocalNotificationService {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -9,6 +12,7 @@ class LocalNotificationService {
   //initial notification with android and ios
 
   static Future<void> init() async {
+    onNotificationClick = BehaviorSubject<String>();
     const settings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
@@ -21,6 +25,9 @@ class LocalNotificationService {
   }
 
   static void onTap(NotificationResponse notificationResponse) {
+    print("notificationResponse $notificationResponse");
+    onNotificationClick?.add(notificationResponse.payload ?? "");
+
     // navigator
     if (int.parse(notificationResponse.payload.toString()) != -1) {
       // sl<GlobalKey<NavigatorState>>().currentState!.context.pushName(

@@ -5,6 +5,7 @@ import 'package:q_cut/core/localization/change_local.dart';
 import 'package:q_cut/core/notification/firebase_cloud_messaging.dart';
 import 'package:q_cut/core/notification/notfication.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 import 'package:q_cut/qcut_app.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -64,7 +65,12 @@ void main() async {
 
   // Initialize the LocaleController after SharedPreferences
   Get.put(LocaleController(), permanent: true);
-
+  onNotificationClick?.stream.listen((event) {
+    if (event.isNotEmpty) {
+      print("event11111111111111111111 $event");
+      Get.toNamed(AppRouter.notificationPath);
+    }
+  });
   // Run app
   runApp(const QCut());
 }

@@ -61,6 +61,7 @@ dependencies:
   geocoding: ^3.0.0
   permission_handler:
   google_maps_flutter: ^2.12.3
+  rxdart:
 
 dev_dependencies:
   flutter_lints: ^5.0.0

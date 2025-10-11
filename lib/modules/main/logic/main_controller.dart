@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/services/notification/notfication.dart';
 import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
 import 'package:q_cut/core/utils/app_router.dart';
@@ -104,6 +105,17 @@ class MainController extends GetxController {
     if (isCustomer == false) {
       await fetchDealById();
     }
+    await _notificationListener();
+  }
+
+
+  Future<void> _notificationListener() async {
+    onNotificationClick?.stream.listen((event) {
+      if (event.isNotEmpty) {
+        print("event11111111111111111111 $event");
+        _onNotificationClick(event);
+      }
+    });
   }
 
   // Method to fetch deal by ID
@@ -555,5 +567,12 @@ class MainController extends GetxController {
   void onClose() {
     pageController.dispose();
     super.onClose();
+  }
+
+  void _onNotificationClick(event) {
+    // Handle navigation based on notification payload
+    Get.toNamed(AppRouter.notificationPath);
+
+    onNotificationClick?.add("");
   }
 }

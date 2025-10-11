@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
@@ -42,7 +43,11 @@ class CitySelectionView extends StatelessWidget {
             Icons.arrow_back_ios,
             color: Colors.white,
           ),
-          onPressed: () => Get.back(),
+          onPressed: () {
+            final selected =
+            controller.getSelectedCitiesAsString();
+            Get.back(result: selected);
+          },
         ),
       ),
       body: WillPopScope(
@@ -143,7 +148,8 @@ class CitySelectionView extends StatelessWidget {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.filteredCities.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child: SpinKitDoubleBounce(color: ColorsData.primary));
                 }
 
                 if (controller.isError.value) {
@@ -276,7 +282,11 @@ class CitySelectionView extends StatelessWidget {
                   ),
                 ),
               ),
-        onTap: () => controller.toggleCitySelection(city),
+        onTap: () async {
+          controller.toggleCitySelection(city);
+
+          await controller.saveSelectedCities();
+        },
       ),
     );
   }

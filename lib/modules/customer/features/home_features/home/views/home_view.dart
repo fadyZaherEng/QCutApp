@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/services/notification/notfication.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/custom_drawer.dart';
@@ -55,6 +56,23 @@ class _HomeViewState extends State<HomeView> {
       // Handle the error, e.g., show a snackbar or dialog
       print(e);
     });
+    // await _notificationListener();
+  }
+
+  Future<void> _notificationListener() async {
+    print("Notification Listener Initialized");
+    onNotificationClick?.stream.listen((event) {
+      if (event.isNotEmpty) {
+        print("event11111111111111111111 $event");
+        _onNotificationClick(event);
+      }
+    });
+  }
+
+  void _onNotificationClick(event) {
+    // Handle navigation based on notification payload
+    Get.toNamed(AppRouter.notificationPath);
+    onNotificationClick?.add("");
   }
 
   Future<void> fetchProfileData() async {
@@ -140,6 +158,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     loadSelectedCities();
+      _notificationListener();
+
 
     return RefreshIndicator(
       onRefresh: () async {
