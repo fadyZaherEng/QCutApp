@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -30,6 +29,7 @@ class FirebaseMessagingNavigate {
       _navigate(message);
     }
   }
+
   static void _navigate(RemoteMessage message) {
     print("message.data ${message.data}");
 
@@ -67,5 +67,4 @@ class FirebaseMessagingNavigate {
     //   arguments: productId,
     // );
   }
-
 }

@@ -7,7 +7,7 @@ BehaviorSubject<String>? onNotificationClick;
 
 class LocalNotificationService {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   //initial notification with android and ios
 

@@ -44,8 +44,7 @@ class CitySelectionView extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            final selected =
-            controller.getSelectedCitiesAsString();
+            final selected = controller.getSelectedCitiesAsString();
             Get.back(result: selected);
           },
         ),

@@ -161,8 +161,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     loadSelectedCities();
-      _notificationListener();
-
+    _notificationListener();
 
     return RefreshIndicator(
       onRefresh: () async {
