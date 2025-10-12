@@ -156,7 +156,9 @@ class AuthController extends GetxController {
         'phoneNumber':
             "+972${phoneNumberController.text.trim().replaceAll('\u200E', '')}",
         'password': passwordController.text,
-        "fcmToken": fcmToken
+        "fcmToken": fcmToken,
+        "userType":
+            SharedPref().getBool(PrefKeys.userRole) == true ? "user" : "barber",
       };
       print(requestData);
 

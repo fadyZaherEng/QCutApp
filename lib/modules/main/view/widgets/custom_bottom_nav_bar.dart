@@ -42,15 +42,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 375.w,
-      height: 86.h,
+      // height: 86.h,
       decoration: BoxDecoration(
         color: ColorsData.secondary,
         border: const Border(
           top: BorderSide(color: Color(0xFFAAAAAA), width: 1),
         ),
       ),
-      padding: EdgeInsets.only(top: 8.h, right: 16.w, bottom: 20.h, left: 16.w),
+      padding: EdgeInsets.only(top: 8.h, right: 0.w, bottom: 20.h, left: 0.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: SharedPref().getBool(PrefKeys.userRole) == false

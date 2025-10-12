@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -22,7 +21,6 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/my_profile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../models/barber_profile_model.dart';
 
 class BProfileView extends StatefulWidget {
@@ -117,37 +115,65 @@ class _BProfileViewBodyState extends State<BProfileView>
       final fullName =
           profileData.fullName.isNotEmpty ? profileData.fullName : 'Your Name';
 
-      return Scaffold(
-        key: _scaffoldKey, // 👈 عشان نتحكم في الـ Scaffold
-        drawer: const CustomBDrawer(), // 👈 هنا بنضيف الـ Drawer بتاعك
-        body: Column(
-          children: [
-            SizedBox(
-              height: 300.h,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 250.h,
-                    decoration: BoxDecoration(
-                      color: ColorsData.secondary,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        alignment: Alignment.topCenter,
-                        image: CachedNetworkImageProvider(
-                          profileData.coverPic,
-                          errorListener: (exception) =>
-                              print('Error loading image: $exception'),
-                        ),
-                      ),
-                    ),
-                    child: profileData.coverPic.isNotEmpty
-                        ? Image.network(
-                            profileData.coverPic,
+      return RefreshIndicator(
+        onRefresh: () async {
+          await controller.fetchProfileData();
+          if (_tabController.index == 1) {
+            await controller.fetchGallery();
+          }
+        },
+        child: Scaffold(
+          key: _scaffoldKey, // 👈 عشان نتحكم في الـ Scaffold
+          drawer: const CustomBDrawer(), // 👈 هنا بنضيف الـ Drawer بتاعك
+          body: Column(
+            children: [
+              RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchProfileData();
+                  if (_tabController.index == 1) {
+                    await controller.fetchGallery();
+                  }
+                },
+                child: SizedBox(
+                  height: 300.h,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 250.h,
+                        decoration: BoxDecoration(
+                          color: ColorsData.secondary,
+                          image: DecorationImage(
                             fit: BoxFit.fill,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
+                            alignment: Alignment.topCenter,
+                            image: CachedNetworkImageProvider(
+                              profileData.coverPic,
+                              errorListener: (exception) =>
+                                  print('Error loading image: $exception'),
+                            ),
+                          ),
+                        ),
+                        child: profileData.coverPic.isNotEmpty
+                            ? Image.network(
+                                profileData.coverPic,
+                                fit: BoxFit.fill,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: ColorsData.secondary,
+                                    child: Center(
+                                      child: Text(
+                                        "Add Cover Photo".tr,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
                                 color: ColorsData.secondary,
                                 child: Center(
                                   child: Text(
@@ -158,144 +184,14 @@ class _BProfileViewBodyState extends State<BProfileView>
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          )
-                        : Container(
-                            color: ColorsData.secondary,
-                            child: Center(
-                              child: Text(
-                                "Add Cover Photo".tr,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.sp,
-                                ),
                               ),
-                            ),
-                          ),
-                  ),
-                  Positioned(
-                    bottom: 20.h,
-                    right: 20.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        showChooseBreakDaysBottomSheet(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ColorsData.primary),
-                          borderRadius: BorderRadius.circular(10.r),
-                          color: ColorsData.font,
-                        ),
-                        width: 120.w,
-                        height: 36.h,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AssetsData.takeBreakIcon,
-                              height: 18.h,
-                              width: 18.w,
-                            ),
-                            SizedBox(width: 5.w),
-                            Text(
-                              "Take break".tr,
-                              style:
-                                  Styles.textStyleS14W500(color: Colors.black),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 200.98.h,
-                    left: 47.39.w,
-                    child: InkWell(
-                      onTap: () {
-                        if (profileData.profilePic.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => FullScreenImageView(
-                                imageUrl: profileData.profilePic,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      child: SizedBox(
-                        width: 120.w,
-                        height: 127.08.h,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundColor: ColorsData.secondary,
-                          child: CircleAvatar(
-                            radius: 55,
-                            backgroundImage:
-                                NetworkImage(profileData.profilePic),
-                            backgroundColor: ColorsData.secondary,
-                            onBackgroundImageError: (exception, stackTrace) {
-                              print('Error loading profile image: $exception');
-                            },
-                            child: profileData.profilePic.isEmpty
-                                ? const Icon(
-                                    Icons.person,
-                                    size: 50,
-                                    color: Colors.white,
-                                  )
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    left: 110.w,
-                    bottom: -20.h,
-                    child: InkWell(
-                      onTap: () {
-                        showChangeYourPictureDialog(context);
-                      },
-                      child: MaterialButton(
-                        height: 36.16748046875.h,
-                        minWidth: 36.16748046875.w,
-                        padding: EdgeInsets.zero,
-                        shape: const CircleBorder(),
-                        onPressed: () {
-                          showChangeYourPictureDialog(context);
-                        },
-                        child: CircleAvatar(
-                          radius: 18.08.r,
-                          backgroundColor: ColorsData.primary,
-                          child: SvgPicture.asset(
-                            height: 20.h,
-                            width: 20.w,
-                            AssetsData.addImageIcon,
-                            colorFilter: const ColorFilter.mode(
-                              ColorsData.font,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Burger Menu + Take Break
-                  Positioned(
-                    top: 10.h,
-                    left: Get.locale?.languageCode == "ar" ? 20.w : null,
-                    // 👈 RTL support
-                    right: Get.locale?.languageCode == "ar" ? null : 20.w,
-                    child: Row(
-                      children: [
-                        // Burger Menu
-                        GestureDetector(
+                      Positioned(
+                        bottom: 24.h,
+                        right: 20.w,
+                        child: GestureDetector(
                           onTap: () {
-                            // open drawer / show menu sheet
-                            _scaffoldKey.currentState?.openDrawer();
+                            showChooseBreakDaysBottomSheet(context);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -303,204 +199,325 @@ class _BProfileViewBodyState extends State<BProfileView>
                               borderRadius: BorderRadius.circular(10.r),
                               color: ColorsData.font,
                             ),
-                            width: 40.w,
-                            height: 36.h,
-                            child: Icon(
-                              Icons.menu,
-                              color: Colors.black,
-                              size: 22.sp,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 68.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  barberShop,
-                                  style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: ColorsData.primary),
-                                  borderRadius: BorderRadius.circular(8.r),
-                                ),
-                                width: 80.w,
-                                height: 30.h,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "NO. 1".tr,
-                                      style: Styles.textStyleS13W400(
-                                          color: ColorsData.primary),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.h),
-                          Divider(
-                            color: ColorsData.cardStrock,
-                            thickness: 1.w,
-                          ),
-                          SizedBox(height: 8.h),
-                          _buildInfoRow(
-                              AssetsData.personIcon, fullName, location),
-                          SizedBox(height: 8.h),
-                          InkWell(
-                            onTap: () {
-                              // Handle city tap if needed
-                              // Future.delayed to ensure the tap is registered properly
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return MapSearchScreen(
-                                  initialLatitude: profileData
-                                          .barberShopLocation
-                                          .coordinates
-                                          .isNotEmpty
-                                      ? profileData
-                                          .barberShopLocation.coordinates[1]
-                                      : 31.0461,
-                                  initialLongitude: profileData
-                                          .barberShopLocation
-                                          .coordinates
-                                          .isNotEmpty
-                                      ? profileData
-                                          .barberShopLocation.coordinates[0]
-                                      : 34.8516,
-                                  onLocationSelected: (lat, lng, address) {
-                                    setState(() {});
-                                  },
-                                );
-                              }));
-                            },
-                            child: _buildInfoRow(
-                                AssetsData.mapPinIcon, city, location,
-                                isAddress: true),
-                          ),
-                          SizedBox(height: 8.h),
-                          InkWell(
-                            onTap: () {
-                              // Handle phone number tap if needed
-                              launchPhoneDialer(profileData.phoneNumber);
-                            },
-                            child: _buildInfoRow(
-                                AssetsData.callIcon,
-                                "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
-                                location),
-                          ),
-                          SizedBox(height: 8.h),
-                          InkWell(
-                            onTap: () {
-                              // Handle Instagram tap if needed
-                              try {
-                                launch(profileData.instagramPage);
-                              } catch (e) {
-                                print('Could not launch Instagram: $e');
-                                // s(context, "Invalid Instagram link".tr);
-                              }
-                            },
-                            child: _buildInfoRow(AssetsData.instagramIcon,
-                                instagramPage, location),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomBigButton(
-                            color: const Color(0xA6C59D4E),
-                            textData: "workingDays".tr,
-                            onPressed: () {
-                              showBWorkingDaysBottomSheet(
-                                  context, profileData.workingDays);
-                            },
-                          ),
-                          SizedBox(height: 12.h),
-                          CustomBigButton(
-                            textData: "Edit Profile".tr,
-                            onPressed: () async {
-                              final result = await Get.toNamed(
-                                AppRouter.beditProfilePath,
-                                arguments: BarberProfileModel(
-                                  fullName: profileData.fullName,
-                                  offDay: profileData.offDay,
-                                  barberShop: profileData.barberShop,
-                                  bankAccountNumber:
-                                      profileData.bankAccountNumber,
-                                  instagramPage: profileData.instagramPage,
-                                  profilePic: profileData.profilePic,
-                                  coverPic: profileData.coverPic,
-                                  city: profileData.city,
-                                  workingDays: profileData.workingDays,
-                                  barberShopLocation:
-                                      profileData.barberShopLocation,
-                                  phoneNumber: profileData.phoneNumber,
-                                ),
-                              );
-
-                              if (result == true) {
-                                // Profile was updated, refresh the data
-                                controller.fetchProfileData();
-                              }
-                            },
-                          ),
-                          SizedBox(height: 24.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              _buildTabButton(
-                                  "My service".tr, _tabController.index == 0),
-                              _buildTabButton(
-                                  "My gallery".tr, _tabController.index == 1),
-                            ],
-                          ),
-                          SizedBox(height: 16.h),
-                          SizedBox(
-                            // Use a fixed height that's tall enough to show content
-                            height: 400.h,
-                            child: TabBarView(
-                              controller: _tabController,
+                            width: 90.w,
+                            height: 32.h,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Services Tab
-                                _buildServicesTab(),
-
-                                // Gallery Tab
-                                _buildGalleryTab(),
+                                SvgPicture.asset(
+                                  AssetsData.takeBreakIcon,
+                                  height: 14.h,
+                                  width: 14.w,
+                                ),
+                                Text(
+                                  "Take break".tr,
+                                  style: Styles.textStyleS13W400(
+                                      color: Colors.black),
+                                ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Positioned(
+                        top: 200.98.h,
+                        left: 47.39.w,
+                        child: InkWell(
+                          onTap: () {
+                            if (profileData.profilePic.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullScreenImageView(
+                                    imageUrl: profileData.profilePic,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: SizedBox(
+                            width: 120.w,
+                            height: 127.08.h,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundColor: ColorsData.secondary,
+                              child: CircleAvatar(
+                                radius: 55,
+                                backgroundImage:
+                                    NetworkImage(profileData.profilePic),
+                                backgroundColor: ColorsData.secondary,
+                                onBackgroundImageError:
+                                    (exception, stackTrace) {
+                                  print(
+                                      'Error loading profile image: $exception');
+                                },
+                                child: profileData.profilePic.isEmpty
+                                    ? const Icon(
+                                        Icons.person,
+                                        size: 50,
+                                        color: Colors.white,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Positioned(
+                        left: 110.w,
+                        bottom: -20.h,
+                        child: InkWell(
+                          onTap: () {
+                            showChangeYourPictureDialog(context);
+                          },
+                          child: MaterialButton(
+                            height: 36.16748046875.h,
+                            minWidth: 36.16748046875.w,
+                            padding: EdgeInsets.zero,
+                            shape: const CircleBorder(),
+                            onPressed: () {
+                              showChangeYourPictureDialog(context);
+                            },
+                            child: CircleAvatar(
+                              radius: 18.08.r,
+                              backgroundColor: ColorsData.primary,
+                              child: SvgPicture.asset(
+                                height: 20.h,
+                                width: 20.w,
+                                AssetsData.addImageIcon,
+                                colorFilter: const ColorFilter.mode(
+                                  ColorsData.font,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Burger Menu + Take Break
+                      Positioned(
+                        top: 10.h,
+                        left: Get.locale?.languageCode == "ar" ? 20.w : null,
+                        // 👈 RTL support
+                        right: Get.locale?.languageCode == "ar" ? null : 20.w,
+                        child: Row(
+                          children: [
+                            // Burger Menu
+                            GestureDetector(
+                              onTap: () {
+                                // open drawer / show menu sheet
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: ColorsData.primary),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: ColorsData.font,
+                                ),
+                                width: 40.w,
+                                height: 36.h,
+                                child: Icon(
+                                  Icons.menu,
+                                  color: Colors.black,
+                                  size: 22.sp,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 68.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    barberShop,
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: ColorsData.primary),
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  width: 80.w,
+                                  height: 30.h,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "NO. 1".tr,
+                                        style: Styles.textStyleS13W400(
+                                            color: ColorsData.primary),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Divider(
+                              color: ColorsData.cardStrock,
+                              thickness: 1.w,
+                            ),
+                            SizedBox(height: 8.h),
+                            _buildInfoRow(
+                                AssetsData.personIcon, fullName, location),
+                            SizedBox(height: 8.h),
+                            InkWell(
+                              onTap: () {
+                                // Handle city tap if needed
+                                // Future.delayed to ensure the tap is registered properly
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return MapSearchScreen(
+                                    initialLatitude: profileData
+                                            .barberShopLocation
+                                            .coordinates
+                                            .isNotEmpty
+                                        ? profileData
+                                            .barberShopLocation.coordinates[1]
+                                        : 31.0461,
+                                    initialLongitude: profileData
+                                            .barberShopLocation
+                                            .coordinates
+                                            .isNotEmpty
+                                        ? profileData
+                                            .barberShopLocation.coordinates[0]
+                                        : 34.8516,
+                                    onLocationSelected: (lat, lng, address) {
+                                      setState(() {});
+                                    },
+                                  );
+                                }));
+                              },
+                              child: _buildInfoRow(
+                                  AssetsData.mapPinIcon, city, location,
+                                  isAddress: true),
+                            ),
+                            SizedBox(height: 8.h),
+                            InkWell(
+                              onTap: () {
+                                // Handle phone number tap if needed
+                                launchPhoneDialer(profileData.phoneNumber);
+                              },
+                              child: _buildInfoRow(
+                                  AssetsData.callIcon,
+                                  "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
+                                  location),
+                            ),
+                            SizedBox(height: 8.h),
+                            InkWell(
+                              onTap: () {
+                                // Handle Instagram tap if needed
+                                try {
+                                  launch(profileData.instagramPage);
+                                } catch (e) {
+                                  print('Could not launch Instagram: $e');
+                                  // s(context, "Invalid Instagram link".tr);
+                                }
+                              },
+                              child: _buildInfoRow(AssetsData.instagramIcon,
+                                  instagramPage, location),
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomBigButton(
+                              color: const Color(0xA6C59D4E),
+                              textData: "workingDays".tr,
+                              onPressed: () {
+                                showBWorkingDaysBottomSheet(
+                                    context, profileData.workingDays);
+                              },
+                            ),
+                            SizedBox(height: 12.h),
+                            CustomBigButton(
+                              textData: "Edit Profile".tr,
+                              onPressed: () async {
+                                final result = await Get.toNamed(
+                                  AppRouter.beditProfilePath,
+                                  arguments: BarberProfileModel(
+                                    fullName: profileData.fullName,
+                                    offDay: profileData.offDay,
+                                    barberShop: profileData.barberShop,
+                                    bankAccountNumber:
+                                        profileData.bankAccountNumber,
+                                    instagramPage: profileData.instagramPage,
+                                    profilePic: profileData.profilePic,
+                                    coverPic: profileData.coverPic,
+                                    city: profileData.city,
+                                    workingDays: profileData.workingDays,
+                                    barberShopLocation:
+                                        profileData.barberShopLocation,
+                                    phoneNumber: profileData.phoneNumber,
+                                  ),
+                                );
+
+                                if (result == true) {
+                                  // Profile was updated, refresh the data
+                                  controller.fetchProfileData();
+                                }
+                              },
+                            ),
+                            SizedBox(height: 24.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTabButton(
+                                    "My service".tr, _tabController.index == 0),
+                                _buildTabButton(
+                                    "My gallery".tr, _tabController.index == 1),
+                              ],
+                            ),
+                            SizedBox(height: 16.h),
+                            SizedBox(
+                              // Use a fixed height that's tall enough to show content
+                              height: 400.h,
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  // Services Tab
+                                  _buildServicesTab(),
+
+                                  // Gallery Tab
+                                  _buildGalleryTab(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });
@@ -764,7 +781,10 @@ class _BProfileViewBodyState extends State<BProfileView>
               return Expanded(
                 child: Text(
                   loc.data ?? text,
-                  style: Styles.textStyleS12W400(),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                  ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),

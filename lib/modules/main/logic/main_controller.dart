@@ -88,8 +88,8 @@ class MainController extends GetxController {
 
   final List<Widget> pages = (SharedPref().getBool(PrefKeys.userRole)) == false
       ? [
-          const BStaticsView(),
           const BAppointmentView(),
+          const BStaticsView(),
           const BProfileView(),
         ]
       : [
@@ -107,7 +107,6 @@ class MainController extends GetxController {
     }
     await _notificationListener();
   }
-
 
   Future<void> _notificationListener() async {
     onNotificationClick?.stream.listen((event) {
