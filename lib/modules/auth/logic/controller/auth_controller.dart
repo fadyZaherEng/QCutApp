@@ -17,10 +17,7 @@ class AuthController extends GetxController {
 
   // Form Controllers
   final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController phoneNumberController =
-      //  TextEditingController(text: "+970591999999");
-      //   barber
-      TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
 
   final TextEditingController passwordController =
       TextEditingController(text: "");
@@ -187,16 +184,12 @@ class AuthController extends GetxController {
             .setString(PrefKeys.fullName, loginResponse.value!.fullName);
         await SharedPref().setBool(PrefKeys.saveMe, isChecked);
         if ((SharedPref().getBool(PrefKeys.userRole)) == false) {
-          ///todo barber
           Barber barber = Barber.fromJson(responseBody);
           await SharedPref()
               .setString(PrefKeys.barber, jsonEncode(barber.toJson()));
         }
-
         // You might want to show a success message
-
         ShowToast.showSuccessSnackBar(message: "loggedInSuccessfully".tr);
-
         Get.offAllNamed(AppRouter.bottomNavigationBar);
       } else {
         errorMessage.value = responseBody['message'] ?? 'Failed to login';
@@ -204,8 +197,12 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to connect to server',
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Error',
+        'Failed to connect to server',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -214,7 +211,7 @@ class AuthController extends GetxController {
   Future<void> verifyOtp(String otpValue, String userIdValue) async {
     isLoading.value = true;
     errorMessage.value = '';
-    update(); // Update UI to show loading state
+    update();
 
     try {
       final requestData = {"userId": userIdValue, "otp": otpValue};
@@ -267,8 +264,12 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to connect to server',
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Error',
+        'Failed to connect to server',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
       update();
@@ -282,7 +283,6 @@ class AuthController extends GetxController {
     city.clear();
     confirmPasswordController.clear();
     // Don't reference otpController here since it might be disposed
-
     errorMessage.value = '';
   }
 }
