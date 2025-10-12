@@ -56,10 +56,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ? [
                 Expanded(
                     child: _buildNavItem(
-                        AssetsData.bstaticsIcon, 'reports'.tr, 0)),
+                        AssetsData.calendarIcon, 'appointments'.tr, 0)),
                 Expanded(
                     child: _buildNavItem(
-                        AssetsData.calendarIcon, 'appointments'.tr, 1)),
+                        AssetsData.bstaticsIcon, 'reports'.tr, 1)),
                 Expanded(
                     child:
                         _buildNavItem(AssetsData.profileIcon, 'profile'.tr, 2)),
