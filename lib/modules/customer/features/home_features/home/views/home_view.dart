@@ -61,6 +61,8 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> _notificationListener() async {
     print("Notification Listener Initialized");
+    print(
+        "onNotificationClick Stream home: ${onNotificationClick?.stream.toString()}");
     onNotificationClick?.stream.listen((event) {
       if (event.isNotEmpty) {
         print("event11111111111111111111 $event");
@@ -133,6 +135,7 @@ class _HomeViewState extends State<HomeView> {
   Future<void> loadSelectedCities() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> savedNames = prefs.getStringList(_selectedCitiesKey) ?? [];
+    if (!mounted) return;
     setState(() {
       selectedCities = savedNames;
     });

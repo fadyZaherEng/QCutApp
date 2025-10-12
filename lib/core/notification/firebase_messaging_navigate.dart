@@ -7,7 +7,7 @@ import 'notfication.dart';
 class FirebaseMessagingNavigate {
   static Future<void> forGroundHandler(RemoteMessage? message) async {
     if (message != null) {
-      _navigate(message);
+      // _navigate(message);
       print("foreground $message");
       await LocalNotificationService.showSimpleNotification(
         title: message.notification!.title ?? '',
@@ -35,6 +35,7 @@ class FirebaseMessagingNavigate {
 
     // تمرير البيانات العامة (للاستخدام في أي مكان)
     onNotificationClick?.add("notification");
+    print("🔔 Notification Clicked");
 
     final data = message.data;
 

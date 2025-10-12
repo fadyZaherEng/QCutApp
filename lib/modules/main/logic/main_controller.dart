@@ -110,6 +110,7 @@ class MainController extends GetxController {
 
   Future<void> _notificationListener() async {
     onNotificationClick?.stream.listen((event) {
+      print("event MainController is $event");
       if (event.isNotEmpty) {
         print("event11111111111111111111 $event");
         _onNotificationClick(event);

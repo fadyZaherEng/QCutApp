@@ -26,6 +26,7 @@ class LocalNotificationService {
 
   static void onTap(NotificationResponse notificationResponse) {
     print("notificationResponse $notificationResponse");
+    print("Notification payload: ${notificationResponse.payload}");
     onNotificationClick?.add(notificationResponse.payload ?? "");
 
     // navigator
