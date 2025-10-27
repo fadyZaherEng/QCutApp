@@ -15,6 +15,7 @@ import 'package:q_cut/modules/customer/features/booking_features/select_appointm
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/view/widgets/custom_b_simple_days_picker.dart';
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/view/widgets/custom_book_appointment_item.dart';
 import 'package:intl/intl.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 import '../../display_barber_services_feature/models/free_time_request_model.dart';
 
@@ -24,7 +25,9 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SelectAppointmentTimeController());
-    final selectedServices = Get.arguments as FreeTimeRequestModel?;
+    final selectedServices = Get.arguments["freeTimeRequestModel"]
+        as FreeTimeRequestModel?;
+    final barber = Get.arguments["barber"] as Barber;
 
     if (selectedServices != null) {
       if (selectedServices.barber.isNotEmpty) {
@@ -68,6 +71,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
       }
     }
 
+
     return Scaffold(
       appBar: CustomAppBar(title: "bookAppointment".tr),
       body: Padding(
@@ -99,6 +103,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                       .entries
                       .map((entry) => entry.value.numberOfUsers)
                       .toList(),
+                  barber: barber,
                 ),
                 SizedBox(height: 17.h),
                 Align(
@@ -231,6 +236,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
 
                     // Debug log
                     print(bookingData);
+                    final barber = Get.arguments["barber"] as Barber;
 
                     // 🟢 الانتقال مع البيانات
                     Get.toNamed(
@@ -239,6 +245,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                         "pay": bookingData,
                         "bookingPaymentDetailsModel":
                             bookingPaymentDetailsModel,
+                        "barber": barber,
                       },
                     );
                   },

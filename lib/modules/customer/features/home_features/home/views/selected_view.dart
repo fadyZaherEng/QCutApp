@@ -15,6 +15,7 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/controllers/gallery_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_barber_list_view_item.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,13 +81,26 @@ class _SelectedViewState extends State<SelectedView> {
                 children: [
                   // Display barber's cover pic if available, otherwise use default image
                   barber.coverPic != null && barber.coverPic!.isNotEmpty
-                      ? Image.network(
-                          barber.coverPic!,
-                          width: double.infinity,
-                          height: 200.h,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(AssetsData.selectedViewImage),
+                      ? InkWell(
+                          onTap: () {
+                            // Handle image tap to view in full screen if needed
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BarberImagesPage(
+                                  imageUrl: barber.coverPic,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Image.network(
+                            barber.coverPic!,
+                            width: double.infinity,
+                            height: 200.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(AssetsData.selectedViewImage),
+                          ),
                         )
                       : Image.asset(AssetsData.selectedViewImage),
                   Container(

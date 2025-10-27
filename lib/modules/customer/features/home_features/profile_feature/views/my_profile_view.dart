@@ -12,6 +12,7 @@ import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_button.dart';
 import 'package:q_cut/main.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/show_change_your_picture_dialog.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_home_app_bar.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/views/widgets/show_change_user_info_bottom_sheet.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/functions/show_log_out_dialog.dart';
@@ -178,36 +179,36 @@ class _MyProfileViewState extends State<MyProfileView> {
                           ),
                         ),
                       ),
-                      if (widget.isBack)
-                        Positioned(
-                          top: 40.h,
-                          left: Get.locale?.languageCode == 'ar' ||
-                                  Get.locale?.languageCode == "he"
-                              ? null
-                              : 16.w,
-                          right: Get.locale?.languageCode == 'ar' ||
-                                  Get.locale?.languageCode == "he"
-                              ? 16.w
-                              : null,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 40.w,
-                              height: 40.h,
-                              decoration: BoxDecoration(
-                                color: ColorsData.font.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: ColorsData.secondary,
-                                size: 20.sp,
-                              ),
+                      // if (widget.isBack)
+                      Positioned(
+                        top: 40.h,
+                        left: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? null
+                            : 16.w,
+                        right: Get.locale?.languageCode == 'ar' ||
+                                Get.locale?.languageCode == "he"
+                            ? 16.w
+                            : null,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              color: ColorsData.font.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: ColorsData.secondary,
+                              size: 20.sp,
                             ),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -327,7 +328,7 @@ class _MyProfileViewState extends State<MyProfileView> {
   bool isClicked = true;
 
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
-    return GestureDetector(
+    return InkWell(
       onTap: () async {
         if (isClicked) {
           isClicked = false;

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:q_cut/core/utils/constants/colors_data.dart';
+import 'package:q_cut/core/utils/app_router.dart';
+ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/constants/drawer_constants.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/main.dart';
+import 'package:get/get.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
   const CustomDrawerHeader({
@@ -59,13 +61,18 @@ class CustomDrawerHeader extends StatelessWidget {
   }
 
   Widget _buildProfileImage() {
-    return CircleAvatar(
-      radius: DrawerConstants.profileImageRadius,
-      backgroundColor: ColorsData.secondary,
+    return InkWell(
+      onTap: () {
+        Get.toNamed(AppRouter.myProfilePath);
+      },
       child: CircleAvatar(
-        radius: DrawerConstants.profileImageInnerRadius,
-        foregroundImage: CachedNetworkImageProvider(profileImage),
+        radius: DrawerConstants.profileImageRadius,
         backgroundColor: ColorsData.secondary,
+        child: CircleAvatar(
+          radius: DrawerConstants.profileImageInnerRadius,
+          foregroundImage: CachedNetworkImageProvider(profileImage),
+          backgroundColor: ColorsData.secondary,
+        ),
       ),
     );
   }

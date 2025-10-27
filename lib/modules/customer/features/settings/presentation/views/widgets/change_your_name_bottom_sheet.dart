@@ -77,22 +77,57 @@ class ChangeYourNameBottomSheet extends StatelessWidget {
                     ? {
                         SharedPref().setString(PrefKeys.fullName, name.text),
                         fullName = name.text,
-                        Navigator.pop(
-                            context) // Changed from Get.back() for consistency
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              content: Text(
+                                "${'success'.tr}: ${response.statusCode}",
+                                style: Styles.textStyleS14W400(
+                                    color: Colors.green),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "ok".tr,
+                                    style: Styles.textStyleS14W400(
+                                      color: ColorsData.secondary,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ) // Changed from Get.back() for consistency
                       }
                     : showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
+                            backgroundColor: Colors.white,
                             content: Text(
                               "${'error'.tr}: ${response.statusCode}",
-                              style: Styles.textStyleS14W400(),
+                              style: Styles.textStyleS14W400(color: Colors.red),
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("ok".tr),
-                              ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "ok".tr,
+                                    style: Styles.textStyleS14W400(
+                                      color: ColorsData.secondary,
+                                      fontSize: 14.sp,
+                                    ),
+                                  )),
                             ],
                           );
                         },

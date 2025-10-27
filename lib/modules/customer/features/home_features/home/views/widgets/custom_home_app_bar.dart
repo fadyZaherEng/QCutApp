@@ -76,6 +76,20 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
               height: 40.h,
               child: TextField(
                 controller: _searchController,
+                onTapOutside: (_) {
+                  if (_searchController.text.isEmpty) {
+                    setState(() {
+                      isSearching = false;
+                    });
+                  }
+                },
+                onTapUpOutside: (_) {
+                  if (_searchController.text.isEmpty) {
+                    setState(() {
+                      isSearching = false;
+                    });
+                  }
+                },
                 onChanged: (value) {
                   widget.onSearchTap?.call(value);
                   setState(() {});

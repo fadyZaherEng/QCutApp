@@ -35,7 +35,19 @@ class CustomBarberListViewItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r)),
       child: Column(
         children: [
-          ClipRRect(
+          GestureDetector(
+            onTap: () {
+              print('Tapped on barber image: ${barber?.coverPic}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BarberImagesPage(
+                    imageUrl: barber?.coverPic,
+                  ),
+                ),
+              );
+            },
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(8.r),
               child: barber?.coverPic != null
                   ? CachedNetworkImage(
@@ -44,8 +56,8 @@ class CustomBarberListViewItem extends StatelessWidget {
                       height: 170.h,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => const Center(
-                          child:
-                              SpinKitDoubleBounce(color: ColorsData.primary)),
+                        child: SpinKitDoubleBounce(color: ColorsData.primary),
+                      ),
                       errorWidget: (context, url, error) => Image.asset(
                         AssetsData.barberSalonImage,
                         width: 211.w,
@@ -58,7 +70,9 @@ class CustomBarberListViewItem extends StatelessWidget {
                       width: 211.w,
                       height: 170.h,
                       fit: BoxFit.cover,
-                    )),
+                    ),
+            ),
+          ),
           Padding(
             padding:
                 EdgeInsets.only(left: 12.w, right: 12.w, bottom: 8.h, top: 5.h),
@@ -120,6 +134,56 @@ class CustomBarberListViewItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BarberImagesPage extends StatelessWidget {
+  final String? imageUrl;
+
+  const BarberImagesPage({super.key, this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Barber Images',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Hero(
+          tag: imageUrl ?? 'barber-image',
+          child: InteractiveViewer(
+            panEnabled: true,
+            minScale: 0.8,
+            maxScale: 4.0,
+            child: imageUrl != null
+                ? CachedNetworkImage(
+                    imageUrl: imageUrl!,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.broken_image,
+                      color: Colors.white,
+                      size: 80,
+                    ),
+                  )
+                : const Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white,
+                    size: 100,
+                  ),
+          ),
+        ),
       ),
     );
   }

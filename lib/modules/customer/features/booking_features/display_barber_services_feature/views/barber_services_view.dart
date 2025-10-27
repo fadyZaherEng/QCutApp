@@ -92,8 +92,10 @@ class BarberServicesView extends StatelessWidget {
                   // Ensure the model exactly matches the required format when converted to JSON
                   print(freeTimeRequestModel.toJson());
 
-                  Get.toNamed(AppRouter.bookAppointmentPath,
-                      arguments: freeTimeRequestModel);
+                  Get.toNamed(AppRouter.bookAppointmentPath, arguments: {
+                    'freeTimeRequestModel': freeTimeRequestModel,
+                    'barber': barber,
+                  });
                 },
               ),
             ],

@@ -6,11 +6,20 @@ import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/models/barber_service.dart';
+import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/models/free_time_request_model.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class CustomBookAppointmentItem extends StatelessWidget {
   final List<BarberServices>? services;
   final List<int>? quantities;
-  const CustomBookAppointmentItem({super.key, this.services, this.quantities});
+  final Barber? barber;
+
+  const CustomBookAppointmentItem({
+    super.key,
+    this.services,
+    this.quantities,
+    this.barber,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +77,8 @@ class CustomBookAppointmentItem extends StatelessWidget {
 
   Widget _buildServiceDetails(
       BuildContext context, int serviceCount, int totalPrice) {
+    // final selectedServices = Get.arguments as FreeTimeRequestModel?;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +124,7 @@ class CustomBookAppointmentItem extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'yourLocation'.tr,
+                  barber?.city ?? 'yourLocation'.tr,
                   style: Styles.textStyleS12W400(),
                 ),
               ),
