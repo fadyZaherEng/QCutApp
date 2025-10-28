@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -468,45 +469,60 @@ class _SelectedViewState extends State<SelectedView> {
                       mainAxisSpacing: 9.w,
                     ),
                     itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: Image.network(
-                            galleryController.photos[index],
-                            width: 108.w,
-                            height: 94.h,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
+                      return InkWell(
+                        onTap: () {
+                          // Handle image tap to view in full screen if needed
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GalleryFullScreenPage(
+                                images: galleryController.photos,
+                                initialIndex: index,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: Image.network(
+                              galleryController.photos[index],
                               width: 108.w,
                               height: 94.h,
-                              color: Colors.grey[300],
-                              child: const Center(
-                                  child: Icon(Icons.broken_image,
-                                      color: Colors.red)),
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
                                 width: 108.w,
                                 height: 94.h,
-                                color: Colors.grey[200],
-                                child: Center(
-                                  child: SpinKitDoubleBounce(
-                                    color: ColorsData.primary,
-                                    // value: loadingProgress.expectedTotalBytes !=
-                                    //         null
-                                    //     ? loadingProgress
-                                    //             .cumulativeBytesLoaded /
-                                    //         loadingProgress.expectedTotalBytes!
-                                    //     : null,
+                                color: Colors.grey[300],
+                                child: const Center(
+                                    child: Icon(Icons.broken_image,
+                                        color: Colors.red)),
+                              ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  width: 108.w,
+                                  height: 94.h,
+                                  color: Colors.grey[200],
+                                  child: Center(
+                                    child: SpinKitDoubleBounce(
+                                      color: ColorsData.primary,
+                                      // value: loadingProgress.expectedTotalBytes !=
+                                      //         null
+                                      //     ? loadingProgress
+                                      //             .cumulativeBytesLoaded /
+                                      //         loadingProgress.expectedTotalBytes!
+                                      //     : null,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       );
@@ -593,6 +609,74 @@ class _SelectedViewState extends State<SelectedView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class GalleryFullScreenPage extends StatefulWidget {
+  final List<String> images;
+  final int initialIndex;
+
+  const GalleryFullScreenPage({
+    super.key,
+    required this.images,
+    this.initialIndex = 0,
+  });
+
+  @override
+  State<GalleryFullScreenPage> createState() => _GalleryFullScreenPageState();
+}
+
+class _GalleryFullScreenPageState extends State<GalleryFullScreenPage> {
+  late PageController _pageController;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          '${_currentIndex + 1} / ${widget.images.length}',
+          style: const TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
+      body: PageView.builder(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() => _currentIndex = index);
+        },
+        itemCount: widget.images.length,
+        itemBuilder: (context, index) {
+          return InteractiveViewer(
+            panEnabled: true,
+            minScale: 0.8,
+            maxScale: 4.0,
+            child: CachedNetworkImage(
+              imageUrl: widget.images[index],
+              fit: BoxFit.contain,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.broken_image,
+                color: Colors.white,
+                size: 80,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

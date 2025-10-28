@@ -339,10 +339,12 @@ class _BProfileViewBodyState extends State<BProfileView>
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 16.w, vertical: 68.h),
+                          horizontal: 16.w,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 80.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -496,7 +498,6 @@ class _BProfileViewBodyState extends State<BProfileView>
                             ),
                             SizedBox(height: 16.h),
                             SizedBox(
-                              // Use a fixed height that's tall enough to show content
                               height: 400.h,
                               child: TabBarView(
                                 controller: _tabController,
@@ -509,6 +510,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 ],
                               ),
                             ),
+                            SizedBox(height: 24.h),
                           ],
                         ),
                       ),
@@ -603,7 +605,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                       return false;
                     },
                     child: ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       // مش AlwaysScrollable
                       itemCount: controller.barberServices.length,

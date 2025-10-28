@@ -79,7 +79,6 @@ class CustomBarberListView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, colIndex) {
                   final barber = rowItems[colIndex];
-                  print("insta: ${barber.instagramPage}");
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 3.h),
                     child: CustomBarberListViewItem(barber: barber),

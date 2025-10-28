@@ -6,7 +6,6 @@ import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/models/barber_service.dart';
-import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/models/free_time_request_model.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class CustomBookAppointmentItem extends StatelessWidget {
