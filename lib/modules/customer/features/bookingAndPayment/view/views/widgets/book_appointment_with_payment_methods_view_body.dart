@@ -29,6 +29,7 @@ class BookAppointmentWithPaymentMethodsViewBody
     final payment = Get.arguments["bookingPaymentDetailsModel"]
         as BookingPaymentDetailsModel;
     final pay = Get.arguments["pay"];
+    final barber = Get.arguments["barber"];
     BookPaymentItemModel ff = BookPaymentItemModel(
       shopName: payment.salonName,
       bookingDay: payment.appointmentDate,
@@ -43,6 +44,7 @@ class BookAppointmentWithPaymentMethodsViewBody
           children: [
             CustomBookPaymentMethodsItem(
               model: ff,
+              barber: barber,
             ),
             SizedBox(height: 24.h),
             Container(

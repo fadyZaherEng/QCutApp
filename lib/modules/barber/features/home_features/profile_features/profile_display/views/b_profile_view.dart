@@ -605,10 +605,10 @@ class _BProfileViewBodyState extends State<BProfileView>
                       return false;
                     },
                     child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       // مش AlwaysScrollable
                       itemCount: controller.barberServices.length,
+                      padding: EdgeInsets.zero,
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 8.h),
                       itemBuilder: (context, index) {
@@ -618,19 +618,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                     ),
                   ),
                 ),
+                SizedBox(height: 16.h),
                 // Add the button at the bottom, outside the ListView
-                Padding(
-                  padding: EdgeInsets.only(top: 16.h),
-                  child: CustomBigButton(
-                    textData: "Add new service".tr,
-                    onPressed: () {
-                      showCustomAddNewServiceBottomSheet(context);
-                    },
-                  ),
+                CustomBigButton(
+                  textData: "Add new service".tr,
+                  onPressed: () {
+                    showCustomAddNewServiceBottomSheet(context);
+                  },
                 ),
 
                 const SizedBox(
-                  height: 64,
+                  height: 58,
                 ),
               ],
             ),
@@ -659,7 +657,7 @@ class _BProfileViewBodyState extends State<BProfileView>
     }
 
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: const Color(0xFF494B5B),
         borderRadius: BorderRadius.circular(8),

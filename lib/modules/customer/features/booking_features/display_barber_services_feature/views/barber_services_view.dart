@@ -82,6 +82,15 @@ class BarberServicesView extends StatelessWidget {
                       .where((entry) => controller.selectedServices[entry.key])
                       .map((entry) => entry.value)
                       .toList();
+                  if(selectedServicesList.isEmpty){
+                    Get.snackbar(
+                      "noServiceSelected".tr,
+                      "pleaseSelectAtLeastOneService".tr,
+                      backgroundColor: ColorsData.primary,
+                      colorText: Colors.white,
+                    );
+                    return;
+                  }
 
                   final freeTimeRequestModel =
                       FreeTimeRequestModel.fromServices(

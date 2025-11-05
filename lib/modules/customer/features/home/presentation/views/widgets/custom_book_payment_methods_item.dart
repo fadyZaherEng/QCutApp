@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
 
 class BookPaymentItemModel {
   final String? imageUrl;
@@ -32,10 +33,12 @@ class BookPaymentItemModel {
 
 class CustomBookPaymentMethodsItem extends StatelessWidget {
   final BookPaymentItemModel? model;
+  final Barber ? barber;
 
   const CustomBookPaymentMethodsItem({
     super.key,
     this.model,
+    this.barber,
   });
 
   @override
@@ -56,7 +59,8 @@ class CustomBookPaymentMethodsItem extends StatelessWidget {
             ),
             child: Container(
               width: double.infinity,
-              height: 194.h,
+              height: 220.h,
+              padding: EdgeInsets.all(8.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(16.r),
@@ -65,7 +69,7 @@ class CustomBookPaymentMethodsItem extends StatelessWidget {
                 color: ColorsData.cardColor,
               ),
               child: Padding(
-                padding: EdgeInsets.all(8.w),
+                padding: EdgeInsets.all(12.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -73,12 +77,12 @@ class CustomBookPaymentMethodsItem extends StatelessWidget {
                       children: [
                         Text(
                           model?.shopName ?? "barberShop".tr,
-                          style: Styles.textStyleS12W700(),
+                          style: Styles.textStyleS12W600(),
                         ),
                         const Spacer(),
                       ],
                     ),
-                    SizedBox(height: 6.h),
+                    SizedBox(height: 3.h),
                     Row(
                       children: [
                         SvgPicture.asset(
@@ -91,7 +95,7 @@ class CustomBookPaymentMethodsItem extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          model?.location ?? 'yourLocation'.tr,
+                          barber?.city ?? 'yourLocation'.tr,
                           style: Styles.textStyleS12W400(),
                         ),
                       ],

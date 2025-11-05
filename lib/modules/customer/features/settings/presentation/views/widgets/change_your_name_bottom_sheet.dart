@@ -83,7 +83,7 @@ class ChangeYourNameBottomSheet extends StatelessWidget {
                             return AlertDialog(
                               backgroundColor: Colors.white,
                               content: Text(
-                                "${'success'.tr}: ${response.statusCode}",
+                                "${'success'.tr}: ${'nameChangedSuccessfully'.tr}",
                                 style: Styles.textStyleS14W400(
                                     color: Colors.green),
                               ),

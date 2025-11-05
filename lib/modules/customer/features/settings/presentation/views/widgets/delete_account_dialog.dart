@@ -53,7 +53,7 @@ class DeleteAccountDialog extends StatelessWidget {
                       var response = await NetworkAPICall().deleteDataWithBody(
                           "${Variables.baseUrl}barber/me", {
                         "deleteReason": "there is a problem in my phone number"
-                      });
+                      },);
                       response.statusCode == 200
                           ? {
                               Get.back(),

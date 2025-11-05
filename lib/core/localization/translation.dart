@@ -12,6 +12,10 @@ class MyTranslation extends Translations {
           "skip": "تخطي",
           "done": "إتمام",
           "submit": "إدخال",
+          "noServiceSelected":
+              "لم يتم اختيار أي خدمة. يرجى اختيار خدمة واحدة على الأقل للمتابعة.",
+          "selectAtLeastOneService":
+              "يرجى اختيار خدمة واحدة على الأقل للمتابعة.",
           "timeSlots": "فتحات زمنية",
           "appName": "وعي الزهايمر",
           "changeLanguages": "تغيير اللغات",
@@ -19,6 +23,7 @@ class MyTranslation extends Translations {
           "english": "الإنجليزية",
           "arabic": "العربية",
           "hebrew": "עברית",
+          "nameChangedSuccessfully": "تم تغيير الاسم بنجاح",
           "where": "أين؟",
           "noAppointments": "لا توجد مواعيد",
           "forgetPassword": "نسيت كلمة المرور",
@@ -590,7 +595,11 @@ class MyTranslation extends Translations {
           "sun": "Sun",
           "mon": "Mon",
           "tue": "Tue",
+          "nameChangedSuccessfully": "Name changed successfully",
           "wed": "Wed",
+          "noServiceSelected": "No Service Selected",
+          "pleaseSelectAtLeastOneService":
+              "Please select at least one service",
           "thu": "Thu",
           "fri": "Fri",
           "sat": "Sat",

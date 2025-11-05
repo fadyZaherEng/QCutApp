@@ -138,7 +138,7 @@ abstract class AppRouter {
     GetPage(
       name: loginPath,
       page: () => const LoginView(),
-      binding: AuthBinding(),
+       binding: AuthBinding(),
     ),
     GetPage(
       name: signUpPath,

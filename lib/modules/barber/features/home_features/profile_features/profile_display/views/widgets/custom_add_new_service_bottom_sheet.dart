@@ -313,44 +313,106 @@ class _CustomAddNewServiceBottomSheetState
                             ),
                           ),
                           SizedBox(height: 4.h),
+                          // SizedBox(
+                          //   width: 164.w,
+                          //   height: 36.h,
+                          //   child: TextFormField(
+                          //     controller: serviceMinTimeController,
+                          //     textAlign: TextAlign.center,
+                          //     keyboardType: TextInputType.number,
+                          //     style: Styles.textStyleS14W400(
+                          //       color: ColorsData.secondary,
+                          //     ),
+                          //     decoration: InputDecoration(
+                          //       filled: true,
+                          //       fillColor: Colors.white,
+                          //       contentPadding: EdgeInsets.zero,
+                          //       border: OutlineInputBorder(
+                          //         borderRadius:
+                          //             BorderRadius.all(Radius.circular(4.r)),
+                          //         borderSide: const BorderSide(
+                          //           color: Color(0xFFAAA8BD),
+                          //           width: 1,
+                          //         ),
+                          //       ),
+                          //       enabledBorder: OutlineInputBorder(
+                          //         borderSide: const BorderSide(
+                          //           color: Color(0xFFAAA8BD),
+                          //           width: 1,
+                          //         ),
+                          //       ),
+                          //       focusedBorder: OutlineInputBorder(
+                          //         borderSide: const BorderSide(
+                          //           color: Color(0xFFAAA8BD),
+                          //           width: 1,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     expands: false,
+                          //   ),
+                          // ),
                           SizedBox(
                             width: 164.w,
                             height: 36.h,
-                            child: TextFormField(
-                              controller: serviceMinTimeController,
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              style: Styles.textStyleS14W400(
-                                color: ColorsData.secondary,
+                            child: // بدل TextFormField تبع Max Time:
+                            SizedBox(
+                              width: 164.w,
+                              height: 36.h,
+                              child: DropdownButtonFormField<int>(
+                                value: null,
+                                items: List.generate(
+                                  24, // 24 * 5 = 120 دقيقة كحد أقصى
+                                      (index) {
+                                    final value =
+                                        (index + 1) * 5; // 5, 10, 15, ...
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        "$value ${"mins".tr}",
+                                        style: Styles.textStyleS14W400(
+                                          color: ColorsData.secondary,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    serviceMinTimeController.text =
+                                        value.toString();
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 0),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(4.r)),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFAAA8BD),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFAAA8BD),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFAAA8BD),
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: EdgeInsets.zero,
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.r)),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFAAA8BD),
-                                    width: 1,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFAAA8BD),
-                                    width: 1,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFAAA8BD),
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
-                              expands: false,
                             ),
+
                           ),
+
                         ],
                       ),
                     ),
@@ -427,41 +489,7 @@ class _CustomAddNewServiceBottomSheetState
                               ),
                             ),
 
-                            // TextFormField(
-                            //   controller: serviceMaxTimeController,
-                            //   textAlign: TextAlign.center,
-                            //   keyboardType: TextInputType.number,
-                            //   style: Styles.textStyleS14W400(
-                            //     color: ColorsData.secondary,
-                            //   ),
-                            //   decoration: InputDecoration(
-                            //     filled: true,
-                            //     fillColor: Colors.white,
-                            //     contentPadding: EdgeInsets.zero,
-                            //     border: OutlineInputBorder(
-                            //       borderRadius:
-                            //           BorderRadius.all(Radius.circular(4.r)),
-                            //       borderSide: const BorderSide(
-                            //         color: Color(0xFFAAA8BD),
-                            //         width: 1,
-                            //       ),
-                            //     ),
-                            //     enabledBorder: OutlineInputBorder(
-                            //       borderSide: const BorderSide(
-                            //         color: Color(0xFFAAA8BD),
-                            //         width: 1,
-                            //       ),
-                            //     ),
-                            //     focusedBorder: OutlineInputBorder(
-                            //       borderSide: const BorderSide(
-                            //         color: Color(0xFFAAA8BD),
-                            //         width: 1,
-                            //       ),
-                            //     ),
-                            //   ),
-                            //   expands: false,
-                            // ),
-                          ),
+                           ),
                         ],
                       ),
                     ),
