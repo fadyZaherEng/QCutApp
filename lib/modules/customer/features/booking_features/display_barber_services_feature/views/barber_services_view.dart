@@ -82,7 +82,7 @@ class BarberServicesView extends StatelessWidget {
                       .where((entry) => controller.selectedServices[entry.key])
                       .map((entry) => entry.value)
                       .toList();
-                  if(selectedServicesList.isEmpty){
+                  if (selectedServicesList.isEmpty) {
                     Get.snackbar(
                       "noServiceSelected".tr,
                       "pleaseSelectAtLeastOneService".tr,
@@ -101,10 +101,13 @@ class BarberServicesView extends StatelessWidget {
                   // Ensure the model exactly matches the required format when converted to JSON
                   print(freeTimeRequestModel.toJson());
 
-                  Get.toNamed(AppRouter.bookAppointmentPath, arguments: {
-                    'freeTimeRequestModel': freeTimeRequestModel,
-                    'barber': barber,
-                  });
+                  Get.toNamed(
+                    AppRouter.bookAppointmentPath,
+                    arguments: {
+                      'freeTimeRequestModel': freeTimeRequestModel,
+                      'barber': barber,
+                    },
+                  );
                 },
               ),
             ],
