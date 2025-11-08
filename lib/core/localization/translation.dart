@@ -17,6 +17,7 @@ class MyTranslation extends Translations {
           "selectAtLeastOneService":
               "يرجى اختيار خدمة واحدة على الأقل للمتابعة.",
           "timeSlots": "فتحات زمنية",
+          "Delete account": "حذف الحساب",
           "appName": "وعي الزهايمر",
           "changeLanguages": "تغيير اللغات",
           "availableLanguages": "اللغات المتاحة",
@@ -450,6 +451,8 @@ class MyTranslation extends Translations {
           "Chat with us": "دردشة معنا",
           "Chat with us": "دردشة معنا",
           "Accept Offer": "قبول العرض",
+          "Why do you want to cancel the account?":
+              "لماذا تريد الغاء الحساب؟",
           "enterYourMessage": "أدخل رسالتك",
           "Are you sure you want to delete your Account?":
               "هل أنت متأكد أنك تريد حذف حسابك؟",
@@ -459,6 +462,7 @@ class MyTranslation extends Translations {
           "Pending": "قيد الانتظار",
           "Free Trial": "تجربة مجانية",
           "Cancelled": "ملغي",
+          "Enter your reason...": "أدخل السبب الخاص بك...",
           "chooseCity": "اختر المدينة",
           "Profile updated successfully": "تم تحديث الملف الشخصي بنجاح",
           "availableCities": "المدن المتاحة",
@@ -539,6 +543,7 @@ class MyTranslation extends Translations {
           "logIn": "Log in",
           "signUp": "Sign up",
           "enterYourFullName": "Enter your Full Name",
+          "Enter your reason...": "Enter your reason...",
           "enterYourBarberShopName": "Enter your Barber Shop Name",
           "pleaseEnterYourBarberShopName": "Please enter your Barber Shop Name",
           "enterYourCity": "Enter your City",
@@ -866,6 +871,8 @@ class MyTranslation extends Translations {
           "My gallery": "My gallery",
           "Expired": "Expired",
           "Add new service": "Add new service",
+          "Why do you want to cancel the account?":
+              "Why do you want to cancel the account?",
           "No services available": "No services available",
           "Edit": "Edit",
           "Gallery": "Gallery",
@@ -1055,6 +1062,8 @@ class MyTranslation extends Translations {
           "where": "איפה?",
           "signUp": "הרשמה",
           "Countdown": "ספירה לאחור",
+          "Why do you want to cancel the account?":
+              "מדוע ברצונך לבטל את החשבון?",
           "enterYourFullName": "הזן את שמך המלא",
           "enterYourBarberShopName": "הזן את שם המספרה שלך",
           "enterYourCity": "הזן את העיר שלך",
@@ -1064,6 +1073,7 @@ class MyTranslation extends Translations {
           "register": "הרשמה",
           "rememberMe": "זכור אותי",
           "login": "התחברות",
+          "Delete account": "מחק חשבון",
           "request": "בקשה",
           "continueAsGuest": "המשך כאורח",
           "continue": "המשך",
@@ -1153,6 +1163,7 @@ class MyTranslation extends Translations {
           "cash": "מזומן",
           "request from customer": "בקשה מהלקוח",
           "selectDate": "בחר תאריך",
+          "Enter your reason...": "הזן את הסיבה שלך...",
           "noDateSelected": "לא נבחר תאריך",
           "quantity": "כמות",
           "newAppointmentDetails": "פרטי תור חדש",

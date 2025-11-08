@@ -221,7 +221,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                         ),
                       ),
                       Positioned(
-                        top: 200.98.h,
+                        top: 173.98.h,
                         left: 47.39.w,
                         child: InkWell(
                           onTap: () {
@@ -267,7 +267,7 @@ class _BProfileViewBodyState extends State<BProfileView>
 
                       Positioned(
                         left: 110.w,
-                        bottom: -20.h,
+                        bottom: 3.h,
                         child: InkWell(
                           onTap: () {
                             showChangeYourPictureDialog(context);
@@ -310,19 +310,10 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 // open drawer / show menu sheet
                                 _scaffoldKey.currentState?.openDrawer();
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: ColorsData.primary),
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: ColorsData.font,
-                                ),
-                                width: 40.w,
-                                height: 36.h,
-                                child: Icon(
-                                  Icons.menu,
-                                  color: Colors.black,
-                                  size: 22.sp,
-                                ),
+                              child: SvgPicture.asset(
+                                AssetsData.menuIcon,
+                                width: 24,
+                                height: 24,
                               ),
                             ),
                           ],
@@ -344,7 +335,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 80.h),
+                            SizedBox(height: 20.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

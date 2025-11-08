@@ -49,24 +49,7 @@ class DeleteAccountDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () async {
-                      var response = await NetworkAPICall().deleteDataWithBody(
-                          "${Variables.baseUrl}barber/me", {
-                        "deleteReason": "there is a problem in my phone number"
-                      },);
-                      response.statusCode == 200
-                          ? {
-                              Get.back(),
-                              ShowToast.showSuccessSnackBar(
-                                message: "Account deleted successfully",
-                              ),
-                              SharedPref().clearPreferences(),
-                              Get.offAllNamed(AppRouter.initialPath),
-                            }
-                          : ShowToast.showError(
-                              message: "Failed to delete account",
-                            );
-                    },
+                    onPressed: () => showDeleteAccountBottomSheet(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorsData.primary,
                       shape: RoundedRectangleBorder(
@@ -98,4 +81,123 @@ class DeleteAccountDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> showDeleteAccountBottomSheet(BuildContext context) {
+  final TextEditingController reasonController = TextEditingController();
+
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      side: BorderSide(color: Colors.white, width: 2
+      ),
+    ),
+    builder: (context) {
+      return Container(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 12,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // زر الإغلاق
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // العنوان
+              Text(
+              "Why do you want to cancel the account?".tr,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // حقل النص
+            TextField(
+              controller: reasonController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: "Enter your reason...",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // زر الحذف
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () async {
+                  final reason = reasonController.text.trim();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  // هنا ممكن تنفذ منطق حذف الحساب
+                  print("Delete account reason: $reason");
+                  var response = await NetworkAPICall().deleteDataWithBody(
+                    "${Variables.baseUrl}barber/me",
+                    {
+                      "deleteReason": reason,
+                    },
+                  );
+                  response.statusCode == 200
+                      ? {
+                          Get.back(),
+                          ShowToast.showSuccessSnackBar(
+                            message: "Account deleted successfully",
+                          ),
+                          SharedPref().clearPreferences(),
+                          Get.offAllNamed(AppRouter.initialPath),
+                        }
+                      : ShowToast.showError(
+                          message: "Failed to delete account",
+                        );
+                },
+                child:   Text(
+                  "Delete account".tr,
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
