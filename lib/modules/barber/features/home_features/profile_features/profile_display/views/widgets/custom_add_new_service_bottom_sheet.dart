@@ -98,7 +98,6 @@ class _CustomAddNewServiceBottomSheetState
       );
       return;
     }
-
     // Upload image if selected but not yet uploaded
     if (_selectedImage != null && _uploadedImageUrl == null) {
       setState(() {
@@ -122,17 +121,21 @@ class _CustomAddNewServiceBottomSheetState
         return;
       }
     }
+    print("min time: ${serviceMinTimeController.text}");
+    print("max time: ${serviceMaxTimeController.text}");
 
     // Call the controller method to create the service
     final result = await _profileController.createBarberService(
       serviceName: serviceNameController.text,
       servicePrice: servicePriceController.text,
-      min: serviceMinTimeController.text,
-      max: serviceMaxTimeController.text,
+      min: int.parse( serviceMinTimeController.text),
+      max: int.parse( serviceMaxTimeController.text),
       imageUrl: _uploadedImageUrl, // Pass the uploaded image URL
     );
 
     if (result['success']) {
+      Navigator.of(context).pop();
+
       // Explicitly fetch services to ensure data is up to date
       await _profileController.fetchBarberServices();
 
@@ -146,7 +149,7 @@ class _CustomAddNewServiceBottomSheetState
       await Future.delayed(const Duration(milliseconds: 100));
 
       // Close the bottom sheet on success
-      Navigator.pop(context);
+      // Navigator.pop(context);
 
       // Show a success message after navigation
       ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -159,8 +162,20 @@ class _CustomAddNewServiceBottomSheetState
 
       // Call Get.reset to refresh injected dependencies (if needed)
       // Get.reset(clearRouteBindings: false);
+    }else{
+      Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message'] ?? "Failed to create service".tr),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
+
+  int? selectedMinTime;
+  int? selectedMaxTime;
 
   @override
   Widget build(BuildContext context) {
@@ -301,6 +316,7 @@ class _CustomAddNewServiceBottomSheetState
               children: [
                 Row(
                   children: [
+                    /// --- Minimum Time ---
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,110 +329,73 @@ class _CustomAddNewServiceBottomSheetState
                             ),
                           ),
                           SizedBox(height: 4.h),
-                          // SizedBox(
-                          //   width: 164.w,
-                          //   height: 36.h,
-                          //   child: TextFormField(
-                          //     controller: serviceMinTimeController,
-                          //     textAlign: TextAlign.center,
-                          //     keyboardType: TextInputType.number,
-                          //     style: Styles.textStyleS14W400(
-                          //       color: ColorsData.secondary,
-                          //     ),
-                          //     decoration: InputDecoration(
-                          //       filled: true,
-                          //       fillColor: Colors.white,
-                          //       contentPadding: EdgeInsets.zero,
-                          //       border: OutlineInputBorder(
-                          //         borderRadius:
-                          //             BorderRadius.all(Radius.circular(4.r)),
-                          //         borderSide: const BorderSide(
-                          //           color: Color(0xFFAAA8BD),
-                          //           width: 1,
-                          //         ),
-                          //       ),
-                          //       enabledBorder: OutlineInputBorder(
-                          //         borderSide: const BorderSide(
-                          //           color: Color(0xFFAAA8BD),
-                          //           width: 1,
-                          //         ),
-                          //       ),
-                          //       focusedBorder: OutlineInputBorder(
-                          //         borderSide: const BorderSide(
-                          //           color: Color(0xFFAAA8BD),
-                          //           width: 1,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     expands: false,
-                          //   ),
-                          // ),
                           SizedBox(
                             width: 164.w,
                             height: 36.h,
-                            child: // بدل TextFormField تبع Max Time:
-                            SizedBox(
-                              width: 164.w,
-                              height: 36.h,
-                              child: DropdownButtonFormField<int>(
-                                value: null,
-                                items: List.generate(
-                                  24, // 24 * 5 = 120 دقيقة كحد أقصى
-                                      (index) {
-                                    final value =
-                                        (index + 1) * 5; // 5, 10, 15, ...
-                                    return DropdownMenuItem<int>(
-                                      value: value,
-                                      child: Text(
-                                        "$value ${"mins".tr}",
-                                        style: Styles.textStyleS14W400(
-                                          color: ColorsData.secondary,
-                                        ),
+                            child: DropdownButtonFormField<int>(
+                              value: selectedMinTime,
+                              items: List.generate(24, (index) {
+                                final value = (index + 1) * 5;
+                                // لو الماكس موجود، خلي المين أقل منه فقط
+                                if (selectedMaxTime != null &&
+                                    value >= selectedMaxTime!) {
+                                  return null;
+                                }
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(
+                                    "$value ${"mins".tr}",
+                                    style: Styles.textStyleS14W400(
+                                      color: ColorsData.secondary,
+                                    ),
+                                  ),
+                                );
+                              }).whereType<DropdownMenuItem<int>>().toList(),
+                              onChanged: (value) {
+                                if (selectedMaxTime != null &&
+                                    value! >= selectedMaxTime!) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Minimum time must be less than maximum time'
+                                            .tr,
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
-                                    );
-                                  },
-                                ),
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    serviceMinTimeController.text =
-                                        value.toString();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 0),
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(4.r)),
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
+                                      backgroundColor: Colors.red,
+                                      duration: const Duration(seconds: 2),
                                     ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
-                                    ),
+                                  );
+                                  return;
+                                }
+                                setState(() {
+                                  selectedMinTime = value;
+                                  serviceMinTimeController.text =
+                                      value.toString();
+                                });
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 8.w, vertical: 0),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.r)),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
                                   ),
                                 ),
                               ),
                             ),
-
                           ),
-
                         ],
                       ),
                     ),
                     SizedBox(width: 24.w),
+
+                    /// --- Maximum Time ---
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -432,64 +411,65 @@ class _CustomAddNewServiceBottomSheetState
                           SizedBox(
                             width: 164.w,
                             height: 36.h,
-                            child: // بدل TextFormField تبع Max Time:
-                                SizedBox(
-                              width: 164.w,
-                              height: 36.h,
-                              child: DropdownButtonFormField<int>(
-                                value: null,
-                                items: List.generate(
-                                  24, // 24 * 5 = 120 دقيقة كحد أقصى
-                                  (index) {
-                                    final value =
-                                        (index + 1) * 5; // 5, 10, 15, ...
-                                    return DropdownMenuItem<int>(
-                                      value: value,
-                                      child: Text(
-                                        "$value ${"mins".tr}",
-                                        style: Styles.textStyleS14W400(
-                                          color: ColorsData.secondary,
+                            child: DropdownButtonFormField<int>(
+                              value: selectedMaxTime,
+                              items: List.generate(24, (index) {
+                                final value = (index + 1) * 5;
+                                // لو المين موجود، خلي الماكس أكبر منه فقط
+                                if (selectedMinTime != null &&
+                                    value <= selectedMinTime!) {
+                                  return null;
+                                }
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(
+                                    "$value ${"mins".tr}",
+                                    style: Styles.textStyleS14W400(
+                                      color: ColorsData.secondary,
+                                    ),
+                                  ),
+                                );
+                              }).whereType<DropdownMenuItem<int>>().toList(),
+                              onChanged: (value) {
+                                if (selectedMinTime != null &&
+                                    value! <= selectedMinTime!) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Maximum time must be greater than minimum time'
+                                            .tr,
+                                        style: const TextStyle(
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    serviceMaxTimeController.text =
-                                        value.toString();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 0),
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4.r)),
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
+                                      backgroundColor: Colors.red,
+                                      duration: const Duration(seconds: 2),
                                     ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color(0xFFAAA8BD),
-                                      width: 1,
-                                    ),
+                                  );
+                                  return;
+                                }
+                                setState(() {
+                                  selectedMaxTime = value;
+                                  serviceMaxTimeController.text =
+                                      value.toString();
+                                });
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 8.w, vertical: 0),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.r)),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFAAA8BD),
+                                    width: 1,
                                   ),
                                 ),
                               ),
                             ),
-
-                           ),
+                          ),
                         ],
                       ),
                     ),
@@ -497,6 +477,7 @@ class _CustomAddNewServiceBottomSheetState
                 ),
               ],
             ),
+
             SizedBox(height: 24.h),
 
             /// Confirm Button

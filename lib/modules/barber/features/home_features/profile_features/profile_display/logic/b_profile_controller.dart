@@ -393,8 +393,8 @@ class BProfileController extends GetxController {
   Future<Map<String, dynamic>> createBarberService({
     required String serviceName,
     required String servicePrice,
-    required String min,
-    required String max,
+    required int min,
+    required int max,
     String? imageUrl,
   }) async {
     isCreatingService.value = true;
