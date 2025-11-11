@@ -17,6 +17,7 @@ class QCutServicesView extends StatelessWidget {
 
   final QCutServicesController controller = Get.put(QCutServicesController());
   final barber = Get.arguments["barber"] as Barber;
+  final isBarber = Get.arguments["isBarber"] as bool? ?? false;
   final numberofUsers = Get.arguments["isMultiple"] as int;
 
   @override
@@ -149,6 +150,16 @@ class QCutServicesView extends StatelessWidget {
                     Get.snackbar(
                       "warning".tr,
                       "${'youMustSelectAtLeast'.tr} $numberofUsers ${'services'.tr}",
+                      backgroundColor: Colors.red.withOpacity(0.8),
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+                  if (isBarber && selectedServicesList.isEmpty) {
+                    Get.snackbar(
+                      "warning".tr,
+                      "${'youMustSelectAtLeast'.tr} 1 ${'services'.tr}",
                       backgroundColor: Colors.red.withOpacity(0.8),
                       colorText: Colors.white,
                       snackPosition: SnackPosition.BOTTOM,

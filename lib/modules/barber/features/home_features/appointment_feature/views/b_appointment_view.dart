@@ -246,10 +246,14 @@ class _BAppointmentViewState extends State<BAppointmentView> {
           onPressed: () {
             // controller.openAddAppointmentDialog();
             // Get.toNamed(AppRouter.selectedPath, arguments: currentBarber);
-            Get.toNamed(AppRouter.qCutServicesPath, arguments: {
-              "barber": currentBarber,
-              "isMultiple": 1,
-            });
+            Get.toNamed(
+              AppRouter.qCutServicesPath,
+              arguments: {
+                "barber": currentBarber,
+                "isMultiple": 1,
+                "isBarber":true,
+              },
+            );
           },
           backgroundColor: ColorsData.primary,
           child: const Icon(Icons.add, color: Colors.white),
