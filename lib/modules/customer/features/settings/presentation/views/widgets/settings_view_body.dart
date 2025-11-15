@@ -103,10 +103,10 @@ class _SettingViewBodyState extends State<SettingViewBody> {
   }
 
   Widget buildDrawerItem(String title, String imagePath, VoidCallback? onTap) {
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
-      child: GestureDetector(
-        onTap: onTap,
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

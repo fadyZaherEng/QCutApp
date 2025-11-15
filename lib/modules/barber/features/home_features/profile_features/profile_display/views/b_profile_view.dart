@@ -618,9 +618,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   },
                 ),
 
-                const SizedBox(
-                  height: 58,
-                ),
+                const SizedBox(height: 58),
               ],
             ),
           );
