@@ -124,43 +124,53 @@ class CustomTextFormField extends StatelessWidget {
     }
 
     // Normal field for other cases
-    return TextFormField(
-      onChanged: onChanged,
-      onFieldSubmitted: onFieldSubmitted,
-      onSaved: onSaved,
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType ?? TextInputType.emailAddress,
-      validator: validator,
-      style: style ?? Styles.textStyleS14W500(),
-      readOnly: readOnly,
-      onTap: onTap,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
-        fillColor: fillColor ?? ColorsData.secondary,
-        filled: true,
-        contentPadding: EdgeInsets.only(
-          left: 16.w,
-          right: 16.w,
-          top: 14.h,
-          bottom: 14.h,
-        ),
-        suffixIconColor: ColorsData.primary,
-        prefixIconColor: ColorsData.secondary,
-        suffixIcon: suffixIcon,
-        prefixIcon: prefixIcon,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: ColorsData.cardStrock),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: ColorsData.cardStrock),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: ColorsData.cardStrock),
+    return Directionality(
+      textDirection: keyboardType == TextInputType.visiblePassword
+          ? TextDirection.ltr
+          : Directionality.of(context),
+      child: TextFormField(
+        inputFormatters: keyboardType == TextInputType.visiblePassword
+            ? [
+                FilteringTextInputFormatter.allow(RegExp(r'[ -~]')),
+              ]
+            : null,
+        onChanged: onChanged,
+        onFieldSubmitted: onFieldSubmitted,
+        onSaved: onSaved,
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType ?? TextInputType.emailAddress,
+        validator: validator,
+        style: style ?? Styles.textStyleS14W500(),
+        readOnly: readOnly,
+        onTap: onTap,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: Styles.textStyleS14W400(color: ColorsData.cardStrock),
+          fillColor: fillColor ?? ColorsData.secondary,
+          filled: true,
+          contentPadding: EdgeInsets.only(
+            left: 16.w,
+            right: 16.w,
+            top: 14.h,
+            bottom: 14.h,
+          ),
+          suffixIconColor: ColorsData.primary,
+          prefixIconColor: ColorsData.secondary,
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: const BorderSide(color: ColorsData.cardStrock),
+          ),
         ),
       ),
     );
