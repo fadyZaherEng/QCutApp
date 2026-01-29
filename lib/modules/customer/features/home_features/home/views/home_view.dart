@@ -43,13 +43,13 @@ class _HomeViewState extends State<HomeView> {
     // loadSelectedCities();
     _notificationListener();
   }
+
   Future<void> _notificationListener() async {
     print("Notification Listener Initialized");
     print(
         "onNotificationClick Stream home: ${onNotificationClick?.stream.toString()}");
     onNotificationClick?.stream.listen((event) {
       if (event.isNotEmpty) {
-        print("event11111111111111111111 $event");
         _onNotificationClick(event);
       }
     });
@@ -60,6 +60,7 @@ class _HomeViewState extends State<HomeView> {
     Get.toNamed(AppRouter.notificationPath);
     onNotificationClick?.add("");
   }
+
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -301,8 +302,7 @@ class _HomeViewState extends State<HomeView> {
                                     city: selectedCities.isNotEmpty
                                         ? selectedCities.first
                                         : "",
-                                    startDate:
-                                        result.millisecondsSinceEpoch,
+                                    startDate: result.millisecondsSinceEpoch,
                                     endDate: result
                                         .add(const Duration(days: 180))
                                         .millisecondsSinceEpoch,

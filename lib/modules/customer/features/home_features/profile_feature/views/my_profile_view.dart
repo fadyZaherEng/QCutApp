@@ -94,16 +94,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                                 Get.locale?.languageCode == "he"
                             ? 20.w
                             : null,
-                        child: CustomButton(
-                          width: 200.w,
-                          text: "editYourProfile".tr,
-                          onPressed: () {
-                            showChangeUserInfoBottomSheet(
-                              context,
-                              profileController,
-                            );
-                          },
-                        ),
+                        child: SizedBox(),
+                        // editYourProfile button removed
                       ),
                       Positioned(
                         bottom: 0.h,
@@ -225,11 +217,29 @@ class _MyProfileViewState extends State<MyProfileView> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                fullName,
-                                style: Styles.textStyleS16W700(),
+                              Row(
+                                children: [
+                                  Text(
+                                    fullName,
+                                    style: Styles.textStyleS16W700(),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showChangeUserInfoBottomSheet(
+                                        context,
+                                        profileController,
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: 26.sp,
+                                      color: ColorsData.primary,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10.h),
+                              SizedBox(height: 16.h),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -273,11 +283,8 @@ class _MyProfileViewState extends State<MyProfileView> {
                           Get.toNamed(AppRouter.changeLangugesPath);
                         }),
                         buildDivider(),
-                        buildDrawerItem(
-                            "changePhoneNumber".tr, AssetsData.callIcon, () {
-                          Get.toNamed(AppRouter.resetPhoneNumberPath);
-                        }),
-                        buildDivider(),
+                        // changePhoneNumber removed
+
                         buildDrawerItem(
                             "changeYourLocation".tr, AssetsData.mapPinIcon,
                             () async {
@@ -297,13 +304,13 @@ class _MyProfileViewState extends State<MyProfileView> {
                         buildDivider(),
                         _buildDrawerItem("Terms and Conditions".tr,
                             Icons.integration_instructions_outlined, () {
-                              Get.toNamed(AppRouter.termsPath);
-                            }),
+                          Get.toNamed(AppRouter.termsPath);
+                        }),
                         buildDivider(),
                         _buildDrawerItem(
                             "privacyPolicy".tr, Icons.policy_outlined, () {
-                              Get.toNamed(AppRouter.privacyPolicyPath);
-                            }),
+                          Get.toNamed(AppRouter.privacyPolicyPath);
+                        }),
                         buildDivider(),
                         buildDrawerItem(
                           "contact_qcut".tr,
