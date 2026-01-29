@@ -12,6 +12,7 @@ class MyTranslation extends Translations {
           "skip": "تخطي",
           "done": "إتمام",
           "submit": "إدخال",
+          "cancel": "إلغاء",
           "noServiceSelected":
               "لم يتم اختيار أي خدمة. يرجى اختيار خدمة واحدة على الأقل للمتابعة.",
           "selectAtLeastOneService":
@@ -514,6 +515,7 @@ class MyTranslation extends Translations {
           "done": "Done",
           "Countdown": "Countdown",
           "submit": "Submit",
+          "cancel": "Cancel",
           "appName": "ALZ Aware",
           "changeLanguages": "Change Languages",
           "availableLanguages": "Available languages",

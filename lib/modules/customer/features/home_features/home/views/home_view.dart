@@ -275,19 +275,31 @@ class _HomeViewState extends State<HomeView> {
                           child: InkWell(
                             onTap: () {
                               Get.toNamed(AppRouter.searchForTheTimePath)
-                                  ?.then((selectedDateTime) {
-                                if (selectedDateTime != null &&
-                                    selectedDateTime is DateTime) {
+                                  ?.then((result) {
+                                if (result == false) {
+                                  // 🔴 User clicked "Cancel" - Clear the time filter
                                   setState(() {
-                                    this.selectedDateTime = selectedDateTime;
+                                    selectedDateTime = null;
+                                  });
+                                  if (selectedCities.isNotEmpty) {
+                                    homeController.getBarbersCity(
+                                        city: selectedCities.join(', '));
+                                  } else {
+                                    homeController.getNearestBarbers(
+                                        longitude, latitude);
+                                  }
+                                } else if (result != null &&
+                                    result is DateTime) {
+                                  setState(() {
+                                    selectedDateTime = result;
                                   });
                                   homeController.getAvailableBarbers(
                                     city: selectedCities.isNotEmpty
                                         ? selectedCities.first
                                         : "",
                                     startDate:
-                                        selectedDateTime.millisecondsSinceEpoch,
-                                    endDate: selectedDateTime
+                                        result.millisecondsSinceEpoch,
+                                    endDate: result
                                         .add(const Duration(days: 180))
                                         .millisecondsSinceEpoch,
                                   );

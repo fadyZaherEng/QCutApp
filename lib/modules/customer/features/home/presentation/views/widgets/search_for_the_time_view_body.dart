@@ -101,20 +101,36 @@ class SearchForTheTimeViewBodyState extends State<SearchForTheTimeViewBody> {
 
           const Spacer(),
 
-          CustomBigButton(
-            textData: "confirm".tr,
-            onPressed: () async {
-              final selectedDateTime = DateTime(
-                selectedDate.year,
-                selectedDate.month,
-                selectedDate.day,
-                selectedTime.hour,
-                selectedTime.minute,
-              );
+          Row(
+            children: [
+              Expanded(
+                child: CustomBigButton(
+                  textData: "cancel".tr,
+                  color: Colors.grey.shade300,
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: CustomBigButton(
+                  textData: "confirm".tr,
+                  onPressed: () async {
+                    final selectedDateTime = DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                      selectedTime.hour,
+                      selectedTime.minute,
+                    );
 
-              await _saveDateTime(); // ✅ نحفظ قبل ما نرجع
-              Navigator.pop(context, selectedDateTime);
-            },
+                    await _saveDateTime(); // ✅ نحفظ قبل ما نرجع
+                    Navigator.pop(context, selectedDateTime);
+                  },
+                ),
+              ),
+            ],
           ),
           const Spacer(),
         ],

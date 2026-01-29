@@ -462,7 +462,7 @@ class _SelectedViewState extends State<SelectedView> {
                     scrollDirection: Axis.vertical,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.only(
-                        top: 0, left: 16.w, right: 17.w, bottom: 80.h),
+                        top: 0, left: 16.w, right: 17.w, bottom: 20.h),
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 110.w,
                       crossAxisSpacing: 6.h,
@@ -512,12 +512,6 @@ class _SelectedViewState extends State<SelectedView> {
                                   child: Center(
                                     child: SpinKitDoubleBounce(
                                       color: ColorsData.primary,
-                                      // value: loadingProgress.expectedTotalBytes !=
-                                      //         null
-                                      //     ? loadingProgress
-                                      //             .cumulativeBytesLoaded /
-                                      //         loadingProgress.expectedTotalBytes!
-                                      //     : null,
                                     ),
                                   ),
                                 );
@@ -531,26 +525,10 @@ class _SelectedViewState extends State<SelectedView> {
                   ),
                 );
               }),
-
               SliverToBoxAdapter(
-                child: SizedBox(height: 70.h),
+                child: SizedBox(height: 20.h),
               ),
             ],
-          ),
-          // Book button at bottom of screen
-          Positioned(
-            bottom: 48,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-              child: CustomBigButton(
-                textData: "book".tr,
-                onPressed: () {
-                  showHowManyConsumerBottomSheet(context, barber: barber);
-                },
-              ),
-            ),
           ),
           // Back button at top of screen
           Positioned(
@@ -609,6 +587,28 @@ class _SelectedViewState extends State<SelectedView> {
             ),
           ),
         ],
+      ),
+
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+          decoration: BoxDecoration(
+            color: ColorsData.secondary, // or transparent if desired, but consistent bg is better for stickiness
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
+          child: CustomBigButton(
+            textData: "book".tr,
+            onPressed: () {
+              showHowManyConsumerBottomSheet(context, barber: barber);
+            },
+          ),
+        ),
       ),
     );
   }
