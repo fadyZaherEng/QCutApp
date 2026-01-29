@@ -15,6 +15,7 @@ class Variables {
   static const String VERIFY_OTP = "${AUTHENTICATION}verify-otp/";
   static const String CHANGE_PASSWORD = "${AUTHENTICATION}change-password"; // Added
   static const String FORGET_PASSWORD = "$baseUrl/authentication/forget-password"; // Added
+  static const String VERIFY_CHANGE_PHONE = "${AUTHENTICATION}verify-change-phone/"; // Added
   static const String GET_PROFILE = "${AUTHENTICATION}profile/";
   static const String REPORT = "${baseUrl}reports";
 

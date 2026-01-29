@@ -38,6 +38,30 @@ class _HomeViewState extends State<HomeView> {
   bool isSearching = false;
 
   @override
+  void initState() {
+    super.initState();
+    // loadSelectedCities();
+    _notificationListener();
+  }
+
+  Future<void> _notificationListener() async {
+    print("Notification Listener Initialized");
+    print(
+        "onNotificationClick Stream home: ${onNotificationClick?.stream.toString()}");
+    onNotificationClick?.stream.listen((event) {
+      if (event.isNotEmpty) {
+        _onNotificationClick(event);
+      }
+    });
+  }
+
+  void _onNotificationClick(event) {
+    // Handle navigation based on notification payload
+    Get.toNamed(AppRouter.notificationPath);
+    onNotificationClick?.add("");
+  }
+
+  @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
     await fetchProfileData();
@@ -57,24 +81,6 @@ class _HomeViewState extends State<HomeView> {
       print(e);
     });
     // await _notificationListener();
-  }
-
-  Future<void> _notificationListener() async {
-    print("Notification Listener Initialized");
-    print(
-        "onNotificationClick Stream home: ${onNotificationClick?.stream.toString()}");
-    onNotificationClick?.stream.listen((event) {
-      if (event.isNotEmpty) {
-        print("event11111111111111111111 $event");
-        _onNotificationClick(event);
-      }
-    });
-  }
-
-  void _onNotificationClick(event) {
-    // Handle navigation based on notification payload
-    Get.toNamed(AppRouter.notificationPath);
-    onNotificationClick?.add("");
   }
 
   Future<void> fetchProfileData() async {
@@ -161,7 +167,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     loadSelectedCities();
-    _notificationListener();
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -297,8 +302,7 @@ class _HomeViewState extends State<HomeView> {
                                     city: selectedCities.isNotEmpty
                                         ? selectedCities.first
                                         : "",
-                                    startDate:
-                                        result.millisecondsSinceEpoch,
+                                    startDate: result.millisecondsSinceEpoch,
                                     endDate: result
                                         .add(const Duration(days: 180))
                                         .millisecondsSinceEpoch,

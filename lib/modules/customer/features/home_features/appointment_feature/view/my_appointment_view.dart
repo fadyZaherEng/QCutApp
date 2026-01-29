@@ -119,7 +119,7 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
                           context: context,
                           onYes: () async {
                             final success = await controller
-                                .deleteAppointment(appointment.id);
+                                .deleteAppointment(appointment);
                             if (success && context.mounted) {
                               Get.back();
                             }
