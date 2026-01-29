@@ -190,7 +190,15 @@ class AuthController extends GetxController {
         }
         // You might want to show a success message
         ShowToast.showSuccessSnackBar(message: "loggedInSuccessfully".tr);
-        Get.offAllNamed(AppRouter.bottomNavigationBar);
+        
+        // Check if there's a pending route to return to
+        final pendingRoute = SharedPref().getString(PrefKeys.pendingRoute);
+        if (pendingRoute != null && pendingRoute.isNotEmpty) {
+          SharedPref().removePreference(PrefKeys.pendingRoute);
+          Get.offAllNamed(pendingRoute);
+        } else {
+          Get.offAllNamed(AppRouter.bottomNavigationBar);
+        }
       } else {
         errorMessage.value = responseBody['message'] ?? 'Failed to login';
         ShowToast.showError(message: errorMessage.value);

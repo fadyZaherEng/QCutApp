@@ -5,6 +5,7 @@ class PrefKeys {
   static const String id = 'id';
   static const String userRole = 'userRole';
   static const String saveMe = 'saveMe';
+  static const String pendingRoute = 'pendingRoute';
   static const String profilePic = 'profilePic';
   static const String coverPic = 'coverPic';
   static const String fullName = 'fullName';
