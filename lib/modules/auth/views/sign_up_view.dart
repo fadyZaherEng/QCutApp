@@ -17,7 +17,6 @@ import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/modules/auth/views/functions/validate_egyptian_phone_number.dart';
 import 'package:q_cut/modules/auth/views/functions/validate_arabic_text.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
-import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
