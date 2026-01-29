@@ -24,25 +24,23 @@ class CustomBarberListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
-    final displayBarbers = isSearching
-        ? controller.searchResults.value
-        : barbers ??
-            (isRecommended
-                ? controller.recommendedBarbers
-                : controller.nearbyBarbers);
-
     return SizedBox(
       height: 281 * 3.h,
       child: Obx(() {
         if (controller.isLoading.value) {
-          return SpinKitDoubleBounce(color: ColorsData.primary);
+          return Center(
+            child: SpinKitDoubleBounce(color: ColorsData.primary),
+          );
         }
 
-        if (displayBarbers.isEmpty) {
-          if (controller.isLoading.value) {
-            return SpinKitDoubleBounce(color: ColorsData.primary);
-          }
+        final displayBarbers = isSearching
+            ? controller.searchResults.toList()
+            : barbers ??
+                (isRecommended
+                    ? controller.recommendedBarbers.toList()
+                    : controller.nearbyBarbers.toList());
 
+        if (displayBarbers.isEmpty) {
           return Center(
             child: Padding(
               padding: EdgeInsets.only(
