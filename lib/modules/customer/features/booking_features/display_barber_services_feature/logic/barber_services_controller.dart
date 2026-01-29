@@ -62,7 +62,7 @@ class BarberServicesController extends GetxController {
     super.onClose();
   }
 
-  Future<void> fetchServices(String barberId) async {
+  Future<void> fetchServices(String barberId, {List<String>? preSelectedServiceIds}) async {
     isLoading.value = true;
     try {
       final response = await _apiCall.getData(Variables.SERVICE + barberId);
@@ -72,8 +72,20 @@ class BarberServicesController extends GetxController {
       if (response.statusCode == 200) {
         final servicesResponse = BarberServiceResponse.fromJson(responseBody);
         barberServices.value = servicesResponse.services;
-        selectedServices.value =
-            List.generate(barberServices.length, (index) => false);
+        
+        // Initialize selected status based on pre-selection or default to false
+        selectedServices.value = List.generate(barberServices.length, (index) {
+          if (preSelectedServiceIds != null && preSelectedServiceIds.isNotEmpty) {
+            final serviceId = barberServices[index].id;
+            return preSelectedServiceIds.contains(serviceId);
+          }
+          return false;
+        });
+        
+        // Update selection count
+        selectedCount.value = selectedServices.where((selected) => selected).length;
+        hasSelection.value = selectedCount.value > 0;
+        
       } else {
         errorMessage.value =
             responseBody['message'] ?? 'failedToFetchServices'.tr;

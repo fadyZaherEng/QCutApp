@@ -18,12 +18,34 @@ class BarberServicesView extends StatelessWidget {
 
   final BarberServicesController controller =
       Get.put(BarberServicesController());
-  final barber = Get.arguments as Barber;
+  final dynamic arguments = Get.arguments;
+  late final Barber barber;
+  List<String>? preSelectedServiceIds;
 
   @override
   Widget build(BuildContext context) {
+    if (arguments is Barber) {
+      barber = arguments;
+    } else if (arguments is Map) {
+      barber = arguments['barber'];
+      preSelectedServiceIds = arguments['preSelectedServiceIds'];
+    } else {
+      // Fallback or error handling
+      barber = Barber(
+          id: "",
+          fullName: "",
+          phoneNumber: "",
+          userType: "",
+          city: "",
+          isFavorite: false,
+          status: "",
+          offDay: [],
+          workingDays: [],
+          instagramPage: ""); // Should handle better
+    }
+
     controller.barberId.value = barber.id;
-    controller.fetchServices(barber.id);
+    controller.fetchServices(barber.id, preSelectedServiceIds: preSelectedServiceIds);
 
     return Scaffold(
       appBar: CustomAppBar(title: "barberServices".tr),

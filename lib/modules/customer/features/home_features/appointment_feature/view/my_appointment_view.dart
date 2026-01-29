@@ -105,10 +105,12 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
                 ),
               );
             } else {
-              return ListView.builder(
+              return ListView.separated(
                 controller: _scrollController,
                 itemCount: controller.filteredAppointments.length +
                     (controller.isLoadingMore.value ? 1 : 0),
+                separatorBuilder: (context, index) =>
+                SizedBox(height: 20.h),
                 itemBuilder: (context, index) {
                   if (index < controller.filteredAppointments.length) {
                     final appointment = controller.filteredAppointments[index];

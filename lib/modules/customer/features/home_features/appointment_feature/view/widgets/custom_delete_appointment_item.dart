@@ -311,20 +311,26 @@ class _CustomDeleteAppointmentItemState
           if (widget.appointment.status.toLowerCase() == 'completed')
             CustomBigButton(
               onPressed: () async {
+                // Extract service IDs from the appointment
+                final serviceIds = widget.appointment.services.map((s) => s.serviceId).toList();
+                
                 Get.toNamed(
                   AppRouter.barberServicesPath,
-                  arguments: Barber(
-                    id: widget.appointment.barber.id,
-                    fullName: widget.appointment.barber.fullName,
-                    phoneNumber: "",
-                    userType: widget.appointment.barber.userType,
-                    city: "",
-                    isFavorite: false,
-                    status: widget.appointment.status,
-                    offDay: [],
-                    workingDays: [],
-                    instagramPage: "",
-                  ),
+                  arguments: {
+                    'barber': Barber(
+                      id: widget.appointment.barber.id,
+                      fullName: widget.appointment.barber.fullName,
+                      phoneNumber: "",
+                      userType: widget.appointment.barber.userType,
+                      city: widget.appointment.barber.city,
+                      isFavorite: false,
+                      status: widget.appointment.status,
+                      offDay: [],
+                      workingDays: [],
+                      instagramPage: "",
+                    ),
+                    'preSelectedServiceIds': serviceIds,
+                  },
                 );
               },
               textData: "Book again".tr,
