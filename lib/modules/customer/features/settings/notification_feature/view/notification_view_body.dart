@@ -132,6 +132,20 @@ class NotificationCard extends StatelessWidget {
                   ),
                 ),
 
+              // Add "See Details" button for appointment related notifications
+              // if (viewModel.isAppointmentRelated(notification))
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: Center(
+                    child: CustomButton(
+                      width: 200.w,
+                      text: "seeDetails".tr,
+                      onPressed: () =>
+                          viewModel.goToAppointmentDetails(notification),
+                    ),
+                  ),
+                ),
+
               SizedBox(height: 4.h),
               // Time ago
               Align(

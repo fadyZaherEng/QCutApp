@@ -21,6 +21,7 @@ class CustomerAppointmentController extends GetxController {
   final RxInt currentPage = 1.obs;
   final RxBool hasMore = true.obs;
   final RxBool isFetching = false.obs;
+  final RxBool isFetchingById = false.obs; // Added
 
   // Filters
   final RxString statusFilter = 'pending'.obs;
@@ -217,6 +218,33 @@ class CustomerAppointmentController extends GetxController {
   /// Select an appointment
   void selectAppointment(CustomerAppointment appointment) {
     selectedAppointment.value = appointment;
+  }
+
+  /// Fetch a single appointment by ID
+  Future<CustomerAppointment?> fetchAppointmentById(String id) async {
+    isFetchingById.value = true;
+    try {
+      final response = await _apiCall.getData("${Variables.APPOINTMENT}$id");
+      print("Fetch Appointment By ID URL: ${Variables.APPOINTMENT}$id");
+      print("Fetch Appointment By ID Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        // The response might be the appointment object directly or wrapped in 'data'
+        final data = decoded is Map && decoded.containsKey("data")
+            ? decoded["data"]
+            : decoded;
+        return CustomerAppointment.fromJson(data);
+      } else {
+        print("Failed to fetch appointment: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Exception while fetching appointment by ID: $e");
+      return null;
+    } finally {
+      isFetchingById.value = false;
+    }
   }
 }
 

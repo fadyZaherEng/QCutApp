@@ -22,6 +22,7 @@ class QCutServicesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("num of users: $numberofUsers");
     controller.barberId.value = barber.id;
     controller.fetchServices(barber.id);
     return Scaffold(
@@ -65,7 +66,18 @@ class QCutServicesView extends StatelessWidget {
                       service: service,
                       isSelected: controller.selectedServices[index],
                       onPressed: () => controller.toggleService(index),
+                      numberofUsers: numberofUsers,
                       onQuantityChanged: (quantity) {
+                        if(quantity>numberofUsers) {
+                          Get.snackbar(
+                            "warning".tr,
+                            "${'youCannotSelectMoreThan'.tr} $numberofUsers ${'services'.tr}",
+                            backgroundColor: Colors.red.withOpacity(0.8),
+                            colorText: Colors.white,
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                          return;
+                        }
                         controller.updateServiceQuantity(index, quantity);
                       },
                     );
