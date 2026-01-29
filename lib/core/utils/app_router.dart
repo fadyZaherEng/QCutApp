@@ -7,6 +7,7 @@ import 'package:q_cut/modules/auth/views/otp_verification_view.dart';
 import 'package:q_cut/modules/auth/views/reset_password_view.dart';
 import 'package:q_cut/modules/auth/views/reset_phone_number_view.dart';
 import 'package:q_cut/modules/auth/views/sign_up_view.dart';
+import 'package:q_cut/modules/auth/views/legal_documents_view.dart'; // Added
 import 'package:q_cut/modules/barber/features/booking/presentation/views/b_available_appointments_view.dart';
 import 'package:q_cut/modules/barber/features/booking/presentation/views/b_booking_view.dart';
 import 'package:q_cut/modules/barber/features/booking/presentation/views/pay_to_qcut_feature/view/b_pay_to_q_cut_view.dart';
@@ -41,7 +42,7 @@ import 'package:q_cut/modules/customer/features/home/presentation/views/search_f
 import 'package:q_cut/modules/customer/features/home_features/home/views/selected_view.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/change_languges_view.dart';
 import 'package:q_cut/modules/customer/features/settings/chat_feature/chat_with_us_view.dart';
-import 'package:q_cut/modules/customer/features/settings/presentation/views/connect_us_view.dart';
+// import 'package:q_cut/modules/customer/features/settings/presentation/views/connect_us_view.dart';
 import 'package:q_cut/modules/customer/features/settings/notification_feature/view/notification_view.dart';
 import 'package:q_cut/modules/customer/features/settings/presentation/views/settings_view.dart';
 import 'package:q_cut/splash/views/select_services_view.dart';
@@ -110,6 +111,8 @@ abstract class AppRouter {
   static const String successScreenPath = "/successScreenPath";
   static const String bottomNavigationBar = "/bottomNavigationBar";
   static const String citySelectionPath = "/citySelectionPath";
+  static const String termsPath = "/termsPath"; // Added
+  static const String privacyPolicyPath = "/privacyPolicyPath"; // Added
 
   // Define the GetPage routes
   static final List<GetPage> routes = [
@@ -195,10 +198,10 @@ abstract class AppRouter {
       page: () => HistoryView(),
       binding: HistoryBinding(),
     ),
-    GetPage(
-      name: conectUsPath,
-      page: () => const ConnectUsView(),
-    ),
+    // GetPage(
+    //   name: conectUsPath,
+    //   page: () => const ConnectUsView(),
+    // ),
     GetPage(
       name: chatWithUsPath,
       page: () => const ChatWithUsView(),
@@ -307,6 +310,14 @@ abstract class AppRouter {
       name: citySelectionPath,
       page: () => const CitySelectionView(),
       binding: CityBinding(),
+    ),
+    GetPage(
+      name: termsPath,
+      page: () => const LegalDocumentsView(titleKey: "Terms and Conditions"),
+    ),
+    GetPage(
+      name: privacyPolicyPath,
+      page: () => const LegalDocumentsView(titleKey: "privacyPolicy"),
     ),
   ];
 }

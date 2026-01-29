@@ -21,6 +21,11 @@ class NotificationViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Initialize from controller's current state
+    isLoading.value = _controller.isLoading.value;
+    isError.value = _controller.isError.value;
+    errorMessage.value = _controller.errorMessage.value;
+
     // Listen to changes in the notification controller
     ever(_controller.notifications, _updateViewModel);
     ever(_controller.isLoading, (loading) => isLoading.value = loading);

@@ -296,16 +296,20 @@ class _MyProfileViewState extends State<MyProfileView> {
                         ),
                         buildDivider(),
                         _buildDrawerItem("Terms and Conditions".tr,
-                            Icons.integration_instructions_outlined, () {}),
+                            Icons.integration_instructions_outlined, () {
+                              Get.toNamed(AppRouter.termsPath);
+                            }),
                         buildDivider(),
                         _buildDrawerItem(
-                            "Privacy Policy".tr, Icons.policy_outlined, () {}),
+                            "privacyPolicy".tr, Icons.policy_outlined, () {
+                              Get.toNamed(AppRouter.privacyPolicyPath);
+                            }),
                         buildDivider(),
                         buildDrawerItem(
-                          "Contact us".tr,
+                          "contact_qcut".tr,
                           AssetsData.callIcon,
                           () {
-                            Get.toNamed(AppRouter.conectUsPath);
+                            Get.toNamed(AppRouter.chatWithUsPath);
                           },
                         ),
                         buildDivider(),

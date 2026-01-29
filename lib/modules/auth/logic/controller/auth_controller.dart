@@ -222,6 +222,7 @@ class AuthController extends GetxController {
       final responseBody = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        print("dddddddddddddddddddddddd ${responseBody}");
         // Clear registration form data
         clearForm();
         ShowToast.showSuccessSnackBar(message: 'OTP verified successfully');
@@ -257,6 +258,7 @@ class AuthController extends GetxController {
       final responseBody = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        print("dddddddddddddddddddddddd ${responseBody}");
         ShowToast.showSuccessSnackBar(message: 'OTP resent successfully');
       } else {
         errorMessage.value = responseBody['message'] ?? 'Failed to resend OTP';

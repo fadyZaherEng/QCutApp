@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/widgets/custom_app_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
@@ -8,7 +9,6 @@ import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/modules/auth/logic/controller/otp_verification_controller.dart';
-import 'package:q_cut/modules/auth/views/functions/show_reset_password_bottom_sheet.dart';
 import 'package:q_cut/modules/auth/views/functions/show_reset_phone_bottom_sheet.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_pin_input.dart';
 
@@ -79,49 +79,59 @@ class OtpVerificationResetCaseView extends StatelessWidget {
                         'didntReceiveOTP'.tr,
                         style: Styles.textStyleS14W400(),
                       ),
-                      InkWell(
-                          onTap: () {
-                            // Implement resend OTP
-                            controller.resendOtp(phoneNumber);
-                          },
+                      Obx(
+                        () => InkWell(
+                          onTap: controller.timerSeconds.value > 0
+                              ? null
+                              : () {
+                                  // Implement resend OTP
+                                  controller.resendOtp(phoneNumber);
+                                  controller.otpController.clear();
+                                },
                           child: Text(
-                            'clickToResend'.tr,
+                            controller.timerSeconds.value > 0
+                                ? " ${controller.timerSeconds.value} s"
+                                : 'clickToResend'.tr,
                             style: Styles.textStyleS14W400(
-                                color: ColorsData.primary),
-                          )),
+                                color: controller.timerSeconds.value > 0
+                                    ? Colors.grey
+                                    : ColorsData.primary),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 8.h),
-                  Obx(() => CustomBigButton(
-                        textData: controller.isLoading.value
-                            ? "verifying".tr
-                            : "resetPassword".tr,
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : () {
-                                if (_otpVerificationFormKey.currentState!
-                                    .validate()) {
-                                  if (resetCase == false) {
-                                    showResetPhoneBottomSheet(context);
-                                  } else if (resetCase == true) {
-                                    // Create a map with the data first, then use Get.put()
-                                    final Map<String, dynamic>
-                                        resetPasswordData = {
-                                      "phoneNumber": phoneNumber,
-                                      "otp": controller.otpController.text,
-                                    };
+                  Obx(
+                    () => CustomBigButton(
+                      textData: controller.isLoading.value
+                          ? "verifying".tr
+                          : "resetPassword".tr,
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () async {
+                              if (_otpVerificationFormKey.currentState!
+                                  .validate()) {
+                                if (resetCase == false) {
+                                  showResetPhoneBottomSheet(context);
+                                } else if (resetCase == true) {
+                                  // Verify OTP first logic (simulated in controller for now)
+                                  try {
+                                    // Optional: await controller.verifyOtp(...)
 
-                                    // Use put forcefully to ensure it's available
-                                    Get.put<Map<String, dynamic>>(
-                                        resetPasswordData,
-                                        tag: "resetPasswordData",
-                                        permanent: false);
-
-                                    showResetPasswordBottomSheet(context);
+                                    Get.toNamed(AppRouter.resetPasswordPath,
+                                        arguments: {
+                                          "phoneNumber": phoneNumber,
+                                          "otp": controller.otpController.text,
+                                        });
+                                  } catch (e) {
+                                    // Error handled in controller
                                   }
                                 }
-                              },
-                      )),
+                              }
+                            },
+                    ),
+                  ),
                 ],
               ),
             ),

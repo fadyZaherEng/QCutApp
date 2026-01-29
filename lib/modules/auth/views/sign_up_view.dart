@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/services/shared_pref/pref_keys.dart';
 import 'package:q_cut/core/services/shared_pref/shared_pref.dart';
+import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/core/utils/styles.dart';
@@ -233,9 +234,43 @@ class _SignUpViewState extends State<SignUpView> {
                             },
                           ),
                           SizedBox(width: 10.w),
-                          Text(
-                            'iAgreeWithPrivacyPolicy'.tr,
-                            style: Styles.textStyleS14W400(),
+                          Expanded(
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  'iAgreeWith'.tr,
+                                  style: Styles.textStyleS14W400(),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.toNamed(AppRouter.privacyPolicyPath);
+                                  },
+                                  child: Text(
+                                    'privacyPolicy'.tr,
+                                    style: Styles.textStyleS14W400().copyWith(
+                                      color: ColorsData.primary,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  " ${'and'.tr} ",
+                                  style: Styles.textStyleS14W400(),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                     Get.toNamed(AppRouter.termsPath);
+                                  },
+                                  child: Text(
+                                    'Terms and Conditions'.tr,
+                                    style: Styles.textStyleS14W400().copyWith(
+                                      color: ColorsData.primary,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

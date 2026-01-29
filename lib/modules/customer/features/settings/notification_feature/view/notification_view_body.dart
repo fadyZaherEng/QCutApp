@@ -17,59 +17,16 @@ class NotificationViewBody extends StatelessWidget {
     final viewModel = Get.put(NotificationViewModel());
 
     return Obx(() {
-      // Show loading indicator while fetching data
-      if (viewModel.isLoading.value &&
-          viewModel.displayedNotifications.isEmpty) {
+      // Show loading yellow circle while fetching data or if the list is empty
+      if (viewModel.displayedNotifications.isEmpty) {
         return Center(
-          child: SpinKitDoubleBounce(
+          child: CircularProgressIndicator(
             color: ColorsData.primary,
           ),
         );
       }
 
-      // Show error message if loading failed
-      if (viewModel.isError.value && viewModel.displayedNotifications.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Failed to load notifications".tr,
-                style: Styles.textStyleS14W700(),
-              ),
-              ElevatedButton(
-                onPressed: viewModel.refreshNotifications,
-                child: Text("Retry".tr),
-              ),
-            ],
-          ),
-        );
-      }
-
-      // Show empty state if no notifications
-      if (viewModel.displayedNotifications.isEmpty &&
-          !viewModel.isLoading.value &&
-          !viewModel.isError.value) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.notifications_off, size: 48, color: Colors.grey),
-              SizedBox(height: 12),
-              Text(
-                "No notifications available".tr,
-                style: Styles.textStyleS14W700(),
-              ),
-              ElevatedButton(
-                onPressed: viewModel.refreshNotifications,
-                child: Text("Refresh".tr),
-              ),
-            ],
-          ),
-        );
-      }
-
-      // Display notifications
+      // Display notifications if not empty
       return RefreshIndicator(
         onRefresh: () async => viewModel.refreshNotifications(),
         child: ListView.separated(
