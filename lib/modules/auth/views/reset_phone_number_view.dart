@@ -10,6 +10,8 @@ import 'package:q_cut/core/utils/widgets/custom_app_bar.dart';
 import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/modules/auth/views/functions/validate_egyptian_phone_number.dart';
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
+import 'package:q_cut/core/utils/network/api.dart';
+import 'package:q_cut/core/utils/network/network_helper.dart';
 
 class ResetPhoneNumberView extends StatelessWidget {
   ResetPhoneNumberView({super.key});
@@ -65,10 +67,28 @@ class ResetPhoneNumberView extends StatelessWidget {
                     textData: "sendOTPVerification".tr,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.toNamed(
-                          AppRouter.otpVerificationResetCasePath,
-                          arguments: "RESET_PHONE",
-                        );
+                        // Call API to send OTP
+                        NetworkAPICall().postDataAsGuest({
+                          "phoneNumber": _phoneNumberController.text
+                        }, Variables.FORGET_PASSWORD).then((response) {
+                          if (response.statusCode == 200 ||
+                              response.statusCode == 201) {
+                            ShowToast.showSuccessSnackBar(
+                                message: "OTP is 123456".tr);
+                            Get.toNamed(
+                              AppRouter.otpVerificationResetCasePath,
+                              arguments: {
+                                "isFromResetPassword": false,
+                                "phoneNumber": _phoneNumberController.text,
+                              },
+                            );
+                          } else {
+                            ShowToast.showError(
+                                message: "Failed to send OTP".tr);
+                          }
+                        }).catchError((e) {
+                          ShowToast.showError(message: "Error: $e");
+                        });
                       }
                     },
                   ),

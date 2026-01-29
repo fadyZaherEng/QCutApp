@@ -41,7 +41,7 @@ class AppointmentDetailView extends StatelessWidget {
                           context: context,
                           onYes: () async {
                             final success = await controller
-                                .deleteAppointment(appointment.id);
+                                .deleteAppointment(appointment);
                             if (success) {
                               Get.back(); // Return to appointments list
                             }

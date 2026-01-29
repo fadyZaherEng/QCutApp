@@ -145,17 +145,27 @@ class CustomerAppointmentController extends GetxController {
   }
 
   /// Delete appointment
-  Future<bool> deleteAppointment(String appointmentId) async {
+  Future<bool> deleteAppointment(CustomerAppointment appointment) async {
+    // Check if cancellation is allowed (at least 20 mins before)
+    final now = DateTime.now();
+    final difference = appointment.startDate.difference(now);
+
+    if (difference.inMinutes < 20) {
+      ShowToast.showError(
+          message: 'cancellationRestrictionMessage'.tr);
+      return false;
+    }
+
     try {
-      final url = "${Variables.APPOINTMENT}cancel/$appointmentId";
+      final url = "${Variables.APPOINTMENT}cancel/${appointment.id}";
       print("DELETE URL: $url");
 
       final response = await _apiCall.putData(url, []);
       print("DELETE Response: ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        appointments.removeWhere((a) => a.id == appointmentId);
-        filteredAppointments.removeWhere((a) => a.id == appointmentId);
+        appointments.removeWhere((a) => a.id == appointment.id);
+        filteredAppointments.removeWhere((a) => a.id == appointment.id);
 
         ShowToast.showSuccessSnackBar(
             message: 'Appointment deleted successfully');
@@ -175,7 +185,7 @@ class CustomerAppointmentController extends GetxController {
   /// Booking Again
   Future<bool> bookingAgainAppointment(
       CustomerAppointment customerAppointment) async {
-    await deleteAppointment(customerAppointment.id);
+    await deleteAppointment(customerAppointment);
 
     try {
       final response = await _apiCall.putData(Variables.APPOINTMENT, {

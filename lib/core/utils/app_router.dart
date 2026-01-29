@@ -7,7 +7,8 @@ import 'package:q_cut/modules/auth/views/otp_verification_view.dart';
 import 'package:q_cut/modules/auth/views/reset_password_view.dart';
 import 'package:q_cut/modules/auth/views/reset_phone_number_view.dart';
 import 'package:q_cut/modules/auth/views/sign_up_view.dart';
-import 'package:q_cut/modules/auth/views/legal_documents_view.dart'; // Added
+import 'package:q_cut/modules/auth/views/legal_documents_view.dart';
+import 'package:q_cut/modules/auth/views/update_phone_number_view.dart'; // Added
 import 'package:q_cut/modules/barber/features/booking/presentation/views/b_available_appointments_view.dart';
 import 'package:q_cut/modules/barber/features/booking/presentation/views/b_booking_view.dart';
 import 'package:q_cut/modules/barber/features/booking/presentation/views/pay_to_qcut_feature/view/b_pay_to_q_cut_view.dart';
@@ -72,6 +73,7 @@ abstract class AppRouter {
   static const String botpVerificationResetCasePath =
       "/botpVerificationResetCasePath";
   static const String bresetPhoneNumberPath = "/bresetPhoneNumberPath";
+  static const String updatePhoneNumberPath = "/updatePhoneNumberPath"; // Added
   static const String homPath = "/homPath";
   static const String selectedPath = "/selectedPath";
   static const String myProfilePath = "/myProfilePath";
@@ -163,6 +165,10 @@ abstract class AppRouter {
     GetPage(
       name: otpVerificationResetCasePath,
       page: () => OtpVerificationResetCaseView(),
+    ),
+    GetPage(
+      name: updatePhoneNumberPath,
+      page: () => UpdatePhoneNumberView(),
     ),
     GetPage(
       name: resetPhoneNumberPath,
