@@ -65,7 +65,7 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
           },
           child: Obx(() {
             if (controller.isLoading.value && controller.appointments.isEmpty) {
-              return Center(
+              return const Center(
                 child: SpinKitDoubleBounce(
                   color: ColorsData.primary,
                 ),
@@ -134,8 +134,8 @@ class _MyAppointmentViewState extends State<MyAppointmentView> {
                     );
                   } else {
                     // loader at bottom while loading more
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    return const Padding(
+                      padding: EdgeInsets.all(16.0),
                       child: Center(
                         child: SpinKitThreeBounce(
                           color: ColorsData.primary,

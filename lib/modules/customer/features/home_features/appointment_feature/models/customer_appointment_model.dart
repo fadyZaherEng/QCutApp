@@ -109,20 +109,44 @@ class BarberInfo {
   final String fullName;
   final String userType;
   final String city;
+  final String? barberShop;
+  final List<double>? locationCoordinates;
 
   BarberInfo({
     required this.id,
     required this.fullName,
     required this.userType,
     required this.city,
+    this.barberShop,
+    this.locationCoordinates,
   });
 
   factory BarberInfo.fromJson(Map<String, dynamic> json) {
+    List<double>? coords;
+    // Check if location info exists and handle both Map and List cases
+    if (json['barberShopLocation'] != null) {
+      if (json['barberShopLocation'] is Map &&
+          json['barberShopLocation']['coordinates'] != null) {
+        coords = List<double>.from(json['barberShopLocation']['coordinates']
+            .map((x) => (x as num).toDouble()));
+      } else if (json['barberShopLocation'] is List &&
+          json['barberShopLocation'].isNotEmpty) {
+        // Assuming if it's a list, the first item is the location object
+        var loc = json['barberShopLocation'][0];
+        if (loc is Map && loc['coordinates'] != null) {
+          coords = List<double>.from(
+              loc['coordinates'].map((x) => (x as num).toDouble()));
+        }
+      }
+    }
+
     return BarberInfo(
       id: json['_id'],
       fullName: json['fullName'],
       userType: json['userType'],
-      city: json['city'],
+      city: json['city'] ?? "",
+      barberShop: json['barberShop'],
+      locationCoordinates: coords,
     );
   }
 }
