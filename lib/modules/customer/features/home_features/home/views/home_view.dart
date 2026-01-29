@@ -18,6 +18,7 @@ import 'package:q_cut/modules/customer/features/home_features/home/views/widgets
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/nearby_salons_section.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/logic/profile_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/profile_feature/models/customer_profile_model.dart';
+import 'package:q_cut/core/utils/auth/auth_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeView extends StatefulWidget {
@@ -205,6 +206,76 @@ class _HomeViewState extends State<HomeView> {
                         });
                       },
                     ),
+                    
+                    // Guest user banner
+                    if (!AuthHelper.isAuthenticated()) ...[
+                      SizedBox(height: 12.h),
+                      Container(
+                        padding: EdgeInsets.all(16.w),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              ColorsData.primary.withOpacity(0.1),
+                              ColorsData.primary.withOpacity(0.05),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: ColorsData.primary.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'welcomeGuest'.tr,
+                                    style: Styles.textStyleS14W700(
+                                      color: ColorsData.primary,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    'loginToAccessAllFeatures'.tr,
+                                    style: Styles.textStyleS12W400(
+                                      color: ColorsData.secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.toNamed(AppRouter.loginPath);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorsData.primary,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 10.h,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                              child: Text(
+                                'login'.tr,
+                                style: Styles.textStyleS14W600(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    
                     SizedBox(height: 12.h),
                     Row(
                       children: [
