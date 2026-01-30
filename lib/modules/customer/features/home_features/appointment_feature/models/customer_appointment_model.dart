@@ -54,7 +54,7 @@ class CustomerAppointment {
     return CustomerAppointment(
       id: json['_id'],
       barber: BarberInfo.fromJson(json['barber']),
-      user: json['user'],
+      user: (json['user'] is Map) ? json['user']['_id'] : json['user'],
       userName: json['userName'],
       services: serviceList,
       price: (json['price'] is int)

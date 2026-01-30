@@ -68,7 +68,7 @@ class NotificationViewModel extends GetxController {
 
   String getNotificationMessage(NotificationModel notification) {
     //check for language
-    Locale currentLocale = Get.locale ?? Locale('en');
+    Locale currentLocale = Get.locale ?? const Locale('en');
     print("Current Locale: ${currentLocale.languageCode}");
     if (currentLocale.languageCode == 'ar' &&
         notification.messageAr.isNotEmpty) {
@@ -128,7 +128,7 @@ class NotificationViewModel extends GetxController {
 
     // Show loading dialog
     Get.dialog(
-      Center(
+      const Center(
         child: SpinKitDoubleBounce(
           color: ColorsData.primary,
         ),
@@ -139,11 +139,8 @@ class NotificationViewModel extends GetxController {
     try {
       final appointmentController = Get.put(CustomerAppointmentController());
       final appointment =
-          await appointmentController.fetchAppointmentById(notification.id);
-      print("Fetched appointment: ${notification.id}");
-      print("Fetched appointment: ${notification.process}");
-      print("Fetched appointment: ${notification.processId}");
-      print("Fetched appointment: ${notification.message}");
+          await appointmentController.fetchAppointmentById(notification.appointmentId);
+      print("Fetched appointment: ${notification.appointmentId}");
       Get.back(); // Close loading dialog
 
       if (appointment != null) {
