@@ -112,6 +112,7 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               Form(
                 key: _authController.signupFormKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Column(

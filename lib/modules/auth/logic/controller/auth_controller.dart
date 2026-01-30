@@ -47,10 +47,10 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    fullNameController.dispose();
+    // fullNameController.dispose();
     // phoneNumberController.dispose();
     // passwordController.dispose();
-    confirmPasswordController.dispose();
+    // confirmPasswordController.dispose();
     super.onClose();
   }
 
@@ -104,7 +104,7 @@ class AuthController extends GetxController {
         }
 
         ShowToast.showSuccessSnackBar(
-            message: 'Account created successfully'.tr);
+            message: 'Account created successfully ِAnd OTP Verification is 123456'.tr);
 
         Get.to(() => OtpVerificationView(userId: userId.value));
       } else {

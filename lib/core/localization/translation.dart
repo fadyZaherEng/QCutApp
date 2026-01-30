@@ -478,6 +478,8 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "هل أنت متأكد أنك تريد حذف حسابك؟",
           "Account created successfully": "تم إنشاء الحساب بنجاح",
+          "Account created successfully ِAnd OTP Verification is 123456":
+              "تم إنشاء الحساب بنجاح، رمز التحقق هو 123456",
           "Search for the time": "ابحث عن الوقت",
           "favorites": "المفضلة",
           "Pending": "قيد الانتظار",
@@ -1017,6 +1019,8 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "Are you sure you want to delete your Account?",
           "Account created successfully": "Account created successfully",
+          "Account created successfully ِAnd OTP Verification is 123456":
+              "Account created successfully And OTP Verification is 123456",
 
           "Search for the time": "Search for the time",
           "favorites": "Favorites",
@@ -1529,6 +1533,8 @@ class MyTranslation extends Translations {
           "Are you sure you want to delete your Account?":
               "האם אתה בטוח שברצונך למחוק את החשבון שלך?",
           "Account created successfully": "החשבון נוצר בהצלחה",
+          "Account created successfully ِAnd OTP Verification is 123456":
+              "החשבון נוצר בהצלחה, קוד האימות הוא 123456",
           "Search for the time": "חפש לפי זמן",
           "favorites": "מועדפים",
           "Pending": "ממתין",

@@ -154,6 +154,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           child: Center(
             child: Form(
               key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
                   SizedBox(height: 30.h),

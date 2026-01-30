@@ -36,6 +36,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             child: Center(
               child: Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   children: [
                     SvgPicture.asset(AssetsData.forgetPasswordImage),
