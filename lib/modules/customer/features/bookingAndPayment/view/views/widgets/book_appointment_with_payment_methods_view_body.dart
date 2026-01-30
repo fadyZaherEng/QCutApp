@@ -30,12 +30,22 @@ class BookAppointmentWithPaymentMethodsViewBody
         as BookingPaymentDetailsModel;
     final pay = Get.arguments["pay"];
     final barber = Get.arguments["barber"];
+    final serviceList = Get.arguments["serviceList"] as List<dynamic>?;
+    
+    int totalConsumers = 0;
+    if (serviceList != null) {
+      totalConsumers = serviceList.fold<int>(0, (sum, item) => sum + (item['numberOfUsers'] as int));
+    }
+
     BookPaymentItemModel ff = BookPaymentItemModel(
       shopName: payment.salonName,
       bookingDay: payment.appointmentDate,
       bookingTime: payment.appointmentTime,
       price: payment.servicePrice,
       service: payment.serviceTitle,
+      servicesList: serviceList,
+      totalServicesQty: serviceList?.length ?? 1,
+      totalConsumersQty: totalConsumers > 0 ? totalConsumers : 1,
     );
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 17.w),

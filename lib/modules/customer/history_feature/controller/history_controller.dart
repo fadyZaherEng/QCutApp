@@ -110,13 +110,13 @@ class HistoryController extends GetxController {
     if (isPrevious) {
       if (value == 'all') {
         previousAppointments.value = previousOriginal.toList();
-      } else if (value == 'attended') {
+      } else if (value == 'attended'|| value == 'completed') {
         previousAppointments.value = previousOriginal
             .where((a) =>
                 a.status.toLowerCase() == 'attended' ||
                 a.status.toLowerCase() == 'completed')
             .toList();
-      } else if (value == 'NotCome') {
+      } else if (value == 'NotCome'|| value == 'missed') {
         previousAppointments.value = previousOriginal
             .where((a) =>
                 a.status.toLowerCase() == 'notcome' ||

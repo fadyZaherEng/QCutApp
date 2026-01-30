@@ -156,11 +156,11 @@ abstract class AppRouter {
     ),
     GetPage(
       name: otpVerificationPath,
-      page: () => OtpVerificationView(userId: ""),
+      page: () => const OtpVerificationView(userId: ""),
     ),
     GetPage(
       name: resetPasswordPath,
-      page: () => ResetPasswordView(),
+      page: () => const ResetPasswordView(),
     ),
     GetPage(
       name: otpVerificationResetCasePath,
@@ -201,7 +201,7 @@ abstract class AppRouter {
     ),
     GetPage(
       name: historyPath,
-      page: () => HistoryView(),
+      page: () => const HistoryView(),
       binding: HistoryBinding(),
     ),
     // GetPage(
@@ -226,7 +226,7 @@ abstract class AppRouter {
     ),
     GetPage(
       name: bookAppointmentPath,
-      page: () => BookAppointmentView(),
+      page: () => const BookAppointmentView(),
     ),
     GetPage(
       name: bookAppointmentWithPaymentMethodsPath,
@@ -310,7 +310,7 @@ abstract class AppRouter {
     ),
     GetPage(
       name: successScreenPath,
-      page: () => SuccessScreen(),
+      page: () => const SuccessScreen(),
     ),
     GetPage(
       name: citySelectionPath,

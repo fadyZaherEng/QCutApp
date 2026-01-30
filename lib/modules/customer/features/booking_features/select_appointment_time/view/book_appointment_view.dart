@@ -83,7 +83,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SpinKitDoubleBounce(color: ColorsData.primary),
+                  const SpinKitDoubleBounce(color: ColorsData.primary),
                   SizedBox(height: 20.h),
                   Text("loadingAvailableAppointments".tr,
                       style: TextStyle(fontSize: 16.sp, color: Colors.grey))
@@ -96,15 +96,18 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomBookAppointmentItem(
-                  services: selectedServices!.barberServices,
-                  quantities: selectedServices.services
-                      .asMap()
-                      .entries
-                      .map((entry) => entry.value.numberOfUsers)
-                      .toList(),
-                  barber: barber,
-                ),
+                if (selectedServices != null)
+                  CustomBookAppointmentItem(
+                    services: selectedServices.barberServices,
+                    quantities: selectedServices.services
+                        .asMap()
+                        .entries
+                        .map((entry) => entry.value.numberOfUsers)
+                        .toList(),
+                    barber: barber,
+                  )
+                else
+                   Center(child: Text("errorLoadingData".tr)),
                 SizedBox(height: 17.h),
                 Align(
                   alignment: Alignment.center,
@@ -121,8 +124,10 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                     selectedDay: controller.selectedDay.value,
                     onDaySelected: (day) {
                       print("${"daySelectedInUI".tr}: $day");
-                      controller.changeSelectedDay(
-                          day, selectedServices.onHolding);
+                      if (selectedServices != null) {
+                        controller.changeSelectedDay(
+                            day, selectedServices.onHolding);
+                      }
                     },
                     titleSimpleDaysPicker: "selectDay".tr,
                   );
@@ -139,7 +144,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                 // Use GetBuilder with specific ID for time slots to prevent full UI rebuilds
                 GetBuilder<SelectAppointmentTimeController>(
                   id: 'timeSlots',
-                  builder: (controller) => CustomAvailableTime(),
+                  builder: (controller) => const CustomAvailableTime(),
                 ),
                 SizedBox(height: 24.h),
                 Text(
@@ -154,9 +159,11 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        Get.toNamed(AppRouter.onHoldAppointmentPath,
-                            arguments:
-                                selectedServices.copyWith(onHolding: true));
+                        if (selectedServices != null) {
+                          Get.toNamed(AppRouter.onHoldAppointmentPath,
+                              arguments:
+                                  selectedServices.copyWith(onHolding: true));
+                        }
                       },
                       child: Text(
                         textAlign: TextAlign.left,
@@ -205,13 +212,17 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                       textData: "confirm".tr,
                       onPressed: isSlotSelected
                           ? () {
+                              if (selectedServices == null) return;
                               print("confirmButtonPressed".tr);
                               final slot = controller.selectedTimeSlot.value!;
                               final startTime =
-                                  DateFormat('h:mm').format(slot.startTime);
+                                  DateFormat('HH:mm').format(slot.startTime);
+                              final endTime =
+                                  DateFormat('HH:mm').format(slot.endTime);
+                              final timeRange = "$startTime-$endTime";
 
                               // 🟢 جهز بيانات الخدمات مرة واحدة
-                              final services = selectedServices!.services;
+                              final services = selectedServices.services;
                               final barberServices =
                                   selectedServices.barberServices!;
 
@@ -258,7 +269,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                                 barberImage: controller.barberImage.value,
                                 salonName: barberServices.first.name,
                                 appointmentDate: slot.dayName.toString(),
-                                appointmentTime: startTime,
+                                appointmentTime: timeRange,
                                 serviceDuration:
                                     "20", // TODO: احسبها ديناميك لو متاحة
                               );
@@ -289,6 +300,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                                   "bookingPaymentDetailsModel":
                                       bookingPaymentDetailsModel,
                                   "barber": barber,
+                                  "serviceList": serviceList,
                                 },
                               );
                             }

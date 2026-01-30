@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
 import 'package:q_cut/modules/customer/history_feature/view/previous_bookings_view.dart';
@@ -33,8 +34,8 @@ class HistoryView extends GetView<HistoryController> {
       body: Obx(() {
         if (controller.isLoading.value &&
             controller.previousAppointments.isEmpty) {
-          return Center(
-            child: CircularProgressIndicator(color: ColorsData.primary),
+          return   const Center(
+            child: SpinKitDoubleBounce(color: ColorsData.primary),
           );
         }
         
@@ -47,7 +48,7 @@ class HistoryView extends GetView<HistoryController> {
                   controller.errorMessage.value.tr,
                   style: const TextStyle(color: Colors.red),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => controller.fetchAppointments("previous"),
                   child: Text('Retry'.tr),

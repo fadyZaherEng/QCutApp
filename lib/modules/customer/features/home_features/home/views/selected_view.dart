@@ -388,7 +388,7 @@ class _SelectedViewState extends State<SelectedView> {
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 20.h),
-                        child: SpinKitDoubleBounce(
+                        child: const SpinKitDoubleBounce(
                           color: ColorsData.primary,
                         ),
                       ),
@@ -439,7 +439,7 @@ class _SelectedViewState extends State<SelectedView> {
                         padding: EdgeInsets.only(top: 20.h, bottom: 80.h),
                         child: Column(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.photo_library_outlined,
                               size: 40,
                               color: Colors.grey,
@@ -509,7 +509,7 @@ class _SelectedViewState extends State<SelectedView> {
                                   width: 108.w,
                                   height: 94.h,
                                   color: Colors.grey[200],
-                                  child: Center(
+                                  child: const Center(
                                     child: SpinKitDoubleBounce(
                                       color: ColorsData.primary,
                                     ),
