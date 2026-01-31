@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,6 +34,9 @@ class BProfileController extends GetxController {
   final RxBool isGalleryLoading = false.obs;
   final RxBool isUploadingPhotos = false.obs;
 
+  // Walk-in days
+  final RxList<DateTime> walkInDates = <DateTime>[].obs;
+
   // UI States
   final RxBool isLoading = false.obs;
   final RxBool isServicesLoading = false.obs;
@@ -58,6 +62,7 @@ class BProfileController extends GetxController {
   void onInit() async {
     super.onInit();
     await fetchProfileData();
+    loadWalkInDaysFromProfile();
     await fetchBarberServices();
     await fetchGallery(); // Fetch gallery on init
   }
@@ -245,7 +250,7 @@ class BProfileController extends GetxController {
       };
 
       // Ensure the URL is properly formatted with the API base URL
-      final endpoint = Variables.UPDATE_BARBER_SERVICE;
+      const endpoint = Variables.UPDATE_BARBER_SERVICE;
       final url = endpoint + (endpoint.endsWith('/') ? '' : '/') + serviceId;
 
       print('API URL: $url');
@@ -529,4 +534,78 @@ class BProfileController extends GetxController {
 
     return profileData.value!.city;
   }
+
+  // Walk-in days management
+  // Check if a date is a walk-in day
+  bool isWalkInDay(DateTime date) {
+    if (profileData.value?.walkIn == null || profileData.value!.walkIn!.isEmpty) {
+      return false;
+    }
+    
+    // Check if the date falls within any walk-in range
+    return profileData.value!.walkIn!.any((record) => record.containsDate(date));
+  }
+
+  // Load walk-in days from profile data
+  void loadWalkInDaysFromProfile() {
+    if (profileData.value?.walkIn != null) {
+      walkInDates.clear();
+      // Extract all dates from walk-in ranges
+      for (var record in profileData.value!.walkIn!) {
+        final start = DateTime.fromMillisecondsSinceEpoch(record.startDate);
+        final end = DateTime.fromMillisecondsSinceEpoch(record.endDate);
+        
+        // Add all dates in the range
+        for (var date = start; 
+             date.isBefore(end) || date.isAtSameMomentAs(end); 
+             date = date.add(const Duration(days: 1))) {
+          walkInDates.add(DateTime(date.year, date.month, date.day));
+        }
+      }
+    }
+  }
+
+  // Update walk-in ranges
+  Future<void> updateWalkInRanges(List<Map<String, DateTime>> ranges) async {
+    try {
+      if (ranges.isEmpty) {
+        ShowToast.showError(message: "Please select at least one range");
+        return;
+      }
+
+      List<Map<String, dynamic>> walkInRecords = [];
+      
+      for (var range in ranges) {
+        final start = range['start']!;
+        final end = range['end'] ?? start;
+        
+        // Ensure start is at 00:00:00 and end is at 23:59:59
+        final startOfDay = DateTime(start.year, start.month, start.day, 0, 0, 0);
+        final endOfDay = DateTime(end.year, end.month, end.day, 23, 59, 59);
+        
+        walkInRecords.add({
+          "startDate": startOfDay.millisecondsSinceEpoch,
+          "endDate": endOfDay.millisecondsSinceEpoch,
+        });
+      }
+      print("Walk-in records to update: $walkInRecords");
+      final response = await _apiCall.putData(Variables.UPDATE_WALK_IN, {
+        "walkInRecords": walkInRecords
+      });
+         print("Update walk-in response: ${response.statusCode}, ${response.body}");
+      if (response.statusCode == 200) {
+        // Refresh profile to get updated walk-in data
+        await fetchProfileData();
+        loadWalkInDaysFromProfile();
+        ShowToast.showSuccessSnackBar(message: "Walk-In ranges updated successfully");
+        update();
+      } else {
+        final responseBody = json.decode(response.body);
+        ShowToast.showError(message: responseBody['message'] ?? "Failed to update walk-in days");
+      }
+    } catch (e) {
+      ShowToast.showError(message: "Error updating walk-in days: $e");
+    }
+  }
 }
+

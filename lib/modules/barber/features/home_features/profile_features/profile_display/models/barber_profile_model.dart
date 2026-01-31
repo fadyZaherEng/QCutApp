@@ -29,6 +29,7 @@ class BarberProfileData {
   String bankAccountNumber;
   String instagramPage;
   BarberShopLocation barberShopLocation;
+  List<WalkInRecord>? walkIn;
 
   BarberProfileData({
     required this.id,
@@ -48,6 +49,7 @@ class BarberProfileData {
     required this.bankAccountNumber,
     required this.instagramPage,
     required this.barberShopLocation,
+    this.walkIn,
   });
 
   factory BarberProfileData.fromJson(Map<String, dynamic> json) {
@@ -95,6 +97,10 @@ class BarberProfileData {
       barberShop: json['barberShop'] ?? '',
       bankAccountNumber: json['bankAccountNumber'] ?? '',
       instagramPage: json['instagramPage'] ?? '',
+      walkIn: json['walkIn'] != null
+          ? List<WalkInRecord>.from(
+              json['walkIn'].map((x) => WalkInRecord.fromJson(x)))
+          : null,
     );
   }
 
@@ -115,6 +121,7 @@ class BarberProfileData {
       'offDay': offDay,
       'profilePic': profilePic,
       'breakTime': breakTime.map((x) => x.toJson()).toList(),
+      if (walkIn != null) 'walkIn': walkIn!.map((x) => x.toJson()).toList(), 
     };
   }
 }
@@ -214,3 +221,45 @@ class BreakTime {
     return '${date.day}/${date.month}/${date.year}';
   }
 }
+
+class WalkInRecord {
+  final int startDate; // timestamp in milliseconds
+  final int endDate;   // timestamp in milliseconds
+  final String? id;
+
+  WalkInRecord({
+    required this.startDate,
+    required this.endDate,
+    this.id,
+  });
+
+  factory WalkInRecord.fromJson(Map<String, dynamic> json) {
+    return WalkInRecord(
+      startDate: json['startDate'] ?? 0,
+      endDate: json['endDate'] ?? 0,
+      id: json['_id'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'startDate': startDate,
+      'endDate': endDate,
+      if (id != null) '_id': id,
+    };
+  }
+
+  // Check if a date falls within this walk-in range
+  bool containsDate(DateTime date) {
+    final dateTimestamp = date.millisecondsSinceEpoch;
+    return dateTimestamp >= startDate && dateTimestamp <= endDate;
+  }
+
+  // Get formatted date range
+  String get formattedRange {
+    final start = DateTime.fromMillisecondsSinceEpoch(startDate);
+    final end = DateTime.fromMillisecondsSinceEpoch(endDate);
+    return '${start.day}/${start.month}/${start.year} - ${end.day}/${end.month}/${end.year}';
+  }
+}
+

@@ -55,6 +55,9 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
       // Fetch available days immediately without any delay
       controller.getAvailableDays(selectedServices);
 
+      // Fetch working hours range to get walk-in info
+      controller.fetchWorkingHoursRange(barber.id);
+
       // Manually add test timestamps if needed for debugging
       if (controller.availableDaysTimestamps.isEmpty) {
         print("addingTestTimestamps".tr);

@@ -19,6 +19,10 @@ import 'package:q_cut/modules/customer/features/home_features/home/models/barber
 import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_barber_list_view_item.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:q_cut/modules/customer/features/home_features/home/models/working_hours_range_model.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:collection/collection.dart'; // Added for firstWhereOrNull if needed, but Get has it too. Actually WorkingHoursRangeResponse is imported.
 
 class SelectedView extends StatefulWidget {
   const SelectedView({super.key});
@@ -33,6 +37,9 @@ class _SelectedViewState extends State<SelectedView> {
   late Barber barber;
   final GalleryController galleryController = Get.put(GalleryController());
   bool isClicked = true;
+  final RxList<WalkInRecord> walkInRanges = <WalkInRecord>[].obs;
+  final RxList<WorkingHourDay> workingHoursRange = <WorkingHourDay>[].obs;
+  final RxBool isLoadingWalkIn = false.obs;
 
   @override
   void initState() {
@@ -44,7 +51,37 @@ class _SelectedViewState extends State<SelectedView> {
       isFavorite.value = barber.isFavorite;
       // Fetch gallery when view is initialized
       galleryController.fetchGallery(barber.id);
+      // Fetch walk-in data
+      fetchWalkInData(barber.id);
     });
+  }
+
+  Future<void> fetchWalkInData(String barberId) async {
+    try {
+      isLoadingWalkIn.value = true;
+      final NetworkAPICall apiCall = NetworkAPICall();
+      final url = Variables.GET_WORKING_HOURS_RANGE + barberId;
+      
+      final response = await apiCall.getData(url);
+      print('Walk-in data response: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          final workingHoursData = WorkingHoursRangeResponse.fromJson(decoded);
+          walkInRanges.value = workingHoursData.walkIn;
+          workingHoursRange.value = workingHoursData.workingHoursRange;
+        } else {
+          print('Unexpected response format: $decoded');
+        }
+      } else {
+        print('Failed to fetch walk-in data: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      print('Error fetching walk-in data: $e');
+    } finally {
+      isLoadingWalkIn.value = false;
+    }
   }
 
   Future<void> navigateToLocation(double lat, double lng) async {
@@ -64,12 +101,13 @@ class _SelectedViewState extends State<SelectedView> {
   @override
   Widget build(BuildContext context) {
     // Safely get the barber object
-    if (!Get.arguments.runtimeType.toString().contains('Barber')) {
+    final args = Get.arguments;
+    if (args == null || args is! Barber) {
       return const Scaffold(
           body: Center(child: SpinKitDoubleBounce(color: ColorsData.primary)));
     }
 
-    barber = Get.arguments as Barber;
+    barber = args;
 
     return Scaffold(
       body: Stack(
@@ -83,17 +121,20 @@ class _SelectedViewState extends State<SelectedView> {
                     // Display barber's cover pic if available, otherwise use default image
                     barber.coverPic != null && barber.coverPic!.isNotEmpty
                         ? InkWell(
-                            onTap: () {
-                              // Handle image tap to view in full screen if needed
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BarberImagesPage(
-                                    imageUrl: barber.coverPic,
-                                  ),
-                                ),
-                              );
-                            },
+                              onTap: () {
+                                // Handle image tap to view in full screen
+                                if (barber.coverPic != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => GalleryFullScreenPage(
+                                        images: [barber.coverPic!],
+                                        initialIndex: 0,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                             child: Image.network(
                               barber.coverPic!,
                               width: double.infinity,
@@ -116,9 +157,38 @@ class _SelectedViewState extends State<SelectedView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Display barber shop name with fallback
-                          Text(
-                            barber.barberShop ?? barber.fullName,
-                            style: Styles.textStyleS14W700(),
+                          Row(
+                            children: [
+                              Text(
+                                barber.barberShop ?? barber.fullName,
+                                style: Styles.textStyleS14W700(),
+                              ),
+                              SizedBox(width: 8.w),
+                              Obx(() {
+                                final today =
+                                    DateFormat('yyyy-MM-dd').format(DateTime.now());
+                                final todayWork = workingHoursRange
+                                    .firstWhereOrNull((d) => d.formattedDate == today);
+                                if (todayWork?.isWalkIn ?? false) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(4.r),
+                                      border: Border.all(
+                                          color: Colors.orange.withOpacity(0.5)),
+                                    ),
+                                    child: Text(
+                                      "${"Walk-In Only".tr} (${todayWork!.workingHours})",
+                                      style: Styles.textStyleS10W600(
+                                          color: Colors.orange.shade900),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              }),
+                            ],
                           ),
                           SizedBox(
                             height: 10.h,
@@ -140,7 +210,7 @@ class _SelectedViewState extends State<SelectedView> {
                                   } else {
                                     ShowToast.showError(
                                         message:
-                                            "No Instagram link available for this barber"
+                                            "Instagram link is not set"
                                                 .tr);
                                   }
                                 },
@@ -189,7 +259,7 @@ class _SelectedViewState extends State<SelectedView> {
                                     navigateToLocation(coords[1], coords[0]);
                                   } else {
                                     ShowToast.showError(
-                                        message: "Location not available");
+                                        message: "Location not available".tr);
                                   }
                                 },
                                 child: Column(
@@ -327,28 +397,80 @@ class _SelectedViewState extends State<SelectedView> {
                             height: 8.h,
                           ),
                           // Time and distance information
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                AssetsData.clockIcon,
-                                width: 16.w,
-                                height: 16.h,
-                                colorFilter: const ColorFilter.mode(
-                                  ColorsData.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 2.w,
-                              ),
-                              Text(
-                                '15 min   1.5 km',
-                                style: Styles.textStyleS14W500(),
-                              ),
-                            ],
+                          // Row(
+                          //   children: [
+                          //     SvgPicture.asset(
+                          //       AssetsData.clockIcon,
+                          //       width: 16.w,
+                          //       height: 16.h,
+                          //       colorFilter: const ColorFilter.mode(
+                          //         ColorsData.primary,
+                          //         BlendMode.srcIn,
+                          //       ),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 2.w,
+                          //     ),
+                          //     Text(
+                          //       '15 min   1.5 km',
+                          //       style: Styles.textStyleS14W500(),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(
+                          //   height: 8.h,
+                          // ),
+                          Obx(
+                                () {
+                              if (walkInRanges.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...walkInRanges.map((walkIn) {
+                                    return Container(
+                                      margin: EdgeInsets.only(bottom: 8.h),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w,
+                                        vertical: 10.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: ColorsData.primary.withOpacity(0.15),
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        border: Border.all(
+                                          color: ColorsData.primary.withOpacity(0.3),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_busy,
+                                            color: ColorsData.primary,
+                                            size: 20.sp,
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          Expanded(
+                                            child: Text(
+                                              "${"Walk-In from".tr} ${walkIn.formattedRange}",
+                                              style: Styles.textStyleS14W500(
+                                                color: ColorsData.primary,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                  SizedBox(height: 4.h),
+                                ],
+                              );
+                            },
                           ),
                           SizedBox(
-                            height: 8.h,
+                            height: 12.h,
                           ),
                           // Working days button
                           CustomButton(
@@ -370,6 +492,8 @@ class _SelectedViewState extends State<SelectedView> {
                           SizedBox(
                             height: 12.h,
                           ),
+                          // Walk-In section
+
                           // Gallery section with dynamic count
                           Obx(
                             () => Row(
@@ -578,13 +702,13 @@ class _SelectedViewState extends State<SelectedView> {
                     setState(() {});
                     var response = await NetworkAPICall().addData({
                       "barberId": barber.id,
-                    }, "${Variables.baseUrl}favoriteForUser/toggle");
+                    }, "${Variables.FAVORITE_FOR_USER}toggle");
 
                     if (response.statusCode == 200) {
                       isFavorite.value = !isFavorite.value;
                       barber.isFavorite = isFavorite.value;
                     } else {
-                      ShowToast.showError(message: "Error occurred");
+                      ShowToast.showError(message: "Error occurred".tr);
                     }
                     await Future.delayed(const Duration(seconds: 2), () {
                       isClicked = true;

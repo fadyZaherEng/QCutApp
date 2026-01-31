@@ -8,43 +8,44 @@ class Variables {
   static const address = 'api.qcut.org';
   static const baseUrl = "https://$address/";
 
-  ///
+  /// AUTHENTICATION
   static const String AUTHENTICATION = "${baseUrl}authentication/";
   static const String SIGNUP = "${AUTHENTICATION}signup/";
   static const String LOGIN = "${AUTHENTICATION}login/";
   static const String VERIFY_OTP = "${AUTHENTICATION}verify-otp/";
-  static const String CHANGE_PASSWORD = "${AUTHENTICATION}change-password"; // Added
-  static const String FORGET_PASSWORD = "$baseUrl/authentication/forget-password"; // Added
-  static const String VERIFY_CHANGE_PHONE = "${AUTHENTICATION}verify-change-phone/"; // Added
+  static const String CHANGE_PASSWORD = "${AUTHENTICATION}change-password";
+  static const String FORGET_PASSWORD = "${AUTHENTICATION}forget-password";
+  static const String VERIFY_CHANGE_PHONE = "${AUTHENTICATION}verify-change-phone/";
   static const String GET_PROFILE = "${AUTHENTICATION}profile/";
   static const String REPORT = "${baseUrl}reports";
 
-  ///
-  ///
+  /// BARBER
   static const String BARBER = "${baseUrl}barber/";
   static const String SEARCH_BARBER_NAME = "${BARBER}search-by-barberShop";
   static const String GET_BARBERS = "${BARBER}active/";
-  static const String GET_BARBERS_FILTER = "${baseUrl}barber/search-by-city";
+  static const String GET_BARBERS_FILTER = "${BARBER}search-by-city";
+  static const String UPDATE_WALK_IN = "${BARBER}update-walk-in";
+  static const String GET_WORKING_HOURS_RANGE = "${BARBER}working-hours-range/";
+
+  /// SERVICE
   static const String SERVICE = "${baseUrl}service/";
   static const String GET_BARBER_SERVICES = "${SERVICE}forSpecificBarber/";
   static const String UPDATE_BARBER_SERVICE = SERVICE;
   static const String CREATE_BARBER_SERVICE = "${SERVICE}create/";
 
-// service/forSpecificBarber
-  ///
-  ///
+  /// APPOINTMENT
   static const String APPOINTMENT = "${baseUrl}appointment/";
-  static const String GET_BARBER_APPOINTMENTS =
-      "${APPOINTMENT}appointment-by-dat/";
+  static const String GET_BARBER_APPOINTMENTS = "${APPOINTMENT}appointment-by-dat/";
   static const String GET_BARBER_HISTORY = "${APPOINTMENT}barber-history/";
   static const String SET_APPOINTMENT_NOT_COME = "${APPOINTMENT}not-come/";
-  static const String COUNT_REPORTS = "$REPORT/count/";
-  static const String GET_CUSTOMER_HISTORY_APPOINTMENTS =
-      "${APPOINTMENT}previous-currently/";
+  static const String GET_CUSTOMER_HISTORY_APPOINTMENTS = "${APPOINTMENT}previous-currently/";
+
+  /// STATS & OTHERS
   static const String BARBER_STATS = "${baseUrl}barberStats/";
   static const String BARBER_PAYMENT_STATS = "${BARBER_STATS}payment/one/";
   static const String BARBER_COUNT_MOUNTH = "${BARBER_STATS}count-for-month/";
   static const String FAVORITE_FOR_USER = "${baseUrl}favoriteForUser/";
+  static const String COUNT_REPORTS = "$REPORT/count/";
 }
 
 class ShowToast {
