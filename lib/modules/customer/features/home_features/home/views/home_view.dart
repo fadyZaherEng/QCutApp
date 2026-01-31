@@ -65,23 +65,27 @@ class _HomeViewState extends State<HomeView> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    await fetchProfileData();
-    await _determinePosition(context).then((Position? position) {
-      latitude = position!.latitude;
-      longitude = position.longitude;
-      loadSelectedCities();
-      setState(() {});
-      if (selectedCities.isNotEmpty) {
-        homeController.getBarbersCity(city: selectedCities.join(', '));
-      } else {
-        homeController.getNearestBarbers(longitude, latitude);
-      }
-      // homeController.getNearestBarbers(longitude, latitude);
-    }).catchError((e) {
-      // Handle the error, e.g., show a snackbar or dialog
-      print(e);
-    });
-    // await _notificationListener();
+    
+    // Check if user is authenticated (not a guest)
+    if (AuthHelper.isAuthenticated()) {
+      await fetchProfileData();
+      await _determinePosition(context).then((Position? position) {
+        latitude = position!.latitude;
+        longitude = position.longitude;
+        loadSelectedCities();
+        setState(() {});
+        if (selectedCities.isNotEmpty) {
+          homeController.getBarbersCity(city: selectedCities.join(', '));
+        } else {
+          homeController.getNearestBarbers(longitude, latitude);
+        }
+      }).catchError((e) {
+        print(e);
+      });
+    } else {
+      // Guest user logic: Fetch all barbers without location/profile dependency
+      homeController.getBarbers();
+    }
   }
 
   Future<void> fetchProfileData() async {
@@ -177,19 +181,23 @@ class _HomeViewState extends State<HomeView> {
           selectedDateTime = null;
           _clearSelection();
         });
-        await fetchProfileData();
-        await _determinePosition(context).then((Position? position) {
-          latitude = position!.latitude;
-          longitude = position.longitude;
-          homeController.getNearestBarbers(longitude, latitude);
-        }).catchError((e) {
-          // Handle the error, e.g., show a snackbar or dialog
-          print(e);
-        });
+
+        if (AuthHelper.isAuthenticated()) {
+          await fetchProfileData();
+          await _determinePosition(context).then((Position? position) {
+            latitude = position!.latitude;
+            longitude = position.longitude;
+            homeController.getNearestBarbers(longitude, latitude);
+          }).catchError((e) {
+            print(e);
+          });
+        } else {
+          await homeController.getBarbers();
+        }
       },
       child: SafeArea(
           child: Scaffold(
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
