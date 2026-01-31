@@ -77,227 +77,262 @@ class _SelectedViewState extends State<SelectedView> {
           CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Display barber's cover pic if available, otherwise use default image
-                  barber.coverPic != null && barber.coverPic!.isNotEmpty
-                      ? InkWell(
-                          onTap: () {
-                            // Handle image tap to view in full screen if needed
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BarberImagesPage(
-                                  imageUrl: barber.coverPic,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Display barber's cover pic if available, otherwise use default image
+                    barber.coverPic != null && barber.coverPic!.isNotEmpty
+                        ? InkWell(
+                            onTap: () {
+                              // Handle image tap to view in full screen if needed
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BarberImagesPage(
+                                    imageUrl: barber.coverPic,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Image.network(
+                              barber.coverPic!,
+                              width: double.infinity,
+                              height: 200.h,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.asset(AssetsData.selectedViewImage),
+                            ),
+                          )
+                        : Image.asset(AssetsData.selectedViewImage),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24.r),
+                        topRight: Radius.circular(24.r),
+                      )),
+                      padding: EdgeInsets.only(
+                          top: 20.h, bottom: 30.h, left: 16.w, right: 16.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Display barber shop name with fallback
+                          Text(
+                            barber.barberShop ?? barber.fullName,
+                            style: Styles.textStyleS14W700(),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            height: 18.h,
+                          ),
+                          // Social media and action buttons
+                          Row(
+                            children: [
+                              // Instagram button
+
+                              InkWell(
+                                onTap: () async {
+                                  final String? instaUrl = barber.instagramPage;
+                                  if (instaUrl != null && instaUrl.isNotEmpty) {
+                                    launch(barber.instagramPage!);
+                                  } else {
+                                    ShowToast.showError(
+                                        message:
+                                            "No Instagram link available for this barber"
+                                                .tr);
+                                  }
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(7.r),
+                                      height: 30.h,
+                                      width: 30.w,
+                                      decoration: BoxDecoration(
+                                        color: ColorsData.font,
+                                        borderRadius:
+                                            BorderRadius.circular(25.r),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        height: 16.h,
+                                        width: 16.w,
+                                        AssetsData.instagramIcon,
+                                        colorFilter: const ColorFilter.mode(
+                                          ColorsData.primary,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      "instagram".tr,
+                                      style: Styles.textStyleS14W500(),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                          child: Image.network(
-                            barber.coverPic!,
-                            width: double.infinity,
-                            height: 200.h,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(AssetsData.selectedViewImage),
-                          ),
-                        )
-                      : Image.asset(AssetsData.selectedViewImage),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24.r),
-                      topRight: Radius.circular(24.r),
-                    )),
-                    padding: EdgeInsets.only(
-                        top: 20.h, bottom: 30.h, left: 16.w, right: 16.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Display barber shop name with fallback
-                        Text(
-                          barber.barberShop ?? barber.fullName,
-                          style: Styles.textStyleS14W700(),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        const Divider(),
-                        SizedBox(
-                          height: 18.h,
-                        ),
-                        // Social media and action buttons
-                        Row(
-                          children: [
-                            // Instagram button
 
-                            InkWell(
-                              onTap: () async {
-                                final String? instaUrl = barber.instagramPage;
-                                if (instaUrl != null && instaUrl.isNotEmpty) {
-                                  launch(barber.instagramPage!);
-                                } else {
-                                  ShowToast.showError(
-                                      message:
-                                          "No Instagram link available for this barber"
-                                              .tr);
-                                }
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(7.r),
-                                    height: 30.h,
-                                    width: 30.w,
-                                    decoration: BoxDecoration(
-                                      color: ColorsData.font,
-                                      borderRadius: BorderRadius.circular(25.r),
-                                    ),
-                                    child: SvgPicture.asset(
-                                      height: 16.h,
-                                      width: 16.w,
-                                      AssetsData.instagramIcon,
-                                      colorFilter: const ColorFilter.mode(
-                                        ColorsData.primary,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 4.h),
-                                  Text(
-                                    "instagram".tr,
-                                    style: Styles.textStyleS14W500(),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const Spacer(),
-                            // Direction button
-                            InkWell(
-                              onTap: () {
-                                // Handle Direction button tap
-                                if (barber.barberShopLocation?.coordinates
-                                        .isNotEmpty ??
-                                    false) {
-                                  debugPrint(
-                                      "📍 Navigating to barber location: ${barber.barberShopLocation!.coordinates}");
-                                  final coords =
-                                      barber.barberShopLocation!.coordinates;
-                                  navigateToLocation(coords[1], coords[0]);
-                                } else {
-                                  ShowToast.showError(
-                                      message: "Location not available");
-                                }
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(7.r),
-                                    height: 30.h,
-                                    width: 30.w,
-                                    decoration: BoxDecoration(
-                                      color: ColorsData.font,
-                                      borderRadius: BorderRadius.circular(25.r),
-                                    ),
-                                    child: SvgPicture.asset(
-                                      height: 16.h,
-                                      width: 16.w,
-                                      AssetsData.directionIcon,
-                                      colorFilter: const ColorFilter.mode(
-                                        ColorsData.primary,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 4.h,
-                                  ),
-                                  Text(
-                                    "direction".tr,
-                                    style: Styles.textStyleS14W500(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            // Share button
-                            InkWell(
-                              onTap: () {
-                                // Handle Share button tap
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(7.r),
-                                    height: 30.h,
-                                    width: 30.w,
-                                    decoration: BoxDecoration(
-                                      color: ColorsData.font,
-                                      borderRadius: BorderRadius.circular(25.r),
-                                    ),
-                                    child: SvgPicture.asset(
-                                      height: 16.h,
-                                      width: 16.w,
-                                      AssetsData.shareIcon,
-                                      colorFilter: const ColorFilter.mode(
-                                        ColorsData.primary,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 4.h,
-                                  ),
-                                  Text(
-                                    "share".tr,
-                                    style: Styles.textStyleS14W500(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 18.h,
-                        ),
-                        // Address information
-                        InkWell(
-                          onTap: () {
-                            // Handle city tap if needed
-                            // Future.delayed to ensure the tap is registered properly
-                            if (barber.barberShopLocation == null ||
-                                barber
-                                    .barberShopLocation!.coordinates.isEmpty) {
-                              return;
-                            }
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return MapSearchScreen(
-                                initialLatitude: barber.barberShopLocation!
-                                        .coordinates.isNotEmpty
-                                    ? barber.barberShopLocation!.coordinates[1]
-                                    : 31.0461,
-                                initialLongitude: barber.barberShopLocation!
-                                        .coordinates.isNotEmpty
-                                    ? barber.barberShopLocation!.coordinates[0]
-                                    : 34.8516,
-                                onLocationSelected: (lat, lng, address) {
-                                  setState(() {});
+                              const Spacer(),
+                              // Direction button
+                              InkWell(
+                                onTap: () {
+                                  // Handle Direction button tap
+                                  if (barber.barberShopLocation?.coordinates
+                                          .isNotEmpty ??
+                                      false) {
+                                    debugPrint(
+                                        "📍 Navigating to barber location: ${barber.barberShopLocation!.coordinates}");
+                                    final coords =
+                                        barber.barberShopLocation!.coordinates;
+                                    navigateToLocation(coords[1], coords[0]);
+                                  } else {
+                                    ShowToast.showError(
+                                        message: "Location not available");
+                                  }
                                 },
-                              );
-                            }));
-                          },
-                          child: Row(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(7.r),
+                                      height: 30.h,
+                                      width: 30.w,
+                                      decoration: BoxDecoration(
+                                        color: ColorsData.font,
+                                        borderRadius:
+                                            BorderRadius.circular(25.r),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        height: 16.h,
+                                        width: 16.w,
+                                        AssetsData.directionIcon,
+                                        colorFilter: const ColorFilter.mode(
+                                          ColorsData.primary,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4.h,
+                                    ),
+                                    Text(
+                                      "direction".tr,
+                                      style: Styles.textStyleS14W500(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              // Share button
+                              InkWell(
+                                onTap: () {
+                                  // Handle Share button tap
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(7.r),
+                                      height: 30.h,
+                                      width: 30.w,
+                                      decoration: BoxDecoration(
+                                        color: ColorsData.font,
+                                        borderRadius:
+                                            BorderRadius.circular(25.r),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        height: 16.h,
+                                        width: 16.w,
+                                        AssetsData.shareIcon,
+                                        colorFilter: const ColorFilter.mode(
+                                          ColorsData.primary,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4.h,
+                                    ),
+                                    Text(
+                                      "share".tr,
+                                      style: Styles.textStyleS14W500(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 18.h,
+                          ),
+                          // Address information
+                          InkWell(
+                            onTap: () {
+                              // Handle city tap if needed
+                              // Future.delayed to ensure the tap is registered properly
+                              if (barber.barberShopLocation == null ||
+                                  barber.barberShopLocation!.coordinates
+                                      .isEmpty) {
+                                return;
+                              }
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return MapSearchScreen(
+                                  initialLatitude: barber.barberShopLocation!
+                                          .coordinates.isNotEmpty
+                                      ? barber
+                                          .barberShopLocation!.coordinates[1]
+                                      : 31.0461,
+                                  initialLongitude: barber.barberShopLocation!
+                                          .coordinates.isNotEmpty
+                                      ? barber
+                                          .barberShopLocation!.coordinates[0]
+                                      : 34.8516,
+                                  onLocationSelected: (lat, lng, address) {
+                                    setState(() {});
+                                  },
+                                );
+                              }));
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  AssetsData.mapPinIcon,
+                                  width: 18.w,
+                                  height: 18.h,
+                                  colorFilter: const ColorFilter.mode(
+                                    ColorsData.primary,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                // Show actual address if available
+                                Expanded(
+                                  child: Text(
+                                    barber.city,
+                                    style: Styles.textStyleS14W500(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          // Time and distance information
+                          Row(
                             children: [
                               SvgPicture.asset(
-                                AssetsData.mapPinIcon,
-                                width: 18.w,
-                                height: 18.h,
+                                AssetsData.clockIcon,
+                                width: 16.w,
+                                height: 16.h,
                                 colorFilter: const ColorFilter.mode(
                                   ColorsData.primary,
                                   BlendMode.srcIn,
@@ -306,64 +341,38 @@ class _SelectedViewState extends State<SelectedView> {
                               SizedBox(
                                 width: 2.w,
                               ),
-                              // Show actual address if available
-                              Expanded(
-                                child: Text(
-                                  barber.city,
-                                  style: Styles.textStyleS14W500(),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              Text(
+                                '15 min   1.5 km',
+                                style: Styles.textStyleS14W500(),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        // Time and distance information
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              AssetsData.clockIcon,
-                              width: 16.w,
-                              height: 16.h,
-                              colorFilter: const ColorFilter.mode(
-                                ColorsData.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            Text(
-                              '15 min   1.5 km',
-                              style: Styles.textStyleS14W500(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        // Working days button
-                        CustomButton(
-                          height: 48.h,
-                          width: 343.w,
-                          textStyle: Styles.textStyleS16W700(),
-                          backgroundColor: ColorsData.primary.withOpacity(0.65),
-                          text: "workingDays".tr,
-                          onPressed: () {
-                            print(barber.id);
-                            //  barber.id
-                            showBWorkingDaysBottomSheet(
-                                context, barber.workingDays);
-                          },
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        // Gallery section with dynamic count
-                        Obx(() => Row(
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          // Working days button
+                          CustomButton(
+                            height: 48.h,
+                            width: 343.w,
+                            textStyle: Styles.textStyleS16W700(),
+                            backgroundColor:
+                                ColorsData.primary.withOpacity(0.65),
+                            text: "workingDays".tr,
+                            onPressed: () {
+                              print(barber.id);
+                              //  barber.id
+                              showBWorkingDaysBottomSheet(
+                                context,
+                                barber.workingDays,
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          // Gallery section with dynamic count
+                          Obx(
+                            () => Row(
                               children: [
                                 Text(
                                   "gallery".tr,
@@ -375,12 +384,14 @@ class _SelectedViewState extends State<SelectedView> {
                                       color: ColorsData.primary),
                                 ),
                               ],
-                            )),
-                      ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )),
+                  ],
+                ),
+              ),
               // Gallery grid with API data
               Obx(() {
                 if (galleryController.isLoading.value) {
@@ -588,12 +599,12 @@ class _SelectedViewState extends State<SelectedView> {
           ),
         ],
       ),
-
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: ColorsData.secondary, // or transparent if desired, but consistent bg is better for stickiness
+            color: ColorsData.secondary,
+            // or transparent if desired, but consistent bg is better for stickiness
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),

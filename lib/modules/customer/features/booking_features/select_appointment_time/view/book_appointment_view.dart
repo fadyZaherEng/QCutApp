@@ -25,8 +25,8 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SelectAppointmentTimeController());
-    final selectedServices = Get.arguments["freeTimeRequestModel"]
-        as FreeTimeRequestModel?;
+    final selectedServices =
+        Get.arguments["freeTimeRequestModel"] as FreeTimeRequestModel?;
     final barber = Get.arguments["barber"] as Barber;
 
     if (selectedServices != null) {
@@ -59,7 +59,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
       if (controller.availableDaysTimestamps.isEmpty) {
         print("addingTestTimestamps".tr);
         final now = DateTime.now().millisecondsSinceEpoch;
-        final oneDayMs = 86400000; // 24 hours in milliseconds
+        const oneDayMs = 86400000; // 24 hours in milliseconds
 
         // Add the next 7 days as test data
         for (int i = 0; i < 7; i++) {
@@ -70,7 +70,6 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
         }
       }
     }
-
 
     return Scaffold(
       appBar: CustomAppBar(title: "bookAppointment".tr),
@@ -85,8 +84,13 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                 children: [
                   const SpinKitDoubleBounce(color: ColorsData.primary),
                   SizedBox(height: 20.h),
-                  Text("loadingAvailableAppointments".tr,
-                      style: TextStyle(fontSize: 16.sp, color: Colors.grey))
+                  Text(
+                    "loadingAvailableAppointments".tr,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey,
+                    ),
+                  )
                 ],
               ),
             );
@@ -107,7 +111,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                     barber: barber,
                   )
                 else
-                   Center(child: Text("errorLoadingData".tr)),
+                  Center(child: Text("errorLoadingData".tr)),
                 SizedBox(height: 17.h),
                 Align(
                   alignment: Alignment.center,
@@ -246,8 +250,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                                   .map((s) =>
                                       "${s["name"]} x${s["numberOfUsers"]}")
                                   .join(", ");
-                              final servicePrice =
-                                  serviceList.fold<double>(
+                              final servicePrice = serviceList.fold<double>(
                                 0,
                                 (sum, s) =>
                                     sum +
@@ -255,7 +258,8 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                                         (s["numberOfUsers"] as int)),
                               );
 
-                              final totalAmount = serviceList.fold<double>(0,
+                              final totalAmount = serviceList.fold<double>(
+                                  0,
                                   (sum, s) =>
                                       sum + (s["total"] as num).toDouble());
 

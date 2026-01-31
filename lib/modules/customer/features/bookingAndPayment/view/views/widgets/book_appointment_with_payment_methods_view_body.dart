@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +12,6 @@ import 'package:q_cut/core/utils/widgets/custom_big_button.dart';
 import 'package:q_cut/modules/customer/features/bookingAndPayment/models/booking_payment_details_model.dart';
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/controller/select_appointment_time_controller.dart';
 import 'package:q_cut/modules/customer/features/home/presentation/views/widgets/custom_book_payment_methods_item.dart';
-
 import '../../../../../../../core/services/shared_pref/shared_pref.dart';
 import '../../../../../../../core/utils/app_router.dart';
 import '../../../../../../../core/utils/network/network_helper.dart';
@@ -126,8 +124,8 @@ class BookAppointmentWithPaymentMethodsViewBody
                 //controller.toggleCashPayment();
               },
             ),
-            SizedBox(
-              height: 20,
+            const SizedBox(
+              height: 20
             ),
             CustomBigButton(
               textData: "confirm".tr,
