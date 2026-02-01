@@ -20,7 +20,7 @@ class BPayToQCutViewBody extends StatefulWidget {
 class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
   final PayToQcutController _controller = Get.put(PayToQcutController());
   bool isClicked = true;
-  int _selectedTab = 1; // 0 for Previous, 1 for Currently (setting 1 as default to match left image)
+  int _selectedTab = 0; // Set to 0 (Previous) as default to show the list
 
   @override
   Widget build(BuildContext context) {
@@ -86,21 +86,20 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
   }
 
   Widget _buildMainContent() {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Padding(
+    return Scrollbar(
+      thumbVisibility: true,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          children: [
-            SizedBox(height: 20.h),
-            _buildHeaderSection(),
-            SizedBox(height: 30.h),
-            _buildPaymentCard(),
-            SizedBox(height: 30.h),
-            _buildActionButtons(),
-            SizedBox(height: 30.h),
-          ],
-        ),
+        children: [
+          SizedBox(height: 20.h),
+          _buildHeaderSection(),
+          SizedBox(height: 30.h),
+          _buildPaymentCard(),
+          SizedBox(height: 30.h),
+          _buildActionButtons(),
+          SizedBox(height: 30.h),
+        ],
       ),
     );
   }
@@ -150,9 +149,16 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
       ),
       padding: EdgeInsets.all(20.w),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildJoinDateSection(),
+          SizedBox(height: 20.h),
+          Divider(color: Colors.white24, height: 1.h),
+          SizedBox(height: 20.h),
           Text(
-            "monthly payment is 200\$!",
+            "monthlyPayment".trParams({
+              "amount": "200"
+            }),
             style: TextStyle(
               color: ColorsData.primary,
               fontSize: 15.sp,
@@ -162,14 +168,54 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
           SizedBox(height: 20.h),
           Row(
             children: [
-              _buildTabItem("Previous Payments", 0),
-              _buildTabItem("Currently Payments", 1),
+              _buildTabItem("previousPayments".tr, 0),
+              _buildTabItem("currentlyPayments".tr, 1),
             ],
           ),
           SizedBox(height: 20.h),
           _selectedTab == 0 ? _buildPreviousPaymentsList() : _buildCurrentlyPaymentsGrid(),
         ],
       ),
+    );
+  }
+
+  Widget _buildJoinDateSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'timeToJoinedQcut'.tr,
+          style: TextStyle(
+            color: ColorsData.primary,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 12.h),
+        _buildJoinInfoRow('dateToJoined'.tr, _controller.getJoinDate()),
+        SizedBox(height: 8.h),
+        _buildJoinInfoRow('joinedSince'.tr, _controller.getJoinedSince(), isGold: true),
+      ],
+    );
+  }
+
+  Widget _buildJoinInfoRow(String label, String value, {bool isGold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: isGold ? ColorsData.primary : Colors.white,
+            fontSize: 13.sp,
+            fontWeight: isGold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ],
     );
   }
 
@@ -211,9 +257,11 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
     if (payments.isEmpty || (payments.length == 1 && payments[0]['date'] == 'No data')) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 20.h),
-        child: Text(
-          "No previous payments found",
-          style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+        child: Center(
+          child: Text(
+            "No previous payments found",
+            style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+          ),
         ),
       );
     }
@@ -221,12 +269,12 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
     return Column(
       children: payments.map((payment) {
         return Padding(
-          padding: EdgeInsets.only(bottom: 10.h),
+          padding: EdgeInsets.only(bottom: 12.h),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(10.r),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,7 +284,7 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
@@ -256,7 +304,6 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
   }
 
   Widget _buildCurrentlyPaymentsGrid() {
-    // Current month first and second day
     DateTime now = DateTime.now();
     DateTime firstDay = DateTime(now.year, now.month, 1);
     DateTime secondDay = DateTime(now.year, now.month, 2);
@@ -275,10 +322,10 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
 
   Widget _buildCurrentPaymentCard(String day) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
+      padding: EdgeInsets.symmetric(vertical: 24.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         children: [
@@ -286,11 +333,11 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
             day,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 14.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 16.h),
           Text(
             "17:00 - 20:00",
             style: TextStyle(
@@ -305,31 +352,23 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
 
   Widget _buildActionButtons() {
     return Obx(() {
-      // Check if there's at least one unpaid invoice
       final hasUnpaidInvoice =
           _controller.invoices.value.any((invoice) => !invoice.isPaid);
 
-      if (hasUnpaidInvoice) {
-        final unpaidInvoice = _controller.invoices.value.firstWhere(
-          (invoice) => !invoice.isPaid,
-          orElse: () => _controller.invoices.value.first,
-        );
+      final unpaidInvoiceId = hasUnpaidInvoice 
+          ? _controller.invoices.value.firstWhere((i) => !i.isPaid).id 
+          : null;
 
-        return CustomBigButton(
-          textData: "Confirm", // Using "Confirm" as per the image
-          onPressed: () {
-            Get.toNamed(AppRouter.bpaymentMethodsPath,
-                arguments: unpaidInvoice.id);
-          },
-        );
-      } else {
-        return CustomBigButton(
-          textData: "Confirm",
-          onPressed: () {
-            // Even if no unpaid, we can allow clicking or show feedback
-          },
-        );
-      }
+      return CustomBigButton(
+        textData: "confirm".tr,
+        onPressed: () {
+          if (unpaidInvoiceId != null) {
+            Get.toNamed(AppRouter.bpaymentMethodsPath, arguments: unpaidInvoiceId);
+          } else {
+            // Optional: Feedback if no unpaid invoices
+          }
+        },
+      );
     });
   }
 }

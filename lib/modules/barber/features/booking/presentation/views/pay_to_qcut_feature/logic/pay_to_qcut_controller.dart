@@ -51,8 +51,7 @@ class PayToQcutController extends GetxController {
 
         final invoiceResponse = MonthlyInvoiceResponse.fromJson(responseBody);
         invoices.value = invoiceResponse.invoices;
-
-        print("Fetched ${invoices.value.length} invoices");
+        print("DEBUG: Fetched ${invoices.value.length} invoices total from API");
 
         if (invoices.value.isEmpty) {
           isError.value = false;
@@ -60,7 +59,7 @@ class PayToQcutController extends GetxController {
           updatePaymentStatusList(); // Will set up default empty state
         } else {
           invoices.value.sort((a, b) => a.fromDate.compareTo(b.fromDate));
-          currentInvoice.value = invoices.value.last;
+          currentInvoice.value = invoices.value.reduce((a, b) => a.fromDate.isAfter(b.fromDate) ? a : b);
           updatePaymentStatusList();
           print("Current invoice set: ${currentInvoice.value?.id}");
         }
@@ -99,15 +98,10 @@ class PayToQcutController extends GetxController {
       final sortedInvoices = List<MonthlyInvoiceModel>.from(invoices.value)
         ..sort((a, b) => b.fromDate.compareTo(a.fromDate)); // Newest first
 
-      // Use real data if available, showing the most recent invoices first
-      for (var invoice in sortedInvoices.take(3)) {
+      // Use real data if available
+      for (var invoice in sortedInvoices) {
         // Mark as paid if cashMethod is "paid"
         statusList.add(invoice.isPaid);
-      }
-
-      // Fill with dummy data if we have less than 3 entries
-      while (statusList.length < 3) {
-        statusList.add(false);
       }
     }
 
@@ -213,8 +207,8 @@ class PayToQcutController extends GetxController {
     final sortedInvoices = List<MonthlyInvoiceModel>.from(invoices.value)
       ..sort((a, b) => b.fromDate.compareTo(a.fromDate)); // Newest first
 
-    // Return the most recent 3 or fewer invoices
-    return sortedInvoices.take(3).map((invoice) {
+    // Return all invoices
+    return sortedInvoices.map((invoice) {
       return {
         'date': DateFormat('M/d/yyyy').format(invoice.fromDate),
         'status': invoice.isPaid ? 'paid'.tr : 'unpaid'.tr,

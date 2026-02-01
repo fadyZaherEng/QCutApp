@@ -4,6 +4,9 @@ class MyTranslation extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         "ar": {
+          "monthlyPayment": "الدفع الشهري هو @amount\$!",
+          "previousPayments": "الدفعات القديمة",
+          "currentlyPayments": "الدفع الحالي",
           "emailreq": "البريد الإلكتروني مطلوب",
           "userreq": "اسم المستخدم مطلوب",
           "emailinvalid": "عنوان البريد الإلكتروني غير صالح",
@@ -560,6 +563,9 @@ class MyTranslation extends Translations {
           "Error: Endpoint not found": "خطأ: لم يتم العثور على المسار",
         },
         "en": {
+          "monthlyPayment": "monthly payment is @amount\$!",
+          "previousPayments": "Previous Payments",
+          "currentlyPayments": "Currently Payments",
           "emailreq": "Email is Required",
           "userreq": "Username is Required",
           "emailinvalid": "Invalid Email Address",
