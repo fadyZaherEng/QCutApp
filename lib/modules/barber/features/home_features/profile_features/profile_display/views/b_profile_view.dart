@@ -1006,9 +1006,12 @@ class _BProfileViewBodyState extends State<BProfileView>
   Widget _buildWalkInDialog(
       BuildContext context, BProfileController controller) {
     // Range selection state
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
     final Rx<DateTime?> rangeStart = Rx<DateTime?>(null);
     final Rx<DateTime?> rangeEnd = Rx<DateTime?>(null);
-    final Rx<DateTime> focusedDay = DateTime.now().obs;
+    final Rx<DateTime> focusedDay = today.obs;
     final Rx<RangeSelectionMode> rangeSelectionMode =
         RangeSelectionMode.toggledOn.obs;
 
@@ -1039,16 +1042,18 @@ class _BProfileViewBodyState extends State<BProfileView>
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24.r),
                     topRight: Radius.circular(24.r),
+                    bottomLeft: Radius.circular(24.r),
+                    bottomRight: Radius.circular(24.r),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(Icons.date_range,
-                        color: ColorsData.primary, size: 24.sp),
+                        color: ColorsData.primary, size: 24.sp,),
                     SizedBox(width: 12.w),
                     Text(
                       "set_walkIn_range".tr,
-                      style: Styles.textStyleS18W700(color: ColorsData.primary),
+                      style: Styles.textStyleS18W700(color: ColorsData.primary,),
                     ),
                     const Spacer(),
                     IconButton(
@@ -1065,8 +1070,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                 padding: EdgeInsets.all(16.w),
                 child: Obx(
                   () => TableCalendar(
-                    firstDay: DateTime.now(),
-                    lastDay: DateTime.now().add(const Duration(days: 365)),
+                    firstDay: today,
+                    lastDay: today.add(const Duration(days: 365 * 2)), // 2 years flexibility
                     focusedDay: focusedDay.value,
                     rangeStartDay: rangeStart.value,
                     rangeEndDay: rangeEnd.value,

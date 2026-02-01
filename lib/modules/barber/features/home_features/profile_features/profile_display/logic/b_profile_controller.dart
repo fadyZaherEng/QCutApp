@@ -132,13 +132,13 @@ class BProfileController extends GetxController {
       } else {
         isError.value = true;
         errorMessage.value =
-            responseBody['message'] ?? 'Failed to fetch profile data';
+            responseBody['message'] ?? 'Failed to fetch profile data'.tr;
         ShowToast.showError(message: errorMessage.value);
       }
     } catch (e) {
       isError.value = true;
-      errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to connect to server',
+      errorMessage.value = '${'networkError'.tr}: $e';
+      Get.snackbar('Error'.tr, 'Failed to connect to server'.tr,
           backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoading.value = false;
@@ -161,13 +161,13 @@ class BProfileController extends GetxController {
       } else {
         isError.value = true;
         errorMessage.value =
-            responseBody['message'] ?? 'Failed to fetch gallery';
+            responseBody['message'] ?? 'Failed to fetch gallery'.tr;
         ShowToast.showError(message: errorMessage.value);
       }
     } catch (e) {
       isError.value = true;
-      errorMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to load gallery',
+      errorMessage.value = '${'networkError'.tr}: $e';
+      Get.snackbar('Error'.tr, 'Failed to load gallery'.tr,
           backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isGalleryLoading.value = false;
@@ -202,14 +202,14 @@ class BProfileController extends GetxController {
       } else {
         isError.value = true;
         final errorMsg =
-            responseBody['message'] ?? 'Failed to fetch barber services';
+            responseBody['message'] ?? 'Failed to fetch barber services'.tr;
         errorMessage.value = errorMsg;
         ShowToast.showError(message: errorMsg);
       }
     } catch (e) {
       isError.value = true;
-      errorMessage.value = 'Network error when fetching services: $e';
-      Get.snackbar('Error', 'Failed to load services data',
+      errorMessage.value = '${'networkError'.tr}: $e';
+      Get.snackbar('Error'.tr, 'Failed to load services data'.tr,
           backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isServicesLoading.value = false;
@@ -223,7 +223,7 @@ class BProfileController extends GetxController {
       return uploadedUrl;
     } catch (e) {
       print('Error uploading service image: $e');
-      ShowToast.showError(message: 'Failed to upload service image');
+      ShowToast.showError(message: 'Failed to upload service image'.tr);
       return null;
     }
   }
@@ -267,7 +267,7 @@ class BProfileController extends GetxController {
       print("Response body: ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        updateServiceMessage.value = 'Service updated successfully';
+        updateServiceMessage.value = 'Service updated successfully'.tr;
         ShowToast.showSuccessSnackBar(message: updateServiceMessage.value);
 
         // Refresh services list after successful update
@@ -298,13 +298,13 @@ class BProfileController extends GetxController {
         } catch (e) {
           // If response body isn't valid JSON (like HTML error page)
           responseBody = {
-            'message': 'Failed to update service: ${response.statusCode}'
+            'message': '${'Failed to update service'.tr}: ${response.statusCode}'
           };
         }
 
         updateServiceMessage.value = (responseBody is Map)
-            ? (responseBody['message'] ?? 'Failed to update service')
-            : 'Failed to update service';
+            ? (responseBody['message'] ?? 'Failed to update service'.tr)
+            : 'Failed to update service'.tr;
         ShowToast.showError(message: updateServiceMessage.value);
         return {
           'success': false,
@@ -314,8 +314,8 @@ class BProfileController extends GetxController {
       }
     } catch (e) {
       print("=====> $e");
-      updateServiceMessage.value = 'Network error: $e';
-      Get.snackbar('Error', 'Failed to update service',
+      updateServiceMessage.value = '${'networkError'.tr}: $e';
+      Get.snackbar('Error'.tr, 'Failed to update service'.tr,
           backgroundColor: Colors.red, colorText: Colors.white);
       return {
         'success': false,
@@ -428,7 +428,7 @@ class BProfileController extends GetxController {
       print("Response body: ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        createServiceMessage.value = 'Service created successfully';
+        createServiceMessage.value = 'Service created successfully'.tr;
         ShowToast.showSuccessSnackBar(message: createServiceMessage.value);
 
         // Refresh services list after successful creation
@@ -458,13 +458,13 @@ class BProfileController extends GetxController {
           responseBody = json.decode(response.body);
         } catch (e) {
           responseBody = {
-            'message': 'Failed to create service: ${response.statusCode}'
+            'message': '${'Failed to create service'.tr}: ${response.statusCode}'
           };
         }
 
         createServiceMessage.value = (responseBody is Map)
-            ? (responseBody['message'] ?? 'Failed to create service')
-            : 'Failed to create service';
+            ? (responseBody['message'] ?? 'Failed to create service'.tr)
+            : 'Failed to create service'.tr;
         ShowToast.showError(message: createServiceMessage.value);
         return {
           'success': false,
@@ -474,8 +474,8 @@ class BProfileController extends GetxController {
       }
     } catch (e) {
       print("=====> Error creating service: $e");
-      createServiceMessage.value = 'Network error: $e';
-      ShowToast.showError(message: 'Failed to create service');
+      createServiceMessage.value = '${'networkError'.tr}: $e';
+      ShowToast.showError(message: 'Failed to create service'.tr);
       return {
         'success': false,
         'message': createServiceMessage.value,
@@ -492,7 +492,7 @@ class BProfileController extends GetxController {
   // Helper method to get total price range
   String getServicesRangeAsString() {
     if (barberServices.isEmpty) {
-      return 'No services available';
+      return 'No services available'.tr;
     }
 
     int minPrice =
@@ -506,7 +506,7 @@ class BProfileController extends GetxController {
   // Helper method to get working days as formatted string
   String getWorkingDaysAsString() {
     if (profileData.value == null || profileData.value!.workingDays.isEmpty) {
-      return 'No working days set';
+      return 'No working days set'.tr;
     }
 
     final List<String> formattedDays =
@@ -520,7 +520,7 @@ class BProfileController extends GetxController {
   // Helper method to get off days as string
   String getOffDaysAsString() {
     if (profileData.value == null || profileData.value!.offDay.isEmpty) {
-      return 'No off days set';
+      return 'No off days set'.tr;
     }
 
     return profileData.value!.offDay.join(', ');
@@ -529,7 +529,7 @@ class BProfileController extends GetxController {
   // Helper method to format address
   String getAddress() {
     if (profileData.value == null) {
-      return 'No address set';
+      return 'No address set'.tr;
     }
 
     return profileData.value!.city;
@@ -569,7 +569,7 @@ class BProfileController extends GetxController {
   Future<void> updateWalkInRanges(List<Map<String, DateTime>> ranges) async {
     try {
       if (ranges.isEmpty) {
-        ShowToast.showError(message: "Please select at least one range");
+        ShowToast.showError(message: "Please select at least one range".tr);
         return;
       }
 
@@ -597,14 +597,14 @@ class BProfileController extends GetxController {
         // Refresh profile to get updated walk-in data
         await fetchProfileData();
         loadWalkInDaysFromProfile();
-        ShowToast.showSuccessSnackBar(message: "Walk-In ranges updated successfully");
+        ShowToast.showSuccessSnackBar(message: "Walk-In ranges updated successfully".tr);
         update();
       } else {
         final responseBody = json.decode(response.body);
-        ShowToast.showError(message: responseBody['message'] ?? "Failed to update walk-in days");
+        ShowToast.showError(message: responseBody['message'] ?? "Failed to update walk-in days".tr);
       }
     } catch (e) {
-      ShowToast.showError(message: "Error updating walk-in days: $e");
+      ShowToast.showError(message: "${'Error updating walk-in days'.tr}: $e");
     }
   }
 }
