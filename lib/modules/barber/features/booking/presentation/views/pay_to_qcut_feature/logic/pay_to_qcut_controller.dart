@@ -43,6 +43,7 @@ class PayToQcutController extends GetxController {
           await _apiCall.getData("${Variables.baseUrl}monthly-barber-Invoice");
 
       print("API Response status code: ${response.statusCode}");
+      print("API Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -142,10 +143,13 @@ class PayToQcutController extends GetxController {
       final requestBody = {"bill": billId, "date": dateTimestamp};
 
       print("Requesting payment for bill: $billId, date: $dateTimestamp");
+      print("Request body: $requestBody");
+      print("api url: ${Variables.baseUrl}request-payment");
       final response = await _apiCall.addData(
           requestBody, "${Variables.baseUrl}request-payment");
 
       print("Payment request response status code: ${response.statusCode}");
+      print("Payment request response body: ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.toNamed(AppRouter.successScreenPath);

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:q_cut/core/utils/app_router.dart';
 import 'package:q_cut/core/utils/constants/assets_data.dart';
 import 'package:q_cut/core/utils/constants/colors_data.dart';
@@ -19,6 +20,7 @@ class BPayToQCutViewBody extends StatefulWidget {
 class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
   final PayToQcutController _controller = Get.put(PayToQcutController());
   bool isClicked = true;
+  int _selectedTab = 1; // 0 for Previous, 1 for Currently (setting 1 as default to match left image)
 
   @override
   Widget build(BuildContext context) {
@@ -89,43 +91,14 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20.h),
             _buildHeaderSection(),
-            SizedBox(height: 20.h),
-            _buildInvoiceDetailsCard(),
-            SizedBox(height: 20.h),
-            Obx(() {
-              // Check if there's at least one unpaid invoice
-              final hasUnpaidInvoice =
-                  _controller.invoices.value.any((invoice) => !invoice.isPaid);
-
-              if (hasUnpaidInvoice) {
-                // Find the first unpaid invoice to get its ID
-                final unpaidInvoice = _controller.invoices.value.firstWhere(
-                  (invoice) => !invoice.isPaid,
-                  orElse: () => _controller.invoices.value.first,
-                );
-
-                return CustomBigButton(
-                  textData: "continueToPay".tr,
-                  onPressed: () {
-                    Get.toNamed(AppRouter.bpaymentMethodsPath,
-                        arguments: unpaidInvoice.id);
-                  },
-                );
-              } else if (_controller.invoices.value.isEmpty) {
-                return CustomBigButton(
-                  textData: "noPaymentsRequired".tr,
-                  onPressed: null,
-                );
-              } else {
-                // Return an empty SizedBox if all invoices are paid
-                return const SizedBox();
-              }
-            }),
-            SizedBox(height: 20.h),
+            SizedBox(height: 30.h),
+            _buildPaymentCard(),
+            SizedBox(height: 30.h),
+            _buildActionButtons(),
+            SizedBox(height: 30.h),
           ],
         ),
       ),
@@ -149,99 +122,18 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
             style: TextStyle(
               color: ColorsData.primary,
               fontWeight: FontWeight.bold,
-              fontSize: 14.sp,
+              fontSize: 16.sp,
             ),
-          ),
-        ),
-        SizedBox(height: 4.h),
-        Center(
-          child: Text(
-            "checkSubscription".tr,
-            style: TextStyle(color: Colors.white70, fontSize: 12.sp),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInvoiceDetailsCard() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      decoration: BoxDecoration(
-        color: ColorsData.cardColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildJoinedSection(),
-          SizedBox(height: 16.h),
-          _buildPaymentTimelineSection(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildJoinedSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'timeToJoinedQcut'.tr,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Divider(color: Colors.white24, height: 16.h),
-        _buildInfoRow('dateToJoined'.tr, _controller.getJoinDate()),
-        _buildInfoRow('joinedSince'.tr, _controller.getJoinedSince(),
-            highlight: true),
-      ],
-    );
-  }
-
-  Widget _buildPaymentTimelineSection() {
-    final paymentTimeline = _controller.getPaymentTimeline();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'paymentTimeLine'.tr,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 8.h),
-        ...List.generate(
-          paymentTimeline.length,
-          (index) => _buildPaymentItem(
-            index,
-            paymentTimeline[index]['date'],
-            paymentTimeline[index]['status'],
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {
-              if (isClicked) {
-                isClicked = false;
-                setState(() {});
-                Get.toNamed(AppRouter.bpaymentTimeLinePath);
-                Future.delayed(const Duration(seconds: 2), () {
-                  isClicked = true;
-                  setState(() {});
-                });
-              }
-            },
-            child: Text(
-              'seeAll'.tr,
-              style: TextStyle(color: ColorsData.primary, fontSize: 12.sp),
+        Center(
+          child: Text(
+            "checkSubscription".tr,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -249,89 +141,195 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
     );
   }
 
-  Widget _buildInfoRow(String title, String value, {bool highlight = false}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildPaymentCard() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: ColorsData.cardColor.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      padding: EdgeInsets.all(20.w),
+      child: Column(
         children: [
           Text(
-            title,
-            style: TextStyle(color: Colors.white70, fontSize: 12.sp),
-          ),
-          Text(
-            value,
+            "monthly payment is 200\$!",
             style: TextStyle(
-              color: highlight ? ColorsData.primary : Colors.white,
-              fontSize: 12.sp,
-              fontWeight: highlight ? FontWeight.bold : FontWeight.normal,
+              color: ColorsData.primary,
+              fontSize: 15.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 20.h),
+          Row(
+            children: [
+              _buildTabItem("Previous Payments", 0),
+              _buildTabItem("Currently Payments", 1),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          _selectedTab == 0 ? _buildPreviousPaymentsList() : _buildCurrentlyPaymentsGrid(),
         ],
       ),
     );
   }
 
-  Widget _buildPaymentItem(int index, String date, String status) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SvgPicture.asset(
-            AssetsData.calendarIcon,
-            height: 16.h,
-            width: 16.w,
-            colorFilter: const ColorFilter.mode(
-              ColorsData.primary,
-              BlendMode.srcIn,
+  Widget _buildTabItem(String title, int index) {
+    bool isSelected = _selectedTab == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedTab = index;
+          });
+        },
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13.sp,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            SizedBox(height: 8.h),
+            Container(
+              height: 2.h,
+              width: 80.w,
+              color: isSelected ? ColorsData.primary : Colors.transparent,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPreviousPaymentsList() {
+    final payments = _controller.getPaymentTimeline();
+
+    if (payments.isEmpty || (payments.length == 1 && payments[0]['date'] == 'No data')) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        child: Text(
+          "No previous payments found",
+          style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+        ),
+      );
+    }
+
+    return Column(
+      children: payments.map((payment) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 10.h),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  date,
-                  style: TextStyle(color: Colors.white, fontSize: 12.sp),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  status.toLowerCase().contains("paid")
-                      ? 'paid'.tr
-                      : 'unpaid'.tr,
+                  payment['date'],
                   style: TextStyle(
-                    color: _controller.isPaidList[index]
-                        ? Colors.white
-                        : Colors.white70,
-                    fontSize: 12.sp,
+                    color: Colors.black,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
                   ),
-                  softWrap: true,
+                ),
+                Text(
+                  "${payment['amount']} LE",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(
-              _controller.isPaidList[index]
-                  ? Icons.check_circle
-                  : Icons.radio_button_unchecked,
-              color: _controller.isPaidList[index]
-                  ? ColorsData.primary
-                  : Colors.white70,
-              size: 18.sp,
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildCurrentlyPaymentsGrid() {
+    // Current month first and second day
+    DateTime now = DateTime.now();
+    DateTime firstDay = DateTime(now.year, now.month, 1);
+    DateTime secondDay = DateTime(now.year, now.month, 2);
+
+    String firstDayName = DateFormat('EEEE').format(firstDay);
+    String secondDayName = DateFormat('EEEE').format(secondDay);
+
+    return Row(
+      children: [
+        Expanded(child: _buildCurrentPaymentCard(firstDayName)),
+        SizedBox(width: 15.w),
+        Expanded(child: _buildCurrentPaymentCard(secondDayName)),
+      ],
+    );
+  }
+
+  Widget _buildCurrentPaymentCard(String day) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.r),
+      ),
+      child: Column(
+        children: [
+          Text(
+            day,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
             ),
-            onPressed: () {},
-            constraints: BoxConstraints(
-              minWidth: 36.w,
-              minHeight: 36.h,
+          ),
+          SizedBox(height: 20.h),
+          Text(
+            "17:00 - 20:00",
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 12.sp,
             ),
-            padding: EdgeInsets.zero,
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildActionButtons() {
+    return Obx(() {
+      // Check if there's at least one unpaid invoice
+      final hasUnpaidInvoice =
+          _controller.invoices.value.any((invoice) => !invoice.isPaid);
+
+      if (hasUnpaidInvoice) {
+        final unpaidInvoice = _controller.invoices.value.firstWhere(
+          (invoice) => !invoice.isPaid,
+          orElse: () => _controller.invoices.value.first,
+        );
+
+        return CustomBigButton(
+          textData: "Confirm", // Using "Confirm" as per the image
+          onPressed: () {
+            Get.toNamed(AppRouter.bpaymentMethodsPath,
+                arguments: unpaidInvoice.id);
+          },
+        );
+      } else {
+        return CustomBigButton(
+          textData: "Confirm",
+          onPressed: () {
+            // Even if no unpaid, we can allow clicking or show feedback
+          },
+        );
+      }
+    });
   }
 }
