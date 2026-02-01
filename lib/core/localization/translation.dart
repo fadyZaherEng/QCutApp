@@ -536,6 +536,10 @@ class MyTranslation extends Translations {
           "OTP is 123456": "رمز التحقق هو 123456",
           "Failed to send OTP": "فشل في إرسال رمز التحقق",
           "Password changed successfully": "تم تغيير كلمة المرور بنجاح",
+          "Invalid OTP": "رمز التحقق غير صحيح",
+          "Phone number updated successfully": "تم تحديث رقم الهاتف بنجاح",
+          "Failed to update phone number": "فشل في تحديث رقم الهاتف",
+          "Error: Endpoint not found": "خطأ: لم يتم العثور على المسار",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -1090,6 +1094,10 @@ class MyTranslation extends Translations {
           "Failed to send OTP": "Failed to send OTP",
           "Please enter valid phone number (9 digits)": "Please enter valid phone number (9 digits)",
           "Password changed successfully": "Password changed successfully",
+          "Invalid OTP": "Invalid OTP",
+          "Phone number updated successfully": "Phone number updated successfully",
+          "Failed to update phone number": "Failed to update phone number",
+          "Error: Endpoint not found": "Error: Endpoint not found",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1607,6 +1615,10 @@ class MyTranslation extends Translations {
             "Failed to send OTP": "שליחת קוד האימות נכשלה",
             "Please enter valid phone number (9 digits)": "אנא הזן מספר טלפון תקין (9 ספרות)",
             "Password changed successfully": "הסיסמה שונתה בהצלחה",
+            "Invalid OTP": "קוד אימות לא תקין",
+            "Phone number updated successfully": "מספר הטלפון עודכן בהצלחה",
+            "Failed to update phone number": "עדכון מספר הטלפון נכשל",
+            "Error: Endpoint not found": "שגיאה: נתיב לא נמצא",
           },
       };
 }

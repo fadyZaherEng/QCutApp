@@ -12,6 +12,7 @@ import 'package:q_cut/modules/auth/views/functions/validate_egyptian_phone_numbe
 import 'package:q_cut/modules/auth/views/widgets/custom_text_form.dart';
 import 'package:q_cut/core/utils/network/api.dart';
 import 'package:q_cut/core/utils/network/network_helper.dart';
+import 'dart:convert';
 
 class ResetPhoneNumberView extends StatelessWidget {
   ResetPhoneNumberView({super.key});
@@ -68,27 +69,49 @@ class ResetPhoneNumberView extends StatelessWidget {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Call API to send OTP
-                        NetworkAPICall().postDataAsGuest({
-                          "phoneNumber": _phoneNumberController.text
-                        }, Variables.FORGET_PASSWORD).then((response) {
-                          if (response.statusCode == 200 ||
-                              response.statusCode == 201) {
-                            ShowToast.showSuccessSnackBar(
-                                message: "OTP is 123456".tr);
-                            Get.toNamed(
-                              AppRouter.otpVerificationResetCasePath,
-                              arguments: {
-                                "isFromResetPassword": false,
-                                "phoneNumber": _phoneNumberController.text,
-                              },
-                            );
-                          } else {
-                            ShowToast.showError(
-                                message: "Failed to send OTP".tr);
-                          }
-                        }).catchError((e) {
-                          ShowToast.showError(message: "Error: $e");
-                        });
+                        print(
+                            "Sending OTP to +972${_phoneNumberController.text}");
+                        print("url: ${Variables.FORGET_PASSWORD}");
+                        ShowToast.showSuccessSnackBar(message: "OTP is 123456".tr);
+                        Get.toNamed(
+                          AppRouter.otpVerificationResetCasePath,
+                          arguments: {
+                            "isFromResetPassword": false,
+                            "phoneNumber": "+972${_phoneNumberController.text}",
+                          },
+                        );
+                        // NetworkAPICall().postDataAsGuest(
+                        //     {"phoneNumber": _phoneNumberController.text},
+                        //     Variables.FORGET_PASSWORD).then((response) {
+                        //   print("Response status: ${response.statusCode}");
+                        //   print("Response body: ${response.body}");
+                        //   if (response.statusCode == 200 || response.statusCode == 201) {
+                        //     ShowToast.showSuccessSnackBar(message: "OTP is 123456".tr);
+                        //     Get.toNamed(
+                        //       AppRouter.otpVerificationResetCasePath,
+                        //       arguments: {
+                        //         "isFromResetPassword": false,
+                        //         "phoneNumber": "+972${_phoneNumberController.text}",
+                        //       },
+                        //     );
+                        //   } else {
+                        //     // Extract message from response body if it's available
+                        //     String errorMsg = "Failed to send OTP".tr;
+                        //     if (response.body is Map && response.body.containsKey('message')) {
+                        //       errorMsg = response.body['message'];
+                        //     } else if (response.body is String) {
+                        //       try {
+                        //         final decoded = json.decode(response.body);
+                        //         if (decoded is Map && decoded.containsKey('message')) {
+                        //           errorMsg = decoded['message'];
+                        //         }
+                        //       } catch (_) {}
+                        //     }
+                        //     ShowToast.showError(message: errorMsg.tr);
+                        //   }
+                        // }).catchError((e) {
+                        //   ShowToast.showError(message: "Error: $e");
+                        // });
                       }
                     },
                   ),

@@ -25,7 +25,7 @@ class OtpVerificationController extends GetxController {
     super.onInit();
     print("OtpVerificationController initialized");
     startTimer();
-    otpController.text ="";// "123456"; // Constant OTP
+    otpController.text = ""; // "123456"; // Constant OTP
   }
 
   void startTimer() {
@@ -65,7 +65,7 @@ class OtpVerificationController extends GetxController {
       // For now, just simulate and restart timer
       await Future.delayed(
           const Duration(seconds: 1)); // Simulate network delay
-      ShowToast.showSuccessSnackBar(message: "OTP is 123456");
+      ShowToast.showSuccessSnackBar(message: "OTP is 123456".tr);
       startTimer();
     } catch (e) {
       errorMessage.value = 'Error: $e';
@@ -83,17 +83,17 @@ class OtpVerificationController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     try {
-       // Since OTP is constant "123456" for this flow, we might not need to call API here 
-       // if the requirement is just to move to the next screen.
-       // However, usually verify happens here. 
-       // For this specific request "make otp constatnt show for user from 1 to 6",
-       // and "then when reset navigate to reset password screen".
-       
-       // check if OTP matches 123456
-       if(otp != "123456"){
-           ShowToast.showError(message: "Invalid OTP");
-           return;
-       }
+      // Since OTP is constant "123456" for this flow, we might not need to call API here
+      // if the requirement is just to move to the next screen.
+      // However, usually verify happens here.
+      // For this specific request "make otp constatnt show for user from 1 to 6",
+      // and "then when reset navigate to reset password screen".
+
+      // check if OTP matches 123456
+      if (otp != "123456") {
+        ShowToast.showError(message: "Invalid OTP".tr);
+        return;
+      }
 
       await Future.delayed(
           const Duration(seconds: 1)); // Simulate network delay
@@ -107,6 +107,7 @@ class OtpVerificationController extends GetxController {
       isLoading.value = false;
     }
   }
+
   // Method to update phone number
   Future<void> updatePhoneNumber(String newPhoneNumber) async {
     isLoading.value = true;
@@ -115,7 +116,9 @@ class OtpVerificationController extends GetxController {
       final String formattedPhoneNumber = newPhoneNumber.startsWith('+')
           ? newPhoneNumber
           : "+972$newPhoneNumber";
-
+      print("API Endpoint: ${Variables.VERIFY_CHANGE_PHONE}");
+      print(
+          "Request Body: {newPhoneNumber: $formattedPhoneNumber, otp: ${otpController.text}}");
       final response = await NetworkAPICall().addData({
         "newPhoneNumber": formattedPhoneNumber,
         "otp": otpController.text,
@@ -139,7 +142,7 @@ class OtpVerificationController extends GetxController {
             // Navigate back to profile or home
             Get.offAllNamed("/bottomNavigationBar");
           } else if (response.body.toString().contains("Endpoint not found")) {
-            ShowToast.showError(message: "Error: Endpoint not found");
+            ShowToast.showError(message: "Error: Endpoint not found".tr);
           } else {
             // Fallback success if it's 200 but not standard JSON
             await SharedPref()
@@ -151,7 +154,7 @@ class OtpVerificationController extends GetxController {
         } catch (e) {
           // If not JSON but status is successful
           if (response.body.toString().contains("Endpoint not found")) {
-            ShowToast.showError(message: "Error: Endpoint not found");
+            ShowToast.showError(message: "Error: Endpoint not found".tr);
           } else {
             await SharedPref()
                 .setString(PrefKeys.phoneNumber, formattedPhoneNumber);
@@ -166,12 +169,12 @@ class OtpVerificationController extends GetxController {
           final responseBody = json.decode(response.body);
           ShowToast.showError(
               message:
-                  responseBody['message'] ?? 'Failed to update phone number');
+                  responseBody['message'] ?? 'Failed to update phone number'.tr);
         } catch (e) {
           ShowToast.showError(
               message: response.body.isNotEmpty
                   ? response.body.toString()
-                  : 'Failed to update phone number (Status: ${response.statusCode})');
+                  : 'Failed to update phone number'.tr + " (Status: ${response.statusCode})");
         }
       }
     } catch (e) {
