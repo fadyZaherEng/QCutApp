@@ -20,7 +20,7 @@ class CustomerAppointmentResponse {
 class CustomerAppointment {
   final String id;
   final BarberInfo barber;
-  final String user;
+  final UserInfo user;
   final String userName;
   final List<ServiceInfo> services;
   final double price;
@@ -52,20 +52,20 @@ class CustomerAppointment {
         .toList();
 
     return CustomerAppointment(
-      id: json['_id'],
+      id: json['_id'] ?? "",
       barber: BarberInfo.fromJson(json['barber']),
-      user: (json['user'] is Map) ? json['user']['_id'] : json['user'],
-      userName: json['userName'],
+      user: UserInfo.fromJson(json['user']),
+      userName: json['userName'] ?? "",
       services: serviceList,
       price: (json['price'] is int)
           ? (json['price'] as int).toDouble()
-          : json['price'],
-      duration: json['duration'],
-      status: json['status'],
+          : (json['price'] as num).toDouble(),
+      duration: json['duration'] ?? 0,
+      status: json['status'] ?? "pending",
       startDate: _parseDate(json['startDate']),
       endDate: _parseDate(json['endDate']),
       createdAt: _parseDate(json['createdAt']),
-      paymentMethod: json['paymentMethod'],
+      paymentMethod: json['paymentMethod'] ?? "cash",
     );
   }
 
@@ -104,12 +104,40 @@ class CustomerAppointment {
   }
 }
 
+class UserInfo {
+  final String id;
+  final String fullName;
+  final String phoneNumber;
+  final String? profilePic;
+
+  UserInfo({
+    required this.id,
+    required this.fullName,
+    required this.phoneNumber,
+    this.profilePic,
+  });
+
+  factory UserInfo.fromJson(dynamic json) {
+    if (json is String) {
+      return UserInfo(id: json, fullName: "", phoneNumber: "");
+    }
+    return UserInfo(
+      id: json['_id'] ?? '',
+      fullName: json['fullName'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
+      profilePic: json['profilePic'],
+    );
+  }
+}
+
 class BarberInfo {
   final String id;
   final String fullName;
   final String userType;
   final String city;
   final String? barberShop;
+  final String? profilePic;
+  final String? coverPic;
   final List<double>? locationCoordinates;
 
   BarberInfo({
@@ -118,12 +146,13 @@ class BarberInfo {
     required this.userType,
     required this.city,
     this.barberShop,
+    this.profilePic,
+    this.coverPic,
     this.locationCoordinates,
   });
 
   factory BarberInfo.fromJson(Map<String, dynamic> json) {
     List<double>? coords;
-    // Check if location info exists and handle both Map and List cases
     if (json['barberShopLocation'] != null) {
       if (json['barberShopLocation'] is Map &&
           json['barberShopLocation']['coordinates'] != null) {
@@ -131,7 +160,6 @@ class BarberInfo {
             .map((x) => (x as num).toDouble()));
       } else if (json['barberShopLocation'] is List &&
           json['barberShopLocation'].isNotEmpty) {
-        // Assuming if it's a list, the first item is the location object
         var loc = json['barberShopLocation'][0];
         if (loc is Map && loc['coordinates'] != null) {
           coords = List<double>.from(
@@ -141,11 +169,13 @@ class BarberInfo {
     }
 
     return BarberInfo(
-      id: json['_id'],
-      fullName: json['fullName'],
-      userType: json['userType'],
+      id: json['_id'] ?? "",
+      fullName: json['fullName'] ?? "",
+      userType: json['userType'] ?? "barber",
       city: json['city'] ?? "",
       barberShop: json['barberShop'],
+      profilePic: json['profilePic'],
+      coverPic: json['coverPic'],
       locationCoordinates: coords,
     );
   }
@@ -161,26 +191,24 @@ class ServiceInfo {
     required this.serviceId,
     required this.numberOfUsers,
     required this.price,
-    this.serviceName =
-        "Hair style", // Default value since API doesn't provide service name
+    this.serviceName = "Hair style",
   });
 
   factory ServiceInfo.fromJson(Map<String, dynamic> json) {
     return ServiceInfo(
-      serviceId: json['service'],
-      numberOfUsers: json['numberOfUsers'],
+      serviceId: json['service'] ?? json['_id'] ?? "",
+      numberOfUsers: json['numberOfUsers'] ?? 1,
       price: (json['price'] is int)
           ? (json['price'] as int).toDouble()
-          : json['price'],
+          : (json['price'] as num).toDouble(),
     );
   }
-  //to json
+
   Map<String, dynamic> toJson() {
     return {
       'service': serviceId,
       'numberOfUsers': numberOfUsers,
       'price': price,
-      // 'serviceName': serviceName, // Not included as API doesn't require it
     };
   }
 }
