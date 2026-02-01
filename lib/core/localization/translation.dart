@@ -532,6 +532,10 @@ class MyTranslation extends Translations {
           "From:": "من:",
           "update_range": "تحديث النطاق",
           "your_name": "اسمك",
+          "phone number not found": "رقم الهاتف غير موجود",
+          "OTP is 123456": "رمز التحقق هو 123456",
+          "Failed to send OTP": "فشل في إرسال رمز التحقق",
+          "Password changed successfully": "تم تغيير كلمة المرور بنجاح",
         },
         "en": {
           "emailreq": "Email is Required",
@@ -1081,6 +1085,11 @@ class MyTranslation extends Translations {
           "From:": "From:",
           "update_range": "Update Range",
           "your_name": "Your Name",
+          "phone number not found": "Phone number not found",
+          "OTP is 123456": "OTP is 123456",
+          "Failed to send OTP": "Failed to send OTP",
+          "Please enter valid phone number (9 digits)": "Please enter valid phone number (9 digits)",
+          "Password changed successfully": "Password changed successfully",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1593,6 +1602,11 @@ class MyTranslation extends Translations {
           "Instagram link is not set": "לא מוגדר קישור לאינסטגרם",
           "Error": "שגיאה",
            "seeDetails": "ראה פרטים",
-         },
+            "phone number not found": "מספר הטלפון לא נמצא",
+            "OTP is 123456": "קוד האימות הוא 123456",
+            "Failed to send OTP": "שליחת קוד האימות נכשלה",
+            "Please enter valid phone number (9 digits)": "אנא הזן מספר טלפון תקין (9 ספרות)",
+            "Password changed successfully": "הסיסמה שונתה בהצלחה",
+          },
       };
 }

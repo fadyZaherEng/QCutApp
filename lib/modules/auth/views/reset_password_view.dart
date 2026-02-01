@@ -76,6 +76,16 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           .then((response) async {
             print("Reset Password Response: ${response.body}");
         if (response.statusCode == 200 || response.statusCode == 201) {
+          // Extract success message
+          String successMsg = "resetPasswordSuccess".tr;
+          try {
+            final responseBody = json.decode(response.body);
+            if (responseBody is Map && responseBody.containsKey('message')) {
+              successMsg = responseBody['message'];
+            }
+          } catch (_) {}
+          ShowToast.showSuccessSnackBar(message: successMsg.tr);
+          
           // Password reset successful, now login
           
           // Get FCM token first (optional, or pass empty/dummy if not critical for immediate login here, 
