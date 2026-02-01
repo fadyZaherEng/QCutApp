@@ -92,13 +92,13 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         children: [
-          SizedBox(height: 20.h),
+          SizedBox(height: 10.h),
           _buildHeaderSection(),
-          SizedBox(height: 30.h),
+          SizedBox(height: 16.h),
           _buildPaymentCard(),
-          SizedBox(height: 30.h),
+          SizedBox(height: 16.h),
           _buildActionButtons(),
-          SizedBox(height: 30.h),
+          SizedBox(height: 55.h),
         ],
       ),
     );
@@ -111,10 +111,10 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
           child: Image.asset(
             AssetsData.thanksImage,
             width: 183.w,
-            height: 137.h,
+            height: 130.h,
           ),
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         Center(
           child: Text(
             'weAreGlad'.tr,
@@ -287,13 +287,25 @@ class _BPayToQCutViewBodyState extends State<BPayToQCutViewBody> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  "${payment['amount']} LE",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Text(
+                    //   "totalAfterDeductions".tr,
+                    //   style: TextStyle(
+                    //     color: Colors.black54,
+                    //     fontSize: 10.sp,
+                    //   ),
+                    // ),
+                    Text(
+                      "${payment['amount']} LE",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

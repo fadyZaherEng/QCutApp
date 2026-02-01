@@ -213,7 +213,7 @@ class PayToQcutController extends GetxController {
         'date': DateFormat('M/d/yyyy').format(invoice.fromDate),
         'status': invoice.isPaid ? 'paid'.tr : 'unpaid'.tr,
         'isPaid': invoice.isPaid,
-        'amount': invoice.qcuteSubscription,
+        'amount': invoice.totalAfterDeductions,
       };
     }).toList();
   }
