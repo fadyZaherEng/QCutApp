@@ -142,6 +142,7 @@ class QCutServicesView extends StatelessWidget {
                     arguments: {
                       "freeTimeRequestModel": freeTimeRequestModel,
                       "barber": barber,
+                      "isBarber": isBarber,
                     },
                   );
                 },

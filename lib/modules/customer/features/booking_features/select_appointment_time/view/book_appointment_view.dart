@@ -28,6 +28,7 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
     final selectedServices =
         Get.arguments["freeTimeRequestModel"] as FreeTimeRequestModel?;
     final barber = Get.arguments["barber"] as Barber;
+    final isBarberBooking = Get.arguments["isBarber"] as bool? ?? false;
 
     if (selectedServices != null) {
       if (selectedServices.barber.isNotEmpty) {
@@ -154,34 +155,36 @@ class BookAppointmentView extends GetView<SelectAppointmentTimeController> {
                   builder: (controller) => const CustomAvailableTime(),
                 ),
                 SizedBox(height: 24.h),
-                Text(
-                  "ifAppointmentsDontFit".tr,
-                  style: Styles.textStyleS16W400(),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "youCanSelectFrom".tr,
-                      style: Styles.textStyleS16W400(),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        if (selectedServices != null) {
-                          Get.toNamed(AppRouter.onHoldAppointmentPath,
-                              arguments:
-                                  selectedServices.copyWith(onHolding: true));
-                        }
-                      },
-                      child: Text(
-                        textAlign: TextAlign.left,
-                        "onHoldAppointments".tr,
-                        style:
-                            Styles.textStyleS16W400(color: ColorsData.primary),
+                if (!isBarberBooking) ...[
+                  Text(
+                    "ifAppointmentsDontFit".tr,
+                    style: Styles.textStyleS16W400(),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "youCanSelectFrom".tr,
+                        style: Styles.textStyleS16W400(),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
+                      GestureDetector(
+                        onTap: () async {
+                          if (selectedServices != null) {
+                            Get.toNamed(AppRouter.onHoldAppointmentPath,
+                                arguments:
+                                    selectedServices.copyWith(onHolding: true));
+                          }
+                        },
+                        child: Text(
+                          textAlign: TextAlign.left,
+                          "onHoldAppointments".tr,
+                          style:
+                              Styles.textStyleS16W400(color: ColorsData.primary),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                ],
               ],
             ),
           );
