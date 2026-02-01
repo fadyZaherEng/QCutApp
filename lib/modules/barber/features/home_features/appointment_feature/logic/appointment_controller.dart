@@ -32,7 +32,7 @@ class BAppointmentController extends GetxController {
   final RxInt selectedDay = 0.obs;
 
   // Barber profile info
-  final String barberName = "barberShop".tr;
+  final String barberName = "BarberShop".tr;
   final String barberServices = "hairStyleCutsFaceShaving".tr;
   final RxString barberImage = "".obs;
 
