@@ -117,6 +117,7 @@ class OtpVerificationController extends GetxController {
           ? newPhoneNumber
           : "+972$newPhoneNumber";
       print("API Endpoint: ${Variables.VERIFY_CHANGE_PHONE}");
+
       print(
           "Request Body: {newPhoneNumber: $formattedPhoneNumber, otp: ${otpController.text}}");
       final response = await NetworkAPICall().addData({

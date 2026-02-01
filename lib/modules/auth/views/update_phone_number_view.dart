@@ -39,7 +39,7 @@ class UpdatePhoneNumberView extends StatelessWidget {
                   ),
                   SizedBox(height: 79.h),
                   Text(
-                    'enterYourNewPhoneNumber'.tr,
+                    'confirmPhoneNumberChange'.tr,
                     style: Styles.textStyleS16W700(color: ColorsData.primary),
                   ),
                   SizedBox(height: 24.h),
