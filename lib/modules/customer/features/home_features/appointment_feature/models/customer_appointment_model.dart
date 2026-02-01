@@ -3,7 +3,8 @@ class CustomerAppointmentResponse {
 
   CustomerAppointmentResponse({required this.appointments});
 
-  factory CustomerAppointmentResponse.fromJson(Map<String, dynamic> json) {
+  factory CustomerAppointmentResponse.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return CustomerAppointmentResponse(appointments: []);
     var appointmentsData = json['data'];
     List<CustomerAppointment> appointmentsList = [];
 
@@ -46,20 +47,49 @@ class CustomerAppointment {
     required this.paymentMethod,
   });
 
-  factory CustomerAppointment.fromJson(Map<String, dynamic> json) {
-    var serviceList = (json['service'] as List)
-        .map((item) => ServiceInfo.fromJson(item))
-        .toList();
+  factory CustomerAppointment.fromJson(dynamic json) {
+    if (json == null || json is! Map) {
+      return CustomerAppointment(
+        id: "",
+        barber: BarberInfo.fromJson(null),
+        user: UserInfo.fromJson(null),
+        userName: "",
+        services: [],
+        price: 0.0,
+        duration: 0,
+        status: "pending",
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        createdAt: DateTime.now(),
+        paymentMethod: "cash",
+      );
+    }
+
+    // Flexible user handling
+    dynamic userRaw = json['user'];
+    UserInfo userInfo;
+    if (userRaw is String) {
+      userInfo = UserInfo(
+          id: userRaw, fullName: json['userName'] ?? "", phoneNumber: "");
+    } else {
+      userInfo = UserInfo.fromJson(userRaw);
+    }
+
+    var serviceListRaw = json['service'];
+    List<ServiceInfo> serviceList = [];
+    if (serviceListRaw is List) {
+      serviceList = serviceListRaw
+          .map((item) => ServiceInfo.fromJson(item))
+          .toList();
+    }
 
     return CustomerAppointment(
       id: json['_id'] ?? "",
       barber: BarberInfo.fromJson(json['barber']),
-      user: UserInfo.fromJson(json['user']),
+      user: userInfo,
       userName: json['userName'] ?? "",
       services: serviceList,
-      price: (json['price'] is int)
-          ? (json['price'] as int).toDouble()
-          : (json['price'] as num).toDouble(),
+      price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0.0,
       duration: json['duration'] ?? 0,
       status: json['status'] ?? "pending",
       startDate: _parseDate(json['startDate']),
@@ -70,12 +100,17 @@ class CustomerAppointment {
   }
 
   static DateTime _parseDate(dynamic dateValue) {
+    if (dateValue == null) return DateTime.now();
     if (dateValue is int) {
       // Handle milliseconds timestamp
       return DateTime.fromMillisecondsSinceEpoch(
           dateValue > 9999999999 ? dateValue : dateValue * 1000);
     } else if (dateValue is String) {
-      return DateTime.parse(dateValue);
+      try {
+        return DateTime.parse(dateValue);
+      } catch (_) {
+        return DateTime.now();
+      }
     }
     return DateTime.now();
   }
@@ -118,15 +153,21 @@ class UserInfo {
   });
 
   factory UserInfo.fromJson(dynamic json) {
+    if (json == null) {
+      return UserInfo(id: "", fullName: "", phoneNumber: "");
+    }
     if (json is String) {
       return UserInfo(id: json, fullName: "", phoneNumber: "");
     }
-    return UserInfo(
-      id: json['_id'] ?? '',
-      fullName: json['fullName'] ?? '',
-      phoneNumber: json['phoneNumber'] ?? '',
-      profilePic: json['profilePic'],
-    );
+    if (json is Map) {
+      return UserInfo(
+        id: json['_id'] ?? '',
+        fullName: json['fullName'] ?? '',
+        phoneNumber: json['phoneNumber'] ?? '',
+        profilePic: json['profilePic'],
+      );
+    }
+    return UserInfo(id: "", fullName: "", phoneNumber: "");
   }
 }
 
@@ -151,16 +192,19 @@ class BarberInfo {
     this.locationCoordinates,
   });
 
-  factory BarberInfo.fromJson(Map<String, dynamic> json) {
+  factory BarberInfo.fromJson(dynamic json) {
+    if (json == null || json is! Map) {
+      return BarberInfo(
+          id: "", fullName: "", userType: "barber", city: "", barberShop: null);
+    }
     List<double>? coords;
-    if (json['barberShopLocation'] != null) {
-      if (json['barberShopLocation'] is Map &&
-          json['barberShopLocation']['coordinates'] != null) {
-        coords = List<double>.from(json['barberShopLocation']['coordinates']
-            .map((x) => (x as num).toDouble()));
-      } else if (json['barberShopLocation'] is List &&
-          json['barberShopLocation'].isNotEmpty) {
-        var loc = json['barberShopLocation'][0];
+    var location = json['barberShopLocation'];
+    if (location != null) {
+      if (location is Map && location['coordinates'] != null) {
+        coords = List<double>.from(
+            location['coordinates'].map((x) => (x as num).toDouble()));
+      } else if (location is List && location.isNotEmpty) {
+        var loc = location[0];
         if (loc is Map && loc['coordinates'] != null) {
           coords = List<double>.from(
               loc['coordinates'].map((x) => (x as num).toDouble()));
@@ -194,13 +238,14 @@ class ServiceInfo {
     this.serviceName = "Hair style",
   });
 
-  factory ServiceInfo.fromJson(Map<String, dynamic> json) {
+  factory ServiceInfo.fromJson(dynamic json) {
+    if (json == null || json is! Map) {
+      return ServiceInfo(serviceId: "", numberOfUsers: 1, price: 0.0);
+    }
     return ServiceInfo(
       serviceId: json['service'] ?? json['_id'] ?? "",
       numberOfUsers: json['numberOfUsers'] ?? 1,
-      price: (json['price'] is int)
-          ? (json['price'] as int).toDouble()
-          : (json['price'] as num).toDouble(),
+      price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0.0,
     );
   }
 
