@@ -371,6 +371,19 @@ class BAppointmentController extends GetxController {
   }
 
   Future<bool> deleteAppointment(String appointmentId) async {
+    // Check if cancellation is allowed (at least 20 mins before)
+    final now = DateTime.now();
+    final appointment =
+        appointments.firstWhereOrNull((a) => a.id == appointmentId);
+
+    if (appointment != null) {
+      final difference = appointment.startDate.difference(now);
+      if (difference.inMinutes < 20) {
+        ShowToast.showError(message: 'cancellationRestrictionMessage'.tr);
+        return false;
+      }
+    }
+
     try {
       print("${Variables.APPOINTMENT}cancel/$appointmentId");
 

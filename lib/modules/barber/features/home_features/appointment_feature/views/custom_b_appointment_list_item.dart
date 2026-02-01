@@ -87,7 +87,7 @@ class _CustomBAppointmentListItemState extends State<CustomBAppointmentListItem>
   Widget build(BuildContext context) {
     final appointmentStart = widget.appointment.startDate;
     final canDelete =
-        now.isBefore(appointmentStart.subtract(const Duration(minutes: 30)));
+        now.isBefore(appointmentStart.subtract(const Duration(minutes: 20)));
     final canMarkDidntCome =
         now.isAfter(appointmentStart.add(const Duration(minutes: 5)));
 
