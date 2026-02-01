@@ -133,20 +133,15 @@ class _BProfileViewBodyState extends State<BProfileView>
           child: Scaffold(
             key: _scaffoldKey,
             drawer: const CustomBDrawer(),
-            body: Column(
-              children: [
-                RefreshIndicator(
-                  onRefresh: () async {
-                    await controller.fetchProfileData();
-                    if (_tabController.index == 1) {
-                      await controller.fetchGallery();
-                    }
-                  },
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
                   child: SizedBox(
                     height: 300.h,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
+                        // ... existing Header content ...
                         Container(
                           width: double.infinity,
                           height: 250.h,
@@ -302,7 +297,6 @@ class _BProfileViewBodyState extends State<BProfileView>
                             ),
                           ),
                         ),
-                        // Burger Menu + Take Break
                         Positioned(
                           top: 10.h,
                           left: Get.locale?.languageCode == "ar" ? 20.w : null,
@@ -325,219 +319,208 @@ class _BProfileViewBodyState extends State<BProfileView>
                     ),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  sliver: SliverToBoxAdapter(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 20.h),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                barberShop,
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ColorsData.primary),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              width: 80.w,
+                              height: 30.h,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Flexible(
-                                    child: Text(
-                                      barberShop,
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8.w),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: ColorsData.primary),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    width: 80.w,
-                                    height: 30.h,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "NO. 1".tr,
-                                          style: Styles.textStyleS13W400(
-                                            color: ColorsData.primary,
-                                          ),
-                                        ),
-                                      ],
+                                  Text(
+                                    "NO. 1".tr,
+                                    style: Styles.textStyleS13W400(
+                                      color: ColorsData.primary,
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10.h),
-                              Divider(
-                                color: ColorsData.cardStrock,
-                                thickness: 1.w,
-                              ),
-                              SizedBox(height: 8.h),
-                              _buildInfoRow(
-                                AssetsData.personIcon,
-                                fullName,
-                                location,
-                              ),
-                              SizedBox(height: 8.h),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return MapSearchScreen(
-                                          initialLatitude: profileData
-                                                  .barberShopLocation
-                                                  .coordinates
-                                                  .isNotEmpty
-                                              ? profileData.barberShopLocation
-                                                  .coordinates[1]
-                                              : 31.0461,
-                                          initialLongitude: profileData
-                                                  .barberShopLocation
-                                                  .coordinates
-                                                  .isNotEmpty
-                                              ? profileData.barberShopLocation
-                                                  .coordinates[0]
-                                              : 34.8516,
-                                          onLocationSelected:
-                                              (lat, lng, address) {
-                                            setState(() {});
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                                child: _buildInfoRow(
-                                  AssetsData.mapPinIcon,
-                                  city,
-                                  location,
-                                  isAddress: true,
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              InkWell(
-                                onTap: () {
-                                  launchPhoneDialer(profileData.phoneNumber);
-                                },
-                                child: _buildInfoRow(
-                                  AssetsData.callIcon,
-                                  "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
-                                  location,
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              InkWell(
-                                onTap: () {
-                                  try {
-                                    launch(profileData.instagramPage);
-                                  } catch (e) {
-                                    print('Could not launch Instagram: $e');
-                                  }
-                                },
-                                child: _buildInfoRow(
-                                  AssetsData.instagramIcon,
-                                  instagramPage,
-                                  location,
-                                ),
-                              ),
-                              SizedBox(height: 16.h),
-                              CustomBigButton(
-                                color: const Color(0xA6C59D4E),
-                                textData: "workingDays".tr,
-                                onPressed: () {
-                                  showBWorkingDaysBottomSheet(
-                                    context,
-                                    profileData.workingDays,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Divider(
+                          color: ColorsData.cardStrock,
+                          thickness: 1.w,
+                        ),
+                        SizedBox(height: 8.h),
+                        _buildInfoRow(
+                          AssetsData.personIcon,
+                          fullName,
+                          location,
+                        ),
+                        SizedBox(height: 8.h),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return MapSearchScreen(
+                                    initialLatitude: profileData
+                                            .barberShopLocation
+                                            .coordinates
+                                            .isNotEmpty
+                                        ? profileData.barberShopLocation
+                                            .coordinates[1]
+                                        : 31.0461,
+                                    initialLongitude: profileData
+                                            .barberShopLocation
+                                            .coordinates
+                                            .isNotEmpty
+                                        ? profileData.barberShopLocation
+                                            .coordinates[0]
+                                        : 34.8516,
+                                    onLocationSelected:
+                                        (lat, lng, address) {
+                                      setState(() {});
+                                    },
                                   );
                                 },
                               ),
-                              SizedBox(height: 12.h),
-                              CustomBigButton(
-                                textData: "Edit Profile".tr,
-                                onPressed: () async {
-                                  final result = await Get.toNamed(
-                                    AppRouter.beditProfilePath,
-                                    arguments: BarberProfileModel(
-                                      fullName: profileData.fullName,
-                                      offDay: profileData.offDay,
-                                      barberShop: profileData.barberShop,
-                                      bankAccountNumber:
-                                          profileData.bankAccountNumber,
-                                      instagramPage: profileData.instagramPage,
-                                      profilePic: profileData.profilePic,
-                                      coverPic: profileData.coverPic,
-                                      city: profileData.city,
-                                      workingDays: profileData.workingDays,
-                                      barberShopLocation:
-                                          profileData.barberShopLocation,
-                                      phoneNumber: profileData.phoneNumber,
-                                    ),
-                                  );
-
-                                  if (result == true) {
-                                    // Profile was updated, refresh the data
-                                    controller.fetchProfileData();
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 12.h),
-                              CustomBigButton(
-                                color: Color(0xA6C59D4E),
-                                textData:
-                                    //get app language to decide
-                                    LocalizationService.getCurrentLocale() ==
-                                            const Locale('ar')
-                                        ? "المواعيد بدون حجز"
-                                        : "Walk-In".tr,
-                                onPressed: () {
-                                  _showWalkInCalendar(context, controller);
-                                },
-                              ),
-                              SizedBox(height: 24.h),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  _buildTabButton(
-                                    "My service".tr,
-                                    _tabController.index == 0,
-                                  ),
-                                  _buildTabButton(
-                                    "My gallery".tr,
-                                    _tabController.index == 1,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 16.h),
-                              SizedBox(
-                                height: 400.h,
-                                child: TabBarView(
-                                  controller: _tabController,
-                                  children: [
-                                    _buildServicesTab(),
-                                    _buildGalleryTab(),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 24.h),
-                            ],
+                            );
+                          },
+                          child: _buildInfoRow(
+                            AssetsData.mapPinIcon,
+                            city,
+                            location,
+                            isAddress: true,
                           ),
                         ),
+                        SizedBox(height: 8.h),
+                        InkWell(
+                          onTap: () {
+                            launchPhoneDialer(profileData.phoneNumber);
+                          },
+                          child: _buildInfoRow(
+                            AssetsData.callIcon,
+                            "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
+                            location,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        InkWell(
+                          onTap: () {
+                            try {
+                              launch(profileData.instagramPage);
+                            } catch (e) {
+                              print('Could not launch Instagram: $e');
+                            }
+                          },
+                          child: _buildInfoRow(
+                            AssetsData.instagramIcon,
+                            instagramPage,
+                            location,
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        CustomBigButton(
+                          color: const Color(0xA6C59D4E),
+                          textData: "workingDays".tr,
+                          onPressed: () {
+                            showBWorkingDaysBottomSheet(
+                              context,
+                              profileData.workingDays,
+                            );
+                          },
+                        ),
+                        SizedBox(height: 12.h),
+                        CustomBigButton(
+                          textData: "Edit Profile".tr,
+                          onPressed: () async {
+                            final result = await Get.toNamed(
+                              AppRouter.beditProfilePath,
+                              arguments: BarberProfileModel(
+                                fullName: profileData.fullName,
+                                offDay: profileData.offDay,
+                                barberShop: profileData.barberShop,
+                                bankAccountNumber:
+                                    profileData.bankAccountNumber,
+                                instagramPage: profileData.instagramPage,
+                                profilePic: profileData.profilePic,
+                                coverPic: profileData.coverPic,
+                                city: profileData.city,
+                                workingDays: profileData.workingDays,
+                                barberShopLocation:
+                                    profileData.barberShopLocation,
+                                phoneNumber: profileData.phoneNumber,
+                              ),
+                            );
+
+                            if (result == true) {
+                              controller.fetchProfileData();
+                            }
+                          },
+                        ),
+                        SizedBox(height: 12.h),
+                        CustomBigButton(
+                          color: Color(0xA6C59D4E),
+                          textData:
+                              LocalizationService.getCurrentLocale() ==
+                                      const Locale('ar')
+                                  ? "المواعيد بدون حجز"
+                                  : "Walk-In".tr,
+                          onPressed: () {
+                            _showWalkInCalendar(context, controller);
+                          },
+                        ),
+                        SizedBox(height: 24.h),
+                        Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildTabButton(
+                              "My service".tr,
+                              _tabController.index == 0,
+                            ),
+                            _buildTabButton(
+                              "My gallery".tr,
+                              _tabController.index == 1,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16.h),
                       ],
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: SizedBox(
+                      height: 500.h, // Fixed height to prevent overflow
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildServicesTab(),
+                          _buildGalleryTab(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -552,110 +535,98 @@ class _BProfileViewBodyState extends State<BProfileView>
   // New method to build services tab with API data
   Widget _buildServicesTab() {
     bool isClicked = true;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "${"services".tr} (${controller.totalServices})",
-          style: TextStyle(
-            fontSize: 16.sp,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${"services".tr} (${controller.totalServices})",
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        SizedBox(height: 16.h),
-        Obx(() {
-          if (controller.isServicesLoading.value) {
-            return const Center(
-              child: SpinKitDoubleBounce(color: ColorsData.primary),
-            );
-          }
+          SizedBox(height: 16.h),
+          Obx(() {
+            if (controller.isServicesLoading.value) {
+              return const Center(
+                child: SpinKitDoubleBounce(color: ColorsData.primary),
+              );
+            }
 
-          if (controller.barberServices.isEmpty) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 50.h),
-                Text(
-                  'No services available'.tr,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.white,
+            if (controller.barberServices.isEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h),
+                  Text(
+                    'No services available'.tr,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: 16.h),
-                ElevatedButton(
-                  onPressed: () {
-                    if (isClicked) {
-                      isClicked = false;
-                      setState(() {});
-                      controller.fetchBarberServices();
-                      Future.delayed(const Duration(seconds: 2), () {
-                        isClicked = true;
-                        setState(() {});
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorsData.primary,
-                  ),
-                  child: Text('Refresh'.tr),
-                ),
-                SizedBox(height: 16.h),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 24.h), // يرفع الزرار لفوق
-                  child: CustomBigButton(
-                    textData: "Add new service".tr,
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
                     onPressed: () {
-                      showCustomAddNewServiceBottomSheet(context);
-                    },
-                  ),
-                ),
-              ],
-            );
-          }
-
-          // When there are services, show them in a scrollable list
-          return Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (notification) {
-                      if (notification is OverscrollNotification) {
-                        return true;
+                      if (isClicked) {
+                        isClicked = false;
+                        setState(() {});
+                        controller.fetchBarberServices();
+                        Future.delayed(const Duration(seconds: 2), () {
+                          isClicked = true;
+                          setState(() {});
+                        });
                       }
-                      return false;
                     },
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      // مش AlwaysScrollable
-                      itemCount: controller.barberServices.length,
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 8.h),
-                      itemBuilder: (context, index) {
-                        final service = controller.barberServices[index];
-                        return _buildServiceItemFromData(service);
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorsData.primary,
+                    ),
+                    child: Text('Refresh'.tr),
+                  ),
+                  SizedBox(height: 16.h),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 24.h), // يرفع الزرار لفوق
+                    child: CustomBigButton(
+                      textData: "Add new service".tr,
+                      onPressed: () {
+                        showCustomAddNewServiceBottomSheet(context);
                       },
                     ),
                   ),
+                ],
+              );
+            }
+
+            // When there are services, show them in a scrollable list
+            return Column(
+              children: [
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.barberServices.length,
+                  padding: EdgeInsets.zero,
+                  separatorBuilder: (context, index) =>
+                      SizedBox(height: 8.h),
+                  itemBuilder: (context, index) {
+                    final service = controller.barberServices[index];
+                    return _buildServiceItemFromData(service);
+                  },
                 ),
                 SizedBox(height: 16.h),
-                // Add the button at the bottom, outside the ListView
                 CustomBigButton(
                   textData: "Add new service".tr,
                   onPressed: () {
                     showCustomAddNewServiceBottomSheet(context);
                   },
                 ),
-
                 const SizedBox(height: 58),
               ],
-            ),
-          );
-        }),
-      ],
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -847,68 +818,68 @@ class _BProfileViewBodyState extends State<BProfileView>
   }
 
   Widget _buildGalleryTab() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Obx(() => Text(
-                  "${"Gallery".tr} (${controller.galleryPhotos.length})",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                )),
-            Container(
-              height: 28.h,
-              decoration: BoxDecoration(
-                border: Border.all(color: ColorsData.primary, width: 1.w),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Obx(() => TextButton.icon(
-                    onPressed: controller.isUploadingPhotos.value
-                        ? null
-                        : () async {
-                            controller.addPhotosToGallery();
-                          },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.all(2.w),
-                    ),
-                    icon: controller.isUploadingPhotos.value
-                        ? SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: const SpinKitDoubleBounce(
-                              color: ColorsData.primary,
-                            ),
-                          )
-                        : SvgPicture.asset(
-                            AssetsData.addImageIcon,
-                            height: 20.h,
-                            width: 20.w,
-                            colorFilter: const ColorFilter.mode(
-                              ColorsData.cardStrock,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                    label: Text(
-                      controller.isUploadingPhotos.value
-                          ? "Uploading...".tr
-                          : "add photos".tr,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13.sp,
-                      ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() => Text(
+                    "${"Gallery".tr} (${controller.galleryPhotos.length})",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
                     ),
                   )),
-            ),
-          ],
-        ),
-        SizedBox(height: 16.h),
-        Expanded(
-          child: Obx(
+              Container(
+                height: 28.h,
+                decoration: BoxDecoration(
+                  border: Border.all(color: ColorsData.primary, width: 1.w),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Obx(() => TextButton.icon(
+                      onPressed: controller.isUploadingPhotos.value
+                          ? null
+                          : () async {
+                              controller.addPhotosToGallery();
+                            },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(2.w),
+                      ),
+                      icon: controller.isUploadingPhotos.value
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: const SpinKitDoubleBounce(
+                                color: ColorsData.primary,
+                              ),
+                            )
+                          : SvgPicture.asset(
+                              AssetsData.addImageIcon,
+                              height: 20.h,
+                              width: 20.w,
+                              colorFilter: const ColorFilter.mode(
+                                ColorsData.cardStrock,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                      label: Text(
+                        controller.isUploadingPhotos.value
+                            ? "Uploading...".tr
+                            : "add photos".tr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13.sp,
+                        ),
+                      ),
+                    )),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          Obx(
             () {
               if (controller.isGalleryLoading.value) {
                 return const Center(
@@ -943,65 +914,60 @@ class _BProfileViewBodyState extends State<BProfileView>
               }
 
               // When there are photos, show them in a grid
-              return RefreshIndicator(
-                onRefresh: controller.fetchGallery,
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 8.w,
-                    mainAxisSpacing: 8.h,
-                  ),
-                  itemCount: controller.galleryPhotos.length,
-                  itemBuilder: (context, index) {
-                    final photo = controller.galleryPhotos[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Get.toNamed(
-                          AppRouter.imageViewPath,
-                          arguments: photo,
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                          color: ColorsData.secondary,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: Flexible(
-                            child: CachedNetworkImage(
-                              imageUrl: photo,
-                              fit: BoxFit.fill,
-                              placeholder: (context, url) => Container(
-                                color: ColorsData.primary,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  color: ColorsData.secondary,
-                                ),
-                                child: const Icon(
-                                  Icons.error,
-                                  color: Colors.white,
-                                ),
-                              ),
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8.w,
+                  mainAxisSpacing: 8.h,
+                ),
+                itemCount: controller.galleryPhotos.length,
+                itemBuilder: (context, index) {
+                  final photo = controller.galleryPhotos[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                        AppRouter.imageViewPath,
+                        arguments: photo,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.r),
+                        color: ColorsData.secondary,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.r),
+                        child: CachedNetworkImage(
+                          imageUrl: photo,
+                          fit: BoxFit.fill,
+                          placeholder: (context, url) => Container(
+                            color: ColorsData.primary,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.r),
+                              color: ColorsData.secondary,
+                            ),
+                            child: const Icon(
+                              Icons.error,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               );
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
