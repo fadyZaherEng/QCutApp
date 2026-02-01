@@ -10,6 +10,7 @@ import 'package:q_cut/modules/barber/features/home_features/appointment_feature/
 import 'package:q_cut/modules/barber/features/home_features/profile_features/models/barber_profile_model.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/logic/b_profile_controller.dart';
 import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/b_profile_view.dart';
+import 'package:q_cut/modules/barber/features/home_features/profile_features/profile_display/views/widgets/custom_add_new_service_bottom_sheet.dart';
 import 'package:q_cut/modules/barber/features/home_features/statistics_feature/views/b_statics_view.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/views/home_view.dart';
 import 'package:q_cut/modules/customer/features/home_features/appointment_feature/view/my_appointment_view.dart';
@@ -308,21 +309,22 @@ class MainController extends GetxController {
                         if (response.statusCode == 200) {
                           Get.back();
 
-                          // ✅ اعرض رسالة نجاح
                           Get.snackbar(
-                            "Success",
+                            "Success".tr,
                             "Offer accepted successfully".tr,
                             backgroundColor: Colors.green,
                             colorText: Colors.white,
                           );
-                          final BProfileController controller =
+                          
+                          final BProfileController profileController =
                               Get.put(BProfileController());
-                          await controller.fetchProfileData();
+                          await profileController.fetchProfileData();
+                          await profileController.fetchBarberServices();
 
-                          final profileData = controller.profileData.value;
+                          final profileData = profileController.profileData.value;
 
-                          // ✅ بعد القبول أول مرة، روح على صفحة البروفايل
-                          final result = await Get.toNamed(
+                          // Step 1: Navigate to Edit Profile page
+                          final editProfileResult = await Get.toNamed(
                             AppRouter.beditProfilePath,
                             arguments: BarberProfileModel(
                               fullName: profileData?.fullName.trim() ?? '',
@@ -343,26 +345,57 @@ class MainController extends GetxController {
                             ),
                           );
 
-                          if (result == true) {
-                            // Profile was updated, refresh the data
-
-                            // ✅ اعرض تنبيه إنه لازم يملأ بيانات البروفايل
-                            Future.delayed(const Duration(seconds: 1), () {
+                          // Step 2: Check if profile was updated
+                          if (editProfileResult == true) {
+                            await profileController.fetchProfileData();
+                            final updatedProfileData = profileController.profileData.value;
+                            
+                            // Check if working days are set
+                            if (updatedProfileData?.workingDays == null || 
+                                updatedProfileData!.workingDays.isEmpty) {
+                              // Show message and redirect back to edit profile
                               Get.snackbar(
-                                "Complete Profile".tr,
-                                "Please fill out your profile to start working."
-                                    .tr,
+                                "Set Working Days".tr,
+                                "Please set your working days to continue".tr,
                                 backgroundColor: Colors.orange,
                                 colorText: Colors.white,
-                                snackPosition: SnackPosition.TOP,
-                                duration: const Duration(seconds: 5),
+                                duration: const Duration(seconds: 3),
                               );
-                            });
+                              
+                              await Future.delayed(const Duration(seconds: 1));
+                              
+                              // Redirect back to edit profile
+                              final workingDaysResult = await Get.toNamed(
+                                AppRouter.beditProfilePath,
+                                arguments: BarberProfileModel(
+                                  fullName: updatedProfileData?.fullName.trim() ?? '',
+                                  offDay: updatedProfileData?.offDay
+                                      ?? [],
+                                  barberShop: updatedProfileData?.barberShop??'',
+                                  bankAccountNumber: updatedProfileData?.bankAccountNumber??'',
+                                  instagramPage: updatedProfileData?.instagramPage??'',
+                                  profilePic: updatedProfileData?.profilePic.trim()??'',
+                                  coverPic: updatedProfileData?.coverPic.trim()??'',
+                                  city: updatedProfileData?.city??'',
+                                  workingDays: updatedProfileData?.workingDays??[],
+                                  barberShopLocation: updatedProfileData?.barberShopLocation??
+                                      BarberShopLocation(type: 'Point', coordinates: [0, 0]),
+                                  phoneNumber: updatedProfileData?.phoneNumber??'',
+                                ),
+                              );
+                              
+                              if (workingDaysResult == true) {
+                                await _checkAndForceAddService(profileController);
+                              }
+                            } else {
+                              // Working days already set, check services
+                              await _checkAndForceAddService(profileController);
+                            }
                           }
                         } else {
                           Get.snackbar(
-                            "Error",
-                            "Failed to accept the offer",
+                            "Error".tr,
+                            "Failed to accept the offer".tr,
                             backgroundColor: Colors.red,
                             colorText: Colors.white,
                           );
@@ -567,6 +600,95 @@ class MainController extends GetxController {
   void onClose() {
     pageController.dispose();
     super.onClose();
+  }
+
+  // Helper method to check and force service addition
+  Future<void> _checkAndForceAddService(BProfileController profileController) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    
+    // Refresh services to get latest data
+    await profileController.fetchBarberServices();
+    
+    if (profileController.barberServices.isEmpty) {
+      // Navigate to profile page first
+      Get.offAll(() => const BProfileView());
+      
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      // Show a dialog explaining they need to add a service
+      await Get.dialog(
+        WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            title: Text("Add Your First Service".tr),
+            content: Text("You must add at least one service before customers can book appointments with you.".tr),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFD1A439),
+                ),
+                onPressed: () async {
+                  Get.back();
+                  await Future.delayed(const Duration(milliseconds: 300));
+                  
+                  // Open add service bottom sheet in a non-dismissible way
+                  await Get.bottomSheet(
+                    WillPopScope(
+                      onWillPop: () async {
+                        // Check if at least one service has been added
+                        await profileController.fetchBarberServices();
+                        if (profileController.barberServices.isEmpty) {
+                          Get.snackbar(
+                            "Service Required".tr,
+                            "Please add at least one service to continue".tr,
+                            backgroundColor: Colors.orange,
+                            colorText: Colors.white,
+                          );
+                          return false; // Prevent dismissing
+                        }
+                        return true; // Allow dismissing
+                      },
+                      child: const CustomAddNewServiceBottomSheet(),
+                    ),
+                    isDismissible: false,
+                    enableDrag: false,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                    ),
+                  );
+                  
+                  // After bottom sheet closes, verify service was added
+                  await profileController.fetchBarberServices();
+                  if (profileController.barberServices.isNotEmpty) {
+                    Get.snackbar(
+                      "Setup Complete".tr,
+                      "Your profile is now ready! Customers can book appointments with you.".tr,
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white,
+                      duration: const Duration(seconds: 5),
+                    );
+                  }
+                },
+                child: Text("Add Service".tr),
+              ),
+            ],
+          ),
+        ),
+        barrierDismissible: false,
+      );
+    } else {
+      // Services already exist, navigate to profile page and show success
+      Get.offAll(() => const BProfileView());
+      await Future.delayed(const Duration(milliseconds: 500));
+      Get.snackbar(
+        "Welcome!".tr,
+        "Your profile is complete. You're ready to accept appointments!".tr,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 5),
+      );
+    }
   }
 
   void _onNotificationClick(event) {
