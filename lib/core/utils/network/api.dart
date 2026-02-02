@@ -27,6 +27,7 @@ class Variables {
   static const String GET_BARBERS_FILTER = "${BARBER}search-by-city";
   static const String UPDATE_WALK_IN = "${BARBER}update-walk-in";
   static const String GET_WORKING_HOURS_RANGE = "${BARBER}working-hours-range/";
+  static const String GET_NEXT_WORKING_DAYS = "${BARBER}next-working-days";
 
   /// SERVICE
   static const String SERVICE = "${baseUrl}service/";

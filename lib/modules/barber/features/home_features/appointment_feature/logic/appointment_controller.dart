@@ -24,6 +24,7 @@ class BAppointmentController extends GetxController {
   // UI States
   final RxBool isLoading = false.obs;
   final RxBool isLoadingMore = false.obs;
+  final RxBool isLoadingWorkingDays = false.obs;
   final RxBool isError = false.obs;
   final RxString errorMessage = ''.obs;
 
@@ -36,12 +37,16 @@ class BAppointmentController extends GetxController {
   final String barberServices = "hairStyleCutsFaceShaving".tr;
   final RxString barberImage = "".obs;
 
+  // Next working days
+  final RxList<Map<String, dynamic>> workingDays = <Map<String, dynamic>>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     print("BAppointmentController: onInit called");
     // Initialize with the current day
     selectedDay.value = DateTime.now().day;
+    fetchNextWorkingDays();
     fetchAppointments();
   }
 
@@ -172,6 +177,35 @@ class BAppointmentController extends GetxController {
     }
   }
 
+  Future<void> fetchNextWorkingDays() async {
+    isLoadingWorkingDays.value = true;
+    try {
+      final response = await _apiCall.getData(Variables.GET_NEXT_WORKING_DAYS);
+      print("Fetching next working days from: ${Variables.GET_NEXT_WORKING_DAYS}");
+      if (response.statusCode == 200) {
+        print("Next working days response: ${response.body}");
+        final responseBody = json.decode(response.body);
+        if (responseBody['workingDays'] != null) {
+          workingDays.value =
+              List<Map<String, dynamic>>.from(responseBody['workingDays']);
+
+          if (workingDays.isNotEmpty) {
+            // Optional: Initialize selectedDay with the first working day
+            // final firstDay = DateTime.fromMillisecondsSinceEpoch(workingDays.first['date']);
+            // selectedDay.value = firstDay.day;
+            // selectedDate.value = firstDay;
+          }
+        }
+      } else {
+        print("Failed to fetch next working days: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Exception while fetching next working days: $e");
+    } finally {
+      isLoadingWorkingDays.value = false;
+    }
+  }
+
   Future<void> loadMoreAppointments() async {
     print(
         "loadMoreAppointments called. Current page: ${currentPage.value}, Total pages: ${totalPages.value}");
@@ -189,20 +223,32 @@ class BAppointmentController extends GetxController {
   void changeSelectedDay(int day) {
     print("changeSelectedDay called with day: $day");
     selectedDay.value = day;
-    final now = DateTime.now();
-    print("Current date: $now");
 
-    // Calculate the correct date based on current month
+    // Try to find the date in workingDays fetched from API
+    final workingDay = workingDays.firstWhereOrNull((d) {
+      final date = DateTime.fromMillisecondsSinceEpoch(d['date'] as int);
+      return date.day == day;
+    });
+
     DateTime newDate;
-    if (day < now.day && now.day > 25) {
-      // Likely next month
-      final nextMonth = DateTime(now.year, now.month + 1, 1);
-      newDate = DateTime(nextMonth.year, nextMonth.month, day);
-      print("Selected day is in next month: $newDate");
+    if (workingDay != null) {
+      newDate = DateTime.fromMillisecondsSinceEpoch(workingDay['date'] as int);
+      print("Selected day found in workingDays: $newDate");
     } else {
-      // Current month
-      newDate = DateTime(now.year, now.month, day);
-      print("Selected day is in current month: $newDate");
+      final now = DateTime.now();
+      print("Current date: $now");
+
+      // Calculate the correct date based on current month (fallback)
+      if (day < now.day && now.day > 25) {
+        // Likely next month
+        final nextMonth = DateTime(now.year, now.month + 1, 1);
+        newDate = DateTime(nextMonth.year, nextMonth.month, day);
+        print("Selected day is in next month (fallback): $newDate");
+      } else {
+        // Current month
+        newDate = DateTime(now.year, now.month, day);
+        print("Selected day is in current month (fallback): $newDate");
+      }
     }
 
     selectedDate.value = newDate;
