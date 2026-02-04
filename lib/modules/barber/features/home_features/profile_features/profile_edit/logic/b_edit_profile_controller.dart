@@ -20,7 +20,9 @@ class BEditProfileController extends GetxController {
   // Profile controller reference
   BProfileController? _profileController;
 
-  late final BarberProfileModel initialData;
+  BarberProfileModel? _initialData;
+  BarberProfileModel get initialData => _initialData!;
+  
   late Rx<BarberProfileModel> profileData;
   final RxBool isLoading = false.obs;
 
@@ -69,18 +71,9 @@ class BEditProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initialData = Get.arguments as BarberProfileModel;
-    profileData = Rx<BarberProfileModel>(initialData);
-    _initializeControllers();
-
-    // Initialize working days from the profile data
-    if (initialData.workingDays.isNotEmpty) {
-      workingDays.value = List<WorkingDay>.from(initialData.workingDays);
-    }
-
-    // Initialize off days from the profile data
-    if (initialData.offDay.isNotEmpty) {
-      offDays.value = List<String>.from(initialData.offDay);
+    final args = Get.arguments;
+    if (args is BarberProfileModel) {
+      initWithData(args);
     }
 
     // Initialize profile controller if available
@@ -89,6 +82,27 @@ class BEditProfileController extends GetxController {
     } catch (e) {
       // If not found, we'll handle it when needed
       print('BProfileController not found, will create when needed');
+    }
+  }
+
+  void initWithData(BarberProfileModel data) {
+    _initialData = data;
+    profileData = Rx<BarberProfileModel>(data);
+    _initializeControllers();
+
+    // Initialize working days from the profile data
+    if (data.workingDays.isNotEmpty) {
+      workingDays.value = List<WorkingDay>.from(data.workingDays);
+    }
+
+    // Initialize off days from the profile data
+    if (data.offDay.isNotEmpty) {
+      offDays.value = List<String>.from(data.offDay);
+    }
+
+    if (data.barberShopLocation.coordinates.length == 2) {
+      locationLongitude = data.barberShopLocation.coordinates[0];
+      locationLatitude = data.barberShopLocation.coordinates[1];
     }
   }
 

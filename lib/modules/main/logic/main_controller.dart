@@ -323,7 +323,7 @@ class MainController extends GetxController {
 
                           final profileData = profileController.profileData.value;
 
-                          // Step 1: Navigate to Edit Profile page
+                          // Step 1: Navigate to Edit Profile page for pics and bio
                           final editProfileResult = await Get.toNamed(
                             AppRouter.beditProfilePath,
                             arguments: BarberProfileModel(
@@ -345,52 +345,9 @@ class MainController extends GetxController {
                             ),
                           );
 
-                          // Step 2: Check if profile was updated
+                          // Step 2: If profile confirmed, go to profile page and start onboarding sequence
                           if (editProfileResult == true) {
-                            await profileController.fetchProfileData();
-                            final updatedProfileData = profileController.profileData.value;
-                            
-                            // Check if working days are set
-                            if (updatedProfileData?.workingDays == null || 
-                                updatedProfileData!.workingDays.isEmpty) {
-                              // Show message and redirect back to edit profile
-                              Get.snackbar(
-                                "Set Working Days".tr,
-                                "Please set your working days to continue".tr,
-                                backgroundColor: Colors.orange,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 3),
-                              );
-                              
-                              await Future.delayed(const Duration(seconds: 1));
-                              
-                              // Redirect back to edit profile
-                              final workingDaysResult = await Get.toNamed(
-                                AppRouter.beditProfilePath,
-                                arguments: BarberProfileModel(
-                                  fullName: updatedProfileData?.fullName.trim() ?? '',
-                                  offDay: updatedProfileData?.offDay
-                                      ?? [],
-                                  barberShop: updatedProfileData?.barberShop??'',
-                                  bankAccountNumber: updatedProfileData?.bankAccountNumber??'',
-                                  instagramPage: updatedProfileData?.instagramPage??'',
-                                  profilePic: updatedProfileData?.profilePic.trim()??'',
-                                  coverPic: updatedProfileData?.coverPic.trim()??'',
-                                  city: updatedProfileData?.city??'',
-                                  workingDays: updatedProfileData?.workingDays??[],
-                                  barberShopLocation: updatedProfileData?.barberShopLocation??
-                                      BarberShopLocation(type: 'Point', coordinates: [0, 0]),
-                                  phoneNumber: updatedProfileData?.phoneNumber??'',
-                                ),
-                              );
-                              
-                              if (workingDaysResult == true) {
-                                await _checkAndForceAddService(profileController);
-                              }
-                            } else {
-                              // Working days already set, check services
-                              await _checkAndForceAddService(profileController);
-                            }
+                            Get.offAllNamed(AppRouter.bprofilePath, arguments: {'startOnboarding': true});
                           }
                         } else {
                           Get.snackbar(

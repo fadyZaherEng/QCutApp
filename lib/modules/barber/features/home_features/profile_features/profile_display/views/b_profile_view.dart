@@ -24,6 +24,7 @@ import 'package:q_cut/modules/customer/features/home_features/profile_feature/vi
 import 'package:url_launcher/url_launcher.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../models/barber_profile_model.dart';
+import 'widgets/onboarding_working_days_bottom_sheet.dart';
 
 class BProfileView extends StatefulWidget {
   const BProfileView({super.key});
@@ -49,6 +50,113 @@ class _BProfileViewBodyState extends State<BProfileView>
       }
       setState(() {});
     });
+
+    // Check if we should start onboarding
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = Get.arguments;
+      if (args is Map && args['startOnboarding'] == true) {
+        _runOnboardingSequence();
+      }
+    });
+  }
+
+  Future<void> _runOnboardingSequence() async {
+    // Wait for controller to finish initial load if it's loading
+    while (controller.isLoading.value) {
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+
+    final profileData = controller.profileData.value;
+    if (profileData == null) return;
+
+    // Step 1: Force Working Days if empty
+    if (profileData.workingDays.isEmpty) {
+      final workingDaysResult = await Get.bottomSheet(
+        WillPopScope(
+          onWillPop: () async => false, // Force completion
+          child: OnboardingWorkingDaysBottomSheet(
+            profileData: BarberProfileModel(
+              fullName: profileData.fullName,
+              offDay: profileData.offDay,
+              barberShop: profileData.barberShop,
+              bankAccountNumber: profileData.bankAccountNumber,
+              instagramPage: profileData.instagramPage,
+              profilePic: profileData.profilePic,
+              coverPic: profileData.coverPic,
+              city: profileData.city,
+              workingDays: profileData.workingDays,
+              barberShopLocation: profileData.barberShopLocation,
+              phoneNumber: profileData.phoneNumber,
+            ),
+          ),
+        ),
+        isDismissible: false,
+        enableDrag: false,
+        isScrollControlled: true,
+      );
+
+      if (workingDaysResult == true) {
+        await controller.fetchProfileData();
+      }
+    }
+
+    // Step 2: Force at least 1 service if empty
+    await controller.fetchBarberServices();
+    if (controller.barberServices.isEmpty) {
+      await Get.dialog(
+        WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            backgroundColor: ColorsData.secondary,
+            title: Text("Add Your First Service".tr, style: Styles.textStyleS16W700()),
+            content: Text(
+              "You must add at least one service before customers can book appointments with you.".tr,
+              style: Styles.textStyleS14W400(color: Colors.white),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: ColorsData.primary),
+                onPressed: () => Get.back(),
+                child: Text("Add Service".tr, style: const TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+        barrierDismissible: false,
+      );
+
+      await Get.bottomSheet(
+        WillPopScope(
+          onWillPop: () async {
+            await controller.fetchBarberServices();
+            if (controller.barberServices.isEmpty) {
+              Get.snackbar(
+                "Service Required".tr,
+                "Please add at least one service to continue".tr,
+                backgroundColor: Colors.orange,
+                colorText: Colors.white,
+              );
+              return false;
+            }
+            return true;
+          },
+          child: const CustomAddNewServiceBottomSheet(),
+        ),
+        isDismissible: false,
+        enableDrag: false,
+        isScrollControlled: true,
+      );
+      
+      await controller.fetchBarberServices();
+    }
+    
+    Get.snackbar(
+      "Setup Complete".tr,
+      "Your profile is now live! Customers can book appointments with you.".tr,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 5),
+    );
   }
 
   @override
