@@ -198,7 +198,19 @@ class _CustomAddNewServiceBottomSheetState
               alignment: Alignment.topLeft,
               child: IconButton(
                 icon: const Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () async {
+                  await _profileController.fetchBarberServices();
+                  if (_profileController.barberServices.isEmpty) {
+                    Get.snackbar(
+                      "Service Required".tr,
+                      "Please add at least one service to continue".tr,
+                      backgroundColor: Colors.orange,
+                      colorText: Colors.white,
+                    );
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ),
             Container(
