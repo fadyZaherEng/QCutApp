@@ -99,7 +99,7 @@ class BSettingViewBody extends StatelessWidget {
               }),
               buildDivider(),
               buildDrawerItem("deleteAccount".tr, AssetsData.trashIcon, () {
-                showDeleteAccountDialog(context);
+                Get.toNamed(AppRouter.bdeleteAccountReasonPath);
               }),
             ],
           ),

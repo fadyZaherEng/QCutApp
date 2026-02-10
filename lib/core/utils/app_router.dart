@@ -24,6 +24,7 @@ import 'package:q_cut/modules/barber/features/home_features/statistics_feature/v
 import 'package:q_cut/modules/barber/features/settings/presentation/views/b_connect_us_view.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/b_history_view.dart';
 import 'package:q_cut/modules/barber/features/settings/presentation/views/b_settings_view.dart';
+import 'package:q_cut/modules/barber/features/settings/presentation/views/delete_account_reason_page.dart';
 import 'package:q_cut/modules/barber/features/settings/report_feature/view/reports_view.dart';
 import 'package:q_cut/modules/customer/features/booking_features/display_barber_services_feature/views/barber_services_view.dart';
 import 'package:q_cut/modules/customer/features/booking_features/select_appointment_time/view/book_appointment_view.dart';
@@ -101,6 +102,7 @@ abstract class AppRouter {
   static const String imageViewPath = "/imageViewPath";
   static const String bconectUsPath = "/bconectUsPath";
   static const String bchatWithUsPath = "/bchatWithUsPath";
+  static const String bdeleteAccountReasonPath = "/bdeleteAccountReasonPath";
 
   static const String bsettingsPath = "/bsettingsPath";
   static const String reportsPath = "/reportsPath";
@@ -307,6 +309,10 @@ abstract class AppRouter {
     GetPage(
       name: bpaymentTimeLinePath,
       page: () => const BPaymentTimeLineView(),
+    ),
+    GetPage(
+      name: bdeleteAccountReasonPath,
+      page: () => const DeleteAccountReasonPage(),
     ),
     GetPage(
       name: bpaymentMethodsPath,
