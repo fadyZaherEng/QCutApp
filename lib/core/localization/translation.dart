@@ -594,6 +594,8 @@ class MyTranslation extends Translations {
           "Your profile is now ready! Customers can book appointments with you.": "ملفك الشخصي جاهز الآن! يمكن للعملاء حجز المواعيد معك.",
           "Welcome!": "مرحباً!",
           "Your profile is complete. You're ready to accept appointments!": "ملفك الشخصي مكتمل. أنت جاهز لقبول المواعيد!",
+          "Processing...": "جاري المعالجة...",
+          "Please wait a moment": "يرجى الانتظار لحظة",
         },
         "en": {
           "totalAfterDeductions": "Total after deductions",
@@ -1204,6 +1206,8 @@ class MyTranslation extends Translations {
           "Your profile is now ready! Customers can book appointments with you.": "Your profile is now ready! Customers can book appointments with you.",
           "Welcome!": "Welcome!",
           "Your profile is complete. You're ready to accept appointments!": "Your profile is complete. You're ready to accept appointments!",
+          "Processing...": "Processing...",
+          "Please wait a moment": "Please wait a moment",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1772,6 +1776,8 @@ class MyTranslation extends Translations {
             "Your profile is now ready! Customers can book appointments with you.": "הפרופיל שלך מוכן עכשיו! לקוחות יכולים לקבוע פגישות איתך.",
             "Welcome!": "ברוך הבא!",
             "Your profile is complete. You're ready to accept appointments!": "הפרופיל שלך הושלם. אתה מוכן לקבל פגישות!",
+            "Processing...": "מעבד...",
+            "Please wait a moment": "אנא המתן רגע",
           },
       };
 }

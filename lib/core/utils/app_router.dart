@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:q_cut/modules/auth/binding/auth_binding.dart';
 import 'package:q_cut/modules/auth/views/forget_password_view.dart';
@@ -255,6 +256,9 @@ abstract class AppRouter {
     GetPage(
       name: beditProfilePath,
       page: () => const BEditProfileView(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
     ),
     GetPage(
       name: imageViewPath,

@@ -301,12 +301,109 @@ class MainController extends GetxController {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
+                        // Close the deal dialog immediately for fast UX
+                        Get.back();
+
+                        // Show animated processing overlay
+                        Get.dialog(
+                          Center(
+                            child: TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 0.0, end: 1.0),
+                              duration: const Duration(milliseconds: 350),
+                              curve: Curves.easeOutBack,
+                              builder: (context, value, child) {
+                                return Transform.scale(
+                                  scale: 0.8 + (0.2 * value),
+                                  child: Opacity(
+                                    opacity: value.clamp(0.0, 1.0),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 28.h, horizontal: 32.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFFD1A439).withOpacity(0.2),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.08),
+                                      blurRadius: 10,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 56.w,
+                                      height: 56.w,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color(0xFFFAF6E9),
+                                            Color(0xFFF5EDD6),
+                                          ],
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: SizedBox(
+                                          width: 28.w,
+                                          height: 28.w,
+                                          child: CircularProgressIndicator(
+                                            color: Color(0xFFD1A439),
+                                            strokeWidth: 3,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 18.h),
+                                    Text(
+                                      "Processing...".tr,
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF333333),
+                                      ),
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Text(
+                                      "Please wait a moment".tr,
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Color(0xFF999999),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          barrierColor: Colors.black.withOpacity(0.3),
+                          barrierDismissible: false,
+                        );
+
                         var response = await NetworkAPICall().editData(
                           '${Variables.baseUrl}deal',
                           {"status": "accepted"},
                         );
 
                         if (response.statusCode == 200) {
+                          final BProfileController profileController =
+                              Get.put(BProfileController());
+                          
+                          // Fetch only profile data (skip services for speed)
+                          await profileController.fetchProfileData();
+
+                          // Close loading overlay
                           Get.back();
 
                           Get.snackbar(
@@ -315,15 +412,10 @@ class MainController extends GetxController {
                             backgroundColor: Colors.green,
                             colorText: Colors.white,
                           );
-                          
-                          final BProfileController profileController =
-                              Get.put(BProfileController());
-                          await profileController.fetchProfileData();
-                          await profileController.fetchBarberServices();
 
                           final profileData = profileController.profileData.value;
 
-                          // Step 1: Navigate to Edit Profile page
+                          // Navigate to Edit Profile immediately with smooth transition
                           final editProfileResult = await Get.toNamed(
                             AppRouter.beditProfilePath,
                             arguments: BarberProfileModel(
@@ -353,7 +445,6 @@ class MainController extends GetxController {
                             // Check if working days are set
                             if (updatedProfileData?.workingDays == null || 
                                 updatedProfileData!.workingDays.isEmpty) {
-                              // Show message and redirect back to edit profile
                               Get.snackbar(
                                 "Set Working Days".tr,
                                 "Please set your working days to continue".tr,
@@ -362,25 +453,23 @@ class MainController extends GetxController {
                                 duration: const Duration(seconds: 3),
                               );
                               
-                              await Future.delayed(const Duration(seconds: 1));
+                              await Future.delayed(const Duration(milliseconds: 500));
                               
-                              // Redirect back to edit profile
                               final workingDaysResult = await Get.toNamed(
                                 AppRouter.beditProfilePath,
                                 arguments: BarberProfileModel(
                                   fullName: updatedProfileData?.fullName.trim() ?? '',
-                                  offDay: updatedProfileData?.offDay
-                                      ?? [],
-                                  barberShop: updatedProfileData?.barberShop??'',
-                                  bankAccountNumber: updatedProfileData?.bankAccountNumber??'',
-                                  instagramPage: updatedProfileData?.instagramPage??'',
-                                  profilePic: updatedProfileData?.profilePic.trim()??'',
-                                  coverPic: updatedProfileData?.coverPic.trim()??'',
-                                  city: updatedProfileData?.city??'',
-                                  workingDays: updatedProfileData?.workingDays??[],
-                                  barberShopLocation: updatedProfileData?.barberShopLocation??
+                                  offDay: updatedProfileData?.offDay ?? [],
+                                  barberShop: updatedProfileData?.barberShop ?? '',
+                                  bankAccountNumber: updatedProfileData?.bankAccountNumber ?? '',
+                                  instagramPage: updatedProfileData?.instagramPage ?? '',
+                                  profilePic: updatedProfileData?.profilePic.trim() ?? '',
+                                  coverPic: updatedProfileData?.coverPic.trim() ?? '',
+                                  city: updatedProfileData?.city ?? '',
+                                  workingDays: updatedProfileData?.workingDays ?? [],
+                                  barberShopLocation: updatedProfileData?.barberShopLocation ??
                                       BarberShopLocation(type: 'Point', coordinates: [0, 0]),
-                                  phoneNumber: updatedProfileData?.phoneNumber??'',
+                                  phoneNumber: updatedProfileData?.phoneNumber ?? '',
                                 ),
                               );
                               
@@ -388,11 +477,13 @@ class MainController extends GetxController {
                                 await _checkAndForceAddService(profileController);
                               }
                             } else {
-                              // Working days already set, check services
                               await _checkAndForceAddService(profileController);
                             }
                           }
                         } else {
+                          // Close loading overlay
+                          Get.back();
+                          
                           Get.snackbar(
                             "Error".tr,
                             "Failed to accept the offer".tr,
