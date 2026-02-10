@@ -44,6 +44,7 @@ class Variables {
 
   /// STATS & OTHERS
   static const String BARBER_STATS = "${baseUrl}barberStats/";
+  static const String BARBER_STATS_RANGE = "${BARBER_STATS}search/date-range/";
   static const String BARBER_PAYMENT_STATS = "${BARBER_STATS}payment/one/";
   static const String BARBER_COUNT_MOUNTH = "${BARBER_STATS}count-for-month/";
   static const String FAVORITE_FOR_USER = "${baseUrl}favoriteForUser/";

@@ -38,10 +38,13 @@ class BStaticsViewBody extends StatelessWidget {
                             fontWeight: FontWeight.w700, fontSize: 13.sp)),
                 GestureDetector(
                   onTap: () {
-                    showCustomTimeSelectDialog(context,
-                        onTimeSelected: (timeFrame) {
-                      controller.updateTimeFrame(timeFrame);
-                    });
+                    showCustomTimeSelectDialog(
+                      context,
+                      initialSelected: controller.statsTimeFrame.value,
+                      onTimeSelected: (timeFrame) {
+                        controller.updateTimeFrame(timeFrame);
+                      },
+                    );
                   },
                   child: SvgPicture.asset(
                     height: 33.h,
@@ -61,11 +64,7 @@ class BStaticsViewBody extends StatelessWidget {
                   )
                 : _buildStatisticsCards(controller)),
             SizedBox(height: 20.h),
-            // Text('allPaymentMethods'.tr,
-            //     style: Styles.textStyleS14W600(color: Colors.white)),
-            // SizedBox(height: 10.h),
-            // _buildPaymentMethods(),
-            // SizedBox(height: 20.h),
+
             _buildBookingChart(),
             SizedBox(height: 100.h),
           ],
@@ -84,7 +83,7 @@ class BStaticsViewBody extends StatelessWidget {
       },
       {
         'title': 'workingHours'.tr,
-        'value': controller.barberStats.value.workingHours.toString(),
+        'value': controller.barberStats.value.workingHours.toStringAsFixed(1),
         'unit': 'hours'.tr,
         'svgImagePath': AssetsData.clockIcon,
       },
@@ -112,35 +111,107 @@ class BStaticsViewBody extends StatelessWidget {
         'unit': 'consumers'.tr,
         'svgImagePath': AssetsData.profileIcon,
       },
+      {
+        'title': 'notComeTotal'.tr,
+        'value': controller.barberStats.value.notComeTotal.toString(),
+        'unit': 'appointment'.tr,
+        'svgImagePath': AssetsData.calendarIcon,
+      },
     ];
 
     return Container(
       width: 348.w,
-      height: 192.h,
       decoration: BoxDecoration(
         color: const Color(0xFF5A5679),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: const Color(0xAAAAAAAA), width: 1),
       ),
       padding: EdgeInsets.all(8.w),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8.w,
-          mainAxisSpacing: 8.h,
-          childAspectRatio: 104 / 85,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8.w,
+              mainAxisSpacing: 8.h,
+              childAspectRatio: 104 / 85,
+            ),
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              return _buildStatCard(
+                stats[index]['title']!,
+                stats[index]['value']!,
+                stats[index]['unit']!,
+                stats[index]['svgImagePath']!,
+              );
+            },
+          ),
+          SizedBox(height: 8.h),
+          _buildWideStatCard(
+            stats[6]['title']!,
+            stats[6]['value']!,
+            stats[6]['unit']!,
+            stats[6]['svgImagePath']!,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWideStatCard(
+      String title, String value, String unit, String svgImagePath) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 13.h),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(-0.5, -0.5),
+          end: Alignment(1, 1),
+          colors: [Color(0xFF1F1E25), Color(0xFF5A5679)],
+          stops: [0.2826, 0.912],
+          transform: GradientRotation(126.97 * 3.14159 / 180),
         ),
-        itemCount: stats.length,
-        itemBuilder: (context, index) {
-          return _buildStatCard(
-            stats[index]['title']!,
-            stats[index]['value']!,
-            stats[index]['unit']!,
-            stats[index]['svgImagePath']!,
-          );
-        },
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(
+                height: 20.h,
+                width: 20.w,
+                svgImagePath,
+                colorFilter: const ColorFilter.mode(
+                  ColorsData.primary,
+                  BlendMode.srcIn,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Text(
+                title,
+                style: Styles.textStyleS12W400(color: ColorsData.primary).copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                value,
+                style: Styles.textStyleS14W700(color: Colors.white),
+              ),
+              Text(
+                ' $unit',
+                style: Styles.textStyleS10W400(color: ColorsData.thirty),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -348,105 +419,7 @@ class BStaticsViewBody extends StatelessWidget {
                       style: Styles.textStyleS14W600(color: Colors.white),
                     ),
                   ),
-                  // Expanded(
-                  //   child: BarChart(
-                  //     BarChartData(
-                  //       alignment: BarChartAlignment.spaceAround,
-                  //       maxY: _calculateMaxY(controller),
-                  //       barTouchData: BarTouchData(
-                  //         enabled: true,
-                  //         touchTooltipData: BarTouchTooltipData(
-                  //           getTooltipColor: (value) {
-                  //             return ColorsData.primary.withOpacity(0.8);
-                  //           },
-                  //           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                  //             final months = [
-                  //               'Jan'.tr,
-                  //               'Feb'.tr,
-                  //               'Mar'.tr,
-                  //               'Aug'.tr,
-                  //               'Sep'.tr,
-                  //               'Oct'.tr,
-                  //               'Nov'.tr,
-                  //               'Dec'.tr
-                  //             ];
-                  //             return BarTooltipItem(
-                  //               '${months[group.x.toInt()]}: ${rod.toY.toInt()}',
-                  //               TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontSize: 12.sp,
-                  //               ),
-                  //             );
-                  //           },
-                  //         ),
-                  //       ),
-                  //       titlesData: FlTitlesData(
-                  //         show: true,
-                  //         bottomTitles: AxisTitles(
-                  //           sideTitles: SideTitles(
-                  //             showTitles: true,
-                  //             getTitlesWidget: (value, meta) {
-                  //               final months = [
-                  //                 'Jan'.tr,
-                  //                 'Feb'.tr,
-                  //                 'Mar'.tr,
-                  //                 'Apr'.tr,
-                  //                 'May'.tr,
-                  //                 'Jun'.tr,
-                  //                 'Jul'.tr,
-                  //                 'Aug'.tr,
-                  //                 'Sep'.tr,
-                  //                 'Oct'.tr,
-                  //                 'Nov'.tr,
-                  //                 'Dec'.tr,
-                  //               ];
-                  //               return Padding(
-                  //                 padding: EdgeInsets.only(top: 8.h),
-                  //                 child: Text(
-                  //                   months[value.toInt()],
-                  //                   style: Styles.textStyleS10W400(
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               );
-                  //             },
-                  //             reservedSize: 30,
-                  //           ),
-                  //         ),
-                  //         // Hide left titles
-                  //         leftTitles: const AxisTitles(
-                  //           sideTitles: SideTitles(showTitles: false),
-                  //         ),
-                  //         // Show right titles
-                  //         rightTitles: AxisTitles(
-                  //           sideTitles: SideTitles(
-                  //             showTitles: true,
-                  //             getTitlesWidget: (value, meta) {
-                  //               return Text(
-                  //                 value.toInt().toString(),
-                  //                 style: Styles.textStyleS10W400(
-                  //                   color: Colors.white,
-                  //                 ).copyWith(
-                  //                     fontSize: 9.sp,
-                  //                     fontWeight: FontWeight.w400),
-                  //                 textAlign: TextAlign.right,
-                  //               );
-                  //             },
-                  //             reservedSize: 40,
-                  //           ),
-                  //         ),
-                  //         topTitles: const AxisTitles(
-                  //           sideTitles: SideTitles(showTitles: false),
-                  //         ),
-                  //       ),
-                  //       borderData: FlBorderData(show: false),
-                  //       gridData: const FlGridData(show: false),
-                  //       barGroups: _createBarGroups(controller),
-                  //     ),
-                  //   ),
-                  // ),
-                  Expanded(
+                   Expanded(
                     child: BarChart(
                       BarChartData(
                         alignment: BarChartAlignment.spaceAround,
@@ -592,10 +565,8 @@ class BStaticsViewBody extends StatelessWidget {
 
   double _calculateMaxY(StatisticsController controller) {
     int maxValue = controller.monthlyStats.value.maxBookings;
-
-    double paddedMax = maxValue * 1.2;
-
-    return paddedMax > 10 ? paddedMax : 10;
+    if (maxValue <= 0) return 5;
+    return (maxValue * 1.1).ceil().toDouble();
   }
 
   List<BarChartGroupData> _createBarGroups(StatisticsController controller) {
@@ -604,7 +575,7 @@ class BStaticsViewBody extends StatelessWidget {
     for (int i = 0; i < 12; i++) {
       int bookings = controller.monthlyStats.value.getBookingsByMonthIndex(i);
 
-      double barValue = bookings > 0 ? bookings.toDouble() : 1;
+      double barValue = bookings.toDouble();
 
       groups.add(BarChartGroupData(
         x: i,
