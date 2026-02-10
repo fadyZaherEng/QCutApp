@@ -233,7 +233,9 @@ class BEditProfileController extends GetxController {
             .map((day) => {
                   "day": day.day,
                   "startHour": day.startHour,
+                  "startMinute": day.startMinute,
                   "endHour": day.endHour,
+                  "endMinute": day.endMinute,
                 })
             .toList(),
         'profilePic': profilePicUrl,
@@ -252,10 +254,12 @@ class BEditProfileController extends GetxController {
         // Also update working days in a separate call
         final workingDaysPayload = {
           'workingDays': workingDays
-              .map((day) => {
+                  .map((day) => {
                     "day": day.day,
                     "startHour": day.startHour,
+                    "startMinute": day.startMinute,
                     "endHour": day.endHour,
+                    "endMinute": day.endMinute,
                   })
               .toList(),
         };

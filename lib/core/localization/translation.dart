@@ -612,6 +612,8 @@ class MyTranslation extends Translations {
           "Your profile is complete. You're ready to accept appointments!": "ملفك الشخصي مكتمل. أنت جاهز لقبول المواعيد!",
           "Processing...": "جاري المعالجة...",
           "Please wait a moment": "يرجى الانتظار لحظة",
+          "Working": "يعمل",
+          "Not working": "لا يعمل",
         },
         "en": {
           "Appointment Day": "Appointment Day",
@@ -1240,6 +1242,8 @@ class MyTranslation extends Translations {
           "Your profile is complete. You're ready to accept appointments!": "Your profile is complete. You're ready to accept appointments!",
           "Processing...": "Processing...",
           "Please wait a moment": "Please wait a moment",
+          "Working": "Working",
+          "Not working": "Not working",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1810,6 +1814,8 @@ class MyTranslation extends Translations {
             "Your profile is complete. You're ready to accept appointments!": "הפרופיל שלך הושלם. אתה מוכן לקבל פגישות!",
             "Processing...": "מעבד...",
             "Please wait a moment": "אנא המתן רגע",
+            "Working": "עובד",
+            "Not working": "לא עובד",
           },
       };
 }

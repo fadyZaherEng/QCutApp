@@ -157,19 +157,25 @@ class Otp {
 class WorkingDay {
   final String day;
   final int startHour;
+  final int startMinute;
   final int endHour;
+  final int endMinute;
 
   WorkingDay({
     required this.day,
     required this.startHour,
+    this.startMinute = 0,
     required this.endHour,
+    this.endMinute = 0,
   });
 
   factory WorkingDay.fromJson(Map<String, dynamic> json) {
     return WorkingDay(
       day: json['day'] as String,
       startHour: json['startHour'] as int,
+      startMinute: json['startMinute'] as int? ?? 0,
       endHour: json['endHour'] as int,
+      endMinute: json['endMinute'] as int? ?? 0,
     );
   }
 
@@ -178,11 +184,14 @@ class WorkingDay {
     return {
       'day': day,
       'startHour': startHour,
+      'startMinute': startMinute,
       'endHour': endHour,
+      'endMinute': endMinute,
     };
   }
 
-  String get workingHours => '$startHour:00 - $endHour:00';
+  String get workingHours =>
+      '${startHour.toString().padLeft(2, '0')}:${startMinute.toString().padLeft(2, '0')} - ${endHour.toString().padLeft(2, '0')}:${endMinute.toString().padLeft(2, '0')}';
 }
 
 class BreakTime {

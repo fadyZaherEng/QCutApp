@@ -511,7 +511,7 @@ class BProfileController extends GetxController {
 
     final List<String> formattedDays =
         profileData.value!.workingDays.map((day) {
-      return '${day.day} (${day.startHour}:00 - ${day.endHour}:00)';
+      return '${day.day} (${day.workingHours})';
     }).toList();
 
     return formattedDays.join(', ');

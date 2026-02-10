@@ -58,7 +58,9 @@ class WorkingHourDay {
   final bool isOffDay;
   final bool isWalkIn;
   final int startHour;
+  final int startMinute;
   final int endHour;
+  final int endMinute;
 
   WorkingHourDay({
     required this.date,
@@ -67,7 +69,9 @@ class WorkingHourDay {
     required this.isOffDay,
     required this.isWalkIn,
     required this.startHour,
+    this.startMinute = 0,
     required this.endHour,
+    this.endMinute = 0,
   });
 
   factory WorkingHourDay.fromJson(Map<String, dynamic> json) {
@@ -78,7 +82,9 @@ class WorkingHourDay {
       isOffDay: json['isOffDay'] ?? false,
       isWalkIn: json['isWalkIn'] ?? false,
       startHour: json['startHour'] ?? 0,
+      startMinute: json['startMinute'] ?? 0,
       endHour: json['endHour'] ?? 0,
+      endMinute: json['endMinute'] ?? 0,
     );
   }
 
@@ -86,5 +92,6 @@ class WorkingHourDay {
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(date);
 
   // Get formatted working hours
-  String get workingHours => '$startHour:00 - $endHour:00';
+  String get workingHours =>
+      '${startHour.toString().padLeft(2, '0')}:${startMinute.toString().padLeft(2, '0')} - ${endHour.toString().padLeft(2, '0')}:${endMinute.toString().padLeft(2, '0')}';
 }
