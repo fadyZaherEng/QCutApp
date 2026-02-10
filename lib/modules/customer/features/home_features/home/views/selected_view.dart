@@ -16,13 +16,12 @@ import 'package:q_cut/modules/barber/features/home_features/profile_features/pro
 import 'package:q_cut/modules/barber/map_search/map_search_screen.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/controllers/gallery_controller.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/barber_model.dart';
-import 'package:q_cut/modules/customer/features/home_features/home/views/widgets/custom_barber_list_view_item.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:q_cut/modules/customer/features/home_features/home/models/working_hours_range_model.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'package:collection/collection.dart'; // Added for firstWhereOrNull if needed, but Get has it too. Actually WorkingHoursRangeResponse is imported.
+// Added for firstWhereOrNull if needed, but Get has it too. Actually WorkingHoursRangeResponse is imported.
 
 class SelectedView extends StatefulWidget {
   const SelectedView({super.key});
@@ -393,6 +392,18 @@ class _SelectedViewState extends State<SelectedView> {
                               ],
                             ),
                           ),
+                          if (barber.locationDescription != null &&
+                              barber.locationDescription!.isNotEmpty) ...[
+                            SizedBox(height: 4.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                barber.locationDescription!,
+                                style: Styles.textStyleS12W400(
+                                    color: Colors.white70),
+                              ),
+                            ),
+                          ],
                           SizedBox(
                             height: 8.h,
                           ),

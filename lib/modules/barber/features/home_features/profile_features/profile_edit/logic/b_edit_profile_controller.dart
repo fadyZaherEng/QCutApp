@@ -63,6 +63,7 @@ class BEditProfileController extends GetxController {
   final cityController = TextEditingController();
   // final bankAccountController = TextEditingController();
   final instagramController = TextEditingController();
+  final locationDescriptionController = TextEditingController();
   double locationLatitude = 0.0;
   double locationLongitude = 0.0;
 
@@ -100,6 +101,7 @@ class BEditProfileController extends GetxController {
     cityController.text = initialData.city;
     // bankAccountController.text = initialData.bankAccountNumber;
     instagramController.text = initialData.instagramPage;
+    locationDescriptionController.text = initialData.locationDescription;
     if (initialData.barberShopLocation.coordinates.length == 2) {
       locationLongitude = initialData.barberShopLocation.coordinates[0];
       locationLatitude = initialData.barberShopLocation.coordinates[1];
@@ -224,6 +226,7 @@ class BEditProfileController extends GetxController {
         'barberShop': saloonController.text,
         'city': cityController.text,
         'instagramPage': instagramController.text,
+        'locationDescription': locationDescriptionController.text,
         'bankAccountNumber': "123456", // bankAccountController.text,
         'offDay': offDays,
         'workingDays': workingDays
@@ -300,6 +303,7 @@ class BEditProfileController extends GetxController {
     cityController.dispose();
     // bankAccountController.dispose();
     instagramController.dispose();
+    locationDescriptionController.dispose();
     super.onClose();
   }
 }

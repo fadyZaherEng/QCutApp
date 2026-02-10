@@ -29,6 +29,7 @@ class BarberProfileData {
   String bankAccountNumber;
   String instagramPage;
   BarberShopLocation barberShopLocation;
+  String locationDescription;
   List<WalkInRecord>? walkIn;
 
   BarberProfileData({
@@ -49,6 +50,7 @@ class BarberProfileData {
     required this.bankAccountNumber,
     required this.instagramPage,
     required this.barberShopLocation,
+    required this.locationDescription,
     this.walkIn,
   });
 
@@ -97,6 +99,7 @@ class BarberProfileData {
       barberShop: json['barberShop'] ?? '',
       bankAccountNumber: json['bankAccountNumber'] ?? '',
       instagramPage: json['instagramPage'] ?? '',
+      locationDescription: json['locationDescription'] ?? '',
       walkIn: json['walkIn'] != null
           ? List<WalkInRecord>.from(
               json['walkIn'].map((x) => WalkInRecord.fromJson(x)))
@@ -118,6 +121,7 @@ class BarberProfileData {
       'barberShop': barberShop,
       'coverPic': coverPic,
       'instagramPage': instagramPage,
+      'locationDescription': locationDescription,
       'offDay': offDay,
       'profilePic': profilePic,
       'breakTime': breakTime.map((x) => x.toJson()).toList(),

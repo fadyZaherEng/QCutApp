@@ -434,6 +434,7 @@ class MainController extends GetxController {
                                       BarberShopLocation(
                                           type: 'Point', coordinates: [0, 0]),
                               phoneNumber: profileData?.phoneNumber ?? '',
+                              locationDescription: profileData?.locationDescription.trim() ?? ''
                             ),
                           );
 
@@ -470,6 +471,7 @@ class MainController extends GetxController {
                                   barberShopLocation: updatedProfileData?.barberShopLocation ??
                                       BarberShopLocation(type: 'Point', coordinates: [0, 0]),
                                   phoneNumber: updatedProfileData?.phoneNumber ?? '',
+                                  locationDescription: updatedProfileData?.locationDescription.trim() ?? ''
                                 ),
                               );
                               

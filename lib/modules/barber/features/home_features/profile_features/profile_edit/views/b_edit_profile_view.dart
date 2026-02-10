@@ -62,128 +62,135 @@ class _BEditProfileViewState extends State<BEditProfileView> {
         elevation: 0,
       ),
       body: Obx(
-        () => controller.isLoading.value
+            () => controller.isLoading.value
             ? Center(child: SpinKitDoubleBounce(color: ColorsData.primary))
             : SingleChildScrollView(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Profile Photo Section
-                    _buildTitle("Change Profile Photo".tr),
-                    SizedBox(height: 16.h),
-                    _buildProfilePhoto(controller),
-                    SizedBox(height: 24.h),
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile Photo Section
+              _buildTitle("Change Profile Photo".tr),
+              SizedBox(height: 16.h),
+              _buildProfilePhoto(controller),
+              SizedBox(height: 24.h),
 
-                    // Cover Photo Section
-                    _buildTitle("Change Cover Photo".tr),
-                    SizedBox(height: 16.h),
-                    _buildCoverPhoto(controller),
-                    SizedBox(height: 32.h),
+              // Cover Photo Section
+              _buildTitle("Change Cover Photo".tr),
+              SizedBox(height: 16.h),
+              _buildCoverPhoto(controller),
+              SizedBox(height: 32.h),
 
-                    // Personal Details Section
-                    _buildTitle("Change Your Details".tr),
-                    SizedBox(height: 20.h),
-                    _buildInputField("Change your name".tr, "Full Name".tr,
-                        controller.nameController, controller),
-                    SizedBox(height: 16.h),
-                    _buildInputField(
-                      "Change Your Phone Number".tr,
-                      "Phone Number".tr,
-                      controller.phoneController,
-                      controller,
-                      isPhone: true,
-                    ),
-                    SizedBox(height: 16.h),
-                    _buildInputField(
-                      "change your barber shop name".tr,
-                      "Saloon Name".tr,
-                      controller.saloonController,
-                      controller,
-                    ),
-                    SizedBox(height: 16.h),
-                    InkWell(
-                      onTap: () {
-                        // // Future.delayed to ensure the tap is registered properly
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        //   return MapSearchScreen(
-                        //     initialLatitude:32.0853,
-                        //     initialLongitude: 34.7818,
-                        //     onLocationSelected: ( lat, lng, address) {
-                        //       controller.cityController.text = address;
-                        //       controller.locationLatitude = lat;
-                        //       controller.locationLongitude = lng;
-                        //       setState(() {});
-                        //     },
-                        //   );
-                        // }));
-                      },
-                      child: _buildInputField(
-                        "Change Your City".tr,
-                        "City".tr,
-                        controller.cityController,
-                        controller,
-                        readOnly: true,
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    // _buildInputField("Change Your Bank Account".tr,
-                    //     "Bank Account".tr, controller.bankAccountController),
-                    SizedBox(height: 16.h),
-                    _buildInputField(
-                      "Change Your Instagram Page".tr,
-                      "Instagram".tr,
-                      controller.instagramController,
-                      controller,
-                    ),
-                    _buildNoteText(
-                      "It's not necessary if you haven't".tr,
-                    ),
-
-                    SizedBox(height: 24.h),
-                    Divider(thickness: 1.w, color: ColorsData.cardStrock),
-                    SizedBox(height: 24.h),
-
-                    // Off Days Section
-                    _buildTitle("set working days".tr),
-                    SizedBox(height: 16.h),
-                    _buildDropdownField("Select days when you don't work".tr,
-                        () {
-                      Get.bottomSheet(
-                        ChooseOffDaysBottomSheet(
-                          onDaysSelected: (selectedDays) {
-                            // Get the current controller to use
-                            final controller =
-                                Get.find<BEditProfileController>();
-                            // Update the controller with selected off days
-                            controller.setOffDays(selectedDays);
-                          },
-                          selectedDays: Get.find<BEditProfileController>()
-                              .offDays
-                              .toList(),
-                        ),
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                      );
-                    }),
-                    _buildNoteText(
-                        "It's not necessary if you don't have off days".tr),
-
-                    SizedBox(height: 32.h),
-
-                    // Working Days Section
-                    _buildTitle("Set Your Working Hours".tr),
-                    SizedBox(height: 16.h),
-                    _buildWorkingDaysSelector(controller),
-
-                    SizedBox(height: 16.h),
-
-                    // Confirm Button
-                    _buildConfirmButton(controller),
-                    SizedBox(height: 64.h),
-                  ],
+              // Personal Details Section
+              _buildTitle("Change Your Details".tr),
+              SizedBox(height: 20.h),
+              _buildInputField("Change your name".tr, "Full Name".tr,
+                  controller.nameController, controller),
+              SizedBox(height: 16.h),
+              // _buildInputField(
+              //   "Change Your Phone Number".tr,
+              //   "Phone Number".tr,
+              //   controller.phoneController,
+              //   controller,
+              //   isPhone: true,
+              // ),
+              // SizedBox(height: 16.h),
+              _buildInputField(
+                "change your barber shop name".tr,
+                "Saloon Name".tr,
+                controller.saloonController,
+                controller,
+              ),
+              SizedBox(height: 16.h),
+              InkWell(
+                onTap: () {
+                  // // Future.delayed to ensure the tap is registered properly
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return MapSearchScreen(
+                  //     initialLatitude:32.0853,
+                  //     initialLongitude: 34.7818,
+                  //     onLocationSelected: ( lat, lng, address) {
+                  //       controller.cityController.text = address;
+                  //       controller.locationLatitude = lat;
+                  //       controller.locationLongitude = lng;
+                  //       setState(() {});
+                  //     },
+                  //   );
+                  // }));
+                },
+                child: _buildInputField(
+                  "Change Your City".tr,
+                  "City".tr,
+                  controller.cityController,
+                  controller,
+                  readOnly: true,
                 ),
               ),
+              SizedBox(height: 16.h),
+              _buildInputField(
+                "Change Your Location Description".tr,
+                "Location Description".tr,
+                controller.locationDescriptionController,
+                controller,
+              ),
+              SizedBox(height: 16.h),
+              // _buildInputField("Change Your Bank Account".tr,
+              //     "Bank Account".tr, controller.bankAccountController),
+              SizedBox(height: 16.h),
+              _buildInputField(
+                "Change your Instagram link (Optional)".tr,
+                "Instagram".tr,
+                controller.instagramController,
+                controller,
+              ),
+              _buildNoteText(
+                "It's not necessary if you haven't".tr,
+              ),
+
+              SizedBox(height: 24.h),
+              Divider(thickness: 1.w, color: ColorsData.cardStrock),
+              SizedBox(height: 24.h),
+
+              // Off Days Section
+              _buildTitle("set working days".tr),
+              SizedBox(height: 16.h),
+              _buildDropdownField("Select days when you don't work".tr,
+                      () {
+                    Get.bottomSheet(
+                      ChooseOffDaysBottomSheet(
+                        onDaysSelected: (selectedDays) {
+                          // Get the current controller to use
+                          final controller =
+                          Get.find<BEditProfileController>();
+                          // Update the controller with selected off days
+                          controller.setOffDays(selectedDays);
+                        },
+                        selectedDays: Get.find<BEditProfileController>()
+                            .offDays
+                            .toList(),
+                      ),
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                    );
+                  }),
+              _buildNoteText(
+                  "It's not necessary if you don't have off days".tr),
+
+              SizedBox(height: 32.h),
+
+              // Working Days Section
+              _buildTitle("Set Your Working Hours".tr),
+              SizedBox(height: 16.h),
+              _buildWorkingDaysSelector(controller),
+
+              SizedBox(height: 16.h),
+
+              // Confirm Button
+              _buildConfirmButton(controller),
+              SizedBox(height: 64.h),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -351,7 +358,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child:
-          Text(text, style: Styles.textStyleS14W400(color: ColorsData.primary)),
+      Text(text, style: Styles.textStyleS14W400(color: ColorsData.primary)),
     );
   }
 
@@ -386,53 +393,53 @@ class _BEditProfileViewState extends State<BEditProfileView> {
   // Create a new widget to handle working days selection
   Widget _buildWorkingDaysSelector(BEditProfileController controller) {
     return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Working Days Schedule".tr,
-                    style: Styles.textStyleS14W500(color: Colors.white)),
-                TextButton.icon(
-                  onPressed: () => controller.addWorkingDay(),
-                  icon: const Icon(Icons.add, color: ColorsData.primary),
-                  label: Text("Add Day".tr,
-                      style:
-                          Styles.textStyleS12W500(color: ColorsData.primary)),
-                ),
-              ],
+            Text("Working Days Schedule".tr,
+                style: Styles.textStyleS14W500(color: Colors.white)),
+            TextButton.icon(
+              onPressed: () => controller.addWorkingDay(),
+              icon: const Icon(Icons.add, color: ColorsData.primary),
+              label: Text("Add Day".tr,
+                  style:
+                  Styles.textStyleS12W500(color: ColorsData.primary)),
             ),
-            SizedBox(height: 12.h),
-            if (controller.workingDays.isEmpty)
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: ColorsData.cardColor,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: ColorsData.cardStrock),
-                ),
-                child: Center(
-                  child: Text(
-                    "No working days set. Add your working days.".tr,
-                    style: Styles.textStyleS14W400(color: Colors.grey),
-                  ),
-                ),
-              )
-            else
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.workingDays.length,
-                separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                itemBuilder: (context, index) {
-                  final workingDay = controller.workingDays[index];
-                  return _buildWorkingDayItem(
-                      controller, index, workingDay, context);
-                },
-              ),
           ],
-        ));
+        ),
+        SizedBox(height: 12.h),
+        if (controller.workingDays.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
+            decoration: BoxDecoration(
+              color: ColorsData.cardColor,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: ColorsData.cardStrock),
+            ),
+            child: Center(
+              child: Text(
+                "No working days set. Add your working days.".tr,
+                style: Styles.textStyleS14W400(color: Colors.grey),
+              ),
+            ),
+          )
+        else
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.workingDays.length,
+            separatorBuilder: (context, index) => SizedBox(height: 16.h),
+            itemBuilder: (context, index) {
+              final workingDay = controller.workingDays[index];
+              return _buildWorkingDayItem(
+                  controller, index, workingDay, context);
+            },
+          ),
+      ],
+    ));
   }
 
   // Widget to display a single working day with time selection
@@ -457,7 +464,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.r),
                   border:
-                      Border.all(color: ColorsData.primary.withOpacity(0.5)),
+                  Border.all(color: ColorsData.primary.withOpacity(0.5)),
                 ),
                 child: Obx(() {
                   // Get available days - exclude off days and already used working days (except current one)
@@ -471,8 +478,8 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                   // Filter days to only show available ones - those not in usedDays and not in offDays
                   final availableDays = controller.availableDays
                       .where((day) =>
-                          !usedDays.contains(day) && !offDays.contains(day) ||
-                          day == workingDay.day)
+                  !usedDays.contains(day) && !offDays.contains(day) ||
+                      day == workingDay.day)
                       .toList();
 
                   return DropdownButton<String>(
@@ -484,9 +491,9 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                         color: ColorsData.primary),
                     items: availableDays
                         .map((day) => DropdownMenuItem<String>(
-                              value: day,
-                              child: Text(day.tr),
-                            ))
+                      value: day,
+                      child: Text(day.tr),
+                    ))
                         .toList(),
                     onChanged: (value) {
                       if (value != null) {
@@ -525,7 +532,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                         final timeOfDay = await showTimePicker(
                           context: context,
                           initialTime:
-                              TimeOfDay(hour: workingDay.startHour, minute: 0),
+                          TimeOfDay(hour: workingDay.startHour, minute: 0),
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
@@ -565,7 +572,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                             Text(
                               "${workingDay.startHour}:00",
                               style:
-                                  Styles.textStyleS14W400(color: Colors.white),
+                              Styles.textStyleS14W400(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -589,7 +596,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                         final timeOfDay = await showTimePicker(
                           context: context,
                           initialTime:
-                              TimeOfDay(hour: workingDay.endHour, minute: 0),
+                          TimeOfDay(hour: workingDay.endHour, minute: 0),
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
@@ -629,7 +636,7 @@ class _BEditProfileViewState extends State<BEditProfileView> {
                             Text(
                               "${workingDay.endHour}:00",
                               style:
-                                  Styles.textStyleS14W400(color: Colors.white),
+                              Styles.textStyleS14W400(color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ],

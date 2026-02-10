@@ -412,6 +412,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                             isAddress: true,
                           ),
                         ),
+                        if (profileData.locationDescription.isNotEmpty) ...[
+                          SizedBox(height: 4.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 48.w),
+                            child: Text(
+                              profileData.locationDescription,
+                              style: Styles.textStyleS12W400(
+                                  color: Colors.white70),
+                            ),
+                          ),
+                        ],
                         SizedBox(height: 8.h),
                         InkWell(
                           onTap: () {
@@ -469,6 +480,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 barberShopLocation:
                                     profileData.barberShopLocation,
                                 phoneNumber: profileData.phoneNumber,
+                                locationDescription: profileData.locationDescription,
                               ),
                             );
 
