@@ -435,20 +435,20 @@ class _BProfileViewBodyState extends State<BProfileView>
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        InkWell(
-                          onTap: () {
-                            try {
-                              launch(profileData.instagramPage);
-                            } catch (e) {
-                              print('Could not launch Instagram: $e');
-                            }
-                          },
-                          child: _buildInfoRow(
-                            AssetsData.instagramIcon,
-                            instagramPage,
-                            location,
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     try {
+                        //       launch(profileData.instagramPage);
+                        //     } catch (e) {
+                        //       print('Could not launch Instagram: $e');
+                        //     }
+                        //   },
+                        //   child: _buildInfoRow(
+                        //     AssetsData.instagramIcon,
+                        //     instagramPage,
+                        //     location,
+                        //   ),
+                        // ),
                         SizedBox(height: 16.h),
                         CustomBigButton(
                           color: const Color(0xA6C59D4E),

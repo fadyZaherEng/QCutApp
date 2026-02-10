@@ -536,6 +536,34 @@ class BProfileController extends GetxController {
   }
 
   // Walk-in days management
+  // Delete barber service
+  Future<bool> deleteBarberService(String serviceId) async {
+    if (barberServices.length <= 1) {
+      ShowToast.showError(message: "At least one service is required".tr);
+      return false;
+    }
+
+    try {
+      final url = "${Variables.SERVICE}$serviceId";
+      final response = await _apiCall.deleteData(url);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ShowToast.showSuccessSnackBar(
+            message: "Service deleted successfully".tr);
+        await fetchBarberServices();
+        return true;
+      } else {
+        final responseBody = json.decode(response.body);
+        ShowToast.showError(
+            message: responseBody['message'] ?? 'Failed to delete service'.tr);
+        return false;
+      }
+    } catch (e) {
+      ShowToast.showError(message: '${'networkError'.tr}: $e');
+      return false;
+    }
+  }
+
   // Check if a date is a walk-in day
   bool isWalkInDay(DateTime date) {
     if (profileData.value?.walkIn == null || profileData.value!.walkIn!.isEmpty) {

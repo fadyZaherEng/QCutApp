@@ -614,6 +614,14 @@ class MyTranslation extends Translations {
           "Please wait a moment": "يرجى الانتظار لحظة",
           "Working": "يعمل",
           "Not working": "لا يعمل",
+          "At least one service is required": "مطلوب خدمة واحدة على الأقل",
+          "Delete Service": "حذف الخدمة",
+          "Are you sure you want to delete this service?":
+              "هل أنت متأكد أنك تريد حذف هذه الخدمة؟",
+          "Start time must be earlier than end time":
+              "يجب أن يكون وقت البدء قبل وقت الانتهاء",
+          "You must have at least one working day":
+              "يجب أن يكون لديك يوم عمل واحد على الأقل",
         },
         "en": {
           "Appointment Day": "Appointment Day",
@@ -1244,6 +1252,15 @@ class MyTranslation extends Translations {
           "Please wait a moment": "Please wait a moment",
           "Working": "Working",
           "Not working": "Not working",
+          "At least one service is required":
+              "At least one service is required",
+          "Delete Service": "Delete Service",
+          "Are you sure you want to delete this service?":
+              "Are you sure you want to delete this service?",
+          "Start time must be earlier than end time":
+              "Start time must be earlier than end time",
+          "You must have at least one working day":
+              "You must have at least one working day",
         },
         "he": {
           "emailreq": "דרוש אימייל",
@@ -1816,6 +1833,14 @@ class MyTranslation extends Translations {
             "Please wait a moment": "אנא המתן רגע",
             "Working": "עובד",
             "Not working": "לא עובד",
+            "At least one service is required": "נדרש שירות אחד לפחות",
+            "Delete Service": "מחק שירות",
+            "Are you sure you want to delete this service?":
+                "האם אתה בטוח שברצונך למחוק שירות זה?",
+            "Start time must be earlier than end time":
+                "זמן ההתחלה חייב להיות מוקדם מזמן הסיום",
+            "You must have at least one working day":
+                "חייב להיות לך לפחות יום עבודה אחד",
           },
       };
 }

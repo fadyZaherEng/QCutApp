@@ -202,6 +202,15 @@ void _showEditDayBottomSheet(
                     List.from(controller.profileData.value?.workingDays ?? []);
 
                 if (rxIsWorking.value) {
+                  // Validate time: start < end
+                  final startTotal = startH.value * 60 + startM.value;
+                  final endTotal = endH.value * 60 + endM.value;
+                  if (startTotal >= endTotal) {
+                    ShowToast.showError(
+                        message: "Start time must be earlier than end time".tr);
+                    return;
+                  }
+
                   final newDay = WorkingDay(
                     day: day.day,
                     startHour: startH.value,
@@ -216,6 +225,13 @@ void _showEditDayBottomSheet(
                     currentDays.add(newDay);
                   }
                 } else {
+                  // Check if this is the last working day
+                  if (currentDays.length <= 1 &&
+                      currentDays.any((wd) => wd.day == day.day)) {
+                    ShowToast.showError(
+                        message: "You must have at least one working day".tr);
+                    return;
+                  }
                   currentDays.removeWhere((wd) => wd.day == day.day);
                 }
 
