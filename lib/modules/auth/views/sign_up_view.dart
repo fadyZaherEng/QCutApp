@@ -141,11 +141,23 @@ class _SignUpViewState extends State<SignUpView> {
                               children: [
                                 SizedBox(height: 16.h),
                                 CustomTextFormField(
-                                  //     controller: _barberShop,
+                                  controller: _authController.barberShopNameController,
                                   hintText: 'enterYourBarberShopName'.tr,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'pleaseEnterYourBarberShopName'.tr;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(height: 16.h),
+                                CustomTextFormField(
+                                  controller: _authController.locationDescriptionController,
+                                  hintText: 'locationDescription'.tr,
+                                  // maxLines: 3,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'pleaseEnterLocationDescription'.tr;
                                     }
                                     return null;
                                   },

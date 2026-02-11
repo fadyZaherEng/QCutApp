@@ -29,6 +29,7 @@ class BAppointmentView extends StatefulWidget {
 
 class _BAppointmentViewState extends State<BAppointmentView> {
   BarberLocation? location;
+  String? city;
 
   Future<void> fetchProfileData() async {
     final NetworkAPICall apiCall = NetworkAPICall();
@@ -44,6 +45,7 @@ class _BAppointmentViewState extends State<BAppointmentView> {
           type: profileResponse.data.barberShopLocation.type,
           coordinates: profileResponse.data.barberShopLocation.coordinates,
         );
+        city = profileResponse.data.city;
       } else {}
     } finally {}
     if (mounted) {
@@ -91,6 +93,7 @@ class _BAppointmentViewState extends State<BAppointmentView> {
                         children: [
                           CustomBAppointmentAppBar(
                             location: location,
+                            city: city,
                           ),
                           SizedBox(height: 16.h),
                           Column(

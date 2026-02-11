@@ -25,6 +25,8 @@ class AuthController extends GetxController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController otpController = TextEditingController();
+  final TextEditingController barberShopNameController = TextEditingController();
+  final TextEditingController locationDescriptionController = TextEditingController();
 
   // Form Keys
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -78,6 +80,8 @@ class AuthController extends GetxController {
             ? userData.toJson()
             : {
                 ...userData.toJson(),
+                'barberShop': barberShopNameController.text.trim(),
+                'locationDescription': locationDescriptionController.text.trim(),
                 "location": {
                   "type": "Point",
                   "coordinates": [locationLongitude, locationLatitude]
@@ -87,9 +91,18 @@ class AuthController extends GetxController {
 
       final response =
           await _apiCall.postDataAsGuest(requestData, Variables.SIGNUP);
-      print(userData.toJson());
+      print({
+        ...userData.toJson(),
+        'barberShop': barberShopNameController.text.trim(),
+        'locationDescription': locationDescriptionController.text.trim(),
+        "location": {
+          "type": "Point",
+          "coordinates": [locationLongitude, locationLatitude]
+        }
+      });
 
       final responseBody = json.decode(response.body);
+      print("response ${json.decode(response.body)}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         signupResponse.value = SignUpResponse.fromJson(responseBody);
@@ -292,6 +305,8 @@ class AuthController extends GetxController {
     fullNameController.clear();
     city.clear();
     confirmPasswordController.clear();
+    barberShopNameController.clear();
+    locationDescriptionController.clear();
     // Don't reference otpController here since it might be disposed
     errorMessage.value = '';
   }

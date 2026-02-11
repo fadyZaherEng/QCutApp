@@ -145,46 +145,34 @@ class _BProfileViewBodyState extends State<BProfileView>
                         Container(
                           width: double.infinity,
                           height: 250.h,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: ColorsData.secondary,
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              alignment: Alignment.topCenter,
-                              image: CachedNetworkImageProvider(
-                                profileData.coverPic,
-                                errorListener: (exception) =>
-                                    print('Error loading image: $exception'),
-                              ),
-                            ),
                           ),
                           child: profileData.coverPic.isNotEmpty
-                              ? Image.network(
-                                  profileData.coverPic,
+                              ? CachedNetworkImage(
+                                  imageUrl: profileData.coverPic,
                                   fit: BoxFit.fill,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      color: ColorsData.secondary,
-                                      child: Center(
-                                        child: Text(
-                                          "Add Cover Photo".tr,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              : Container(
-                                  color: ColorsData.secondary,
-                                  child: Center(
+                                  placeholder: (context, url) => const Center(
+                                    child: SpinKitDoubleBounce(
+                                      color: ColorsData.primary,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Center(
                                     child: Text(
                                       "Add Cover Photo".tr,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18.sp,
                                       ),
+                                    ),
+                                  ),
+                                )
+                              : Center(
+                                  child: Text(
+                                    "Add Cover Photo".tr,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.sp,
                                     ),
                                   ),
                                 ),
@@ -245,25 +233,30 @@ class _BProfileViewBodyState extends State<BProfileView>
                               child: CircleAvatar(
                                 radius: 60,
                                 backgroundColor: ColorsData.secondary,
-                                child: CircleAvatar(
-                                  radius: 55,
-                                  backgroundImage:
-                                      NetworkImage(profileData.profilePic),
-                                  backgroundColor: ColorsData.secondary,
-                                  onBackgroundImageError: (
-                                    exception,
-                                    stackTrace,
-                                  ) {
-                                    print(
-                                        'Error loading profile image: $exception');
-                                  },
-                                  child: profileData.profilePic.isEmpty
-                                      ? const Icon(
+                                child: ClipOval(
+                                  child: profileData.profilePic.isNotEmpty
+                                      ? CachedNetworkImage(
+                                          imageUrl: profileData.profilePic,
+                                          width: 110,
+                                          height: 110,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const SpinKitDoubleBounce(
+                                            color: ColorsData.primary,
+                                            size: 20,
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Icon(
                                           Icons.person,
                                           size: 50,
                                           color: Colors.white,
-                                        )
-                                      : null,
+                                        ),
                                 ),
                               ),
                             ),
@@ -371,6 +364,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                         SizedBox(height: 8.h),
                         _buildInfoRow(
                           AssetsData.personIcon,
+                          Icons.person,
                           fullName,
                           location,
                         ),
@@ -386,18 +380,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                                             .barberShopLocation
                                             .coordinates
                                             .isNotEmpty
-                                        ? profileData.barberShopLocation
-                                            .coordinates[1]
+                                        ? profileData
+                                            .barberShopLocation.coordinates[1]
                                         : 31.0461,
                                     initialLongitude: profileData
                                             .barberShopLocation
                                             .coordinates
                                             .isNotEmpty
-                                        ? profileData.barberShopLocation
-                                            .coordinates[0]
+                                        ? profileData
+                                            .barberShopLocation.coordinates[0]
                                         : 34.8516,
-                                    onLocationSelected:
-                                        (lat, lng, address) {
+                                    onLocationSelected: (lat, lng, address) {
                                       setState(() {});
                                     },
                                   );
@@ -407,20 +400,20 @@ class _BProfileViewBodyState extends State<BProfileView>
                           },
                           child: _buildInfoRow(
                             AssetsData.mapPinIcon,
+                            Icons.location_on,
                             city,
                             location,
-                            isAddress: true,
+                            isAddress: false,
                           ),
                         ),
                         if (profileData.locationDescription.isNotEmpty) ...[
                           SizedBox(height: 4.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 48.w),
-                            child: Text(
-                              profileData.locationDescription,
-                              style: Styles.textStyleS12W400(
-                                  color: Colors.white70),
-                            ),
+                          _buildInfoRow(
+                            AssetsData.mapPinIcon,
+                            Icons.description,
+                            profileData.locationDescription,
+                            location,
+                            isAddress: false,
                           ),
                         ],
                         SizedBox(height: 8.h),
@@ -430,6 +423,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                           },
                           child: _buildInfoRow(
                             AssetsData.callIcon,
+                            Icons.call,
                             "\u200E${profileData.phoneNumber.replaceFirst('+972', '+972  ')}",
                             location,
                           ),
@@ -480,7 +474,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                                 barberShopLocation:
                                     profileData.barberShopLocation,
                                 phoneNumber: profileData.phoneNumber,
-                                locationDescription: profileData.locationDescription,
+                                locationDescription:
+                                    profileData.locationDescription,
                               ),
                             );
 
@@ -492,19 +487,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                         SizedBox(height: 12.h),
                         CustomBigButton(
                           color: Color(0xA6C59D4E),
-                          textData:
-                              LocalizationService.getCurrentLocale() ==
-                                      const Locale('ar')
-                                  ? "المواعيد بدون حجز"
-                                  : "Walk-In".tr,
+                          textData: LocalizationService.getCurrentLocale() ==
+                                  const Locale('ar')
+                              ? "المواعيد بدون حجز"
+                              : "Walk-In".tr,
                           onPressed: () {
                             _showWalkInCalendar(context, controller);
                           },
                         ),
                         SizedBox(height: 24.h),
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _buildTabButton(
                               "My service".tr,
@@ -619,8 +612,7 @@ class _BProfileViewBodyState extends State<BProfileView>
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.barberServices.length,
                   padding: EdgeInsets.zero,
-                  separatorBuilder: (context, index) =>
-                      SizedBox(height: 8.h),
+                  separatorBuilder: (context, index) => SizedBox(height: 8.h),
                   itemBuilder: (context, index) {
                     final service = controller.barberServices[index];
                     return _buildServiceItemFromData(service);
@@ -754,21 +746,29 @@ class _BProfileViewBodyState extends State<BProfileView>
 
   Widget _buildInfoRow(
     String svgIconPath,
+    IconData? iconData,
     String text,
     BarberLocation location, {
     bool isAddress = false,
   }) {
     return Row(
       children: [
-        SvgPicture.asset(
-          height: 18.h,
-          width: 18.w,
-          svgIconPath,
-          colorFilter: const ColorFilter.mode(
-            ColorsData.primary,
-            BlendMode.srcIn,
+        if (iconData != null)
+          Icon(
+            iconData,
+            size: 18.sp,
+            color: ColorsData.primary,
+          )
+        else
+          SvgPicture.asset(
+            height: 18.h,
+            width: 18.w,
+            svgIconPath,
+            colorFilter: const ColorFilter.mode(
+              ColorsData.primary,
+              BlendMode.srcIn,
+            ),
           ),
-        ),
         SizedBox(width: 8.w),
         if (!isAddress)
           Expanded(
@@ -1020,7 +1020,7 @@ class _BProfileViewBodyState extends State<BProfileView>
     // Range selection state
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     final Rx<DateTime?> rangeStart = Rx<DateTime?>(null);
     final Rx<DateTime?> rangeEnd = Rx<DateTime?>(null);
     final Rx<DateTime> focusedDay = today.obs;
@@ -1060,12 +1060,17 @@ class _BProfileViewBodyState extends State<BProfileView>
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.date_range,
-                        color: ColorsData.primary, size: 24.sp,),
+                    Icon(
+                      Icons.date_range,
+                      color: ColorsData.primary,
+                      size: 24.sp,
+                    ),
                     SizedBox(width: 12.w),
                     Text(
                       "set_walkIn_range".tr,
-                      style: Styles.textStyleS18W700(color: ColorsData.primary,),
+                      style: Styles.textStyleS18W700(
+                        color: ColorsData.primary,
+                      ),
                     ),
                     const Spacer(),
                     IconButton(
@@ -1083,7 +1088,8 @@ class _BProfileViewBodyState extends State<BProfileView>
                 child: Obx(
                   () => TableCalendar(
                     firstDay: today,
-                    lastDay: today.add(const Duration(days: 365 * 2)), // 2 years flexibility
+                    lastDay: today.add(const Duration(days: 365 * 2)),
+                    // 2 years flexibility
                     focusedDay: focusedDay.value,
                     rangeStartDay: rangeStart.value,
                     rangeEndDay: rangeEnd.value,
