@@ -167,41 +167,41 @@ class _CustomBAppointmentListItemState extends State<CustomBAppointmentListItem>
           SizedBox(height: 8.h),
 
           // **Location**
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SvgPicture.asset(
-                height: 16.h,
-                width: 16.w,
-                AssetsData.mapPinIcon,
-                colorFilter: const ColorFilter.mode(
-                  ColorsData.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              SizedBox(width: 4.w),
-              Expanded(
-                  child: FutureBuilder<String>(
-                future: widget.appointment.barber.location
-                    ?.getAddress(Get.locale?.languageCode ?? "en"),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("Loading address...");
-                  }
-                  if (snapshot.hasError) {
-                    return Text("Error loading address");
-                  }
-                  return Text(
-                    snapshot.data ?? "Address not available",
-                    style: Styles.textStyleS12W400(),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  );
-                },
-              )),
-            ],
-          ),
+          // Row(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     SvgPicture.asset(
+          //       height: 16.h,
+          //       width: 16.w,
+          //       AssetsData.mapPinIcon,
+          //       colorFilter: const ColorFilter.mode(
+          //         ColorsData.primary,
+          //         BlendMode.srcIn,
+          //       ),
+          //     ),
+          //     SizedBox(width: 4.w),
+          //     Expanded(
+          //         child: FutureBuilder<String>(
+          //       future: widget.appointment.barber.location
+          //           ?.getAddress(Get.locale?.languageCode ?? "en"),
+          //       builder: (context, snapshot) {
+          //         if (snapshot.connectionState == ConnectionState.waiting) {
+          //           return Text("Loading address...");
+          //         }
+          //         if (snapshot.hasError) {
+          //           return Text("Error loading address");
+          //         }
+          //         return Text(
+          //           snapshot.data ?? "Address not available",
+          //           style: Styles.textStyleS12W400(),
+          //           overflow: TextOverflow.ellipsis,
+          //           maxLines: 2,
+          //         );
+          //       },
+          //     )),
+          //   ],
+          // ),
           SizedBox(height: 12.h),
 
           // **Details in Rows**
