@@ -46,6 +46,9 @@ class _SelectedViewState extends State<SelectedView> {
     // Delay the initialization to ensure Get.arguments is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
       barber = Get.arguments as Barber;
+      print(
+          "SelectedView initialized with arguments: ${barber.locationDescription}");
+
       // Set the initial favorite status
       isFavorite.value = barber.isFavorite;
       // Fetch gallery when view is initialized
@@ -60,10 +63,10 @@ class _SelectedViewState extends State<SelectedView> {
       isLoadingWalkIn.value = true;
       final NetworkAPICall apiCall = NetworkAPICall();
       final url = Variables.GET_WORKING_HOURS_RANGE + barberId;
-      
+
       final response = await apiCall.getData(url);
       print('Walk-in data response: ${response.body}');
-      
+
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
         if (decoded is Map<String, dynamic>) {
@@ -74,7 +77,8 @@ class _SelectedViewState extends State<SelectedView> {
           print('Unexpected response format: $decoded');
         }
       } else {
-        print('Failed to fetch walk-in data: ${response.statusCode} ${response.body}');
+        print(
+            'Failed to fetch walk-in data: ${response.statusCode} ${response.body}');
       }
     } catch (e) {
       print('Error fetching walk-in data: $e');
@@ -120,20 +124,20 @@ class _SelectedViewState extends State<SelectedView> {
                     // Display barber's cover pic if available, otherwise use default image
                     barber.coverPic != null && barber.coverPic!.isNotEmpty
                         ? InkWell(
-                              onTap: () {
-                                // Handle image tap to view in full screen
-                                if (barber.coverPic != null) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => GalleryFullScreenPage(
-                                        images: [barber.coverPic!],
-                                        initialIndex: 0,
-                                      ),
+                            onTap: () {
+                              // Handle image tap to view in full screen
+                              if (barber.coverPic != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => GalleryFullScreenPage(
+                                      images: [barber.coverPic!],
+                                      initialIndex: 0,
                                     ),
-                                  );
-                                }
-                              },
+                                  ),
+                                );
+                              }
+                            },
                             child: Image.network(
                               barber.coverPic!,
                               width: double.infinity,
@@ -164,10 +168,11 @@ class _SelectedViewState extends State<SelectedView> {
                               ),
                               SizedBox(width: 8.w),
                               Obx(() {
-                                final today =
-                                    DateFormat('yyyy-MM-dd').format(DateTime.now());
-                                final todayWork = workingHoursRange
-                                    .firstWhereOrNull((d) => d.formattedDate == today);
+                                final today = DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now());
+                                final todayWork =
+                                    workingHoursRange.firstWhereOrNull(
+                                        (d) => d.formattedDate == today);
                                 if (todayWork?.isWalkIn ?? false) {
                                   return Container(
                                     padding: EdgeInsets.symmetric(
@@ -176,7 +181,8 @@ class _SelectedViewState extends State<SelectedView> {
                                       color: Colors.orange.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(4.r),
                                       border: Border.all(
-                                          color: Colors.orange.withOpacity(0.5)),
+                                          color:
+                                              Colors.orange.withOpacity(0.5)),
                                     ),
                                     child: Text(
                                       "${"Walk-In Only".tr} (${todayWork!.workingHours})",
@@ -189,13 +195,9 @@ class _SelectedViewState extends State<SelectedView> {
                               }),
                             ],
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          SizedBox(height: 10.h),
                           const Divider(),
-                          SizedBox(
-                            height: 18.h,
-                          ),
+                          SizedBox(height: 18.h),
                           // Social media and action buttons
                           Row(
                             children: [
@@ -209,8 +211,7 @@ class _SelectedViewState extends State<SelectedView> {
                                   } else {
                                     ShowToast.showError(
                                         message:
-                                            "Instagram link is not set"
-                                                .tr);
+                                            "Instagram link is not set".tr);
                                   }
                                 },
                                 child: Column(
@@ -235,10 +236,8 @@ class _SelectedViewState extends State<SelectedView> {
                                       ),
                                     ),
                                     SizedBox(height: 4.h),
-                                    Text(
-                                      "instagram".tr,
-                                      style: Styles.textStyleS14W500(),
-                                    ),
+                                    Text("instagram".tr,
+                                        style: Styles.textStyleS14W500()),
                                   ],
                                 ),
                               ),
@@ -394,45 +393,30 @@ class _SelectedViewState extends State<SelectedView> {
                           ),
                           if (barber.locationDescription != null &&
                               barber.locationDescription!.isNotEmpty) ...[
-                            SizedBox(height: 4.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20.w),
-                              child: Text(
-                                barber.locationDescription!,
-                                style: Styles.textStyleS12W400(
-                                    color: Colors.white70),
-                              ),
-                            ),
+                            SizedBox(height: 8.h),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.description,
+                                  size: 18.sp,
+                                  color: ColorsData.primary,
+                                ),
+                                SizedBox(width: 2.w),
+                                // Show actual address if available
+                                Expanded(
+                                  child: Text(
+                                    barber.locationDescription ?? "",
+                                    style: Styles.textStyleS14W500(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          // Time and distance information
-                          // Row(
-                          //   children: [
-                          //     SvgPicture.asset(
-                          //       AssetsData.clockIcon,
-                          //       width: 16.w,
-                          //       height: 16.h,
-                          //       colorFilter: const ColorFilter.mode(
-                          //         ColorsData.primary,
-                          //         BlendMode.srcIn,
-                          //       ),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 2.w,
-                          //     ),
-                          //     Text(
-                          //       '15 min   1.5 km',
-                          //       style: Styles.textStyleS14W500(),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(
-                          //   height: 8.h,
-                          // ),
+                          SizedBox(height: 8.h),
                           Obx(
-                                () {
+                            () {
                               if (walkInRanges.isEmpty) {
                                 return const SizedBox.shrink();
                               }
@@ -448,10 +432,13 @@ class _SelectedViewState extends State<SelectedView> {
                                         vertical: 10.h,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: ColorsData.primary.withOpacity(0.15),
-                                        borderRadius: BorderRadius.circular(8.r),
+                                        color: ColorsData.primary
+                                            .withOpacity(0.15),
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
                                         border: Border.all(
-                                          color: ColorsData.primary.withOpacity(0.3),
+                                          color: ColorsData.primary
+                                              .withOpacity(0.3),
                                           width: 1,
                                         ),
                                       ),
