@@ -111,9 +111,7 @@ class MainController extends GetxController {
 
   Future<void> _notificationListener() async {
     onNotificationClick?.stream.listen((event) {
-      print("event MainController is $event");
       if (event.isNotEmpty) {
-        print("event11111111111111111111 $event");
         _onNotificationClick(event);
       }
     });
@@ -399,7 +397,7 @@ class MainController extends GetxController {
                         if (response.statusCode == 200) {
                           final BProfileController profileController =
                               Get.put(BProfileController());
-                          
+
                           // Fetch only profile data (skip services for speed)
                           await profileController.fetchProfileData();
 
@@ -413,38 +411,42 @@ class MainController extends GetxController {
                             colorText: Colors.white,
                           );
 
-                          final profileData = profileController.profileData.value;
+                          final profileData =
+                              profileController.profileData.value;
 
                           // Navigate to Edit Profile immediately with smooth transition
                           final editProfileResult = await Get.toNamed(
                             AppRouter.beditProfilePath,
                             arguments: BarberProfileModel(
-                              fullName: profileData?.fullName.trim() ?? '',
-                              offDay: profileData?.offDay ?? [],
-                              barberShop: profileData?.barberShop ?? '',
-                              bankAccountNumber:
-                                  profileData?.bankAccountNumber ?? '',
-                              instagramPage: profileData?.instagramPage ?? '',
-                              profilePic: profileData?.profilePic.trim() ?? '',
-                              coverPic: profileData?.coverPic.trim() ?? '',
-                              city: profileData?.city ?? 'New City',
-                              workingDays: profileData?.workingDays ?? [],
-                              barberShopLocation:
-                                  profileData?.barberShopLocation ??
-                                      BarberShopLocation(
-                                          type: 'Point', coordinates: [0, 0]),
-                              phoneNumber: profileData?.phoneNumber ?? '',
-                              locationDescription: profileData?.locationDescription.trim() ?? ''
-                            ),
+                                fullName: profileData?.fullName.trim() ?? '',
+                                offDay: profileData?.offDay ?? [],
+                                barberShop: profileData?.barberShop ?? '',
+                                bankAccountNumber:
+                                    profileData?.bankAccountNumber ?? '',
+                                instagramPage: profileData?.instagramPage ?? '',
+                                profilePic:
+                                    profileData?.profilePic.trim() ?? '',
+                                coverPic: profileData?.coverPic.trim() ?? '',
+                                city: profileData?.city ?? 'New City',
+                                workingDays: profileData?.workingDays ?? [],
+                                barberShopLocation:
+                                    profileData?.barberShopLocation ??
+                                        BarberShopLocation(
+                                            type: 'Point', coordinates: [0, 0]),
+                                phoneNumber: profileData?.phoneNumber ?? '',
+                                locationDescription:
+                                    profileData?.locationDescription.trim() ??
+                                        ''),
                           );
 
                           // Step 2: Check if profile was updated
                           if (editProfileResult == true) {
                             await profileController.fetchProfileData();
-                            final updatedProfileData = profileController.profileData.value;
-                            
+                            final updatedProfileData =
+                                profileController.profileData.value;
+
                             // Check if working days are set
-                            if (updatedProfileData?.workingDays == null || 
+                            if (updatedProfileData?.workingDays == null ||
                                 updatedProfileData!.workingDays.isEmpty) {
                               Get.snackbar(
                                 "Set Working Days".tr,
@@ -453,30 +455,47 @@ class MainController extends GetxController {
                                 colorText: Colors.white,
                                 duration: const Duration(seconds: 3),
                               );
-                              
-                              await Future.delayed(const Duration(milliseconds: 500));
-                              
+
+                              await Future.delayed(
+                                  const Duration(milliseconds: 500));
+
                               final workingDaysResult = await Get.toNamed(
                                 AppRouter.beditProfilePath,
                                 arguments: BarberProfileModel(
-                                  fullName: updatedProfileData?.fullName.trim() ?? '',
-                                  offDay: updatedProfileData?.offDay ?? [],
-                                  barberShop: updatedProfileData?.barberShop ?? '',
-                                  bankAccountNumber: updatedProfileData?.bankAccountNumber ?? '',
-                                  instagramPage: updatedProfileData?.instagramPage ?? '',
-                                  profilePic: updatedProfileData?.profilePic.trim() ?? '',
-                                  coverPic: updatedProfileData?.coverPic.trim() ?? '',
-                                  city: updatedProfileData?.city ?? '',
-                                  workingDays: updatedProfileData?.workingDays ?? [],
-                                  barberShopLocation: updatedProfileData?.barberShopLocation ??
-                                      BarberShopLocation(type: 'Point', coordinates: [0, 0]),
-                                  phoneNumber: updatedProfileData?.phoneNumber ?? '',
-                                  locationDescription: updatedProfileData?.locationDescription.trim() ?? ''
-                                ),
+                                    fullName: updatedProfileData?.fullName.trim() ??
+                                        '',
+                                    offDay: updatedProfileData?.offDay ?? [],
+                                    barberShop:
+                                        updatedProfileData?.barberShop ?? '',
+                                    bankAccountNumber:
+                                        updatedProfileData?.bankAccountNumber ??
+                                            '',
+                                    instagramPage:
+                                        updatedProfileData?.instagramPage ?? '',
+                                    profilePic:
+                                        updatedProfileData?.profilePic.trim() ??
+                                            '',
+                                    coverPic: updatedProfileData?.coverPic.trim() ??
+                                        '',
+                                    city: updatedProfileData?.city ?? '',
+                                    workingDays:
+                                        updatedProfileData?.workingDays ?? [],
+                                    barberShopLocation:
+                                        updatedProfileData?.barberShopLocation ??
+                                            BarberShopLocation(
+                                                type: 'Point',
+                                                coordinates: [0, 0]),
+                                    phoneNumber:
+                                        updatedProfileData?.phoneNumber ?? '',
+                                    locationDescription: updatedProfileData
+                                            ?.locationDescription
+                                            .trim() ??
+                                        ''),
                               );
-                              
+
                               if (workingDaysResult == true) {
-                                await _checkAndForceAddService(profileController);
+                                await _checkAndForceAddService(
+                                    profileController);
                               }
                             } else {
                               await _checkAndForceAddService(profileController);
@@ -485,7 +504,7 @@ class MainController extends GetxController {
                         } else {
                           // Close loading overlay
                           Get.back();
-                          
+
                           Get.snackbar(
                             "Error".tr,
                             "Failed to accept the offer".tr,
@@ -681,11 +700,6 @@ class MainController extends GetxController {
   void changePage(int index) {
     if (index >= 0 && index < pages.length) {
       currentIndex.value = index;
-      pageController.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
     }
   }
 
@@ -696,25 +710,28 @@ class MainController extends GetxController {
   }
 
   // Helper method to check and force service addition
-  Future<void> _checkAndForceAddService(BProfileController profileController) async {
+  Future<void> _checkAndForceAddService(
+      BProfileController profileController) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     // Refresh services to get latest data
     await profileController.fetchBarberServices();
-    
+
     if (profileController.barberServices.isEmpty) {
       // Navigate to profile page first
       Get.offAll(() => const BProfileView());
-      
+
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       // Show a dialog explaining they need to add a service
       await Get.dialog(
         WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
             title: Text("Add Your First Service".tr),
-            content: Text("You must add at least one service before customers can book appointments with you.".tr),
+            content: Text(
+                "You must add at least one service before customers can book appointments with you."
+                    .tr),
             actions: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -723,7 +740,7 @@ class MainController extends GetxController {
                 onPressed: () async {
                   Get.back();
                   await Future.delayed(const Duration(milliseconds: 300));
-                  
+
                   // Open add service bottom sheet in a non-dismissible way
                   await Get.bottomSheet(
                     WillPopScope(
@@ -747,16 +764,18 @@ class MainController extends GetxController {
                     enableDrag: false,
                     isScrollControlled: true,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20.r)),
                     ),
                   );
-                  
+
                   // After bottom sheet closes, verify service was added
                   await profileController.fetchBarberServices();
                   if (profileController.barberServices.isNotEmpty) {
                     Get.snackbar(
                       "Setup Complete".tr,
-                      "Your profile is now ready! Customers can book appointments with you.".tr,
+                      "Your profile is now ready! Customers can book appointments with you."
+                          .tr,
                       backgroundColor: Colors.green,
                       colorText: Colors.white,
                       duration: const Duration(seconds: 5),
