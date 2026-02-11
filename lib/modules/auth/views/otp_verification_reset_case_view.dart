@@ -116,16 +116,7 @@ class OtpVerificationResetCaseView extends StatelessWidget {
                                   .validate()) {
                                 if (resetCase == false) {
                                   // For Phone Reset Case
-                                  await controller.verifyOtp(
-                                    otp: controller.otpController.text,
-                                    phoneNumber: phoneNumber,
-                                  );
-                                  // If verification succeeded (no error message)
-                                  if (controller.errorMessage.value.isEmpty ||
-                                      controller.otpController.text ==
-                                          "123456") {
-                                    Get.toNamed(AppRouter.updatePhoneNumberPath);
-                                  }
+                                  await controller.updatePhoneNumber(phoneNumber);
                                 } else if (resetCase == true) {
                                   // For Password Reset Case
                                   await controller.verifyOtp(
@@ -133,12 +124,16 @@ class OtpVerificationResetCaseView extends StatelessWidget {
                                     phoneNumber: phoneNumber,
                                   );
 
-                                  if (controller.errorMessage.value.isEmpty || controller.otpController.text == "123456") {
-                                    Get.toNamed(AppRouter.resetPasswordPath,
-                                        arguments: {
-                                          "phoneNumber": phoneNumber,
-                                          "otp": controller.otpController.text,
-                                        });
+                                  if (controller.errorMessage.value.isEmpty ||
+                                      controller.otpController.text ==
+                                          "123456") {
+                                    Get.toNamed(
+                                      AppRouter.resetPasswordPath,
+                                      arguments: {
+                                        "phoneNumber": phoneNumber,
+                                        "otp": controller.otpController.text,
+                                      },
+                                    );
                                   }
                                 }
                               }

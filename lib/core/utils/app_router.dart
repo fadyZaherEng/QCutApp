@@ -319,6 +319,14 @@ abstract class AppRouter {
       page: () => const BPaymentMethodsView(),
     ),
     GetPage(
+      name: bresetPhoneNumberPath,
+      page: () => ResetPhoneNumberView(),
+    ),
+    GetPage(
+      name: botpVerificationResetCasePath,
+      page: () => OtpVerificationResetCaseView(),
+    ),
+    GetPage(
       name: successScreenPath,
       page: () => const SuccessScreen(),
     ),

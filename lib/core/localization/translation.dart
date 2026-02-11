@@ -350,6 +350,7 @@ class MyTranslation extends Translations {
           'Oct': 'اكتوبر',
           'Nov': 'نوفمبر',
           'Dec': 'ديسمبر',
+          "Change Phone number": "تعيير رقم الهاتف",
           "cashMethod": "نقدا",
           "Service deleted successfully": "تم حذف الخدمه بنجاح",
           "At least one service is required": "على الاقل مطلوب خدمه",

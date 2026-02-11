@@ -68,11 +68,10 @@ class BSettingViewBody extends StatelessWidget {
                   "changeLanguages".tr, AssetsData.changeLanguagesIcon, () {
                 Get.toNamed(AppRouter.changeLangugesPath);
               }),
-              // buildDivider(),
-              // buildDrawerItem("Change Phone number", AssetsData.callIcon, () {
-              //   context.push(AppRouter.bresetPhoneNumberPath);
-              // }),
-
+              buildDivider(),
+              buildDrawerItem("Change Phone number".tr, AssetsData.callIcon, () {
+                Get.toNamed(AppRouter.bresetPhoneNumberPath);
+              }),
               buildDivider(),
               buildDrawerItem(
                 "changeYourLocation".tr,
