@@ -54,52 +54,41 @@ class Variables {
 class ShowToast {
   const ShowToast._();
   static showError({required String message}) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.close, color: Colors.white), // Adding an icon
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                style: TextStyle(color: Colors.white, fontSize: 13.sp),
-                message.toString(), // Using the passed parameter
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.red, // Changing background color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Setting the border radius
-        ),
-        behavior:
-            SnackBarBehavior.floating, // Making SnackBar float above content
-      ),
+    Get.snackbar(
+      "Error".tr,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.withOpacity(0.9),
+      colorText: Colors.white,
+      icon: const Icon(Icons.error_outline, color: Colors.white),
+      margin: EdgeInsets.all(16.r),
+      borderRadius: 12.r,
+      duration: const Duration(seconds: 3),
+      forwardAnimationCurve: Curves.easeOutBack,
+      reverseAnimationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 500),
+      snackbarStatus: (status) {
+        if (status == SnackbarStatus.OPENING) {
+          // Add custom logic if needed
+        }
+      },
     );
   }
 
   static showSuccessSnackBar({required String message}) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.close, color: Colors.white), // Adding an icon
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                style: TextStyle(color: Colors.white, fontSize: 13.sp),
-                message.toString(),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.green, // Changing background color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Setting the border radius
-        ),
-        behavior:
-            SnackBarBehavior.floating, // Making SnackBar float above content
-      ),
+    Get.snackbar(
+      "Success".tr,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green.withOpacity(0.9),
+      colorText: Colors.white,
+      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+      margin: EdgeInsets.all(16.r),
+      borderRadius: 12.r,
+      duration: const Duration(seconds: 3),
+      forwardAnimationCurve: Curves.easeOutBack,
+      reverseAnimationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 500),
     );
   }
 }

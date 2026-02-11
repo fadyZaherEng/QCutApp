@@ -739,6 +739,76 @@ class _BProfileViewBodyState extends State<BProfileView>
               style: TextStyle(fontSize: 12.sp),
             ),
           ),
+          SizedBox(width: 8.w),
+          IconButton(
+            onPressed: () {
+              Get.generalDialog(
+                barrierDismissible: true,
+                barrierLabel: '',
+                barrierColor: Colors.black54,
+                transitionDuration: const Duration(milliseconds: 300),
+                pageBuilder: (context, animation1, animation2) {
+                  return AlertDialog(
+                    title: Text("Delete Service".tr,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        )),
+                    content:
+                        Text("Are you sure you want to delete this service?".tr,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                            )),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: Text(
+                          "Cancel".tr,
+                            style: TextStyle(
+                              color: ColorsData.primary,
+                              fontSize: 15,
+                            )
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Get.back();
+                          await controller.deleteBarberService(service.id);
+                        },
+                        child: Text(
+                          "Delete".tr,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                            )
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                transitionBuilder: (context, a1, a2, child) {
+                  return ScaleTransition(
+                    scale: CurvedAnimation(
+                      parent: a1,
+                      curve: Curves.easeOutBack,
+                    ),
+                    child: FadeTransition(
+                      opacity: a1,
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            },
+            icon: Icon(
+              Icons.delete_outline,
+              color: Colors.red[300],
+              size: 20.sp,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
         ],
       ),
     );

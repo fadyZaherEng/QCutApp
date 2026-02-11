@@ -184,6 +184,15 @@ class BEditProfileController extends GetxController {
 
   // Remove a working day at the given index
   void removeWorkingDay(int index) {
+    if (workingDays.length <= 1) {
+      Get.snackbar(
+        'Action Denied',
+        'You must have at least one working day',
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
     if (index >= 0 && index < workingDays.length) {
       workingDays.removeAt(index);
     }
