@@ -164,7 +164,7 @@ class _CustomBAppointmentListItemState extends State<CustomBAppointmentListItem>
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8.h),
+          // SizedBox(height: 8.h),
 
           // **Location**
           // Row(
@@ -202,7 +202,7 @@ class _CustomBAppointmentListItemState extends State<CustomBAppointmentListItem>
           //     )),
           //   ],
           // ),
-          SizedBox(height: 12.h),
+          // SizedBox(height: 12.h),
 
           // **Details in Rows**
           _infoRow(

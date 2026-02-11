@@ -44,10 +44,10 @@ class BAppointmentController extends GetxController {
   void onInit() {
     super.onInit();
     print("BAppointmentController: onInit called");
-    // Initialize with the current day
+    // Initialize with the current day as fallback
     selectedDay.value = DateTime.now().day;
+    selectedDate.value = DateTime.now();
     fetchNextWorkingDays();
-    fetchAppointments();
   }
 
   // Fetch appointments from API with pagination
@@ -190,10 +190,11 @@ class BAppointmentController extends GetxController {
               List<Map<String, dynamic>>.from(responseBody['workingDays']);
 
           if (workingDays.isNotEmpty) {
-            // Optional: Initialize selectedDay with the first working day
-            // final firstDay = DateTime.fromMillisecondsSinceEpoch(workingDays.first['date']);
-            // selectedDay.value = firstDay.day;
-            // selectedDate.value = firstDay;
+            // By default select the first working day
+            final firstDay = DateTime.fromMillisecondsSinceEpoch(workingDays.first['date'] as int);
+            selectedDay.value = firstDay.day;
+            selectedDate.value = firstDay;
+            print("Defaulting to first working day: $firstDay");
           }
         }
       } else {
@@ -203,6 +204,8 @@ class BAppointmentController extends GetxController {
       print("Exception while fetching next working days: $e");
     } finally {
       isLoadingWorkingDays.value = false;
+      // Fetch appointments after determining the selected date
+      fetchAppointments();
     }
   }
 
